@@ -1,0 +1,60 @@
+{
+  "OK": {
+    "items": [
+      {
+        "number": 9955753769,
+        "name": "Nilay Choubey",
+        "followerList": [
+          {
+            "username": "nitin_mukesh",
+            "_id": "015784b-257bhu-7895d4-7855d4d"
+          }
+        ],
+        "bankName": "Kotak",
+        "walletMoney": 250,
+        "email": "1234monunilay@gmail.com",
+        "username": "nilay_choubey",
+        "dob": "6 AUG 2004",
+        "_id": "7ca53fa9-d625-4354-a10b-8de25474153d",
+        "_createdDate": "2022-03-27T18:37:45.141Z",
+        "panCardNumber": "AAPF01258474",
+        "completeAddress": {
+          "areaName": "mango",
+          "city": "Jamshedpur",
+          "state": "Jharkhand",
+          "streetAddress": "304, visstoria appartment, gour basti, post office road",
+          "zipCode": 831012,
+          "landmark": "Sai Suraj Aashram"
+        },
+        "_updatedDate": "2022-03-27T18:42:55.313Z",
+        "ifseCode": "HDD011D",
+        "adoroCoin": 5,
+        "accountNumber": "1234567890",
+        "followingList": [
+          {
+            "username": "nitin_mukesh",
+            "_id": "015784b-257bhu-7895d4-7855d4d"
+          }
+        ],
+        "gender": "Pakka Male"
+      }
+    ],
+    "length": 1,
+    "totalCount": 1,
+    "query": {
+      "invalidArguments": [],
+      "filterTree": {
+        "$and": [
+          {
+            "number": 9955753769
+          }
+        ]
+      },
+      "provider": {},
+      "collectionName": "Users",
+      "limitNumber": 50,
+      "skipNumber": 0,
+      "included": []
+    }
+  }
+}

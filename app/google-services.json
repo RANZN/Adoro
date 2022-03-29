@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "877235843150",
+    "project_id": "adoroapp",
+    "storage_bucket": "adoroapp.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:877235843150:android:4da6c9b95ea0a2be9cd31f",
+        "android_client_info": {
+          "package_name": "com.adoro"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "877235843150-kiotl24o10bihf1iksen02s1f23lrfd8.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAD8ow7vexlqKUy25jAkSHoRdtf_rCg3FI"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "877235843150-kiotl24o10bihf1iksen02s1f23lrfd8.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
