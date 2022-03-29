@@ -1,7 +1,6 @@
 apply plugin: 'com.android.application'
 apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-android-extensions'
-//apply plugin: 'com.google.gms.google-services'
 
 
 android {
@@ -52,6 +51,7 @@ dependencies {
     implementation 'androidx.lifecycle:lifecycle-extensions:2.2.0'
     implementation 'androidx.lifecycle:lifecycle-viewmodel-ktx:2.2.0'
     implementation 'androidx.test:core-ktx:1.4.0'
+    implementation 'com.google.firebase:firebase-database:20.0.4'
     testImplementation 'junit:junit:4.12'
     androidTestImplementation 'androidx.test.ext:junit:1.1.1'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.2.0'
@@ -90,12 +90,30 @@ dependencies {
 
     //FIreBase analitics
     implementation 'com.google.firebase:firebase-analytics:19.0.0'
-    implementation "com.google.firebase:firebase-messaging:22.0.0"
     implementation "com.google.firebase:firebase-core:19.0.0"
+
+    //-----FIREBASE DATABASE---
+    implementation 'com.google.firebase:firebase-database:19.2.1'
+
+    //-----FIREBASE STORAGE----
+    implementation 'com.google.firebase:firebase-storage:19.1.1'
+
+    //noinspection GradleCompatible
+    implementation 'com.google.firebase:firebase-messaging:20.1.5'
+
+    //-----DATA IS FETCHED FROM DATABASE AND ADDED TO RECYCLER VIEW----
+    implementation 'com.firebaseui:firebase-ui-database:1.2.0'
+    //----FIREBASE AUTHENTICATION---
+    implementation 'com.google.firebase:firebase-auth:19.3.0'
 
     implementation "com.romainpiel.shimmer:library:1.4.0@aar"
 
     implementation 'com.github.CanHub:Android-Image-Cropper:4.1.0'
     implementation 'com.akexorcist:round-corner-progress-bar:2.1.2'
 
+    implementation 'com.squareup.picasso:picasso:2.71828'
+
+
 }
+
+apply plugin: 'com.google.gms.google-services'

@@ -1,15 +1,18 @@
 package com.hm.mmmhmm.fragments
 
+import android.app.Dialog
 import android.content.Intent
+import android.graphics.Color
+import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
+import android.view.*
+import android.widget.Button
+import android.widget.TextView
 import androidx.fragment.app.Fragment
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
 import com.hm.mmmhmm.R
 import com.hm.mmmhmm.activity.MainActivity
 import com.hm.mmmhmm.activity.SplashLauncher
-import com.hm.mmmhmm.adapter.NotificationsAdapter
+import com.hm.mmmhmm.helper.GlobleData
 import com.hm.mmmhmm.helper.SessionManager
 import kotlinx.android.synthetic.main.custom_navigation_view_sidebar.*
 import kotlinx.android.synthetic.main.custom_toolbar.*
@@ -62,17 +65,38 @@ class SettingsFragment : Fragment() {
 
         rl_logout.setOnClickListener(View.OnClickListener {
 //            Toast.makeText(applicationContext,"Logout", Toast.LENGTH_SHORT).show()
-            logoutUserFromAppSession()
-            SessionManager.setLoginStatus("false")
+
+            showDialog()
         })
         // pb_cms_page.visibility= View.GONE
 
     }
-
+    private fun showDialog() {
+        val btn_no: Button
+        val btn_yes: Button
+        val tv_logout_text: TextView
+        val dialog = Dialog(activity as MainActivity)
+        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE)
+        dialog.setCancelable(true)
+        dialog.setContentView(R.layout.dialog_logout)
+        dialog.window!!.setLayout(
+            WindowManager.LayoutParams.MATCH_PARENT,
+            WindowManager.LayoutParams.WRAP_CONTENT
+        )
+        dialog.window!!.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
+        tv_logout_text = dialog.findViewById(R.id.tv_logout_text)
+        btn_no = dialog.findViewById(R.id.btn_no)
+        btn_yes = dialog.findViewById(R.id.btn_yes)
+        btn_no.setOnClickListener { dialog.dismiss() }
+        btn_yes.setOnClickListener {
+            logoutUserFromAppSession()
+        }
+        dialog.show()
+    }
     fun logoutUserFromAppSession() {
-        // SessionManager.setLoginStatus("false")
-        // SessionManager.logout()
-        // GlobleData.goToLoginScreen = true
+        SessionManager.setLoginStatus("false")
+        SessionManager.logout()
+        GlobleData.goToLoginScreen = true
         startActivity(Intent(activity, SplashLauncher::class.java))
         activity?.finish()
     }

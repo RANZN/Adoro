@@ -47,7 +47,7 @@ class CMSPageFragment : Fragment() {
        // pb_cms_page.visibility= View.VISIBLE
 
         webView.webViewClient = WebViewClient()
-        webView.loadUrl("https://www.marqueberry.com/about-us")
+        webView.loadUrl(requireArguments().getString("url").toString())
         webView.settings.javaScriptEnabled = true
 
        // pb_cms_page.visibility= View.GONE

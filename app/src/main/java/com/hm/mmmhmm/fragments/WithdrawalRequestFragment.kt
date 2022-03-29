@@ -9,28 +9,16 @@ import android.view.ViewGroup
 import com.hm.mmmhmm.Chat_Module.Inbox
 import com.hm.mmmhmm.R
 import com.hm.mmmhmm.activity.MainActivity
+import com.hm.mmmhmm.adapter.FeedListAdapter
 import kotlinx.android.synthetic.main.custom_toolbar.*
-import kotlinx.android.synthetic.main.fragment_add.*
-import kotlinx.android.synthetic.main.fragment_login.*
+import kotlinx.android.synthetic.main.fragment_home.*
+import kotlinx.android.synthetic.main.fragment_o_t_p_verify.*
 
-class AddFragment : Fragment() {
 
+class WithdrawalRequestFragment : Fragment() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
-    }
-
-    override fun onActivityCreated(savedInstanceState: Bundle?) {
-        super.onActivityCreated(savedInstanceState)
-        setupToolBar()
-        btn_choose_design.setOnClickListener(View.OnClickListener {
-            val intent = Intent()
-                .setType("*/*")
-                .setAction(Intent.ACTION_GET_CONTENT)
-
-            startActivityForResult(Intent.createChooser(intent, "Select a file"), 111)
-        })
 
     }
 
@@ -39,8 +27,9 @@ class AddFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_add, container, false)
+        return inflater.inflate(R.layout.fragment_withdrawal_request, container, false)
     }
+
     private fun setupToolBar() {
         iv_toolbar_icon.setBackgroundResource(R.drawable.hamburger_icon)
         iv_toolbar_action_inbox.setBackgroundResource(R.drawable.chat)
@@ -49,7 +38,7 @@ class AddFragment : Fragment() {
         iv_toolbar_action_inbox.setColorFilter(resources.getColor(R.color.black));
         iv_toolbar_action_search.setColorFilter(resources.getColor(R.color.black));
         tv_toolbar_title.setTextColor(resources.getColor(R.color.black))
-        tv_toolbar_title.text = resources.getString(R.string.app_name)
+        tv_toolbar_title.text = resources.getString(R.string.withdraw_money)
         iv_toolbar_icon.setOnClickListener(View.OnClickListener {
             (activity as MainActivity).manageDrawer()
         })
@@ -65,4 +54,21 @@ class AddFragment : Fragment() {
 
 
     }
+
+    override fun onActivityCreated(savedInstanceState: Bundle?) {
+        super.onActivityCreated(savedInstanceState)
+        setupToolBar()
+        btn_verify.setOnClickListener{
+            val oTPVerifyFragment = OTPVerifyFragment()
+            val args = Bundle()
+            args.putString("path", "withdraw")
+            oTPVerifyFragment.arguments = args
+            if (activity != null) {
+                activity?.supportFragmentManager?.beginTransaction()
+                    ?.replace(R.id.frame_layout_main,oTPVerifyFragment)?.commit()
+            }
+        }
+
+    }
+
 }

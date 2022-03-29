@@ -23,6 +23,7 @@ object SessionManager {
     private const val USER_PHONE = "user_phone"
     private const val USER_IMAGE = "user_image"
     private const val LANGUAGE = "language"
+    private const val FIREBASE_USER_ID = "firebase_user_id"
 
 
     //    ----/ Instantiating /--------------------------------------------------
@@ -121,6 +122,35 @@ object SessionManager {
             LOGIN_STATUS
         )
     }
+    fun setUserPic(image: String) {
+        val prefsEditor: SharedPreferences.Editor = prefs.edit()
+        with(prefsEditor) {
+            putString(USER_IMAGE, image)
+            commit()
+        }
+    }
+
+    fun getUserPic(): String? {
+        return prefs.getString(
+            USER_IMAGE,
+            USER_IMAGE
+        )
+    }
+
+    fun setUserName(username: String) {
+        val prefsEditor: SharedPreferences.Editor = prefs.edit()
+        with(prefsEditor) {
+            putString(USER_NAME, username)
+            commit()
+        }
+    }
+
+    fun getUserName(): String? {
+        return prefs.getString(
+            USER_NAME,
+            USER_NAME
+        )
+    }
 
     //    -------------LANGUAGE-------------------------
     fun setLanguage(language: String) {
@@ -135,6 +165,21 @@ object SessionManager {
         return prefs.getString(
             LANGUAGE,
             LANGUAGE
+        )
+    }
+
+    fun setFirbaseID(id: String?) {
+        val prefsEditor: SharedPreferences.Editor = prefs.edit()
+        with(prefsEditor) {
+            putString(FIREBASE_USER_ID, id)
+            commit()
+        }
+    }
+
+    fun getFirbaseID(): String? {
+        return prefs.getString(
+            FIREBASE_USER_ID,
+            FIREBASE_USER_ID
         )
     }
 

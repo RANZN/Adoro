@@ -20,6 +20,7 @@ import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
+import com.hm.mmmhmm.Chat_Module.Inbox
 import com.hm.mmmhmm.R
 import com.hm.mmmhmm.activity.MainActivity
 import com.hm.mmmhmm.adapter.GalleryAdapter
@@ -48,6 +49,7 @@ class ProfileFragment : Fragment() {
     var file: File? = null
     var image_body: MultipartBody.Part? = null
 
+    var myProfileView: Int=0
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -64,6 +66,13 @@ class ProfileFragment : Fragment() {
         setupToolBar()
         rv_gallery.adapter= GalleryAdapter()
       //  SessionManager.init(activity as Context)
+//        myProfileView = requireArguments().getInt("viewType")?:0
+//        if (myProfileView==1){
+//            iv_camera.visibility= View.GONE
+//            progress_profile_complete.visibility= View.GONE
+//            progress_profile_complete.visibility= View.GONE
+//            tv_completed_total.visibility= View.GONE
+//        }
         iv_camera.setOnClickListener(View.OnClickListener {
             activity?.supportFragmentManager?.beginTransaction()
                 ?.replace(R.id.frame_layout_main, EditProfileFragment())
@@ -85,11 +94,24 @@ class ProfileFragment : Fragment() {
 
     private fun setupToolBar() {
         iv_toolbar_icon.setBackgroundResource(R.drawable.hamburger_icon)
+        iv_toolbar_action_inbox.setBackgroundResource(R.drawable.chat)
+        iv_toolbar_action_search.setBackgroundResource(R.drawable.iv_search)
         iv_toolbar_icon.setColorFilter(resources.getColor(R.color.black));
+        iv_toolbar_action_inbox.setColorFilter(resources.getColor(R.color.black));
+        iv_toolbar_action_search.setColorFilter(resources.getColor(R.color.black));
         tv_toolbar_title.setTextColor(resources.getColor(R.color.black))
-        tv_toolbar_title.text = resources.getString(R.string.profile)
+        tv_toolbar_title.text = resources.getString(R.string.app_name)
         iv_toolbar_icon.setOnClickListener(View.OnClickListener {
             (activity as MainActivity).manageDrawer()
+        })
+
+        iv_toolbar_action_inbox.setOnClickListener(View.OnClickListener {
+            startActivity(Intent(activity, Inbox::class.java))
+        })
+
+        iv_toolbar_action_search.setOnClickListener(View.OnClickListener {
+            (activity as MainActivity).supportFragmentManager.beginTransaction().replace(R.id.frame_layout_main, SearchFragment())
+                .addToBackStack(null).commit()
         })
 
 

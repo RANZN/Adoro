@@ -103,13 +103,13 @@
 
             <!--        Line 3-->
             <RelativeLayout
-                android:id="@+id/rl_agreement_drawer"
+                android:id="@+id/rl_adoro_coins"
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/edit_text_height"
                 android:layout_marginTop="5dp">
 
                 <ImageView
-                    android:id="@+id/iv_agree_icon"
+                    android:id="@+id/iv_adoro_coins"
                     android:layout_width="18dp"
                     android:layout_height="18dp"
                     android:layout_centerVertical="true"
@@ -123,8 +123,8 @@
                     android:layout_centerVertical="true"
                     android:layout_marginLeft="15dp"
                     android:textColor="@color/white"
-                    android:layout_toRightOf="@+id/iv_agree_icon"
-                    android:text="@string/adro_coins"
+                    android:layout_toRightOf="@+id/iv_adoro_coins"
+                    android:text="@string/adoro_coins"
                     android:textSize="18sp" />
 
 

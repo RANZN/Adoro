@@ -17,6 +17,8 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity android:name=".activity.ForgotPassword"/>
+        <activity android:name=".Chat_Module.Inbox"/>
+        <activity android:name=".Chat_Module.Chat_Activity"/>
         <activity android:name=".activity.SplashLauncher"
             android:exported="true">
             <intent-filter>
@@ -41,6 +43,10 @@
                 <action android:name="com.google.firebase.MESSAGING_EVENT" />
             </intent-filter>
         </service>
+
+        <uses-library
+            android:name="org.apache.http.legacy"
+            android:required="false" />
     </application>
 
 </manifest>

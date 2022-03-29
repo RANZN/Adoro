@@ -69,7 +69,7 @@
     <string name="what_group_is_about">What group is about</string>
     <string name="notification">Notification</string>
     <string name="profile">Profile</string>
-    <string name="adro_coins">Adro Coins</string>
+    <string name="adoro_coins">Adoro Coins</string>
     <string name="refer">Refer</string>
     <string name="result">Result</string>
     <string name="settings">Settings</string>
@@ -81,4 +81,7 @@
     <string name="my_template">My Template</string>
     <string name="browse_template">Browse Template</string>
     <string name="template">Template</string>
+    <string name="see_result">See Result</string>
+    <string name="withdraw_money">Withdraw Money</string>
+    <string name="verify_number">Verify Number</string>
 </resources>

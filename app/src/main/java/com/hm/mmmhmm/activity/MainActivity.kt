@@ -82,7 +82,7 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
 
     private fun clickMethod() {
         rl_notification.setOnClickListener(View.OnClickListener {
-            resetView()
+           // resetView()
             clearBackStack()
             supportFragmentManager.beginTransaction()
                 .replace(R.id.frame_layout_main, NotificationFragment()).addToBackStack(null).commit()
@@ -91,7 +91,7 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
 
         rl_settings.setOnClickListener(View.OnClickListener {
 
-            resetView()
+            //resetView()
             clearBackStack()
             supportFragmentManager.beginTransaction()
                 .replace(R.id.frame_layout_main, SettingsFragment()).addToBackStack(null).commit()
@@ -100,7 +100,7 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
         })
 
         rl_template.setOnClickListener(View.OnClickListener {
-            resetView()
+            //resetView()
             clearBackStack()
             supportFragmentManager.beginTransaction()
                 .replace(R.id.frame_layout_main, TemplatesFragment()).addToBackStack(null).commit()
@@ -178,6 +178,23 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
             drawer_layout.closeDrawers()
         })
 
+        rl_result.setOnClickListener(View.OnClickListener {
+            clearBackStack()
+            supportFragmentManager.beginTransaction()
+                .replace(R.id.frame_layout_main, ResultFragment()).addToBackStack(null)
+                .commit()
+            drawer_layout.closeDrawers()
+        })
+
+
+        rl_adoro_coins.setOnClickListener(View.OnClickListener {
+            clearBackStack()
+            supportFragmentManager.beginTransaction()
+                .replace(R.id.frame_layout_main, AdoroCoinsFragment()).addToBackStack(null)
+                .commit()
+            drawer_layout.closeDrawers()
+        })
+
 
 //        --------------------------------------
 
@@ -209,37 +226,37 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
 
     }
 
-    private fun resetView() {
-        //iv_home_icon.setColorFilter(resources.getColor(R.color.text_gray))
-       // tv_invite_drawer.setTextColor(resources.getColor(R.color.text_gray))
+//    private fun resetView() {
+//        //iv_home_icon.setColorFilter(resources.getColor(R.color.text_gray))
+//       // tv_invite_drawer.setTextColor(resources.getColor(R.color.text_gray))
+//
+//        iv_nda_icon.setColorFilter(resources.getColor(R.color.text_gray))
+//        tv_nda_drawer.setTextColor(resources.getColor(R.color.text_gray))
+//
+//        iv_agree_icon.setColorFilter(resources.getColor(R.color.text_gray))
+//      //  tv_agreement_drawer.setTextColor(resources.getColor(R.color.text_gray))
+//
+//        iv_blog_icon.setColorFilter(resources.getColor(R.color.text_gray))
+//       // tv_blog_drawer.setTextColor(resources.getColor(R.color.text_gray))
+//
+//
+//    }
 
-        iv_nda_icon.setColorFilter(resources.getColor(R.color.text_gray))
-        tv_nda_drawer.setTextColor(resources.getColor(R.color.text_gray))
-
-        iv_agree_icon.setColorFilter(resources.getColor(R.color.text_gray))
-      //  tv_agreement_drawer.setTextColor(resources.getColor(R.color.text_gray))
-
-        iv_blog_icon.setColorFilter(resources.getColor(R.color.text_gray))
-       // tv_blog_drawer.setTextColor(resources.getColor(R.color.text_gray))
-
-
-    }
-
-    private fun updateToken() {
-        FirebaseMessaging.getInstance().token.addOnCompleteListener(OnCompleteListener { task ->
-            if (!task.isSuccessful) {
-                Log.w("adsfdf", "Fetching FCM registration token failed ${task.exception}")
-                return@OnCompleteListener
-            }
-
-            // Get new FCM registration token
-            val token = task.result
-            SessionManager.init(this)
-            SessionManager.setFcmToken(token ?: "")
-            // Log and toast
-            Log.d("sdfdfsd", token!!)
-        })
-    }
+//    private fun updateToken() {
+//        FirebaseMessaging.getInstance().token.addOnCompleteListener(OnCompleteListener { task ->
+//            if (!task.isSuccessful) {
+//                Log.w("adsfdf", "Fetching FCM registration token failed ${task.exception}")
+//                return@OnCompleteListener
+//            }
+//
+//            // Get new FCM registration token
+//            val token = task.result
+//            SessionManager.init(this)
+//            SessionManager.setFcmToken(token ?: "")
+//            // Log and toast
+//            Log.d("sdfdfsd", token!!)
+//        })
+//    }
 
 
     public fun manageDrawer() {
