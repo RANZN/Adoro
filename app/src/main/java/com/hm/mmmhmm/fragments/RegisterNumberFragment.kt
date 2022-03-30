@@ -7,12 +7,26 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import com.hm.mmmhmm.R
+import com.hm.mmmhmm.activity.MainActivity
+import com.hm.mmmhmm.helper.CommanFunction
 import com.hm.mmmhmm.helper.ConnectivityObserver
+import com.hm.mmmhmm.helper.SessionManager
 import com.hm.mmmhmm.helper.toast
+import com.hm.mmmhmm.models.RequestAuthenticateNumber
+import com.hm.mmmhmm.models.RequestLogin
+import com.hm.mmmhmm.web_service.ApiClient
 import kotlinx.android.synthetic.main.custom_toolbar.*
+import kotlinx.android.synthetic.main.fragment_login.*
+import kotlinx.android.synthetic.main.fragment_o_t_p_verify.*
 import kotlinx.android.synthetic.main.fragment_register_number.*
-
+import kotlinx.android.synthetic.main.fragment_register_number.pb_login
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
+import java.util.*
 
 
 class RegisterNumberFragment : Fragment() {
@@ -56,15 +70,54 @@ class RegisterNumberFragment : Fragment() {
         if (number.isNullOrEmpty()) {
             toast(R.string.enter_phone_number,1)
         } else if (ConnectivityObserver.isOnline(activity as Context)) {
+            var requestRegisterNumber: RequestAuthenticateNumber = RequestAuthenticateNumber(number.toLong());
+            hitAuthenticationAPI(requestRegisterNumber)
 
-            val oTPVerifyFragment = OTPVerifyFragment()
-            val args = Bundle()
-            args.putString("path", "register")
-            args.putString("number", number)
-            oTPVerifyFragment.arguments = args
-            if (activity != null) {
-                activity?.supportFragmentManager?.beginTransaction()
-                    ?.replace(R.id.frame_layout_splash_launcher,oTPVerifyFragment)?.commit()
+        }
+    }
+
+    private fun hitAuthenticationAPI( requestAuthenticateNumber: RequestAuthenticateNumber) {
+        pb_login.visibility = View.VISIBLE
+        val apiInterface = ApiClient.getRetrofitService(requireContext())
+        CoroutineScope(Dispatchers.IO).launch {
+            try {
+                val response = apiInterface.registerNumber(requestAuthenticateNumber)
+                withContext(Dispatchers.Main) {
+                    try {
+                        pb_login.visibility = View.GONE
+                        if (response.body()?.OK?.length ==0) {
+                            val r = response.body()
+
+                           // SessionManager.init(activity as Context)
+//                            val rand = Random()
+//                            SessionManager.setOTP(rand.nextInt(10000).toString())
+
+                            //call send otp api here
+
+                            val oTPVerifyFragment = OTPVerifyFragment()
+                            val args = Bundle()
+                            args.putString("path", "register")
+                            args.putString("number", et_register_number.text.toString())
+                            oTPVerifyFragment.arguments = args
+                            if (activity != null) {
+                                activity?.supportFragmentManager?.beginTransaction()
+                                    ?.replace(R.id.frame_layout_splash_launcher,oTPVerifyFragment)?.commit()
+                            }
+
+                        } else {
+                            Toast.makeText(activity,R.string.user_already_registered, Toast.LENGTH_SHORT).show()
+
+//                            CommanFunction.handleApiError(
+//                                response.errorBody()?.charStream(),
+//                                requireContext()
+//                            )
+                        }
+                    } catch (e: java.lang.Exception) {
+                        Toast.makeText(requireActivity(), "" + e.toString(), Toast.LENGTH_SHORT).show()
+                    }
+                }
+            } catch (e: java.lang.Exception) {
+
             }
         }
     }

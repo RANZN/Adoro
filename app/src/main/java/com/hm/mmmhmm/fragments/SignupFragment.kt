@@ -6,6 +6,8 @@ import android.content.Intent
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
+import android.text.Editable
+import android.text.TextWatcher
 import android.view.*
 import android.widget.Button
 import android.widget.TextView
@@ -17,6 +19,7 @@ import com.hm.mmmhmm.helper.CommanFunction
 import com.hm.mmmhmm.helper.ConnectivityObserver
 import com.hm.mmmhmm.helper.SessionManager
 import com.hm.mmmhmm.helper.toast
+import com.hm.mmmhmm.models.RequestAuthenticateUsername
 import com.hm.mmmhmm.models.RequestRegister
 import com.hm.mmmhmm.web_service.ApiClient
 import kotlinx.android.synthetic.main.custom_toolbar.*
@@ -31,6 +34,7 @@ import java.lang.Exception
 
 class SignupFragment : Fragment() {
 
+    var isUsernameAvailable=false
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
@@ -59,6 +63,17 @@ class SignupFragment : Fragment() {
         btn_signup.setOnClickListener(View.OnClickListener {
             validateInput()
         })
+        et_username.addTextChangedListener(object : TextWatcher {
+            override fun afterTextChanged(s: Editable?) {
+            }
+
+            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
+            }
+
+            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
+                validateUsername(s.toString())
+            }
+        })
 
 
     }
@@ -72,7 +87,7 @@ class SignupFragment : Fragment() {
     private fun validateInput() {
         val name = et_name.text.toString()
         val email = et_email.text.toString()
-        val number = arguments!!.getString("number")
+        val number = requireArguments().getString("number")
         val username = et_username.text.toString()
         if (name.isNullOrEmpty()) {
             toast(R.string.full_name, 1)
@@ -80,10 +95,21 @@ class SignupFragment : Fragment() {
             toast(R.string.email_address, 1)
         } else if (username.isNullOrEmpty()) {
             toast(R.string.username, 1)
+        } else if (!isUsernameAvailable) {
+            toast(R.string.username_already_taken, 1)
         } else if (ConnectivityObserver.isOnline(activity as Context)) {
             var requestRegister: RequestRegister = RequestRegister(name,number?.toLong(),email,username);
             hitRegisteruserAPI(requestRegister)
 
+        }
+    }
+    private fun validateUsername(username: String) {
+    if (username.isNullOrEmpty()) {
+            toast(R.string.username, 1)
+        et_username.setCompoundDrawablesWithIntrinsicBounds(0, 0, 0, 0);
+    } else if (ConnectivityObserver.isOnline(activity as Context)) {
+            var requestAuthenticateUsername: RequestAuthenticateUsername = RequestAuthenticateUsername(username);
+        hitAuthenticateUsernameAPI(requestAuthenticateUsername)
         }
     }
 
@@ -126,6 +152,7 @@ class SignupFragment : Fragment() {
                         if (response.body()?.OK != null) {
 //                        Toast.makeText(activity," "+response.body()?.message, Toast.LENGTH_SHORT).show()
                             val r = response.body()
+                            SessionManager.setUserId(response.body()?.OK!!._id)
 //                            SessionManager.init(activity as Context)
 //                            SessionManager.setAccessToken(response.body()?.data?.token.toString())
 
@@ -140,7 +167,43 @@ class SignupFragment : Fragment() {
                             )
                         }
                     } catch (e: Exception) {
-                        Toast.makeText(activity!!, "" + e.toString(), Toast.LENGTH_SHORT).show()
+                        Toast.makeText(requireActivity(), "" + e.toString(), Toast.LENGTH_SHORT).show()
+                    }
+                }
+            } catch (e: Exception) {
+
+            }
+        }
+    }
+
+    private fun hitAuthenticateUsernameAPI( requestAuthenticateUsername: RequestAuthenticateUsername) {
+        pb_signup.visibility = View.VISIBLE
+        val apiInterface = ApiClient.getRetrofitService(requireContext())
+        CoroutineScope(Dispatchers.IO).launch {
+            try {
+                val response = apiInterface.authenticateUsername(requestAuthenticateUsername)
+                withContext(Dispatchers.Main) {
+
+                    try {
+                        pb_signup.visibility = View.GONE
+                        if (response.body()?.OK != null) {
+//                        Toast.makeText(activity," "+response.body()?.message, Toast.LENGTH_SHORT).show()
+                            val r = response.body()
+                            if(r?.OK?.length!=0){
+                                et_username.error =  resources.getString(R.string.username_already_taken)
+                                isUsernameAvailable= false
+                            }else{
+                                et_username.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.tick, 0);
+                                isUsernameAvailable= true
+                            }
+                        } else {
+                            CommanFunction.handleApiError(
+                                response.errorBody()?.charStream(),
+                                requireContext()
+                            )
+                        }
+                    } catch (e: Exception) {
+                        Toast.makeText(requireActivity(), "" + e.toString(), Toast.LENGTH_SHORT).show()
                     }
                 }
             } catch (e: Exception) {

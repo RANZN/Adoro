@@ -1,5 +1,8 @@
 package com.hm.mmmhmm.models
 
+import com.google.gson.annotations.Expose
+import com.google.gson.annotations.SerializedName
+
 data class LoginResponse(
      val OK: OKLoginResponse
 )
@@ -13,7 +16,9 @@ data class OKLoginResponse(
 
 data class ItemLoginResponse(
     private  val _createdDate: String,
-    private  val _id: String,
+//    @SerializedName("_id")
+//    @Expose
+      val _id: String,
     private val _updatedDate: String,
     private val email: String,
      val name: String,

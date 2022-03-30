@@ -13,7 +13,9 @@ data class OK(
     val image: String?,
     val like: List<Any>?,
     val profile: String?,
-    val username: String?
+    val username: String?,
+    val amount: String?,
+    val trancations: List<Trancation>?
 )
 
 

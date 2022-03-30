@@ -3,12 +3,15 @@ package com.hm.mmmhmm.adapter
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.hm.mmmhmm.R
 import com.hm.mmmhmm.fragments.ResultDetailFragment
+import com.hm.mmmhmm.models.Item
+import com.hm.mmmhmm.models.Trancation
 
 
-class AdoroCoinsAdapter() : RecyclerView.Adapter<AdoroCoinsAdapter.MyViewHolder>() {
+class AdoroCoinsAdapter(private val transactionsList:List<Trancation>? ) : RecyclerView.Adapter<AdoroCoinsAdapter.MyViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MyViewHolder {
         val view: View =
@@ -17,37 +20,13 @@ class AdoroCoinsAdapter() : RecyclerView.Adapter<AdoroCoinsAdapter.MyViewHolder>
     }
 
     override fun onBindViewHolder(holder: MyViewHolder, position: Int) {
-//            holder.tv_brand_name.text= campaignList?.get(position)?.brandName
-//            holder.tv_detail.text= campaignList?.get(position)?.shortDescription
-//            holder.tv_detail.text= campaignList?.get(position)?.shortDescription
-//            holder.tv_time_left.text= "₹"+campaignList?.get(position)?.timeLeft.toString()+" left"
-//            holder.iv_profile_pic_profile.load(
-//                campaignList?.get(position)?.brandLogo.toString(),
-//                R.color.text_gray,
-//                R.color.text_gray,
-//                true
-//            )
-//        holder.itemView.setOnClickListener {
-//            activity?.supportFragmentManager?.beginTransaction()
-//                ?.replace(R.id.frame_layout_main, ResultDetailFragment())
-//                ?.addToBackStack(null)?.commit()
-
-
-
-       // }
-//            holder.btn_learn_more.setOnClickListener {
-//                val postDetailFragment = PostDetailFragment()
-//                val args = Bundle()
-//                args.putString("campaignId", campaignList?.get(position)?._id)
-//                postDetailFragment.arguments = args
-//                (activity as MainActivity).supportFragmentManager.beginTransaction().replace(R.id.frame_layout_main, postDetailFragment)
-//                    .commit()
-//
-//            }
+            holder.tvCoins.text= transactionsList?.get(position)?.amount.toString()
+            holder.tvAdoroDate.text= ""+transactionsList?.get(position)?._createdDate.toString()
+            holder.tvAdoroDate.text= "Date : "+transactionsList?.get(position)?._createdDate.toString()
     }
 
     override fun getItemCount(): Int {
-        return 20
+        return transactionsList?.size?:0
     }
 
     override fun getItemId(position: Int): Long {
@@ -55,22 +34,11 @@ class AdoroCoinsAdapter() : RecyclerView.Adapter<AdoroCoinsAdapter.MyViewHolder>
     }
 
     inner class MyViewHolder(v: View) : RecyclerView.ViewHolder(v) {
-//            val iv_profile_pic_profile: ImageView
-//            val tv_brand_name: TextView
-//            val tv_detail: TextView
-//            val tv_time_left: TextView
-//            val tv_price: TextView
-//            val btn_learn_more: Button
-//            val ll_item_list: LinearLayout
-//
-//            init {
-//                iv_profile_pic_profile = v.findViewById(R.id.iv_profile_pic_profile)
-//                tv_brand_name = v.findViewById(R.id.tv_brand_name)
-//                tv_detail = v.findViewById(R.id.tv_detail)
-//                tv_time_left = v.findViewById(R.id.tv_time_left)
-//                tv_price = v.findViewById(R.id.tv_price)
-//                btn_learn_more = v.findViewById(R.id.btn_learn_more)
-//                ll_item_list = v.findViewById(R.id.ll_item_list)
-//            }
+         val tvCoins: TextView
+             val tvAdoroDate: TextView
+            init {
+                tvCoins = v.findViewById(R.id.tv_coins)
+                tvAdoroDate = v.findViewById(R.id.tv_date)
+            }
     }
 }

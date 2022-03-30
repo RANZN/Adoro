@@ -23,12 +23,12 @@
             android:layout_height="match_parent"
             android:orientation="vertical">
         <TextView
-            android:id="@+id/tv_coin_type"
+            android:id="@+id/tv_coins"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginHorizontal="16dp"
             android:layout_gravity="center_horizontal"
-            android:text="200A"
+            android:text="0A"
             android:textStyle="bold"
             android:textColor="@color/black"
             android:textSize="22sp" />
@@ -39,7 +39,7 @@
             android:layout_marginHorizontal="16dp"
             android:layout_marginTop="20dp"
             android:layout_gravity="center_horizontal"
-            android:text="Total coins earned: 8000"
+            android:text="Total coins earned: 0"
             android:textColor="@color/black"
             android:textSize="16sp" />
 

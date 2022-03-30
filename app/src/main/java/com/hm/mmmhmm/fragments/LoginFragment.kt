@@ -120,7 +120,7 @@ class LoginFragment : androidx.fragment.app.Fragment() {
 //                            )
                         }
                     } catch (e: java.lang.Exception) {
-                        Toast.makeText(activity!!, "" + e.toString(), Toast.LENGTH_SHORT).show()
+                        Toast.makeText(requireActivity(), "" + e.toString(), Toast.LENGTH_SHORT).show()
                     }
                 }
             } catch (e: java.lang.Exception) {

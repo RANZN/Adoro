@@ -18,5 +18,17 @@ data class Item(
     val email: String?,
     val name: String?,
     val number: Long?,
-    val username: String?
+    val panCardNumber: String?,
+    val username: String?,
+    val dob: String?,
+    val followerData: List<Any>?,
+    val followingData: List<FollowingData>?,
+    val gender: String?,
+    val ifseCode: String?,
+    val myGroupInfo: List<Any>?,
+    val accountNumber: String?,
+    val adoroCoins: Int?,
+    val adoroShield: Int?,
+    val bankName: String?,
+    val completeAddress: CompleteAddress?,
 )

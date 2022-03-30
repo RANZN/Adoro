@@ -84,4 +84,8 @@
     <string name="see_result">See Result</string>
     <string name="withdraw_money">Withdraw Money</string>
     <string name="verify_number">Verify Number</string>
+    <string name="username_already_taken">Username already taken!</string>
+    <string name="user_already_registered">User is already registered with us!</string>
+    <string name="Something_went_wrong">Something went wrong!</string>
+    <string name="total_coins_earned">Total coins earned:</string>
 </resources>

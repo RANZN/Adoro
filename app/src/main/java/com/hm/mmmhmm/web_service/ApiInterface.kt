@@ -73,6 +73,21 @@ interface ApiInterface {
         @Body() req: RequestLogin
     ): retrofit2.Response<LoginResponse>
 
+    @POST("_functions/authenticateUsername")
+    suspend fun authenticateUsername(
+        @Body() req: RequestAuthenticateUsername
+    ): retrofit2.Response<BaseResponse>
+
+    @POST("_functions/showAdoro")
+    suspend fun showAdoro(
+        @Body() req: GeneralRequest
+    ): retrofit2.Response<BaseResponse>
+
+    @POST("_functions/showTrancations")
+    suspend fun showTrancations(
+        @Body() req: GeneralRequest
+    ): retrofit2.Response<BaseResponse>
+
     @FormUrlEncoded
     @POST("api/update-fbtoken")
     suspend fun updateFcmToken(
@@ -101,11 +116,3 @@ interface ApiInterface {
         @Part image_url: MultipartBody.Part?
     ): retrofit2.Response<BaseResponse>
 }
-
-data class UpdateInviteModel(
-    var invite_id: String,
-    var agmt_sex_check: Boolean,
-    var agmt_oral_check: Boolean,
-    var agmt_fondling_check: Boolean,
-    var agmt_other_conduct_custom: String
-)

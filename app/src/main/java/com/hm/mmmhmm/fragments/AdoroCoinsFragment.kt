@@ -13,14 +13,26 @@ import android.view.ViewGroup
 import android.view.WindowManager
 import android.widget.Button
 import android.widget.TextView
+import android.widget.Toast
 import com.hm.mmmhmm.Chat_Module.Inbox
 import com.hm.mmmhmm.R
 import com.hm.mmmhmm.activity.MainActivity
 import com.hm.mmmhmm.adapter.AdoroCoinsAdapter
 import com.hm.mmmhmm.adapter.FeedListAdapter
+import com.hm.mmmhmm.helper.SessionManager
+import com.hm.mmmhmm.models.GeneralRequest
+import com.hm.mmmhmm.models.RequestAuthenticateNumber
+import com.hm.mmmhmm.web_service.ApiClient
 import kotlinx.android.synthetic.main.custom_toolbar.*
 import kotlinx.android.synthetic.main.fragment_adoro_coins.*
 import kotlinx.android.synthetic.main.fragment_home.*
+import kotlinx.android.synthetic.main.fragment_login.*
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
+import java.lang.Exception
+import java.util.*
 
 class AdoroCoinsFragment : Fragment() {
 
@@ -69,11 +81,67 @@ class AdoroCoinsFragment : Fragment() {
             (activity as MainActivity).supportFragmentManager.beginTransaction().replace(R.id.frame_layout_main, WithdrawalRequestFragment())
                 .addToBackStack(null).commit()
         }
-        recycler_adoro_coins.adapter= AdoroCoinsAdapter()
-
+        var generalRequest: GeneralRequest = GeneralRequest(SessionManager.getUserId() ?: "");
+        hitShowAdoroAPI(generalRequest)
 
     }
 
+    private fun hitShowAdoroAPI( generalRequest: GeneralRequest) {
+        pb_adoro_coins.visibility = View.VISIBLE
+        val apiInterface = ApiClient.getRetrofitService(requireContext())
+        CoroutineScope(Dispatchers.IO).launch {
+            try {
+                val response = apiInterface.showAdoro(generalRequest)
+                withContext(Dispatchers.Main) {
 
+                    try {
+                        pb_adoro_coins.visibility = View.GONE
+                        if (response.body()?.OK !=null) {
+                            val r = response.body()
+                            tv_coins.text = r?.OK?.amount+" A"
+                            hitShowTrancationsAPI(generalRequest)
+                        } else {
+                            Toast.makeText(activity,R.string.Something_went_wrong, Toast.LENGTH_SHORT).show()
 
+//                            CommanFunction.handleApiError(
+//                                response.errorBody()?.charStream(),
+//                                requireContext()
+//                            )
+                        }
+                    } catch (e: Exception) {
+                        Toast.makeText(requireActivity(), "" + e.toString(), Toast.LENGTH_SHORT).show()
+                    }
+                }
+            } catch (e: java.lang.Exception) {
+
+            }
+        }
+    }
+
+    private fun hitShowTrancationsAPI( generalRequest: GeneralRequest) {
+        pb_adoro_coins.visibility = View.VISIBLE
+        val apiInterface = ApiClient.getRetrofitService(requireContext())
+        CoroutineScope(Dispatchers.IO).launch {
+            try {
+                val response = apiInterface.showTrancations(generalRequest)
+                withContext(Dispatchers.Main) {
+
+                    try {
+                        pb_adoro_coins.visibility = View.GONE
+                        if (response.body()?.OK !=null) {
+                            val r = response.body()
+                            recycler_adoro_coins.adapter= AdoroCoinsAdapter(r?.OK?.trancations)
+                          //  tv_total_earing.text =  R.string.total_coins_earned + r?.OK?.amount.toString()
+                        } else {
+                            Toast.makeText(activity,R.string.Something_went_wrong, Toast.LENGTH_SHORT).show()
+                        }
+                    } catch (e: Exception) {
+                        Toast.makeText(requireActivity(), "" + e.toString(), Toast.LENGTH_SHORT).show()
+                    }
+                }
+            } catch (e: Exception) {
+                e.printStackTrace()
+            }
+        }
+    }
 }

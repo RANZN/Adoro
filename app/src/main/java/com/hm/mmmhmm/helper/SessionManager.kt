@@ -75,6 +75,12 @@ object SessionManager {
             commit()
         }
     }
+    fun getUserId(): String? {
+        return prefs.getString(
+            USER_ID,
+            "0"
+        )
+    }
 
 
     fun setOTP(id: String) {

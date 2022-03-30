@@ -56,7 +56,7 @@ class OTPVerifyFragment : Fragment() {
         super.onActivityCreated(savedInstanceState)
         setupToolBar()
         //GlobleData.goToLoginScreen = false
-        if (arguments!!.getString("path") == "register") {
+        if (requireArguments().getString("path") == "register") {
             tv_signup_terms.visibility = View.VISIBLE;
         }
 
@@ -74,10 +74,10 @@ class OTPVerifyFragment : Fragment() {
             toast(R.string.enter_otp, 1)
             return
         } else if (ConnectivityObserver.isOnline(activity as Context)) {
-            if (arguments!!.getString("path") == "register" && arguments!!.getString("number") != null) {
-                val signupFragment = com.hm.mmmhmm.fragments.SignupFragment()
+            if (requireArguments().getString("path") == "register" && requireArguments().getString("number") != null) {
+                val signupFragment = SignupFragment()
                 val args = android.os.Bundle()
-                args.putString("number", arguments!!.getString("number"))
+                args.putString("number", requireArguments().getString("number"))
                 signupFragment.arguments = args
                 if (activity != null) {
                     activity?.supportFragmentManager?.beginTransaction()
@@ -85,13 +85,13 @@ class OTPVerifyFragment : Fragment() {
                         ?.commit()
                 }
 
-            } else if (arguments!!.getString("path") == "withdraw") {
+            } else if (requireArguments().getString("path") == "withdraw") {
                 showDialog()
 
             } else {
                 //check otp if match call below api
                 var loginRequest: RequestLogin =
-                    RequestLogin(arguments!!.getString("number")!!.toLong());
+                    RequestLogin(requireArguments().getString("number")!!.toLong());
                 hitLoginAPI(loginRequest)
 
             }
@@ -148,6 +148,7 @@ class OTPVerifyFragment : Fragment() {
 //                            val r = response.body()
                             SessionManager.init(activity as Context)
                             SessionManager.setLoginStatus("true")
+                            SessionManager.setUserId(response.body()?.OK!!.items[0]._id)
                             startActivity(Intent(activity, MainActivity::class.java))
                             activity?.finish()
 
@@ -159,7 +160,7 @@ class OTPVerifyFragment : Fragment() {
                             )
                         }
                     } catch (e: Exception) {
-                        Toast.makeText(activity!!, "" + e.toString(), Toast.LENGTH_SHORT).show()
+                        Toast.makeText(requireActivity(), "" + e.toString(), Toast.LENGTH_SHORT).show()
                     }
                 }
             } catch (e: Exception) {
