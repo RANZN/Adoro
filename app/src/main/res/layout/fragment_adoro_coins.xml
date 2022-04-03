@@ -52,7 +52,7 @@
             android:layout_marginVertical="20dp"
             android:background="@drawable/bg_button_red"
             android:text="@string/withdraw_money"
-            android:textColor="@color/black"
+            android:textColor="@color/buttonTextColor"
             android:textSize="18sp" />
         <TextView
             android:id="@+id/tv_limit"

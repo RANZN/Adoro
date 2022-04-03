@@ -29,7 +29,7 @@ xmlns:tools="http://schemas.android.com/tools">
 
 <ProgressBar
     android:visibility="gone"
-    android:id="@+id/pb_upload_meme"
+    android:id="@+id/pb_feeds"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
     android:layout_centerInParent="true"

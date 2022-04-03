@@ -8,7 +8,7 @@ import android.view.ViewGroup
 import com.hm.mmmhmm.R
 import com.hm.mmmhmm.activity.MainActivity
 import com.hm.mmmhmm.adapter.NotificationsAdapter
-import com.hm.mmmhmm.adapter.SearchSuggestionAdapter
+//import com.hm.mmmhmm.adapter.SearchSuggestionAdapter
 import kotlinx.android.synthetic.main.custom_toolbar.*
 import kotlinx.android.synthetic.main.fragment_notification.*
 import kotlinx.android.synthetic.main.fragment_search.*

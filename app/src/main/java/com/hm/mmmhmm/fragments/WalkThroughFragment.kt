@@ -10,7 +10,14 @@ import androidx.fragment.app.Fragment
 import androidx.viewpager.widget.PagerAdapter
 import androidx.viewpager.widget.ViewPager.OnPageChangeListener
 import com.hm.mmmhmm.R
+import com.hm.mmmhmm.adapter.FeedListAdapter
+import com.hm.mmmhmm.web_service.ApiClient
+import kotlinx.android.synthetic.main.fragment_home.*
 import kotlinx.android.synthetic.main.fragment_walk_through.*
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
 
 /**
@@ -29,7 +36,7 @@ class WalkThroughFragment : Fragment() {
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
-
+        getWalkThroughList()
         btn_next_walk.setOnClickListener(View.OnClickListener {
             if (view_pager_walkthrough.currentItem == 2) {
                 stopFragment()
@@ -123,5 +130,35 @@ class WalkThroughFragment : Fragment() {
     private fun stopFragment() {
         activity?.supportFragmentManager?.beginTransaction()
             ?.replace(R.id.frame_layout_splash_launcher, RegisterNumberFragment())?.commit()
+    }
+
+    private fun getWalkThroughList() {
+        pb_walkthrough.visibility = View.VISIBLE
+        val apiInterface = ApiClient.getRetrofitService(requireContext())
+        CoroutineScope(Dispatchers.IO).launch {
+            try {
+                val response = apiInterface.getWalkThroughList()
+                withContext(Dispatchers.Main) {
+                    pb_walkthrough.visibility = View.GONE
+                    try {
+                        //  toast("" + response.body()?.message)
+                        if (response!=null) {
+                           //feedList = response.body()?.OK?.items
+                            //recycler_feed_list.adapter= FeedListAdapter(feedList)
+
+                        } else {
+                            Log.d("resp", "complet else: ")
+                        }
+
+                    } catch (e: Exception) {
+                        Log.d("resp", "cathch: " + e.toString())
+                    }
+                }
+
+            } catch (e: Exception) {
+                Log.d("weweewefw", e.toString())
+            }
+        }
+
     }
 }

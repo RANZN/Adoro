@@ -1,33 +1,33 @@
 {
   "project_info": {
-    "project_number": "877235843150",
-    "project_id": "adoroapp",
-    "storage_bucket": "adoroapp.appspot.com"
+    "project_number": "258233138747",
+    "project_id": "adoro-6e2b5",
+    "storage_bucket": "adoro-6e2b5.appspot.com"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:877235843150:android:4da6c9b95ea0a2be9cd31f",
+        "mobilesdk_app_id": "1:258233138747:android:5cff025db0ea3c7056a61e",
         "android_client_info": {
-          "package_name": "com.adoro"
+          "package_name": "com.adoro.social"
         }
       },
       "oauth_client": [
         {
-          "client_id": "877235843150-kiotl24o10bihf1iksen02s1f23lrfd8.apps.googleusercontent.com",
+          "client_id": "258233138747-i63mv3n5u5f9306j5op8javp40v210em.apps.googleusercontent.com",
           "client_type": 3
         }
       ],
       "api_key": [
         {
-          "current_key": "AIzaSyAD8ow7vexlqKUy25jAkSHoRdtf_rCg3FI"
+          "current_key": "AIzaSyBma1F28dxIc_4zLtfMuaCk44-hpooICdc"
         }
       ],
       "services": {
         "appinvite_service": {
           "other_platform_oauth_client": [
             {
-              "client_id": "877235843150-kiotl24o10bihf1iksen02s1f23lrfd8.apps.googleusercontent.com",
+              "client_id": "258233138747-i63mv3n5u5f9306j5op8javp40v210em.apps.googleusercontent.com",
               "client_type": 3
             }
           ]

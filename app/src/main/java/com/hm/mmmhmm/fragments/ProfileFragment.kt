@@ -11,10 +11,7 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Button
-import android.widget.ImageView
-import android.widget.LinearLayout
-import android.widget.TextView
+import android.widget.*
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.RecyclerView
@@ -23,14 +20,17 @@ import com.bumptech.glide.request.RequestOptions
 import com.hm.mmmhmm.Chat_Module.Inbox
 import com.hm.mmmhmm.R
 import com.hm.mmmhmm.activity.MainActivity
+import com.hm.mmmhmm.adapter.AdoroCoinsAdapter
 import com.hm.mmmhmm.adapter.GalleryAdapter
 import com.hm.mmmhmm.helper.ConnectivityObserver
 import com.hm.mmmhmm.helper.SessionManager
 import com.hm.mmmhmm.helper.load
 import com.hm.mmmhmm.helper.toast
+import com.hm.mmmhmm.models.GeneralRequest
 import com.hm.mmmhmm.models.Item
 import com.hm.mmmhmm.web_service.ApiClient
 import kotlinx.android.synthetic.main.custom_toolbar.*
+import kotlinx.android.synthetic.main.fragment_adoro_coins.*
 import kotlinx.android.synthetic.main.fragment_home.*
 import kotlinx.android.synthetic.main.fragment_profile.*
 import kotlinx.coroutines.*
@@ -90,6 +90,17 @@ class ProfileFragment : Fragment() {
 //            R.color.text_gray,
 //            true
 //        )
+
+        if(requireArguments().getString("path") == "search"){
+            iv_camera.visibility = View.GONE
+            var generalRequest: GeneralRequest =
+                requireArguments().getString("userId")?.let { GeneralRequest(it) }!!;
+            getUserData(generalRequest)
+        }else{
+            var generalRequest: GeneralRequest = GeneralRequest(SessionManager.getUserId() ?: "");
+            getUserData(generalRequest)
+        }
+
     }
 
     private fun setupToolBar() {
@@ -100,7 +111,7 @@ class ProfileFragment : Fragment() {
         iv_toolbar_action_inbox.setColorFilter(resources.getColor(R.color.black));
         iv_toolbar_action_search.setColorFilter(resources.getColor(R.color.black));
         tv_toolbar_title.setTextColor(resources.getColor(R.color.black))
-        tv_toolbar_title.text = resources.getString(R.string.app_name)
+      //  tv_toolbar_title.text = resources.getString(R.string.app_name)
         iv_toolbar_icon.setOnClickListener(View.OnClickListener {
             (activity as MainActivity).manageDrawer()
         })
@@ -127,19 +138,18 @@ class ProfileFragment : Fragment() {
     }
 
 
-    private fun getUserDetailAPI() {
+
+    private fun getUserData( generalRequest: GeneralRequest) {
         pb_prof.visibility = View.VISIBLE
         val apiInterface = ApiClient.getRetrofitService(requireContext())
         CoroutineScope(Dispatchers.IO).launch {
-            val response = apiInterface.getUserDetailApi()
-            withContext(Dispatchers.Main) {
-                if (activity != null && pb_prof != null) {
-                    pb_prof?.visibility = View.GONE
-                }
-
-                try {
-                    if (response.isSuccessful) {
-                        val model = response.body()
+            try {
+                val response = apiInterface.getUserData(generalRequest)
+                withContext(Dispatchers.Main) {
+                    try {
+                        pb_prof.visibility = View.GONE
+                        if (response.body()?.OK !=null) {
+                            val r = response.body()
 
 //                        iv_profile_pic_profile.load(
 //                            model?.data?.profilePicture.toString(),
@@ -147,32 +157,71 @@ class ProfileFragment : Fragment() {
 //                            R.color.text_gray,
 //                            true
 //                        )
-//                        tv_name_prof.setText(model?.data?.name)
+                        tv_name.text= r?.OK?.items?.get(0)?.name
+                            tv_bio.text= r?.OK?.items?.get(0)?.bio
+                            //tv_total_posts.text= r?.OK?.items?.get(0)?.bio
+                            tv_total_fans.text= r?.OK?.items?.get(0)?.followerData?.size.toString()
+                            tv_total_coins.text= r?.OK?.items?.get(0)?.adoroCoins.toString()+"A"
+                        tv_toolbar_title.text =r?.OK?.items?.get(0)?.username
 //                        tv_email_prof.setText(model?.data?.email)
 //                        tv_address_prof.setText(model?.data?.address)
 //                        tv_phone_prof.setText(model?.data?.phone)
-
-
-                    } else {
-
-//                        if (response.code().toString().equals("401")) {
-//                            MainActivity().logoutUserFromAppSession()
-//                        }
-                        //toast(response.code().toString())
-
+                        } else {
+                            Toast.makeText(activity,R.string.Something_went_wrong, Toast.LENGTH_SHORT).show()
+                        }
+                    } catch (e: java.lang.Exception) {
+                        Toast.makeText(requireActivity(), "" + e.toString(), Toast.LENGTH_SHORT).show()
                     }
-                } catch (e: Exception) {
-
-//                    Toast.makeText(activity,""+e.toString(), Toast.LENGTH_SHORT).show()
-                    Log.d(TAG, "profile exception " + e.toString())
                 }
+            } catch (e: java.lang.Exception) {
+                e.printStackTrace()
+            }
+        }
+    }
+
+    private fun getPosts( generalRequest: GeneralRequest) {
+        pb_prof.visibility = View.VISIBLE
+        val apiInterface = ApiClient.getRetrofitService(requireContext())
+        CoroutineScope(Dispatchers.IO).launch {
+            try {
+                val response = apiInterface.getUserData(generalRequest)
+                withContext(Dispatchers.Main) {
+                    try {
+                        pb_prof.visibility = View.GONE
+                        if (response.body()?.OK !=null) {
+                            val r = response.body()
+
+//                        iv_profile_pic_profile.load(
+//                            model?.data?.profilePicture.toString(),
+//                            R.color.text_gray,
+//                            R.color.text_gray,
+//                            true
+//                        )
+                            tv_name.text= r?.OK?.items?.get(0)?.name
+                            tv_bio.text= r?.OK?.items?.get(0)?.bio
+                            //tv_total_posts.text= r?.OK?.items?.get(0)?.bio
+                            tv_total_fans.text= r?.OK?.items?.get(0)?.followerData?.size.toString()
+                            tv_total_coins.text= r?.OK?.items?.get(0)?.adoroCoins.toString()
+                            tv_toolbar_title.text =r?.OK?.items?.get(0)?.username
+//                        tv_email_prof.setText(model?.data?.email)
+//                        tv_address_prof.setText(model?.data?.address)
+//                        tv_phone_prof.setText(model?.data?.phone)
+                        } else {
+                            Toast.makeText(activity,R.string.Something_went_wrong, Toast.LENGTH_SHORT).show()
+                        }
+                    } catch (e: java.lang.Exception) {
+                        Toast.makeText(requireActivity(), "" + e.toString(), Toast.LENGTH_SHORT).show()
+                    }
+                }
+            } catch (e: java.lang.Exception) {
+                e.printStackTrace()
             }
         }
     }
 
     private fun dispatchTakePictureIntent() {
         Intent(MediaStore.ACTION_IMAGE_CAPTURE).also { takePictureIntent ->
-            takePictureIntent.resolveActivity(activity!!.packageManager)?.also {
+            takePictureIntent.resolveActivity(requireActivity().packageManager)?.also {
                 startActivityForResult(takePictureIntent, REQUEST_IMAGE_CAPTURE)
             }
         }
@@ -201,44 +250,46 @@ class ProfileFragment : Fragment() {
                 "image", file?.name,
                 (RequestBody.create(MediaType.parse("multipart/form-data"), file))
             )
-            updateProfilePicAPI() //API CALL<<<<<<<<<<<<<<<<<<<<<<<<<<<<
-        }
-
-    }
-
-
-    private fun updateProfilePicAPI() {
-        pb_prof.visibility = View.VISIBLE
-        val apiInterface = ApiClient.getRetrofitService(requireContext())
-        CoroutineScope(Dispatchers.IO).launch {
-            val response = apiInterface.updateProfilePicApi(image_body!!)
-            withContext(Dispatchers.Main) {
-                if (activity != null && pb_prof != null) {
-                    pb_prof?.visibility = View.GONE
-                    SessionManager.init(activity as Context)
-                }
-                try {
-                    if (response.isSuccessful) {
-                        val data = SessionManager.getUserData()
-                        data?.profilePicture = (response.body()?.data?.get(0) ?: "")
-                        iv_profile_pic_profile.load(
-                            SessionManager.getUserData()?.profilePicture,
-                            R.color.text_gray,
-                            R.color.text_gray,
-                            true
-                        )
-                        //toast(response.body()?.message.toString())
-                    } else {
-                       // toast(response.message().toString())
-                    }
-
-                } catch (e: java.lang.Exception) {
-                    Log.d(TAG, "Exception: " + e.toString())
-                }
-
-            }
+           // updateProfilePicAPI() //API CALL<<<<<<<<<<<<<<<<<<<<<<<<<<<<
         }
     }
+
+//    private fun updateProfilePicAPI( ) {
+//        pb_prof.visibility = View.VISIBLE
+//        val apiInterface = ApiClient.getRetrofitService(requireContext())
+//        CoroutineScope(Dispatchers.IO).launch {
+//            try {
+//                val response = apiInterface.getUserData(generalRequest)
+//                withContext(Dispatchers.Main) {
+//                    try {
+//                        pb_prof.visibility = View.GONE
+//                        if (response.body()?.OK !=null) {
+//                            val r = response.body()
+//
+////                        iv_profile_pic_profile.load(
+////                            model?.data?.profilePicture.toString(),
+////                            R.color.text_gray,
+////                            R.color.text_gray,
+////                            true
+////                        )
+//                            tv_name.text= r?.OK?.items?.get(0)?.name
+//                            tv_toolbar_title.text =r?.OK?.items?.get(0)?.username
+////                        tv_email_prof.setText(model?.data?.email)
+////                        tv_address_prof.setText(model?.data?.address)
+////                        tv_phone_prof.setText(model?.data?.phone)
+//                        } else {
+//                            Toast.makeText(activity,R.string.Something_went_wrong, Toast.LENGTH_SHORT).show()
+//                        }
+//                    } catch (e: java.lang.Exception) {
+//                        Toast.makeText(requireActivity(), "" + e.toString(), Toast.LENGTH_SHORT).show()
+//                    }
+//                }
+//            } catch (e: java.lang.Exception) {
+//                e.printStackTrace()
+//            }
+//        }
+//    }
+
 
 
 }

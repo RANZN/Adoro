@@ -3,6 +3,7 @@ package com.hm.mmmhmm.fragments
 
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -13,12 +14,21 @@ import com.hm.mmmhmm.R
 import com.hm.mmmhmm.activity.MainActivity
 import com.hm.mmmhmm.adapter.FeedListAdapter
 import com.hm.mmmhmm.helper.SessionManager
+import com.hm.mmmhmm.models.Item
+import com.hm.mmmhmm.web_service.ApiClient
 import kotlinx.android.synthetic.main.custom_toolbar.*
 import kotlinx.android.synthetic.main.fragment_home.*
+import kotlinx.android.synthetic.main.fragment_services.*
 import kotlinx.android.synthetic.main.item_job_list.*
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
 
 class HomeFragment : Fragment() {
+
+    private var feedList: List<Item>? = null
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
@@ -59,8 +69,39 @@ class HomeFragment : Fragment() {
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
         setupToolBar()
-        recycler_feed_list.adapter= FeedListAdapter()
+        getFeedListAPI()
 
+
+    }
+
+    private fun getFeedListAPI() {
+        pb_feeds.visibility = View.VISIBLE
+        val apiInterface = ApiClient.getRetrofitService(requireContext())
+        CoroutineScope(Dispatchers.IO).launch {
+            try {
+                val response = apiInterface.getFeed()
+                withContext(Dispatchers.Main) {
+                    pb_feeds.visibility = View.GONE
+
+                    try {
+                        //  toast("" + response.body()?.message)
+                        if (response!=null) {
+                            feedList = response.body()?.OK?.items
+                            recycler_feed_list.adapter= FeedListAdapter(feedList)
+
+                        } else {
+                            Log.d("resp", "complet else: ")
+                        }
+
+                    } catch (e: Exception) {
+                        Log.d("resp", "cathch: " + e.toString())
+                    }
+                }
+
+            } catch (e: Exception) {
+                Log.d("weweewefw", e.toString())
+            }
+        }
 
     }
 

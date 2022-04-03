@@ -8,13 +8,12 @@ android {
     buildToolsVersion "29.0.3"
 
     defaultConfig {
-        applicationId "com.adoro"
+        applicationId "com.adoro.social"
         minSdkVersion 23
         targetSdkVersion 32
         versionCode 1
         versionName "1.0"
         multiDexEnabled true
-
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
 

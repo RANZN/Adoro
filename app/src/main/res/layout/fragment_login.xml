@@ -138,7 +138,7 @@
                 android:layout_marginBottom="40dp"
                 android:background="@drawable/bg_button_red"
                 android:text="Continue"
-                android:textColor="@color/black"
+                android:textColor="@color/buttonTextColor"
                 android:textSize="18sp" />
 
         </LinearLayout>

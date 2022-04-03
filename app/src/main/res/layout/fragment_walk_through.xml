@@ -19,6 +19,14 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent" />
 
+        <ProgressBar
+            android:visibility="gone"
+            android:id="@+id/pb_walkthrough"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            />
+
     </RelativeLayout>
 
 
@@ -80,7 +88,7 @@
                     android:layout_marginTop="28dp"
                     android:background="@drawable/bg_button_red"
                     android:text="@string/lets_start"
-                    android:textColor="@color/black"
+                    android:textColor="@color/buttonTextColor"
                     android:textSize="18sp" />
 
                 <TextView

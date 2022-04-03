@@ -334,7 +334,12 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
                 drawer_layout.closeDrawer(GravityCompat.START)
             }
             R.id.iv_tab_account, R.id.tv_tab_account, R.id.liTab_account -> {
-                supportFragmentManager.beginTransaction().replace(R.id.frame_layout_main, ProfileFragment())
+                val profileFragment = ProfileFragment()
+                val args = Bundle()
+                args.putString("path", "home")
+                args.putString("userId", "")
+                profileFragment.arguments = args
+                supportFragmentManager.beginTransaction().replace(R.id.frame_layout_main, profileFragment)
                     .commit()
                 view_tab_home.visibility = View.GONE
                 view_tab_group.setVisibility(View.GONE)

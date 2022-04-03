@@ -39,7 +39,7 @@
         <entry key="..\:/KapilWorkspace/hh_mm-master/hh_mm-master/app/src/main/res/layout/fragment_notification.xml" value="0.2" />
         <entry key="..\:/KapilWorkspace/hh_mm-master/hh_mm-master/app/src/main/res/layout/fragment_o_t_p_verify.xml" value="0.16666666666666666" />
         <entry key="..\:/KapilWorkspace/hh_mm-master/hh_mm-master/app/src/main/res/layout/fragment_post_detail.xml" value="0.18297101449275363" />
-        <entry key="..\:/KapilWorkspace/hh_mm-master/hh_mm-master/app/src/main/res/layout/fragment_profile.xml" value="0.18" />
+        <entry key="..\:/KapilWorkspace/hh_mm-master/hh_mm-master/app/src/main/res/layout/fragment_profile.xml" value="0.22" />
         <entry key="..\:/KapilWorkspace/hh_mm-master/hh_mm-master/app/src/main/res/layout/fragment_publish_meme.xml" value="0.2" />
         <entry key="..\:/KapilWorkspace/hh_mm-master/hh_mm-master/app/src/main/res/layout/fragment_refer.xml" value="0.2" />
         <entry key="..\:/KapilWorkspace/hh_mm-master/hh_mm-master/app/src/main/res/layout/fragment_register.xml" value="0.1" />
@@ -69,6 +69,7 @@
         <entry key="..\:/KapilWorkspace/hh_mm-master/hh_mm-master/app/src/main/res/layout/item_subscription_list.xml" value="0.17074275362318841" />
         <entry key="..\:/KapilWorkspace/hh_mm-master/hh_mm-master/app/src/main/res/layout/item_walkthroug_pager.xml" value="0.18" />
         <entry key="..\:/KapilWorkspace/hh_mm-master/hh_mm-master/app/src/main/res/layout/item_winner_list.xml" value="0.2" />
+        <entry key="..\:/KapilWorkspace/hh_mm-master/hh_mm-master/app/src/main/res/layout/popup_add_image.xml" value="0.2" />
         <entry key="..\:/KapilWorkspace/hh_mm-master/hh_mm-master/app/src/main/res/mipmap-anydpi-v26/ic_launcher.xml" value="0.1" />
         <entry key="..\:/KapilWorkspace/hh_mm-master/hh_mm-master/app/src/main/res/mipmap-anydpi-v26/ic_launcher_round.xml" value="0.1" />
       </map>

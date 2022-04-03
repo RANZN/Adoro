@@ -90,7 +90,7 @@
             android:paddingVertical="4dp"
             android:background="@drawable/bg_button"
             android:text="@string/see_result"
-            android:textColor="@color/black"
+            android:textColor="@color/buttonTextColor"
             android:textSize="10sp" />
 
         <TextView

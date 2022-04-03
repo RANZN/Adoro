@@ -21,7 +21,7 @@
                 android:orientation="horizontal">
 
                 <de.hdodenhof.circleimageview.CircleImageView
-                    android:id="@+id/iv_user_pic"
+                    android:id="@+id/iv_user_feed"
                     android:layout_width="50dp"
                     android:layout_height="50dp"
                     android:scaleType="centerCrop"
@@ -162,7 +162,7 @@
 
 
             <TextView
-                android:id="@+id/tv_description"
+                android:id="@+id/tv_feed_description"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="4dp"

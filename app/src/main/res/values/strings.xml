@@ -88,4 +88,6 @@
     <string name="user_already_registered">User is already registered with us!</string>
     <string name="Something_went_wrong">Something went wrong!</string>
     <string name="total_coins_earned">Total coins earned:</string>
+    <string name="edit_profile">Edit Profile</string>
+    <string name="accounts">Account</string>
 </resources>

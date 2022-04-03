@@ -85,7 +85,7 @@
                     android:paddingVertical="4dp"
                     android:background="@drawable/bg_button_red"
                     android:text="@string/learn_more"
-                    android:textColor="@color/black"
+                    android:textColor="@color/buttonTextColor"
                     android:textSize="10sp" />
                 <TextView
                     android:id="@+id/tv_time_left"

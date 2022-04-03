@@ -50,7 +50,7 @@
                     android:background="@drawable/bg_button_red"
                     android:paddingVertical="4dp"
                     android:text="@string/choose_design"
-                    android:textColor="@color/black" />
+                    android:textColor="@color/buttonTextColor" />
 
 
                 <TextView
@@ -76,7 +76,7 @@
             android:paddingVertical="4dp"
             android:background="@drawable/bg_button_red"
             android:text="@string/upload_your_design"
-            android:textColor="@color/black"/>
+            android:textColor="@color/buttonTextColor"/>
     </LinearLayout>
 
     <ProgressBar

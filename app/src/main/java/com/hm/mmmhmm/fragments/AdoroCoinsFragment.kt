@@ -125,7 +125,6 @@ class AdoroCoinsFragment : Fragment() {
             try {
                 val response = apiInterface.showTrancations(generalRequest)
                 withContext(Dispatchers.Main) {
-
                     try {
                         pb_adoro_coins.visibility = View.GONE
                         if (response.body()?.OK !=null) {

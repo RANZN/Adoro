@@ -41,7 +41,7 @@
             android:layout_marginTop="20dp"
             android:background="@color/bg_color_red_button"
             android:text="@string/ok"
-            android:textColor="@color/black"
+            android:textColor="@color/buttonTextColor"
             android:textStyle="bold" />
     </LinearLayout>
 

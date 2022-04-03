@@ -10,4 +10,3 @@ data class Query(
      val skipNumber: Int?
 )
 
-

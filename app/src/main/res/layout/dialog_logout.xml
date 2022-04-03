@@ -49,7 +49,7 @@
             android:fontFamily="@font/robotoregular"
             android:text="Yes"
             android:textAllCaps="false"
-            android:textColor="@color/black"
+            android:textColor="@color/buttonTextColor"
             android:textSize="17dp" />
 
 

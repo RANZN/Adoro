@@ -5,6 +5,7 @@
     <color name="colorAccent">#FFEF50</color>
 
 
+
     <color name="text_black">#140b0e</color>
     <color name="text_gray">#726d6f</color>
 
@@ -13,7 +14,8 @@
     <color name="transparent">#00000000</color>
 
     <color name="bg_color_spiner">#fcf5f7</color>
-    <color name="bg_color_red_button">#FFEF50</color>
+    <color name="bg_color_red_button">#000000</color>
+    <color name="buttonTextColor">#FFFFFF</color>
     <color name="black">#000000</color>
     <color name="blue">#BBBFD8</color>
     <color name="backgroundColor">#F9F9F9</color>

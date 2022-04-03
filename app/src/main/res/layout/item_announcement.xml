@@ -44,7 +44,7 @@
             android:layout_marginVertical="10dp"
             android:background="@drawable/bg_button"
             android:text="@string/learn_more"
-            android:textColor="@color/black"
+            android:textColor="@color/buttonTextColor"
             android:textSize="10sp" />
 
 

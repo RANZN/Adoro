@@ -52,6 +52,13 @@ interface ApiInterface {
     suspend fun getCampaignList(): retrofit2.Response<BaseResponse>
 
 
+    @GET("_functions/getFeed")
+    suspend fun getFeed(): retrofit2.Response<BaseResponse>
+
+    @GET("_functions/getWalkThroughList")
+    suspend fun getWalkThroughList(): retrofit2.Response<BaseResponse>
+
+
     @POST("_functions/getSpecificCampaignData")
     suspend fun getCampaignDetail(
         @Body() req: RequestCampaign
@@ -85,6 +92,17 @@ interface ApiInterface {
 
     @POST("_functions/showTrancations")
     suspend fun showTrancations(
+        @Body() req: GeneralRequest
+    ): retrofit2.Response<BaseResponse>
+
+    @POST("_functions/searchAccount")
+    suspend fun searchAccount(
+        @Body() req: SearchRequest
+    ): retrofit2.Response<BaseResponse>
+
+
+    @POST("_functions/getUserData")
+    suspend fun getUserData(
         @Body() req: GeneralRequest
     ): retrofit2.Response<BaseResponse>
 

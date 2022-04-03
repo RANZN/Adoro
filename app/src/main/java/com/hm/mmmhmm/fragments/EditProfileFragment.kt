@@ -2,6 +2,7 @@ package com.hm.mmmhmm.fragments
 
 import android.app.DatePickerDialog
 import android.content.Context
+import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import androidx.fragment.app.Fragment
@@ -9,8 +10,10 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.*
+import com.hm.mmmhmm.Chat_Module.Inbox
 
 import com.hm.mmmhmm.R
+import com.hm.mmmhmm.activity.MainActivity
 import com.hm.mmmhmm.helper.ConnectivityObserver
 import com.hm.mmmhmm.helper.SessionManager
 import com.hm.mmmhmm.helper.toast
@@ -61,10 +64,30 @@ class EditProfileFragment : Fragment() {
     }
 
     private fun setupToolBar() {
-    //    iv_toolbar_icon.setBackgroundResource(R.drawable.ic_back_arrow)
-    //    tb_root.setBackgroundColor(resources.getColor(R.color.black))
-        tv_toolbar_title.setText("Edit Profile")
+        iv_toolbar_icon.setBackgroundResource(R.drawable.hamburger_icon)
+        iv_toolbar_action_inbox.setBackgroundResource(R.drawable.chat)
+        iv_toolbar_action_search.setBackgroundResource(R.drawable.iv_search)
+        iv_toolbar_icon.setColorFilter(resources.getColor(R.color.black));
+        iv_toolbar_action_inbox.setColorFilter(resources.getColor(R.color.black));
+        iv_toolbar_action_search.setColorFilter(resources.getColor(R.color.black));
+        tv_toolbar_title.setTextColor(resources.getColor(R.color.black))
+          tv_toolbar_title.text = resources.getString(R.string.edit_profile)
+        iv_toolbar_icon.setOnClickListener(View.OnClickListener {
+            (activity as MainActivity).manageDrawer()
+        })
+
+        iv_toolbar_action_inbox.setOnClickListener(View.OnClickListener {
+            startActivity(Intent(activity, Inbox::class.java))
+        })
+
+        iv_toolbar_action_search.setOnClickListener(View.OnClickListener {
+            (activity as MainActivity).supportFragmentManager.beginTransaction().replace(R.id.frame_layout_main, SearchFragment())
+                .addToBackStack(null).commit()
+        })
+
+
     }
+
 
     private fun setupSpinner() {
         val spinerAdapter =

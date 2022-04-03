@@ -94,14 +94,24 @@ class RegisterNumberFragment : Fragment() {
 
                             //call send otp api here
 
-                            val oTPVerifyFragment = OTPVerifyFragment()
-                            val args = Bundle()
-                            args.putString("path", "register")
+//                            val oTPVerifyFragment = OTPVerifyFragment()
+//                            val args = Bundle()
+//                            args.putString("path", "register")
+//                            args.putString("number", et_register_number.text.toString())
+//                            oTPVerifyFragment.arguments = args
+//                            if (activity != null) {
+//                                activity?.supportFragmentManager?.beginTransaction()
+//                                    ?.replace(R.id.frame_layout_splash_launcher,oTPVerifyFragment)?.commit()
+//                            }
+
+                            val signupFragment = SignupFragment()
+                            val args = android.os.Bundle()
                             args.putString("number", et_register_number.text.toString())
-                            oTPVerifyFragment.arguments = args
+                            signupFragment.arguments = args
                             if (activity != null) {
                                 activity?.supportFragmentManager?.beginTransaction()
-                                    ?.replace(R.id.frame_layout_splash_launcher,oTPVerifyFragment)?.commit()
+                                    ?.replace(com.hm.mmmhmm.R.id.frame_layout_splash_launcher, signupFragment)
+                                    ?.commit()
                             }
 
                         } else {
