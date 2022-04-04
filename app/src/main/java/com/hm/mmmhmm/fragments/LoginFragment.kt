@@ -101,39 +101,14 @@ class LoginFragment : androidx.fragment.app.Fragment() {
 
                             //call send otp api here
 
-//                            val oTPVerifyFragment = OTPVerifyFragment()
-//                            val args = Bundle()
-//                            args.putString("path", "login")
-//                            args.putString("number", et_email_login.text.toString())
-//                            oTPVerifyFragment.arguments = args
-//                            if (activity != null) {
-//                                activity?.supportFragmentManager?.beginTransaction()
-//                                    ?.replace(R.id.frame_layout_splash_launcher,oTPVerifyFragment)?.commit()
-//                            }
-
-                            if (response.body()?.OK != null) {
-                                Toast.makeText(
-                                    activity,
-                                    "Hi " + (response.body()?.OK!!.items?.get(0)?.name ?: "") + ", Welcome to ADARO! ",
-                                    Toast.LENGTH_SHORT
-                                ).show()
-//                            val r = response.body()
-                                SessionManager.init(activity as Context)
-                                SessionManager.setLoginStatus("true")
-                                response.body()?.OK!!.items?.get(0)?.let { it._id?.let { it1 ->
-                                    SessionManager.setUserId(
-                                        it1
-                                    )
-                                } }
-                                startActivity(Intent(activity, MainActivity::class.java))
-                                activity?.finish()
-
-
-                            } else {
-                                CommanFunction.handleApiError(
-                                    response.errorBody()?.charStream(),
-                                    requireContext()
-                                )
+                            val oTPVerifyFragment = OTPVerifyFragment()
+                            val args = Bundle()
+                            args.putString("path", "login")
+                            args.putString("number", et_email_login.text.toString())
+                            oTPVerifyFragment.arguments = args
+                            if (activity != null) {
+                                activity?.supportFragmentManager?.beginTransaction()
+                                    ?.replace(R.id.frame_layout_splash_launcher,oTPVerifyFragment)?.commit()
                             }
 
                         } else {

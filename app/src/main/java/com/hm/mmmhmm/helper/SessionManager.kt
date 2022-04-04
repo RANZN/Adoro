@@ -82,7 +82,6 @@ object SessionManager {
         )
     }
 
-
     fun setOTP(id: String) {
         val prefsEditor: SharedPreferences.Editor = prefs.edit()
         with(prefsEditor) {

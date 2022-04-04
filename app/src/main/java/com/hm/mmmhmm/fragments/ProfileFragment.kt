@@ -51,6 +51,7 @@ class ProfileFragment : Fragment() {
 
     var myProfileView: Int=0
 
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -64,7 +65,7 @@ class ProfileFragment : Fragment() {
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
         setupToolBar()
-        rv_gallery.adapter= GalleryAdapter()
+
       //  SessionManager.init(activity as Context)
 //        myProfileView = requireArguments().getInt("viewType")?:0
 //        if (myProfileView==1){
@@ -97,7 +98,7 @@ class ProfileFragment : Fragment() {
                 requireArguments().getString("userId")?.let { GeneralRequest(it) }!!;
             getUserData(generalRequest)
         }else{
-            var generalRequest: GeneralRequest = GeneralRequest(SessionManager.getUserId() ?: "");
+            var generalRequest: GeneralRequest = GeneralRequest("2f3fd887-2506-4245-9b60-c2338e95afa3");
             getUserData(generalRequest)
         }
 
@@ -166,6 +167,7 @@ class ProfileFragment : Fragment() {
 //                        tv_email_prof.setText(model?.data?.email)
 //                        tv_address_prof.setText(model?.data?.address)
 //                        tv_phone_prof.setText(model?.data?.phone)
+                            getPosts(generalRequest)
                         } else {
                             Toast.makeText(activity,R.string.Something_went_wrong, Toast.LENGTH_SHORT).show()
                         }
@@ -184,28 +186,13 @@ class ProfileFragment : Fragment() {
         val apiInterface = ApiClient.getRetrofitService(requireContext())
         CoroutineScope(Dispatchers.IO).launch {
             try {
-                val response = apiInterface.getUserData(generalRequest)
+                val response = apiInterface.showPost(generalRequest)
                 withContext(Dispatchers.Main) {
                     try {
                         pb_prof.visibility = View.GONE
                         if (response.body()?.OK !=null) {
                             val r = response.body()
-
-//                        iv_profile_pic_profile.load(
-//                            model?.data?.profilePicture.toString(),
-//                            R.color.text_gray,
-//                            R.color.text_gray,
-//                            true
-//                        )
-                            tv_name.text= r?.OK?.items?.get(0)?.name
-                            tv_bio.text= r?.OK?.items?.get(0)?.bio
-                            //tv_total_posts.text= r?.OK?.items?.get(0)?.bio
-                            tv_total_fans.text= r?.OK?.items?.get(0)?.followerData?.size.toString()
-                            tv_total_coins.text= r?.OK?.items?.get(0)?.adoroCoins.toString()
-                            tv_toolbar_title.text =r?.OK?.items?.get(0)?.username
-//                        tv_email_prof.setText(model?.data?.email)
-//                        tv_address_prof.setText(model?.data?.address)
-//                        tv_phone_prof.setText(model?.data?.phone)
+                            rv_gallery.adapter= GalleryAdapter(r?.OK?.items)
                         } else {
                             Toast.makeText(activity,R.string.Something_went_wrong, Toast.LENGTH_SHORT).show()
                         }
@@ -213,7 +200,7 @@ class ProfileFragment : Fragment() {
                         Toast.makeText(requireActivity(), "" + e.toString(), Toast.LENGTH_SHORT).show()
                     }
                 }
-            } catch (e: java.lang.Exception) {
+            } catch (e: Exception) {
                 e.printStackTrace()
             }
         }

@@ -90,6 +90,12 @@ interface ApiInterface {
         @Body() req: GeneralRequest
     ): retrofit2.Response<BaseResponse>
 
+
+    @POST("_functions/showPost")
+    suspend fun showPost(
+        @Body() req: GeneralRequest
+    ): retrofit2.Response<BaseResponse>
+
     @POST("_functions/showTrancations")
     suspend fun showTrancations(
         @Body() req: GeneralRequest

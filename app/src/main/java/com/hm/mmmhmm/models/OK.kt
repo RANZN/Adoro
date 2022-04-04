@@ -15,7 +15,9 @@ data class OK(
     val profile: String?,
     val username: String?,
     val amount: String?,
-    val trancations: List<Trancation>?
+    val trancations: List<Trancation>?,
+    val id: String?,
+    val serialNumber: Int?,
 )
 
 

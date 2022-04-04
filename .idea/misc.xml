@@ -5,6 +5,7 @@
       <map>
         <entry key="..\:/KapilWorkspace/hh_mm-master/hh_mm-master/app/src/main/res/drawable-v24/bg_button.xml" value="0.126" />
         <entry key="..\:/KapilWorkspace/hh_mm-master/hh_mm-master/app/src/main/res/drawable-v24/ic_launcher_foreground.xml" value="0.1435" />
+        <entry key="..\:/KapilWorkspace/hh_mm-master/hh_mm-master/app/src/main/res/drawable/background4.xml" value="0.127" />
         <entry key="..\:/KapilWorkspace/hh_mm-master/hh_mm-master/app/src/main/res/drawable/bg_button_red.xml" value="0.1" />
         <entry key="..\:/KapilWorkspace/hh_mm-master/hh_mm-master/app/src/main/res/drawable/bg_circle.xml" value="0.144" />
         <entry key="..\:/KapilWorkspace/hh_mm-master/hh_mm-master/app/src/main/res/drawable/bg_cover.xml" value="0.1125" />
@@ -12,13 +13,16 @@
         <entry key="..\:/KapilWorkspace/hh_mm-master/hh_mm-master/app/src/main/res/drawable/bg_edittext.xml" value="0.1325" />
         <entry key="..\:/KapilWorkspace/hh_mm-master/hh_mm-master/app/src/main/res/drawable/bubble_active.xml" value="0.1325" />
         <entry key="..\:/KapilWorkspace/hh_mm-master/hh_mm-master/app/src/main/res/drawable/buble_default.xml" value="0.1325" />
+        <entry key="..\:/KapilWorkspace/hh_mm-master/hh_mm-master/app/src/main/res/drawable/round_shape.xml" value="0.127" />
         <entry key="..\:/KapilWorkspace/hh_mm-master/hh_mm-master/app/src/main/res/layout/activity__chat.xml" value="0.18796296296296297" />
+        <entry key="..\:/KapilWorkspace/hh_mm-master/hh_mm-master/app/src/main/res/layout/activity_chat_screen.xml" value="0.20416666666666666" />
         <entry key="..\:/KapilWorkspace/hh_mm-master/hh_mm-master/app/src/main/res/layout/activity_forgot_password.xml" value="0.2" />
         <entry key="..\:/KapilWorkspace/hh_mm-master/hh_mm-master/app/src/main/res/layout/activity_inbox.xml" value="0.18796296296296297" />
         <entry key="..\:/KapilWorkspace/hh_mm-master/hh_mm-master/app/src/main/res/layout/activity_main.xml" value="0.15" />
         <entry key="..\:/KapilWorkspace/hh_mm-master/hh_mm-master/app/src/main/res/layout/activity_splash_launcher.xml" value="0.1" />
         <entry key="..\:/KapilWorkspace/hh_mm-master/hh_mm-master/app/src/main/res/layout/chat_inbox_adapter.xml" value="0.18796296296296297" />
         <entry key="..\:/KapilWorkspace/hh_mm-master/hh_mm-master/app/src/main/res/layout/chat_list_adapter.xml" value="0.2" />
+        <entry key="..\:/KapilWorkspace/hh_mm-master/hh_mm-master/app/src/main/res/layout/chat_message_list_adapter.xml" value="0.20416666666666666" />
         <entry key="..\:/KapilWorkspace/hh_mm-master/hh_mm-master/app/src/main/res/layout/custom_dialog.xml" value="0.16666666666666666" />
         <entry key="..\:/KapilWorkspace/hh_mm-master/hh_mm-master/app/src/main/res/layout/custom_dialog_publish_meme.xml" value="0.2" />
         <entry key="..\:/KapilWorkspace/hh_mm-master/hh_mm-master/app/src/main/res/layout/custom_navigation_view_sidebar.xml" value="0.2" />
@@ -55,10 +59,11 @@
         <entry key="..\:/KapilWorkspace/hh_mm-master/hh_mm-master/app/src/main/res/layout/fragment_upload_meme.xml" value="0.18931159420289856" />
         <entry key="..\:/KapilWorkspace/hh_mm-master/hh_mm-master/app/src/main/res/layout/fragment_walk_through.xml" value="0.2" />
         <entry key="..\:/KapilWorkspace/hh_mm-master/hh_mm-master/app/src/main/res/layout/fragment_withdrawal_request.xml" value="0.2" />
+        <entry key="..\:/KapilWorkspace/hh_mm-master/hh_mm-master/app/src/main/res/layout/inbox_list.xml" value="0.20416666666666666" />
         <entry key="..\:/KapilWorkspace/hh_mm-master/hh_mm-master/app/src/main/res/layout/item_adoro_list.xml" value="0.2" />
         <entry key="..\:/KapilWorkspace/hh_mm-master/hh_mm-master/app/src/main/res/layout/item_announcement.xml" value="0.2" />
         <entry key="..\:/KapilWorkspace/hh_mm-master/hh_mm-master/app/src/main/res/layout/item_feed.xml" value="0.2" />
-        <entry key="..\:/KapilWorkspace/hh_mm-master/hh_mm-master/app/src/main/res/layout/item_gallery.xml" value="0.4649350649350649" />
+        <entry key="..\:/KapilWorkspace/hh_mm-master/hh_mm-master/app/src/main/res/layout/item_gallery.xml" value="0.41935483870967744" />
         <entry key="..\:/KapilWorkspace/hh_mm-master/hh_mm-master/app/src/main/res/layout/item_group_discussion.xml" value="0.2" />
         <entry key="..\:/KapilWorkspace/hh_mm-master/hh_mm-master/app/src/main/res/layout/item_group_feed.xml" value="0.2" />
         <entry key="..\:/KapilWorkspace/hh_mm-master/hh_mm-master/app/src/main/res/layout/item_group_list.xml" value="0.2" />
