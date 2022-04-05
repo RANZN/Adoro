@@ -52,11 +52,19 @@ interface ApiInterface {
     suspend fun getCampaignList(): retrofit2.Response<BaseResponse>
 
 
-    @GET("_functions/getFeed")
-    suspend fun getFeed(): retrofit2.Response<BaseResponse>
+    @POST("_functions/getFeed")
+    suspend fun getFeed(
+        @Body() req: GeneralRequest
+    ): retrofit2.Response<BaseResponse>
 
     @GET("_functions/getWalkThroughList")
     suspend fun getWalkThroughList(): retrofit2.Response<BaseResponse>
+
+    @GET("_functions/browseGroup")
+    suspend fun browseGroup(): retrofit2.Response<BaseResponse>
+
+    @GET("_functions/getCategoryListForGroup")
+    suspend fun getCategoryListForGroup(): retrofit2.Response<BaseResponse>
 
 
     @POST("_functions/getSpecificCampaignData")
@@ -67,6 +75,11 @@ interface ApiInterface {
     @POST("_functions/authenticate")
     suspend fun registerNumber(
         @Body() req: RequestAuthenticateNumber
+    ): retrofit2.Response<BaseResponse>
+
+    @POST("_functions/createGroup")
+    suspend fun createGroup(
+        @Body() req: CreateGroupRequest
     ): retrofit2.Response<BaseResponse>
 
 
@@ -93,7 +106,7 @@ interface ApiInterface {
 
     @POST("_functions/showPost")
     suspend fun showPost(
-        @Body() req: GeneralRequest
+        @Body() req: ShowPostlRequest
     ): retrofit2.Response<BaseResponse>
 
     @POST("_functions/showTrancations")

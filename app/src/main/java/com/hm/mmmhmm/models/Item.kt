@@ -25,7 +25,7 @@ data class Item(
     val followingData: List<FollowingData>?,
     val gender: String?,
     val ifseCode: String?,
-    val myGroupInfo: List<Any>?,
+    val myGroupInfo: List<Object>?,
     val accountNumber: String?,
     val adoroCoins: Int?,
     val adoroShield: Int?,
@@ -37,5 +37,11 @@ data class Item(
     val bio: String?,
     val id: String?,
     val profile: String?,
-    val serialNumber: Int,
+    val bannerImage: String?,
+    val serialNumber: Int?,
+    val category: String?,
+    val groupName: String?,
+    val groupProfile: String?,
+    val memberData: List<Any>?,
+    val privacy: String?
 )

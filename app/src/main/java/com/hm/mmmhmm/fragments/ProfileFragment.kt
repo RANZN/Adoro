@@ -28,6 +28,7 @@ import com.hm.mmmhmm.helper.load
 import com.hm.mmmhmm.helper.toast
 import com.hm.mmmhmm.models.GeneralRequest
 import com.hm.mmmhmm.models.Item
+import com.hm.mmmhmm.models.ShowPostlRequest
 import com.hm.mmmhmm.web_service.ApiClient
 import kotlinx.android.synthetic.main.custom_toolbar.*
 import kotlinx.android.synthetic.main.fragment_adoro_coins.*
@@ -98,7 +99,7 @@ class ProfileFragment : Fragment() {
                 requireArguments().getString("userId")?.let { GeneralRequest(it) }!!;
             getUserData(generalRequest)
         }else{
-            var generalRequest: GeneralRequest = GeneralRequest("2f3fd887-2506-4245-9b60-c2338e95afa3");
+            var generalRequest: GeneralRequest = GeneralRequest(SessionManager.getUserId()?:"");
             getUserData(generalRequest)
         }
 
@@ -152,12 +153,18 @@ class ProfileFragment : Fragment() {
                         if (response.body()?.OK !=null) {
                             val r = response.body()
 
-//                        iv_profile_pic_profile.load(
-//                            model?.data?.profilePicture.toString(),
-//                            R.color.text_gray,
-//                            R.color.text_gray,
-//                            true
-//                        )
+                        iv_profile_pic_profile.load(
+                            r?.OK?.items?.get(0)?.profile,
+                            R.color.text_gray,
+                            R.color.text_gray,
+                            true
+                        )
+                            iv_cover_pic_profile.load(
+                            r?.OK?.items?.get(0)?.bannerImage,
+                            R.color.text_gray,
+                            R.color.text_gray,
+                            true
+                        )
                         tv_name.text= r?.OK?.items?.get(0)?.name
                             tv_bio.text= r?.OK?.items?.get(0)?.bio
                             //tv_total_posts.text= r?.OK?.items?.get(0)?.bio
@@ -167,7 +174,8 @@ class ProfileFragment : Fragment() {
 //                        tv_email_prof.setText(model?.data?.email)
 //                        tv_address_prof.setText(model?.data?.address)
 //                        tv_phone_prof.setText(model?.data?.phone)
-                            getPosts(generalRequest)
+                            var showPostlRequest: ShowPostlRequest = ShowPostlRequest(SessionManager.getUserId()?:"");
+                            getPosts(showPostlRequest)
                         } else {
                             Toast.makeText(activity,R.string.Something_went_wrong, Toast.LENGTH_SHORT).show()
                         }
@@ -181,12 +189,12 @@ class ProfileFragment : Fragment() {
         }
     }
 
-    private fun getPosts( generalRequest: GeneralRequest) {
+    private fun getPosts( showPostRequest: ShowPostlRequest) {
         pb_prof.visibility = View.VISIBLE
         val apiInterface = ApiClient.getRetrofitService(requireContext())
         CoroutineScope(Dispatchers.IO).launch {
             try {
-                val response = apiInterface.showPost(generalRequest)
+                val response = apiInterface.showPost(showPostRequest)
                 withContext(Dispatchers.Main) {
                     try {
                         pb_prof.visibility = View.GONE

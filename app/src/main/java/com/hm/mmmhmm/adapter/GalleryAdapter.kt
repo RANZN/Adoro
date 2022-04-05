@@ -26,11 +26,10 @@ class GalleryAdapter( private var postsList: List<Item>? = null) : RecyclerView.
                 postsList?.get(position)?.image.toString(),
                 R.color.text_gray,
                 R.color.text_gray,
-                true
+                false
             )
             holder.itemView.setOnClickListener {
                 //todo
-
 
 
             }

@@ -14,6 +14,7 @@ import com.hm.mmmhmm.R
 import com.hm.mmmhmm.activity.MainActivity
 import com.hm.mmmhmm.adapter.FeedListAdapter
 import com.hm.mmmhmm.helper.SessionManager
+import com.hm.mmmhmm.models.GeneralRequest
 import com.hm.mmmhmm.models.Item
 import com.hm.mmmhmm.web_service.ApiClient
 import kotlinx.android.synthetic.main.custom_toolbar.*
@@ -69,17 +70,16 @@ class HomeFragment : Fragment() {
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
         setupToolBar()
-        getFeedListAPI()
-
-
+        var generalRequest: GeneralRequest = GeneralRequest(SessionManager.getUserId()?:"");
+        getFeedListAPI(generalRequest)
     }
 
-    private fun getFeedListAPI() {
+    private fun getFeedListAPI(generalRequest: GeneralRequest) {
         pb_feeds.visibility = View.VISIBLE
         val apiInterface = ApiClient.getRetrofitService(requireContext())
         CoroutineScope(Dispatchers.IO).launch {
             try {
-                val response = apiInterface.getFeed()
+                val response = apiInterface.getFeed(generalRequest)
                 withContext(Dispatchers.Main) {
                     pb_feeds.visibility = View.GONE
 

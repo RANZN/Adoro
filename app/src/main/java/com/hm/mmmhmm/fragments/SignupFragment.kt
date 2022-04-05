@@ -152,12 +152,13 @@ class SignupFragment : Fragment() {
                         if (response.body()?.OK != null) {
 //                        Toast.makeText(activity," "+response.body()?.message, Toast.LENGTH_SHORT).show()
                             val r = response.body()
-                            SessionManager.setUserId(response.body()?.OK!!._id)
+
 //                            SessionManager.init(activity as Context)
 //                            SessionManager.setAccessToken(response.body()?.data?.token.toString())
 
                             SessionManager.init(activity as Context)
                             SessionManager.setLoginStatus("true")
+                            SessionManager.setUserId(response.body()?.OK!!._id)
                             showDialog()
 
                         } else {
