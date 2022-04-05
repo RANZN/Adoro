@@ -21,8 +21,8 @@
         android:layout_weight="1">
         <de.hdodenhof.circleimageview.CircleImageView
             android:id="@+id/iv_group_pic"
-            android:layout_width="50dp"
-            android:layout_height="50dp"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
             android:src="@drawable/ic_account_24" />
     </LinearLayout>
 
@@ -31,13 +31,12 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        android:layout_weight="3"
+        android:layout_weight="4"
         android:layout_marginStart="15dp">
         <TextView
             android:id="@+id/tv_group_name"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="10dp"
             android:text="Group Name"
             android:textColor="@color/text_black"
             android:textSize="18sp"
@@ -79,13 +78,13 @@
             android:padding="5dp"
             android:src="@drawable/option_menu" />
         <TextView
-            android:id="@+id/tv_price"
+            android:id="@+id/tv_group_privacy"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentRight="true"
             android:text="Public"
             android:textColor="@color/text_black"
-            android:textSize="18sp"
+            android:textSize="14sp"
             android:textStyle="bold" />
         <Button
             android:id="@+id/btn_enter"
@@ -100,7 +99,7 @@
             android:textSize="10sp" />
 
         <TextView
-            android:id="@+id/tv_time_left"
+            android:id="@+id/tv_total_memberes"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="160 members"
