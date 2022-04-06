@@ -102,6 +102,10 @@ interface ApiInterface {
     suspend fun showAdoro(
         @Body() req: GeneralRequest
     ): retrofit2.Response<BaseResponse>
+    @POST("_functions/deletePost")
+    suspend fun deletePost(
+        @Body() req: GeneralRequest
+    ): retrofit2.Response<BaseResponse>
 
 
     @POST("_functions/showPost")

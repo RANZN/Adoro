@@ -1,6 +1,5 @@
 package com.hm.mmmhmm.adapter
 
-import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -8,10 +7,9 @@ import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.hm.mmmhmm.R
-import com.hm.mmmhmm.activity.MainActivity
-import com.hm.mmmhmm.fragments.ProfileFragment
 import com.hm.mmmhmm.helper.load
 import com.hm.mmmhmm.models.Item
+
 
 class FeedListAdapter(private var feedList: List<Item>? = null) : RecyclerView.Adapter<FeedListAdapter.MyViewHolder>() {
 
@@ -42,6 +40,39 @@ class FeedListAdapter(private var feedList: List<Item>? = null) : RecyclerView.A
             )
             holder.itemView.setOnClickListener {
                 //todo
+
+            }
+        holder.tv_menu_feed.setOnClickListener {
+//            val popupMenu = PopupMenu(mContext, v)
+//            popupMenu.inflate(R.menu.album_overflow_menu)
+//
+//            // Force icons to show
+//
+//            // Force icons to show
+//            val menuHelper: Any
+//            val argTypes: Array<Class<*>?>
+//            try {
+//                val fMenuHelper: Field = PopupMenu::class.java.getDeclaredField("mPopup")
+//                fMenuHelper.setAccessible(true)
+//                menuHelper = fMenuHelper.get(popupMenu)
+//                argTypes = arrayOf(Boolean::class.javaPrimitiveType)
+//                menuHelper.javaClass.getDeclaredMethod("setForceShowIcon", *argTypes)
+//                    .invoke(menuHelper, true)
+//            } catch (e: Exception) {
+//                // Possible exceptions are NoSuchMethodError and NoSuchFieldError
+//                //
+//                // In either case, an exception indicates something is wrong with the reflection code, or the
+//                // structure of the PopupMenu class or its dependencies has changed.
+//                //
+//                // These exceptions should never happen since we're shipping the AppCompat library in our own apk,
+//                // but in the case that they do, we simply can't force icons to display, so log the error and
+//                // show the menu normally.
+//                Log.w(TAG, "error forcing menu icons to show", e)
+//                popupMenu.show()
+//                return
+//            }
+//
+//            popupMenu.show()
 
             }
         holder.tv_username.setOnClickListener {
@@ -77,6 +108,7 @@ class FeedListAdapter(private var feedList: List<Item>? = null) : RecyclerView.A
         val tv_apply_count: TextView
         val tv_comment_count: TextView
         val tv_feed_description: TextView
+        val tv_menu_feed: TextView
 
         //
         init {
@@ -87,6 +119,7 @@ class FeedListAdapter(private var feedList: List<Item>? = null) : RecyclerView.A
             tv_apply_count = v.findViewById(R.id.tv_apply_count)
             tv_comment_count = v.findViewById(R.id.tv_comment_count)
             tv_feed_description = v.findViewById(R.id.tv_feed_description)
+            tv_menu_feed = v.findViewById(R.id.tv_menu_feed)
         }
     }
 }

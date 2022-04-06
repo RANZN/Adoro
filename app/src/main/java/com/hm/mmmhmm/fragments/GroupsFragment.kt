@@ -50,19 +50,49 @@ class GroupsFragment : Fragment() {
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
         setupToolBar()
-        var generalRequest: GeneralRequest = GeneralRequest(SessionManager.getUserId()?:"");
+        var generalRequest: GeneralRequest = GeneralRequest(SessionManager.getUserId() ?: "");
         getUserData(generalRequest)
-        tv_my_groups.setBackgroundColor(ContextCompat.getColor(requireActivity(),R.color.colorAccent))
-        tv_browse_groups.setBackgroundColor(ContextCompat.getColor(requireActivity(),R.color.transparent))
+        tv_my_groups.setBackgroundColor(
+            ContextCompat.getColor(
+                requireActivity(),
+                R.color.colorAccent
+            )
+        )
+        tv_browse_groups.setBackgroundColor(
+            ContextCompat.getColor(
+                requireActivity(),
+                R.color.transparent
+            )
+        )
         tv_my_groups.setOnClickListener {
-            tv_my_groups.setBackgroundColor(ContextCompat.getColor(requireActivity(),R.color.colorAccent))
-            tv_browse_groups.setBackgroundColor(ContextCompat.getColor(requireActivity(),R.color.transparent))
-            var generalRequest: GeneralRequest = GeneralRequest(SessionManager.getUserId()?:"");
+            tv_my_groups.setBackgroundColor(
+                ContextCompat.getColor(
+                    requireActivity(),
+                    R.color.colorAccent
+                )
+            )
+            tv_browse_groups.setBackgroundColor(
+                ContextCompat.getColor(
+                    requireActivity(),
+                    R.color.transparent
+                )
+            )
+            var generalRequest: GeneralRequest = GeneralRequest(SessionManager.getUserId() ?: "");
             getUserData(generalRequest)
         }
         tv_browse_groups.setOnClickListener {
-            tv_browse_groups.setBackgroundColor(ContextCompat.getColor(requireActivity(),R.color.colorAccent))
-            tv_my_groups.setBackgroundColor(ContextCompat.getColor(requireActivity(),R.color.transparent))
+            tv_browse_groups.setBackgroundColor(
+                ContextCompat.getColor(
+                    requireActivity(),
+                    R.color.colorAccent
+                )
+            )
+            tv_my_groups.setBackgroundColor(
+                ContextCompat.getColor(
+                    requireActivity(),
+                    R.color.transparent
+                )
+            )
             getGroups()
         }
         rl_create_group.setOnClickListener {
@@ -93,13 +123,16 @@ class GroupsFragment : Fragment() {
         })
 
         iv_toolbar_action_search.setOnClickListener(View.OnClickListener {
-            (activity as MainActivity).supportFragmentManager.beginTransaction().replace(R.id.frame_layout_main, SearchFragment())
+            (activity as MainActivity).supportFragmentManager.beginTransaction()
+                .replace(R.id.frame_layout_main, SearchFragment())
                 .addToBackStack(null).commit()
         })
 
 
     }
-    inner class GroupsAdapter(private var groupsList: List<Item>? = null) : RecyclerView.Adapter<GroupsAdapter.MyViewHolder>() {
+
+    inner class GroupsAdapter(private var groupsList: List<Item>? = null) :
+        RecyclerView.Adapter<GroupsAdapter.MyViewHolder>() {
 
         override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MyViewHolder {
             val view: View =
@@ -108,11 +141,12 @@ class GroupsFragment : Fragment() {
         }
 
         override fun onBindViewHolder(holder: MyViewHolder, position: Int) {
-            holder.tv_group_name.text= groupsList?.get(position)?.groupName
-            holder.tv_detail.text= groupsList?.get(position)?.description
-            holder.tv_group_privacy.text= groupsList?.get(position)?.category
-            holder.tv_detail.text= groupsList?.get(position)?.shortDescription
-            holder.tv_total_memberes.text= groupsList?.get(position)?.memberData?.size.toString()+" Members"
+            holder.tv_group_name.text = groupsList?.get(position)?.groupName
+            holder.tv_detail.text = groupsList?.get(position)?.description
+            holder.tv_group_privacy.text = groupsList?.get(position)?.category
+            holder.tv_detail.text = groupsList?.get(position)?.shortDescription
+            holder.tv_total_memberes.text =
+                groupsList?.get(position)?.memberData?.size.toString() + " Members"
             holder.iv_group_pic.load(
                 groupsList?.get(position)?.groupProfile.toString(),
                 R.color.text_gray,
@@ -136,7 +170,7 @@ class GroupsFragment : Fragment() {
         }
 
         override fun getItemCount(): Int {
-            return groupsList?.size?:0
+            return groupsList?.size ?: 0
         }
 
         override fun getItemId(position: Int): Long {
@@ -149,13 +183,14 @@ class GroupsFragment : Fragment() {
             val tv_detail: TextView
             val tv_group_privacy: TextView
             val tv_total_memberes: TextView
-//            val btn_learn_more: Button
+
+            //            val btn_learn_more: Button
 //            val ll_item_list: LinearLayout
 //
             init {
-    iv_group_pic = v.findViewById(R.id.iv_group_pic)
+                iv_group_pic = v.findViewById(R.id.iv_group_pic)
                 tv_group_name = v.findViewById(R.id.tv_group_name)
-    tv_detail = v.findViewById(R.id.tv_detail)
+                tv_detail = v.findViewById(R.id.tv_detail)
                 tv_group_privacy = v.findViewById(R.id.tv_group_privacy)
                 tv_total_memberes = v.findViewById(R.id.tv_total_memberes)
 //                btn_learn_more = v.findViewById(R.id.btn_learn_more)
@@ -164,7 +199,7 @@ class GroupsFragment : Fragment() {
         }
     }
 
-    private fun getGroups( ) {
+    private fun getGroups() {
         pb_groups.visibility = View.VISIBLE
         val apiInterface = ApiClient.getRetrofitService(requireContext())
         CoroutineScope(Dispatchers.IO).launch {
@@ -173,14 +208,19 @@ class GroupsFragment : Fragment() {
                 withContext(Dispatchers.Main) {
                     try {
                         pb_groups.visibility = View.GONE
-                        if (response.body()?.OK !=null) {
+                        if (response.body()?.OK != null) {
                             val r = response.body()
-                            recycler_groups.adapter= GroupsAdapter(r?.OK?.items)
+                            recycler_groups.adapter = GroupsAdapter(r?.OK?.items)
                         } else {
-                            Toast.makeText(activity,R.string.Something_went_wrong, Toast.LENGTH_SHORT).show()
+                            Toast.makeText(
+                                activity,
+                                R.string.Something_went_wrong,
+                                Toast.LENGTH_SHORT
+                            ).show()
                         }
                     } catch (e: java.lang.Exception) {
-                        Toast.makeText(requireActivity(), "" + e.toString(), Toast.LENGTH_SHORT).show()
+                        Toast.makeText(requireActivity(), "" + e.toString(), Toast.LENGTH_SHORT)
+                            .show()
                     }
                 }
             } catch (e: Exception) {
@@ -189,7 +229,7 @@ class GroupsFragment : Fragment() {
         }
     }
 
-    private fun getUserData( generalRequest: GeneralRequest) {
+    private fun getUserData(generalRequest: GeneralRequest) {
         //pb_create_group.visibility = View.VISIBLE
         val apiInterface = ApiClient.getRetrofitService(requireContext())
         CoroutineScope(Dispatchers.IO).launch {
@@ -197,15 +237,20 @@ class GroupsFragment : Fragment() {
                 val response = apiInterface.getUserData(generalRequest)
                 withContext(Dispatchers.Main) {
                     try {
-                      //  pb_create_group.visibility = View.GONE
-                        if (response.body()?.OK !=null) {
+                        //  pb_create_group.visibility = View.GONE
+                        if (response.body()?.OK != null) {
                             val r = response.body()
                             //recycler_groups.adapter= GroupsAdapter(r?.OK?.items[0]?.myGroupInfo)
                         } else {
-                            Toast.makeText(activity,R.string.Something_went_wrong, Toast.LENGTH_SHORT).show()
+                            Toast.makeText(
+                                activity,
+                                R.string.Something_went_wrong,
+                                Toast.LENGTH_SHORT
+                            ).show()
                         }
                     } catch (e: java.lang.Exception) {
-                        Toast.makeText(requireActivity(), "" + e.toString(), Toast.LENGTH_SHORT).show()
+                        Toast.makeText(requireActivity(), "" + e.toString(), Toast.LENGTH_SHORT)
+                            .show()
                     }
                 }
             } catch (e: java.lang.Exception) {

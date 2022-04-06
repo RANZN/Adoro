@@ -1,6 +1,7 @@
 package com.hm.mmmhmm.fragments
 
 import android.content.Context
+import android.content.Intent
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
@@ -39,6 +40,8 @@ class FragmentGroupCreation : Fragment() {
     val types = arrayOf("Group Privacy", "Public")
     private var categoryList: List<Item>? = null
     var visibilityType =types[0]
+    var t:View?=null
+    var category:String?=null
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
@@ -48,8 +51,8 @@ class FragmentGroupCreation : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        val t=inflater.inflate(R.layout.fragment_group_creation, container, false)
-        val spinner = t.findViewById<Spinner>(R.id.spinner_group_privacy)
+        t=inflater.inflate(R.layout.fragment_group_creation, container, false)
+        val spinner = t?.findViewById<Spinner>(R.id.spinner_group_privacy)
         spinner?.adapter = activity?.applicationContext?.let {
             ArrayAdapter(
                 it,
@@ -105,7 +108,8 @@ class FragmentGroupCreation : Fragment() {
             toast(R.string.email_address, 1)
         } else if (ConnectivityObserver.isOnline(activity as Context)) {
             val memberData : Array<Int> = emptyArray()
-            var createGroupRequest: CreateGroupRequest = CreateGroupRequest(groupName,groupAbout,"","",memberData,"")
+            var createGroupRequest: CreateGroupRequest = CreateGroupRequest(category
+                ,groupAbout,groupName,"",memberData,visibilityType)
             createGroupAPI(createGroupRequest)
 
         }
@@ -122,10 +126,14 @@ class FragmentGroupCreation : Fragment() {
                     try {
                         pb_create_group.visibility = View.GONE
                         if (response.body()?.OK != null) {
-//                        Toast.makeText(activity," "+response.body()?.message, Toast.LENGTH_SHORT).show()
                             val r = response.body()
 
                             //showDialog()
+                            Toast.makeText(activity,"Group created successfully!", Toast.LENGTH_LONG).show()
+
+                            startActivity(Intent(activity, MainActivity::class.java))
+                                activity?.finish()
+
 
                         } else {
                             CommanFunction.handleApiError(
@@ -155,7 +163,33 @@ class FragmentGroupCreation : Fragment() {
                         if (response.body()?.OK !=null) {
                             val r = response.body()
                             categoryList = r?.OK?.items
-                                // recycler_groups.adapter= GroupsAdapter(r?.OK?.items)
+                            var listCategory= arrayListOf<String>()
+                            for(i in 0 until categoryList?.size!!){
+                                listCategory.add(categoryList!![i].name!!)
+                            }
+                            category = listCategory[0]
+                            print("gdfgdfgdf${categoryList?.size}")
+                            val spinner = t?.findViewById<Spinner>(R.id.spinner_category)
+                            spinner?.adapter = activity?.applicationContext?.let {
+                                ArrayAdapter(
+                                    it,
+                                    R.layout.support_simple_spinner_dropdown_item,
+                                    listCategory
+                                )
+                            } as SpinnerAdapter
+                            spinner?.onItemSelectedListener = object :AdapterView.OnItemSelectedListener{
+                                override fun onNothingSelected(parent: AdapterView<*>?) {
+                                    println("erreur")
+                                }
+
+                                override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
+                                    val type = parent?.getItemAtPosition(position).toString()
+                                    // Toast.makeText(activity,type, Toast.LENGTH_LONG).show()
+                                    println(type)
+                                    category= type
+                                }
+
+                            }
                         } else {
                             Toast.makeText(activity,R.string.Something_went_wrong, Toast.LENGTH_SHORT).show()
                         }
