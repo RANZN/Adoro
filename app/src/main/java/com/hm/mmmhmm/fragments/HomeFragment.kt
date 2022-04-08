@@ -87,7 +87,7 @@ class HomeFragment : Fragment() {
                         //  toast("" + response.body()?.message)
                         if (response!=null) {
                             feedList = response.body()?.OK?.items
-                            recycler_feed_list.adapter= FeedListAdapter(feedList)
+                            recycler_feed_list.adapter= FeedListAdapter(requireActivity(),feedList)
 
                         } else {
                             Log.d("resp", "complet else: ")

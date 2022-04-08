@@ -10,17 +10,25 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.*
+import androidx.core.content.ContentProviderCompat
+import androidx.core.content.ContentProviderCompat.requireContext
 import com.hm.mmmhmm.Chat_Module.Inbox
 
 import com.hm.mmmhmm.R
 import com.hm.mmmhmm.activity.MainActivity
+import com.hm.mmmhmm.adapter.FeedListAdapter
 import com.hm.mmmhmm.helper.ConnectivityObserver
 import com.hm.mmmhmm.helper.SessionManager
 import com.hm.mmmhmm.helper.toast
+import com.hm.mmmhmm.models.CompleteAddress
+import com.hm.mmmhmm.models.GeneralRequest
+import com.hm.mmmhmm.models.JoinGroupRequest
+import com.hm.mmmhmm.models.UpdateProfileRequest
 import com.hm.mmmhmm.web_service.ApiClient
 import kotlinx.android.synthetic.main.custom_toolbar.*
 import kotlinx.android.synthetic.main.custom_toolbar.tv_toolbar_title
 import kotlinx.android.synthetic.main.fragment_edit_profile.*
+import kotlinx.android.synthetic.main.fragment_home.*
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -28,9 +36,7 @@ import kotlinx.coroutines.withContext
 import java.lang.Exception
 import java.util.*
 
-/**
- * A simple [Fragment] subclass.
- */
+
 class EditProfileFragment : Fragment() {
 
     private val TAG = "edit profile"
@@ -55,6 +61,33 @@ class EditProfileFragment : Fragment() {
 
         btn_update_profile.setOnClickListener(View.OnClickListener {
             //validation()
+
+            var completeAddress: CompleteAddress =CompleteAddress(
+                et_area_name.text.toString(),
+                et_city.text.toString(),
+                et_landmark.text.toString(),
+                et_state_name.text.toString(),
+                et_street_address.text.toString(),
+                et_zip_code.text.toString().toInt(),
+            )
+
+            var updateProfileRequest: UpdateProfileRequest = UpdateProfileRequest(
+                SessionManager.getUserId()?:"",
+                et_account_number.text.toString(),
+               0,
+                0,
+                et_bank_name.text.toString(),
+                completeAddress,
+                "",
+                "",
+                "",
+                "",
+                "",
+                9997854380,
+                "",
+                "",
+            )
+            updateProfileAPI(updateProfileRequest)
         })
 
 //        iv_toolbar_icon.setOnClickListener(View.OnClickListener {
@@ -112,8 +145,37 @@ class EditProfileFragment : Fragment() {
             override fun onNothingSelected(parent: AdapterView<*>) {}
         })
     }
+    private fun updateProfileAPI(updateProfileRequest: UpdateProfileRequest) {
+        pb_edit_prof.visibility = View.VISIBLE
+        val apiInterface = ApiClient.getRetrofitService(requireContext())
+        CoroutineScope(Dispatchers.IO).launch {
+            try {
+                val response = apiInterface.updateProfile(updateProfileRequest)
+                withContext(Dispatchers.Main) {
+                    pb_feeds.visibility = View.GONE
+
+                    try {
+                        //  toast("" + response.body()?.message)
+                        if (response!=null) {
+
+                        } else {
+                            Log.d("resp", "complet else: ")
+                        }
+
+                    } catch (e: Exception) {
+                        Log.d("resp", "cathch: " + e.toString())
+                    }
+                }
+
+            } catch (e: Exception) {
+                Log.d("weweewefw", e.toString())
+            }
+        }
+
+    }
 
 }
+
 
 
 //    private fun getUserDetailAPI() {
@@ -154,45 +216,4 @@ class EditProfileFragment : Fragment() {
 //        }
 //    }
 //
-//    private fun updateProfileAPI(
-//        name: String,
-//        address: String,
-//        phone: String,
-//        gender: String,
-//        dob: String,
-//        id: String,
-//        sex: String
-//    ) {
-//        pb_update_prof.visibility = View.VISIBLE
-//
-//        val apiInterface = ApiClient.getRetrofitService(requireContext())
-//
-//        CoroutineScope(Dispatchers.IO).launch {
-//            try {
-//
-//                val response =
-//                    apiInterface.updateUserInfoApi(name, address, phone, gender, dob, id, sex)
-//                withContext(Dispatchers.Main) {
-//                    if (activity != null && pb_update_prof != null) {
-//                        pb_update_prof.visibility = View.GONE
-//                        SessionManager.init(activity as Context)
-//                    }
-//                    try {
-//                        if (response.isSuccessful && response.body()?.status == 200) {
-//                            val model = response.body()?.data
-//                            SessionManager.setUserData(model)
-//
-//                            //toast(response.body()?.message)
-//                            activity?.supportFragmentManager?.popBackStack()
-//                        } else {
-//                          //  toast(response.body()?.message)
-//                        }
-//                    } catch (e: Exception) {
-//                        Log.d(TAG, "exceptionn: " + e.toString())
-//                    }
-//                }
-//            } catch (e: Exception) {
-//            }
-//        }
-//    }
 

@@ -17,6 +17,7 @@ import com.hm.mmmhmm.helper.SessionManager
 import com.hm.mmmhmm.helper.load
 import com.hm.mmmhmm.models.GeneralRequest
 import com.hm.mmmhmm.models.Item
+import com.hm.mmmhmm.models.JoinGroupRequest
 import com.hm.mmmhmm.models.ShowPostlRequest
 import com.hm.mmmhmm.web_service.ApiClient
 import kotlinx.android.synthetic.main.custom_toolbar.*
@@ -154,19 +155,32 @@ class GroupsFragment : Fragment() {
                 false
             )
             holder.itemView.setOnClickListener {
+                val groupDetailFragment = GroupDetail()
+                val args = android.os.Bundle()
+                args.putString("groupId", groupsList?.get(position)?._id)
+                groupDetailFragment.arguments = args
                 activity?.supportFragmentManager?.beginTransaction()
-                    ?.replace(R.id.frame_layout_main, GroupDetail())
+                    ?.replace(R.id.frame_layout_main, groupDetailFragment)
                     ?.addToBackStack(null)?.commit()
             }
-//            holder.btn_learn_more.setOnClickListener {
-//                val postDetailFragment = PostDetailFragment()
-//                val args = Bundle()
-//                args.putString("campaignId", campaignList?.get(position)?._id)
-//                postDetailFragment.arguments = args
-//                (activity as MainActivity).supportFragmentManager.beginTransaction().replace(R.id.frame_layout_main, postDetailFragment)
-//                    .commit()
-//
-//            }
+            holder.btn_enter.setOnClickListener {
+                var groupDetail: com.hm.mmmhmm.models.GroupDetail = com.hm.mmmhmm.models.GroupDetail(
+                groupsList?.get(position)?._id,
+                groupsList?.get(position)?.category,
+                groupsList?.get(position)?.description,
+                groupsList?.get(position)?.groupName,
+                groupsList?.get(position)?.groupProfile,
+                groupsList?.get(position)?.privacy,)
+
+                var memberDetail: com.hm.mmmhmm.models.MemberDetail = com.hm.mmmhmm.models.MemberDetail(
+                    SessionManager.getUserName(),
+                    SessionManager.getUserPic(),
+                    SessionManager.getUserId(),
+                    SessionManager.getUsername(),)
+                var joinGroupRequest: JoinGroupRequest = JoinGroupRequest(groupDetail,memberDetail)
+                joinGroup(joinGroupRequest)
+
+            }
         }
 
         override fun getItemCount(): Int {
@@ -183,18 +197,15 @@ class GroupsFragment : Fragment() {
             val tv_detail: TextView
             val tv_group_privacy: TextView
             val tv_total_memberes: TextView
+            val btn_enter: Button
 
-            //            val btn_learn_more: Button
-//            val ll_item_list: LinearLayout
-//
             init {
                 iv_group_pic = v.findViewById(R.id.iv_group_pic)
                 tv_group_name = v.findViewById(R.id.tv_group_name)
                 tv_detail = v.findViewById(R.id.tv_detail)
                 tv_group_privacy = v.findViewById(R.id.tv_group_privacy)
                 tv_total_memberes = v.findViewById(R.id.tv_total_memberes)
-//                btn_learn_more = v.findViewById(R.id.btn_learn_more)
-//                ll_item_list = v.findViewById(R.id.ll_item_list)
+                btn_enter = v.findViewById(R.id.btn_enter)
             }
         }
     }
@@ -229,18 +240,21 @@ class GroupsFragment : Fragment() {
         }
     }
 
-    private fun getUserData(generalRequest: GeneralRequest) {
-        //pb_create_group.visibility = View.VISIBLE
+    private fun joinGroup(joinGroupRequest: JoinGroupRequest) {
+        pb_groups.visibility = View.VISIBLE
         val apiInterface = ApiClient.getRetrofitService(requireContext())
         CoroutineScope(Dispatchers.IO).launch {
             try {
-                val response = apiInterface.getUserData(generalRequest)
+                val response = apiInterface.addMemberToGroup(joinGroupRequest)
                 withContext(Dispatchers.Main) {
                     try {
-                        //  pb_create_group.visibility = View.GONE
+                          pb_groups.visibility = View.GONE
+                        Toast.makeText(requireActivity(), "Group Joined" , Toast.LENGTH_SHORT)
+                            .show()
                         if (response.body()?.OK != null) {
                             val r = response.body()
-                            //recycler_groups.adapter= GroupsAdapter(r?.OK?.items[0]?.myGroupInfo)
+//                            Toast.makeText(requireActivity(), "" + e.toString(), Toast.LENGTH_SHORT)
+//                                .show()
                         } else {
                             Toast.makeText(
                                 activity,
@@ -258,6 +272,32 @@ class GroupsFragment : Fragment() {
             }
         }
     }
+
+    private fun getUserData( generalRequest: GeneralRequest) {
+        pb_groups.visibility = View.VISIBLE
+        val apiInterface = ApiClient.getRetrofitService(requireContext())
+        CoroutineScope(Dispatchers.IO).launch {
+            try {
+                val response = apiInterface.getUserData(generalRequest)
+                withContext(Dispatchers.Main) {
+                    try {
+                        pb_groups.visibility = View.GONE
+                        if (response.body()?.OK !=null) {
+                            val r = response.body()
+
+                        } else {
+                            Toast.makeText(activity,R.string.Something_went_wrong, Toast.LENGTH_SHORT).show()
+                        }
+                    } catch (e: java.lang.Exception) {
+                        Toast.makeText(requireActivity(), "" + e.toString(), Toast.LENGTH_SHORT).show()
+                    }
+                }
+            } catch (e: java.lang.Exception) {
+                e.printStackTrace()
+            }
+        }
+    }
+
 
 
 }

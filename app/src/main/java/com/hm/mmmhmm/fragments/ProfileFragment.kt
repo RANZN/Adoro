@@ -26,9 +26,7 @@ import com.hm.mmmhmm.helper.ConnectivityObserver
 import com.hm.mmmhmm.helper.SessionManager
 import com.hm.mmmhmm.helper.load
 import com.hm.mmmhmm.helper.toast
-import com.hm.mmmhmm.models.GeneralRequest
-import com.hm.mmmhmm.models.Item
-import com.hm.mmmhmm.models.ShowPostlRequest
+import com.hm.mmmhmm.models.*
 import com.hm.mmmhmm.web_service.ApiClient
 import kotlinx.android.synthetic.main.custom_toolbar.*
 import kotlinx.android.synthetic.main.fragment_adoro_coins.*
@@ -50,7 +48,9 @@ class ProfileFragment : Fragment() {
     var file: File? = null
     var image_body: MultipartBody.Part? = null
 
-    var myProfileView: Int=0
+    var username: String?=null
+    var name: String ?=null
+    var userId: String?=null
 
 
     override fun onCreateView(
@@ -67,7 +67,7 @@ class ProfileFragment : Fragment() {
         super.onActivityCreated(savedInstanceState)
         setupToolBar()
 
-      //  SessionManager.init(activity as Context)
+        //  SessionManager.init(activity as Context)
 //        myProfileView = requireArguments().getInt("viewType")?:0
 //        if (myProfileView==1){
 //            iv_camera.visibility= View.GONE
@@ -79,6 +79,23 @@ class ProfileFragment : Fragment() {
             activity?.supportFragmentManager?.beginTransaction()
                 ?.replace(R.id.frame_layout_main, EditProfileFragment())
                 ?.addToBackStack(null)?.commit()
+        })
+
+
+
+        btn_follow.setOnClickListener(View.OnClickListener {
+            var myDetail: MyDetail = MyDetail(
+                SessionManager.getUserId(),
+                SessionManager.getUserName(),
+                SessionManager.getUsername()
+            );
+            var personWhomeImFollowingData: PersonWhomeImFollowingData = PersonWhomeImFollowingData(
+                requireArguments().getString("userId") ?: "",
+                name,
+                username
+            );
+            var followRequest: FollowRequest = FollowRequest(myDetail, personWhomeImFollowingData);
+            followUser(followRequest)
         })
 
 //        iv_camera.setOnClickListener(View.OnClickListener {
@@ -93,13 +110,13 @@ class ProfileFragment : Fragment() {
 //            true
 //        )
 
-        if(requireArguments().getString("path") == "search"){
+        if (requireArguments().getString("path") == "search") {
             iv_camera.visibility = View.GONE
             var generalRequest: GeneralRequest =
                 requireArguments().getString("userId")?.let { GeneralRequest(it) }!!;
             getUserData(generalRequest)
-        }else{
-            var generalRequest: GeneralRequest = GeneralRequest(SessionManager.getUserId()?:"");
+        } else {
+            var generalRequest: GeneralRequest = GeneralRequest(SessionManager.getUserId() ?: "");
             getUserData(generalRequest)
         }
 
@@ -113,7 +130,7 @@ class ProfileFragment : Fragment() {
         iv_toolbar_action_inbox.setColorFilter(resources.getColor(R.color.black));
         iv_toolbar_action_search.setColorFilter(resources.getColor(R.color.black));
         tv_toolbar_title.setTextColor(resources.getColor(R.color.black))
-      //  tv_toolbar_title.text = resources.getString(R.string.app_name)
+        //  tv_toolbar_title.text = resources.getString(R.string.app_name)
         iv_toolbar_icon.setOnClickListener(View.OnClickListener {
             (activity as MainActivity).manageDrawer()
         })
@@ -123,7 +140,8 @@ class ProfileFragment : Fragment() {
         })
 
         iv_toolbar_action_search.setOnClickListener(View.OnClickListener {
-            (activity as MainActivity).supportFragmentManager.beginTransaction().replace(R.id.frame_layout_main, SearchFragment())
+            (activity as MainActivity).supportFragmentManager.beginTransaction()
+                .replace(R.id.frame_layout_main, SearchFragment())
                 .addToBackStack(null).commit()
         })
 
@@ -140,8 +158,7 @@ class ProfileFragment : Fragment() {
     }
 
 
-
-    private fun getUserData( generalRequest: GeneralRequest) {
+    private fun getUserData(generalRequest: GeneralRequest) {
         pb_prof.visibility = View.VISIBLE
         val apiInterface = ApiClient.getRetrofitService(requireContext())
         CoroutineScope(Dispatchers.IO).launch {
@@ -150,37 +167,52 @@ class ProfileFragment : Fragment() {
                 withContext(Dispatchers.Main) {
                     try {
                         pb_prof.visibility = View.GONE
-                        if (response.body()?.OK !=null) {
+                        if (response.body()?.OK != null) {
                             val r = response.body()
 
-                        iv_profile_pic_profile.load(
-                            r?.OK?.items?.get(0)?.profile,
-                            R.color.text_gray,
-                            R.color.text_gray,
-                            true
-                        )
+                            iv_profile_pic_profile.load(
+                                r?.OK?.items?.get(0)?.profile,
+                                R.color.text_gray,
+                                R.color.text_gray,
+                                true
+                            )
                             iv_cover_pic_profile.load(
-                            r?.OK?.items?.get(0)?.bannerImage,
-                            R.color.text_gray,
-                            R.color.text_gray,
-                            true
-                        )
-                        tv_name.text= r?.OK?.items?.get(0)?.name
-                            tv_bio.text= r?.OK?.items?.get(0)?.bio
-                            //tv_total_posts.text= r?.OK?.items?.get(0)?.bio
-                            tv_total_fans.text= r?.OK?.items?.get(0)?.followerData?.size.toString()
-                            tv_total_coins.text= r?.OK?.items?.get(0)?.adoroCoins.toString()+"A"
-                        tv_toolbar_title.text =r?.OK?.items?.get(0)?.username
-//                        tv_email_prof.setText(model?.data?.email)
-//                        tv_address_prof.setText(model?.data?.address)
-//                        tv_phone_prof.setText(model?.data?.phone)
-                            var showPostlRequest: ShowPostlRequest = ShowPostlRequest(SessionManager.getUserId()?:"");
+                                r?.OK?.items?.get(0)?.bannerImage,
+                                R.color.text_gray,
+                                R.color.text_gray,
+                                true
+                            )
+                            tv_name.text = r?.OK?.items?.get(0)?.name
+                            tv_bio.text = r?.OK?.items?.get(0)?.bio
+                            //tv_total_posts.text= r?.OK?.items?.get(0)?.bio+"Posts"
+                            tv_total_fans.text = r?.OK?.items?.get(0)?.followerData?.size.toString()+"Fans"
+                            tv_total_coins.text = r?.OK?.items?.get(0)?.adoroCoins.toString() + "A"
+                            tv_toolbar_title.text = r?.OK?.items?.get(0)?.username
+                            userId = r?.OK?.items?.get(0)?._id ?: "";
+                            username = r?.OK?.items?.get(0)?.username ?: "";
+                            name = r?.OK?.items?.get(0)?.name ?: "";
+                            if (SessionManager.getUserId().equals(r?.OK?.items?.get(0)?._id)) {
+                                ll_follow_user.visibility = View.GONE
+                            }else{
+                                ll_follow_user.visibility = View.VISIBLE
+                            }
+//                            SessionManager.setUserId(r?.OK?.items?.get(0)?._id ?: "")
+//                            SessionManager.setUsername(r?.OK?.items?.get(0)?.username ?: "")
+//                            SessionManager.setUserName(r?.OK?.items?.get(0)?.name ?: "")
+//                            SessionManager.setUserPic(r?.OK?.items?.get(0)?.profile ?: "")
+                            var showPostlRequest: ShowPostlRequest =
+                                ShowPostlRequest(SessionManager.getUserId() ?: "");
                             getPosts(showPostlRequest)
                         } else {
-                            Toast.makeText(activity,R.string.Something_went_wrong, Toast.LENGTH_SHORT).show()
+                            Toast.makeText(
+                                activity,
+                                R.string.Something_went_wrong,
+                                Toast.LENGTH_SHORT
+                            ).show()
                         }
                     } catch (e: java.lang.Exception) {
-                        Toast.makeText(requireActivity(), "" + e.toString(), Toast.LENGTH_SHORT).show()
+                        Toast.makeText(requireActivity(), "" + e.toString(), Toast.LENGTH_SHORT)
+                            .show()
                     }
                 }
             } catch (e: java.lang.Exception) {
@@ -189,7 +221,7 @@ class ProfileFragment : Fragment() {
         }
     }
 
-    private fun getPosts( showPostRequest: ShowPostlRequest) {
+    private fun getPosts(showPostRequest: ShowPostlRequest) {
         pb_prof.visibility = View.VISIBLE
         val apiInterface = ApiClient.getRetrofitService(requireContext())
         CoroutineScope(Dispatchers.IO).launch {
@@ -198,14 +230,53 @@ class ProfileFragment : Fragment() {
                 withContext(Dispatchers.Main) {
                     try {
                         pb_prof.visibility = View.GONE
-                        if (response.body()?.OK !=null) {
+                        if (response.body()?.OK != null) {
                             val r = response.body()
-                            rv_gallery.adapter= GalleryAdapter(r?.OK?.items)
+                            rv_gallery.adapter = GalleryAdapter(r?.OK?.items)
                         } else {
-                            Toast.makeText(activity,R.string.Something_went_wrong, Toast.LENGTH_SHORT).show()
+                            Toast.makeText(
+                                activity,
+                                R.string.Something_went_wrong,
+                                Toast.LENGTH_SHORT
+                            ).show()
                         }
                     } catch (e: java.lang.Exception) {
-                        Toast.makeText(requireActivity(), "" + e.toString(), Toast.LENGTH_SHORT).show()
+                        Toast.makeText(requireActivity(), "" + e.toString(), Toast.LENGTH_SHORT)
+                            .show()
+                    }
+                }
+            } catch (e: Exception) {
+                e.printStackTrace()
+            }
+        }
+    }
+
+    private fun followUser(followRequest: FollowRequest) {
+        pb_prof.visibility = View.VISIBLE
+        val apiInterface = ApiClient.getRetrofitService(requireContext())
+        CoroutineScope(Dispatchers.IO).launch {
+            try {
+                val response = apiInterface.follow(followRequest)
+                withContext(Dispatchers.Main) {
+                    try {
+                        pb_prof.visibility = View.GONE
+                        if (response.body()?.OK != null) {
+                            val r = response.body()
+                            //todo
+                            btn_follow.text= resources.getString(R.string.following)
+                                Toast.makeText(requireActivity(), r?.OK?.status, Toast.LENGTH_SHORT)
+                                    .show()
+
+                        } else {
+                            Toast.makeText(
+                                activity,
+                                R.string.Something_went_wrong,
+                                Toast.LENGTH_SHORT
+                            ).show()
+                        }
+                    } catch (e: java.lang.Exception) {
+                        Toast.makeText(requireActivity(), "" + e.toString(), Toast.LENGTH_SHORT)
+                            .show()
                     }
                 }
             } catch (e: Exception) {
@@ -245,7 +316,7 @@ class ProfileFragment : Fragment() {
                 "image", file?.name,
                 (RequestBody.create(MediaType.parse("multipart/form-data"), file))
             )
-           // updateProfilePicAPI() //API CALL<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+            // updateProfilePicAPI() //API CALL<<<<<<<<<<<<<<<<<<<<<<<<<<<<
         }
     }
 
@@ -284,7 +355,6 @@ class ProfileFragment : Fragment() {
 //            }
 //        }
 //    }
-
 
 
 }

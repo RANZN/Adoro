@@ -18,6 +18,7 @@ object SessionManager {
     private const val USER_ID = "user_id"
     private const val OTP = "otp"
     private const val USER_NAME = "user_name"
+    private const val USERNAME = "username"
     private const val USER_DATA = "user_data"
     private const val USER_EMAIL = "user_email"
     private const val USER_PHONE = "user_phone"
@@ -81,6 +82,7 @@ object SessionManager {
             "0"
         )
     }
+
 
     fun setOTP(id: String) {
         val prefsEditor: SharedPreferences.Editor = prefs.edit()
@@ -154,6 +156,21 @@ object SessionManager {
         return prefs.getString(
             USER_NAME,
             USER_NAME
+        )
+    }
+
+    fun setUsername(username: String) {
+        val prefsEditor: SharedPreferences.Editor = prefs.edit()
+        with(prefsEditor) {
+            putString(USERNAME, username)
+            commit()
+        }
+    }
+
+    fun getUsername(): String? {
+        return prefs.getString(
+            USERNAME,
+            USERNAME
         )
     }
 

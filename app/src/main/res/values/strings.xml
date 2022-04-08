@@ -78,6 +78,7 @@
     <string name="privacy">Privacy</string>
     <string name="search">Search</string>
     <string name="follow">Follow</string>
+    <string name="following">Following</string>
     <string name="my_template">My Template</string>
     <string name="browse_template">Browse Template</string>
     <string name="template">Template</string>
@@ -90,4 +91,9 @@
     <string name="total_coins_earned">Total coins earned:</string>
     <string name="edit_profile">Edit Profile</string>
     <string name="accounts">Account</string>
+    <string name="campaign">Campaign</string>
+    <string name="groups">Groups</string>
+    <string name="delete">Delete</string>
+    <string name="edit">Edit</string>
+    <string name="city">City</string>
 </resources>

@@ -3,7 +3,6 @@ package com.hm.mmmhmm.web_service
 import com.hm.mmmhmm.models.*
 import okhttp3.MultipartBody
 import okhttp3.RequestBody
-import okhttp3.Response
 import retrofit2.http.*
 
 interface ApiInterface {
@@ -72,6 +71,13 @@ interface ApiInterface {
         @Body() req: RequestCampaign
     ): retrofit2.Response<BaseResponse>
 
+
+
+    @POST("_functions/updateProfile")
+    suspend fun updateProfile(
+        @Body() req: UpdateProfileRequest
+    ): retrofit2.Response<BaseResponse>
+
     @POST("_functions/authenticate")
     suspend fun registerNumber(
         @Body() req: RequestAuthenticateNumber
@@ -118,8 +124,49 @@ interface ApiInterface {
         @Body() req: GeneralRequest
     ): retrofit2.Response<BaseResponse>
 
+
+    @POST("_functions/addMemberToGroup")
+    suspend fun addMemberToGroup(
+        @Body() req: JoinGroupRequest
+    ): retrofit2.Response<BaseResponse>
+
+    @POST("_functions/showAnnouncement")
+    suspend fun showAnnouncement(
+        @Body() req: ShowAnnouncementRequest
+    ): retrofit2.Response<BaseResponse>
+
+    @POST("_functions/showGroupPost")
+    suspend fun showGroupPost(
+        @Body() req: ShowAnnouncementRequest
+    ): retrofit2.Response<BaseResponse>
+
+    @POST("_functions/showGroupDiscussion")
+    suspend fun showGroupDiscussion(
+        @Body() req: ShowAnnouncementRequest
+    ): retrofit2.Response<BaseResponse>
+
+    @POST("_functions/groupDiscussionPostUpdateLike")
+    suspend fun groupDiscussionPostUpdateLike(
+        @Body() req: GroupDiscussionPostUpdateLikeRequest
+    ): retrofit2.Response<BaseResponse>
+
+    @POST("_functions/groupMemePostUpdateLike")
+    suspend fun groupMemePostUpdateLike(
+        @Body() req: GroupDiscussionPostUpdateLikeRequest
+    ): retrofit2.Response<BaseResponse>
+
     @POST("_functions/searchAccount")
     suspend fun searchAccount(
+        @Body() req: SearchRequest
+    ): retrofit2.Response<BaseResponse>
+
+    @POST("_functions/searchCampaign")
+    suspend fun searchCampaign(
+        @Body() req: SearchRequest
+    ): retrofit2.Response<BaseResponse>
+
+    @POST("_functions/searchGroup")
+    suspend fun searchGroup(
         @Body() req: SearchRequest
     ): retrofit2.Response<BaseResponse>
 
@@ -127,6 +174,11 @@ interface ApiInterface {
     @POST("_functions/getUserData")
     suspend fun getUserData(
         @Body() req: GeneralRequest
+    ): retrofit2.Response<BaseResponse>
+
+    @POST("_functions/follow")
+    suspend fun follow(
+        @Body() req: FollowRequest
     ): retrofit2.Response<BaseResponse>
 
     @FormUrlEncoded

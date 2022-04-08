@@ -149,6 +149,10 @@ class OTPVerifyFragment : Fragment() {
                             SessionManager.init(activity as Context)
                             SessionManager.setLoginStatus("true")
                             SessionManager.setUserId(response.body()?.OK!!.items[0]._id)
+                            SessionManager.setUserId(response.body()?.OK?.items?.get(0)?._id ?: "")
+                            SessionManager.setUsername(response.body()?.OK?.items?.get(0)?.username ?: "")
+                            SessionManager.setUserName(response.body()?.OK?.items?.get(0)?.name ?: "")
+                            SessionManager.setUserPic(response.body()?.OK?.items?.get(0)?.profile ?: "")
                             startActivity(Intent(activity, MainActivity::class.java))
                             activity?.finish()
 

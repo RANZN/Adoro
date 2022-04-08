@@ -19,29 +19,20 @@ data class ItemLoginResponse(
 //    @SerializedName("_id")
 //    @Expose
       val _id: String,
-    private val _updatedDate: String,
-    private val email: String,
+     val _updatedDate: String,
+     val email: String,
      val name: String,
-    private val number: Long,
-    private val username: String
+     val number: Long,
+    val username: String,
+    val profile: String,
 )
 
 data class QueryLoginResponse(
-    private val collectionName: String,
-//    private val filterTree: FilterTree,
-    private val included: List<Any>,
-    private val invalidArguments: List<Any>,
-    private val limitNumber: Int,
-//    private val provider: Provider,
-    private val skipNumber: Int
+     val collectionName: String,
+val filterTree: FilterTree,
+     val included: List<Any>,
+     val invalidArguments: List<Any>,
+     val limitNumber: Int,
+val provider: Provider,
+     val skipNumber: Int
 )
-//
-//data class FilterTree(
-//    val `$and`: List<And>
-//)
-//
-//class Provider
-//
-//data class And(
-//    val number: Long
-//)

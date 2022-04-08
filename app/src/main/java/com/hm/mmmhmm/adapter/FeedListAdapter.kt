@@ -1,17 +1,22 @@
 package com.hm.mmmhmm.adapter
 
 import android.view.LayoutInflater
+import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
+import android.widget.PopupMenu
 import android.widget.TextView
+import android.widget.Toast
+import androidx.fragment.app.FragmentActivity
 import androidx.recyclerview.widget.RecyclerView
 import com.hm.mmmhmm.R
 import com.hm.mmmhmm.helper.load
 import com.hm.mmmhmm.models.Item
+import java.lang.reflect.Field
 
 
-class FeedListAdapter(private var feedList: List<Item>? = null) : RecyclerView.Adapter<FeedListAdapter.MyViewHolder>() {
+class FeedListAdapter(var ctx: FragmentActivity, private var feedList: List<Item>? = null) : RecyclerView.Adapter<FeedListAdapter.MyViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MyViewHolder {
         val view: View =
@@ -43,36 +48,30 @@ class FeedListAdapter(private var feedList: List<Item>? = null) : RecyclerView.A
 
             }
         holder.iv_menu_feed.setOnClickListener {
-//            val popupMenu = PopupMenu(mContext, v)
-//            popupMenu.inflate(R.menu.album_overflow_menu)
-//
-//            // Force icons to show
-//
-//            // Force icons to show
-//            val menuHelper: Any
-//            val argTypes: Array<Class<*>?>
-//            try {
-//                val fMenuHelper: Field = PopupMenu::class.java.getDeclaredField("mPopup")
-//                fMenuHelper.setAccessible(true)
-//                menuHelper = fMenuHelper.get(popupMenu)
-//                argTypes = arrayOf(Boolean::class.javaPrimitiveType)
-//                menuHelper.javaClass.getDeclaredMethod("setForceShowIcon", *argTypes)
-//                    .invoke(menuHelper, true)
-//            } catch (e: Exception) {
-//                // Possible exceptions are NoSuchMethodError and NoSuchFieldError
-//                //
-//                // In either case, an exception indicates something is wrong with the reflection code, or the
-//                // structure of the PopupMenu class or its dependencies has changed.
-//                //
-//                // These exceptions should never happen since we're shipping the AppCompat library in our own apk,
-//                // but in the case that they do, we simply can't force icons to display, so log the error and
-//                // show the menu normally.
-//                Log.w(TAG, "error forcing menu icons to show", e)
-//                popupMenu.show()
-//                return
-//            }
-//
-//            popupMenu.show()
+            val popupMenu = PopupMenu(ctx , holder.iv_menu_feed)
+            popupMenu.inflate(R.menu.menu)
+            popupMenu.setOnMenuItemClickListener(object : PopupMenu.OnMenuItemClickListener{
+                override fun onMenuItemClick(item: MenuItem?): Boolean {
+                    when(item?.itemId){
+                        R.id.delete -> {
+                            // here are the logic to delete an item from the list
+//                        val tempLang = languageList[position]
+//                        languageList.remove(tempLang)
+//                        rvAdapter.notifyDataSetChanged()
+                            return true
+                        }
+                        // in the same way you can implement others
+//                        R.id.edit -> {
+//                            // define
+//                            Toast.makeText(ctx , "Item 2 clicked" , Toast.LENGTH_SHORT).show()
+//                            return true
+//                        }
+
+                    }
+                    return false
+                }
+            })
+            popupMenu.show()
 
             }
         holder.tv_username.setOnClickListener {
@@ -122,4 +121,5 @@ class FeedListAdapter(private var feedList: List<Item>? = null) : RecyclerView.A
             iv_menu_feed = v.findViewById(R.id.iv_menu_feed)
         }
     }
+
 }

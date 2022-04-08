@@ -55,13 +55,34 @@
                 android:id="@+id/tv_search_account"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_centerVertical="true"
                 android:layout_marginHorizontal="20dp"
                 android:layout_marginTop="10dp"
                 android:paddingHorizontal="5dp"
                 android:paddingVertical="2dp"
                 android:background="@drawable/bg_edittext"
                 android:text="@string/accounts"
+                android:textColor="@color/black"
+                android:textSize="16sp" />
+            <TextView
+                android:id="@+id/tv_search_campaigns"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="20dp"
+                android:layout_marginTop="10dp"
+                android:paddingHorizontal="5dp"
+                android:paddingVertical="2dp"
+                android:text="@string/campaign"
+                android:textColor="@color/black"
+                android:textSize="16sp" />
+            <TextView
+                android:id="@+id/tv_search_groups"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="20dp"
+                android:layout_marginTop="10dp"
+                android:paddingHorizontal="5dp"
+                android:paddingVertical="2dp"
+                android:text="@string/groups"
                 android:textColor="@color/black"
                 android:textSize="16sp" />
 

@@ -1,12 +1,25 @@
 package com.hm.mmmhmm.adapter
 
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.LinearLayout
+import androidx.core.content.ContentProviderCompat.requireContext
+import androidx.fragment.app.FragmentActivity
 import androidx.recyclerview.widget.RecyclerView
 import com.hm.mmmhmm.R
+import com.hm.mmmhmm.models.GroupDiscussionPostUpdateLikeRequest
+import com.hm.mmmhmm.models.LikeData
+import com.hm.mmmhmm.models.ShowAnnouncementRequest
+import com.hm.mmmhmm.web_service.ApiClient
+import kotlinx.android.synthetic.main.fragment_group_detail.*
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
- class GroupDiscussionAdapter() : RecyclerView.Adapter<GroupDiscussionAdapter.MyViewHolder>() {
+class GroupDiscussionAdapter(var ctx: FragmentActivity) : RecyclerView.Adapter<GroupDiscussionAdapter.MyViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MyViewHolder {
         val view: View =
@@ -25,21 +38,16 @@ import com.hm.mmmhmm.R
 //                R.color.text_gray,
 //                true
 //            )
-//            holder.itemView.setOnClickListener {
-//                //todo
-//
-//
-//
-//            }
-//            holder.btn_learn_more.setOnClickListener {
-//                val postDetailFragment = PostDetailFragment()
-//                val args = Bundle()
-//                args.putString("campaignId", campaignList?.get(position)?._id)
-//                postDetailFragment.arguments = args
-//                (activity as MainActivity).supportFragmentManager.beginTransaction().replace(R.id.frame_layout_main, postDetailFragment)
-//                    .commit()
-//
-//            }
+            holder.ll_like_discussion.setOnClickListener {
+
+                var likeData: LikeData = LikeData("","","","");
+                var groupDiscussionPostUpdateLikeRequest: GroupDiscussionPostUpdateLikeRequest = GroupDiscussionPostUpdateLikeRequest(
+                    "",likeData);
+                groupDiscussionPostUpdateLike(groupDiscussionPostUpdateLikeRequest)
+
+
+            }
+
     }
 
     override fun getItemCount(): Int {
@@ -57,16 +65,47 @@ import com.hm.mmmhmm.R
 //            val tv_time_left: TextView
 //            val tv_price: TextView
 //            val btn_learn_more: Button
-//            val ll_item_list: LinearLayout
+            val ll_like_discussion: LinearLayout
 //
-//            init {
+            init {
 //                iv_profile_pic_profile = v.findViewById(R.id.iv_profile_pic_profile)
 //                tv_brand_name = v.findViewById(R.id.tv_brand_name)
 //                tv_detail = v.findViewById(R.id.tv_detail)
 //                tv_time_left = v.findViewById(R.id.tv_time_left)
 //                tv_price = v.findViewById(R.id.tv_price)
 //                btn_learn_more = v.findViewById(R.id.btn_learn_more)
-//                ll_item_list = v.findViewById(R.id.ll_item_list)
-//            }
+    ll_like_discussion = v.findViewById(R.id.ll_like_discussion)
+            }
     }
+
+     private fun groupDiscussionPostUpdateLike(groupDiscussionPostUpdateLikeRequest: GroupDiscussionPostUpdateLikeRequest) {
+        // pb_group_detail.visibility = View.VISIBLE
+         val apiInterface = ApiClient.getRetrofitService(ctx)
+         CoroutineScope(Dispatchers.IO).launch {
+             try {
+                 val response = apiInterface.groupDiscussionPostUpdateLike(groupDiscussionPostUpdateLikeRequest)
+                 withContext(Dispatchers.Main) {
+                    // pb_group_detail.visibility = View.GONE
+
+                     try {
+                         //  toast("" + response.body()?.message)
+                         if (response!=null) {
+//                            feedList = response.body()?.OK?.items
+
+
+                         } else {
+                             Log.d("resp", "complet else: ")
+                         }
+
+                     } catch (e: Exception) {
+                         Log.d("resp", "cathch: " + e.toString())
+                     }
+                 }
+
+             } catch (e: Exception) {
+                 Log.d("weweewefw", e.toString())
+             }
+         }
+
+     }
 }
