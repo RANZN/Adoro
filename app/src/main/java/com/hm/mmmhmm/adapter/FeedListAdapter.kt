@@ -42,7 +42,7 @@ class FeedListAdapter(private var feedList: List<Item>? = null) : RecyclerView.A
                 //todo
 
             }
-        holder.tv_menu_feed.setOnClickListener {
+        holder.iv_menu_feed.setOnClickListener {
 //            val popupMenu = PopupMenu(mContext, v)
 //            popupMenu.inflate(R.menu.album_overflow_menu)
 //
@@ -108,7 +108,7 @@ class FeedListAdapter(private var feedList: List<Item>? = null) : RecyclerView.A
         val tv_apply_count: TextView
         val tv_comment_count: TextView
         val tv_feed_description: TextView
-        val tv_menu_feed: TextView
+        val iv_menu_feed: ImageView
 
         //
         init {
@@ -119,7 +119,7 @@ class FeedListAdapter(private var feedList: List<Item>? = null) : RecyclerView.A
             tv_apply_count = v.findViewById(R.id.tv_apply_count)
             tv_comment_count = v.findViewById(R.id.tv_comment_count)
             tv_feed_description = v.findViewById(R.id.tv_feed_description)
-            tv_menu_feed = v.findViewById(R.id.tv_menu_feed)
+            iv_menu_feed = v.findViewById(R.id.iv_menu_feed)
         }
     }
 }

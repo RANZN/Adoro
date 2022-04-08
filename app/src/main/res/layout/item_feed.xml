@@ -54,7 +54,7 @@
                             android:textStyle="bold" />
 
                         <ImageView
-                            android:id="@+id/tv_menu_feed"
+                            android:id="@+id/iv_menu_feed"
                             android:layout_width="50dp"
                             android:layout_height="50dp"
                             android:padding="15dp"
