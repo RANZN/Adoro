@@ -108,12 +108,11 @@ class WithdrawalRequestFragment : Fragment() {
                     ?.replace(R.id.frame_layout_main,oTPVerifyFragment)?.commit()
             }
         }
-        tv_total_coins.text= SessionManager.getAdoroCoins()
+        tv_total_coins.text= SessionManager.getAdoroCoins()+" A"
+
         btn_verify.setOnClickListener {
-            //todo
-
+            validateInput()
         }
-
     }
     private fun sendWithdrawalRequest( generalRequest: RequestWithdrawalMoney) {
         pb_withdrawal.visibility = View.VISIBLE
@@ -126,7 +125,8 @@ class WithdrawalRequestFragment : Fragment() {
                         pb_withdrawal.visibility = View.GONE
                         if (response.body()?.OK !=null) {
                             val r = response.body()
-
+                            Toast.makeText(activity,"Withdraw request sent to admin!", Toast.LENGTH_SHORT).show()
+                            stopFragment()
                         } else {
                             Toast.makeText(activity,R.string.Something_went_wrong, Toast.LENGTH_SHORT).show()
                         }
@@ -138,5 +138,10 @@ class WithdrawalRequestFragment : Fragment() {
                 e.printStackTrace()
             }
         }
+    }
+
+    private fun stopFragment() {
+        startActivity(Intent(activity, MainActivity::class.java))
+        activity?.finish()
     }
 }

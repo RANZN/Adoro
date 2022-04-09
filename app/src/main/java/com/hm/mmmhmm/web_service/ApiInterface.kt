@@ -201,6 +201,24 @@ interface ApiInterface {
         @Body() req: RequestWithdrawalMoney
     ): retrofit2.Response<BaseResponse>
 
+    @POST("_functions/showMyTemplate")
+    suspend fun showMyTemplate(
+        @Body() req: RequestShowMyTemplate
+    ): retrofit2.Response<BaseResponse>
+
+    @POST("_functions/postTemplate")
+    suspend fun postTemplate(
+        @Body() req: PostTemplateRequest
+    ): retrofit2.Response<BaseResponse>
+
+    @POST("_functions/addAdoro")
+    suspend fun addAdoro(
+        @Body() req: AddAdoroCoinsRequest
+    ): retrofit2.Response<BaseResponse>
+
+    @GET("_functions/browseTemplate")
+    suspend fun browseTemplate(): retrofit2.Response<BaseResponse>
+
     @FormUrlEncoded
     @POST("api/update-fbtoken")
     suspend fun updateFcmToken(

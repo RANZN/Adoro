@@ -8,13 +8,24 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 
 import com.hm.mmmhmm.R
 import com.hm.mmmhmm.activity.MainActivity
+import com.hm.mmmhmm.adapter.GalleryAdapter
 import com.hm.mmmhmm.helper.GlobleData
 import com.hm.mmmhmm.helper.SessionManager
+import com.hm.mmmhmm.models.AddAdoroCoinsRequest
+import com.hm.mmmhmm.models.RequestShowMyTemplate
+import com.hm.mmmhmm.web_service.ApiClient
 import com.romainpiel.shimmer.Shimmer
+import kotlinx.android.synthetic.main.fragment_profile.*
 import kotlinx.android.synthetic.main.fragment_splash.*
+import kotlinx.android.synthetic.main.fragment_templates.*
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
 /**
  * A simple [Fragment] subclass.
@@ -32,10 +43,10 @@ class SplashFragment : Fragment() {
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
-        Shimmer().start(shimmerText)
-        Handler().postDelayed({
-            terminateFragment()
-        }, 4000)
+        var addAdoroCoinsRequest: AddAdoroCoinsRequest =
+            AddAdoroCoinsRequest(580,SessionManager.getUserId() ?: "");
+        addAdoro(addAdoroCoinsRequest)
+
     }
 
     private fun terminateFragment() {
@@ -49,5 +60,37 @@ class SplashFragment : Fragment() {
                     ?.replace(R.id.frame_layout_splash_launcher,WalkThroughFragment())?.commit()
         }
     }}
+
+    private fun addAdoro(addAdoroCoinsRequest: AddAdoroCoinsRequest) {
+        Shimmer().start(shimmerText)
+        val apiInterface = ApiClient.getRetrofitService(requireContext())
+        CoroutineScope(Dispatchers.IO).launch {
+            try {
+                val response = apiInterface.addAdoro(addAdoroCoinsRequest)
+                withContext(Dispatchers.Main) {
+                    try {
+                        Shimmer().cancel()
+                        if (response.body()?.OK != null) {
+                            val r = response.body()
+                            Handler().postDelayed({
+                                terminateFragment()
+                            }, 3000)
+                        } else {
+                            Toast.makeText(
+                                activity,
+                                R.string.Something_went_wrong,
+                                Toast.LENGTH_SHORT
+                            ).show()
+                        }
+                    } catch (e: java.lang.Exception) {
+                        Toast.makeText(requireActivity(), "" + e.toString(), Toast.LENGTH_SHORT)
+                            .show()
+                    }
+                }
+            } catch (e: Exception) {
+                e.printStackTrace()
+            }
+        }
+    }
 
 }
