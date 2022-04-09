@@ -43,5 +43,8 @@ data class Item(
     val groupName: String?,
     val groupProfile: String?,
     val memberData: List<Any>?,
-    val privacy: String?
+    val privacy: String?,
+    var requriementType: String?,
+    var message: String?,
+    var winnerDetails: List<WinnerDetail>?
 )

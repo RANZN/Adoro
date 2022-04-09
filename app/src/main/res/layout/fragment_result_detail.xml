@@ -30,7 +30,7 @@
             android:orientation="horizontal">
 
             <de.hdodenhof.circleimageview.CircleImageView
-                android:id="@+id/iv_profile_pic_profile"
+                android:id="@+id/iv_brand_pic"
                 android:layout_width="50dp"
                 android:layout_height="50dp"
                 android:scaleType="centerCrop"
@@ -90,6 +90,7 @@
                         android:layout_width="80dp"
                         android:layout_height="80dp"
                         android:scaleType="centerCrop"
+                        android:visibility="gone"
                         android:src="@drawable/app_logo" />
 
                     <LinearLayout
@@ -100,7 +101,7 @@
                         android:orientation="vertical">
 
                         <TextView
-                            android:id="@+id/tv_short_description"
+                            android:id="@+id/tv_type_title"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_alignParentLeft="true"

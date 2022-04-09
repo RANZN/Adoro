@@ -1,6 +1,7 @@
 package com.hm.mmmhmm.fragments
 
 import android.os.Bundle
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -10,10 +11,17 @@ import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
 import com.hm.mmmhmm.R
 import com.hm.mmmhmm.activity.MainActivity
+import com.hm.mmmhmm.adapter.ResultAdapter
+import com.hm.mmmhmm.web_service.ApiClient
 import kotlinx.android.synthetic.main.custom_toolbar.*
 import kotlinx.android.synthetic.main.fragment_groups.*
 import kotlinx.android.synthetic.main.fragment_result.*
+import kotlinx.android.synthetic.main.fragment_services.*
 import kotlinx.android.synthetic.main.item_result_list.*
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
 
 class ResultFragment : Fragment() {
@@ -34,10 +42,7 @@ class ResultFragment : Fragment() {
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
         setupToolBar()
-        recycler_results.adapter= ResultAdapter()
-//  (activity as MainActivity).supportFragmentManager.beginTransaction().replace(R.id.frame_layout_main, postDetailFragment)
-//                    .commit()
-
+        getResultListAPI()
     }
 
     private fun setupToolBar() {
@@ -70,63 +75,36 @@ class ResultFragment : Fragment() {
 
     }
 
-  inner  class ResultAdapter() : RecyclerView.Adapter<ResultAdapter.MyViewHolder>() {
-
-        override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MyViewHolder {
-            val view: View =
-                LayoutInflater.from(parent.context).inflate(R.layout.item_result_list, parent, false)
-            return MyViewHolder(view)
-        }
-
-        override fun onBindViewHolder(holder: MyViewHolder, position: Int) {
-//            holder.tv_brand_name.text= campaignList?.get(position)?.brandName
-//            holder.tv_detail.text= campaignList?.get(position)?.shortDescription
-//            holder.tv_detail.text= campaignList?.get(position)?.shortDescription
-//            holder.tv_time_left.text= "₹"+campaignList?.get(position)?.timeLeft.toString()+" left"
-//            holder.iv_profile_pic_profile.load(
-//                campaignList?.get(position)?.brandLogo.toString(),
-//                R.color.text_gray,
-//                R.color.text_gray,
-//                true
-//            )
-            holder.btn_see_result.setOnClickListener {
-                activity?.supportFragmentManager?.beginTransaction()
-                    ?.replace(R.id.frame_layout_main, ResultDetailFragment())
-                    ?.addToBackStack(null)?.commit()
 
 
+    private fun getResultListAPI() {
+        pb_results.visibility = View.VISIBLE
+        val apiInterface = ApiClient.getRetrofitService(requireContext())
+        CoroutineScope(Dispatchers.IO).launch {
+            try {
+                val response = apiInterface.getResults()
+                withContext(Dispatchers.Main) {
+                    pb_results.visibility = View.GONE
 
-            }
+                    try {
+                        //  toast("" + response.body()?.message)
+                        if (response!=null) {
+                            recycler_results.adapter= ResultAdapter(requireActivity(),response.body()?.OK?.items )
 
-        }
+                        } else {
+                            Log.d("resp", "complet else: ")
+                        }
 
-        override fun getItemCount(): Int {
-            return 20
-        }
+                    } catch (e: Exception) {
+                        Log.d("resp", "cathch: " + e.toString())
+                    }
+                }
 
-        override fun getItemId(position: Int): Long {
-            return position.toLong()
-        }
-
-        inner class MyViewHolder(v: View) : RecyclerView.ViewHolder(v) {
-//            val iv_profile_pic_profile: ImageView
-//            val tv_brand_name: TextView
-//            val tv_detail: TextView
-//            val tv_time_left: TextView
-//            val tv_price: TextView
-           val btn_see_result: Button
-//            val ll_item_list: LinearLayout
-//
-            init {
-//                iv_profile_pic_profile = v.findViewById(R.id.iv_profile_pic_profile)
-//                tv_brand_name = v.findViewById(R.id.tv_brand_name)
-//                tv_detail = v.findViewById(R.id.tv_detail)
-//                tv_time_left = v.findViewById(R.id.tv_time_left)
-//                tv_price = v.findViewById(R.id.tv_price)
-//                btn_learn_more = v.findViewById(R.id.btn_learn_more)
-    btn_see_result = v.findViewById(R.id.btn_see_result)
+            } catch (e: Exception) {
+                Log.d("weweewefw", e.toString())
             }
         }
+
     }
 
 }

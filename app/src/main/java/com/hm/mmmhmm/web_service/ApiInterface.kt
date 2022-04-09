@@ -51,8 +51,22 @@ interface ApiInterface {
     suspend fun getCampaignList(): retrofit2.Response<BaseResponse>
 
 
+    @GET("_functions/getResults")
+    suspend fun getResults(): retrofit2.Response<BaseResponse>
+
+
+    @POST("_functions/getSpecificResultData")
+    suspend fun getSpecificResultData(
+        @Body() req: GeneralRequest
+    ): retrofit2.Response<BaseResponse>
+
     @POST("_functions/getFeed")
     suspend fun getFeed(
+        @Body() req: GeneralRequest
+    ): retrofit2.Response<BaseResponse>
+
+    @POST("_functions/showNotification")
+    suspend fun showNotification(
         @Body() req: GeneralRequest
     ): retrofit2.Response<BaseResponse>
 

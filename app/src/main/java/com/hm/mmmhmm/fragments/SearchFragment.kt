@@ -103,18 +103,27 @@ class SearchFragment : Fragment() {
             tv_search_account.setBackgroundResource(R.drawable.bg_edittext)
             tv_search_campaigns.setBackgroundResource(0)
             tv_search_groups.setBackgroundResource(0)
+            var searchRequest: SearchRequest = SearchRequest(et_search.text.toString());
+            getSearchAccounts(searchRequest)
+
         }
         tv_search_campaigns.setOnClickListener {
             searchType="campaign"
             tv_search_campaigns.setBackgroundResource(R.drawable.bg_edittext)
             tv_search_account.setBackgroundResource(0)
             tv_search_groups.setBackgroundResource(0)
+                var searchRequest: SearchRequest = SearchRequest(et_search.text.toString());
+            getCampaignListAPI(searchRequest)
+
         }
         tv_search_groups.setOnClickListener {
             searchType="groups"
             tv_search_groups.setBackgroundResource(R.drawable.bg_edittext)
             tv_search_account.setBackgroundResource(0)
             tv_search_campaigns.setBackgroundResource(0)
+                var searchRequest: SearchRequest = SearchRequest(et_search.text.toString());
+                getGroups(searchRequest)
+
         }
 
     }

@@ -1,17 +1,27 @@
 package com.hm.mmmhmm.fragments
 
 import android.os.Bundle
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import com.hm.mmmhmm.R
 import com.hm.mmmhmm.activity.MainActivity
+import com.hm.mmmhmm.adapter.FeedListAdapter
 import com.hm.mmmhmm.adapter.NotificationsAdapter
+import com.hm.mmmhmm.helper.SessionManager
+import com.hm.mmmhmm.models.GeneralRequest
+import com.hm.mmmhmm.web_service.ApiClient
 //import com.hm.mmmhmm.adapter.SearchSuggestionAdapter
 import kotlinx.android.synthetic.main.custom_toolbar.*
+import kotlinx.android.synthetic.main.fragment_home.*
 import kotlinx.android.synthetic.main.fragment_notification.*
 import kotlinx.android.synthetic.main.fragment_search.*
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
 class NotificationFragment : Fragment() {
 
@@ -44,9 +54,40 @@ class NotificationFragment : Fragment() {
         super.onActivityCreated(savedInstanceState)
         setupToolBar()
         // pb_cms_page.visibility= View.VISIBLE
-        recycler_notifications.adapter= NotificationsAdapter()
 
-        // pb_cms_page.visibility= View.GONE
+
+        var generalRequest: GeneralRequest = GeneralRequest("21d54594-5ee4-4bd2-9276-34042c1da954");
+        getNotificationListAPI(generalRequest)
+
+    }
+
+    private fun getNotificationListAPI(generalRequest: GeneralRequest) {
+        pb_notifications.visibility = View.VISIBLE
+        val apiInterface = ApiClient.getRetrofitService(requireContext())
+        CoroutineScope(Dispatchers.IO).launch {
+            try {
+                val response = apiInterface.showNotification(generalRequest)
+                withContext(Dispatchers.Main) {
+                    pb_notifications.visibility = View.GONE
+
+                    try {
+                        //  toast("" + response.body()?.message)
+                        if (response!=null) {
+                            recycler_notifications.adapter= NotificationsAdapter(requireActivity(), response.body()?.OK?.items)
+
+                        } else {
+                            Log.d("resp", "complet else: ")
+                        }
+
+                    } catch (e: Exception) {
+                        Log.d("resp", "cathch: " + e.toString())
+                    }
+                }
+
+            } catch (e: Exception) {
+                Log.d("weweewefw", e.toString())
+            }
+        }
 
     }
 }
