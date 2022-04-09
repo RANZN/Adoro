@@ -4,7 +4,10 @@ import android.Manifest
 import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
+import android.graphics.Bitmap
+import android.graphics.BitmapFactory
 import android.os.Bundle
+import android.util.Base64
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
@@ -15,6 +18,9 @@ import android.widget.TextView
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
+import com.canhub.cropper.CropImageContract
+import com.canhub.cropper.CropImageView
+import com.canhub.cropper.options
 import com.hm.mmmhmm.Chat_Module.Inbox
 import com.hm.mmmhmm.R
 import com.hm.mmmhmm.activity.MainActivity
@@ -23,20 +29,44 @@ import com.hm.mmmhmm.helper.SessionManager
 import com.hm.mmmhmm.models.CompleteAddress
 import com.hm.mmmhmm.models.UpdateProfileRequest
 import com.hm.mmmhmm.web_service.ApiClient
-import com.theartofdev.edmodo.cropper.CropImage
 import kotlinx.android.synthetic.main.custom_toolbar.*
 import kotlinx.android.synthetic.main.fragment_edit_profile.*
-import kotlinx.android.synthetic.main.fragment_home.*
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+import java.io.ByteArrayOutputStream
 
 
 class EditProfileFragment : Fragment() {
 
     companion object {
         var isBanner = false
+    }
+
+    private var pickedProfile: Bitmap? = null
+    private var pickedBanner: Bitmap? = null
+
+    private val cropImage = registerForActivityResult(CropImageContract()) { result ->
+        if (result.isSuccessful) {
+            // use the returned uri
+            val uriContent = result.uriContent
+            val uriFilePath = result.getUriFilePath(requireContext()) // optional usage
+
+            Log.i(TAG, "cropImage: $uriContent $uriFilePath")
+
+            val bitmap = BitmapFactory.decodeFile(uriFilePath)
+            if (isBanner) {
+                pickedBanner = bitmap
+                iv_cover_pic_profile.setImageBitmap(bitmap)
+            } else {
+                pickedProfile = bitmap
+                iv_profile_pic_profile.setImageBitmap(bitmap)
+            }
+        } else {
+            // an error occurred
+            val exception = result.error
+        }
     }
 
     private val TAG = "edit profile"
@@ -62,16 +92,17 @@ class EditProfileFragment : Fragment() {
         btn_update_profile.setOnClickListener(View.OnClickListener {
             //validation()
 
-            var completeAddress: CompleteAddress = CompleteAddress(
+            val completeAddress: CompleteAddress = CompleteAddress(
                 et_area_name.text.toString(),
                 et_city.text.toString(),
                 et_landmark.text.toString(),
                 et_state_name.text.toString(),
                 et_street_address.text.toString(),
-                et_zip_code.text.toString().toInt(),
+                if (et_zip_code.text.toString().isEmpty()) 0 else et_zip_code.text.toString()
+                    .toInt(),
             )
 
-            var updateProfileRequest: UpdateProfileRequest = UpdateProfileRequest(
+            val updateProfileRequest: UpdateProfileRequest = UpdateProfileRequest(
                 SessionManager.getUserId() ?: "",
                 et_account_number.text.toString(),
                 0,
@@ -86,8 +117,8 @@ class EditProfileFragment : Fragment() {
                 9997854380,
                 "",
                 "",
-                "",
-                ""
+                getEncoded64ImageStringFromBitmap(pickedProfile),
+                getEncoded64ImageStringFromBitmap(pickedBanner)
             )
             updateProfileAPI(updateProfileRequest)
         })
@@ -95,7 +126,9 @@ class EditProfileFragment : Fragment() {
         btn_update_profile_pic.setOnClickListener {
             isBanner = false
             if (checkPermission()) {
-                CropImage.startPickImageActivity(requireActivity())
+                cropImage.launch(options {
+                    setGuidelines(CropImageView.Guidelines.ON)
+                })
             } else {
                 ActivityCompat.requestPermissions(
                     requireActivity(), arrayOf(
@@ -110,7 +143,9 @@ class EditProfileFragment : Fragment() {
         iv_camera.setOnClickListener {
             isBanner = true
             if (checkPermission()) {
-                CropImage.startPickImageActivity(requireActivity())
+                cropImage.launch(options {
+                    setGuidelines(CropImageView.Guidelines.ON)
+                })
             } else {
                 ActivityCompat.requestPermissions(
                     requireActivity(), arrayOf(
@@ -121,12 +156,14 @@ class EditProfileFragment : Fragment() {
                 )
             }
         }
+    }
 
-
-//        iv_toolbar_icon.setOnClickListener(View.OnClickListener {
-//            activity?.supportFragmentManager?.popBackStack()
-//        })
-
+    private fun getEncoded64ImageStringFromBitmap(bitmap: Bitmap?): String {
+        val stream = ByteArrayOutputStream()
+        bitmap?.compress(Bitmap.CompressFormat.JPEG, 70, stream)
+        val byteFormat: ByteArray = stream.toByteArray()
+        // get the base 64 string
+        return Base64.encodeToString(byteFormat, Base64.NO_WRAP)
     }
 
     private fun checkPermission(): Boolean {
@@ -145,19 +182,6 @@ class EditProfileFragment : Fragment() {
         }
         return true
     }
-
-//    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-//        super.onActivityResult(requestCode, resultCode, data)
-//
-//        if (requestCode == CropImage.CROP_IMAGE_ACTIVITY_REQUEST_CODE) {
-////
-////            if (resultCode == Activity.RESULT_OK) {
-////                val resultUri: Uri = result.uri
-////            } else if (resultCode == CropImage.CROP_IMAGE_ACTIVITY_RESULT_ERROR_CODE) {
-////                val error = result.error
-////            }
-//        }
-//    }
 
     private fun setupToolBar() {
         iv_toolbar_icon.setBackgroundResource(R.drawable.hamburger_icon)
@@ -210,7 +234,7 @@ class EditProfileFragment : Fragment() {
         }
     }
 
-    fun updateProfileAPI(updateProfileRequest: UpdateProfileRequest) {
+    private fun updateProfileAPI(updateProfileRequest: UpdateProfileRequest) {
         pb_edit_prof.visibility = View.VISIBLE
         val apiInterface = ApiClient.getRetrofitService(requireContext())
         CoroutineScope(Dispatchers.IO).launch {
