@@ -190,11 +190,27 @@ class ProfileFragment : Fragment() {
                             userId = r?.OK?.items?.get(0)?._id ?: "";
                             username = r?.OK?.items?.get(0)?.username ?: "";
                             name = r?.OK?.items?.get(0)?.name ?: "";
-                            if (SessionManager.getUserId().equals(r?.OK?.items?.get(0)?._id)) {
-                                ll_follow_user.visibility = View.GONE
-                            }else{
+//                            if (SessionManager.getUserId().equals(r?.OK?.items?.get(0)?._id)) {
+//                                ll_follow_user.visibility = View.GONE
+//                            }else{
+//                                ll_follow_user.visibility = View.VISIBLE
+//                            }
+                            if (r?.OK?.relation=="follower"){
                                 ll_follow_user.visibility = View.VISIBLE
-                            }
+                                btn_follow.text= "Follow Back"
+                            }else if(r?.OK?.relation=="following"){
+                                ll_follow_user.visibility = View.VISIBLE
+                                btn_follow.text= "Unfollow"
+                            }else if(r?.OK?.relation=="ownProfile"){
+                                ll_follow_user.visibility = View.GONE
+                            }else if(r?.OK?.relation=="newVisitor"){
+                                ll_follow_user.visibility = View.VISIBLE
+                                btn_follow.text= "Follow"
+                            }/*else if(r?.OK?.relation=="mutual"){
+                                ll_follow_user.visibility = View.VISIBLE
+                                btn_follow.text= "Unfollow"
+                            }*/
+                            //follower(follow back button to show),following(unfollow button to show), ownProfile(no button), newVisitor(follow button to show)
 //                            SessionManager.setUserId(r?.OK?.items?.get(0)?._id ?: "")
 //                            SessionManager.setUsername(r?.OK?.items?.get(0)?.username ?: "")
 //                            SessionManager.setUserName(r?.OK?.items?.get(0)?.name ?: "")

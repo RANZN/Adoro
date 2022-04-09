@@ -11,6 +11,7 @@ import com.hm.mmmhmm.R
 import com.hm.mmmhmm.activity.MainActivity
 import com.hm.mmmhmm.adapter.GalleryAdapter
 import com.hm.mmmhmm.adapter.NotificationsAdapter
+import com.hm.mmmhmm.adapter.TemplateAdapter
 import com.hm.mmmhmm.helper.SessionManager
 import com.hm.mmmhmm.models.RequestShowMyTemplate
 import com.hm.mmmhmm.models.ShowPostlRequest
@@ -90,7 +91,7 @@ class TemplatesFragment : Fragment() {
                         pb_templates.visibility = View.GONE
                         if (response.body()?.OK != null) {
                             val r = response.body()
-                            rv_gallery.adapter = GalleryAdapter(r?.OK?.items)
+                            rv_gallery.adapter = TemplateAdapter(r?.OK?.items)
                         } else {
                             Toast.makeText(
                                 activity,
@@ -120,7 +121,7 @@ class TemplatesFragment : Fragment() {
                         pb_templates.visibility = View.GONE
                         if (response.body()?.OK != null) {
                             val r = response.body()
-                            rv_gallery.adapter = GalleryAdapter(r?.OK?.items)
+                            rv_gallery.adapter = TemplateAdapter(r?.OK?.items)
                         } else {
                             Toast.makeText(
                                 activity,

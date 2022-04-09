@@ -169,6 +169,12 @@ interface ApiInterface {
         @Body() req: GroupDiscussionPostUpdateLikeRequest
     ): retrofit2.Response<BaseResponse>
 
+
+    @POST("_functions/updateLike")
+    suspend fun updateLike(
+        @Body() req: PostLikeRequest
+    ): retrofit2.Response<BaseResponse>
+
     @POST("_functions/searchAccount")
     suspend fun searchAccount(
         @Body() req: SearchRequest

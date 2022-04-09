@@ -19,6 +19,7 @@ data class OK(
     val trancations: List<Trancation>?,
     val id: String?,
     val serialNumber: Int?,
+    var relation: String?
 )
 
 

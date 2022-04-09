@@ -1,18 +1,23 @@
 package com.hm.mmmhmm.adapter
 
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
-import android.widget.ImageView
-import android.widget.PopupMenu
-import android.widget.TextView
-import android.widget.Toast
+import android.widget.*
+import androidx.core.content.ContextCompat
 import androidx.fragment.app.FragmentActivity
 import androidx.recyclerview.widget.RecyclerView
 import com.hm.mmmhmm.R
+import com.hm.mmmhmm.helper.SessionManager
 import com.hm.mmmhmm.helper.load
-import com.hm.mmmhmm.models.Item
+import com.hm.mmmhmm.models.*
+import com.hm.mmmhmm.web_service.ApiClient
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import java.lang.reflect.Field
 
 
@@ -88,6 +93,13 @@ class FeedListAdapter(var ctx: FragmentActivity, private var feedList: List<Item
 //            }
 
         }
+        holder.tv_like_count.text =(feedList?.get(position)?.like as List<PostLikeData>).size.toString()
+        holder.iv_like.setOnClickListener {
+            var likeData: PostLikeData = PostLikeData(SessionManager.getUserId(),SessionManager.getUserPic(),SessionManager.getUserName());
+            var postLikeRequest: PostLikeRequest = PostLikeRequest(
+                feedList?.get(position)?._id,likeData);
+            postUpdateLike(postLikeRequest, holder.iv_like,holder.tv_like_count,(feedList?.get(position)?.like as List<PostLikeData>).size)
+        }
             }
 
 
@@ -102,6 +114,7 @@ class FeedListAdapter(var ctx: FragmentActivity, private var feedList: List<Item
     inner class MyViewHolder(v: View) : RecyclerView.ViewHolder(v) {
         val iv_user_feed: ImageView
         val iv_feed: ImageView
+        val iv_like: ImageView
         val tv_username: TextView
         val tv_like_count: TextView
         val tv_apply_count: TextView
@@ -113,6 +126,7 @@ class FeedListAdapter(var ctx: FragmentActivity, private var feedList: List<Item
         init {
             iv_user_feed = v.findViewById(R.id.iv_user_feed)
             iv_feed = v.findViewById(R.id.iv_feed)
+            iv_like = v.findViewById(R.id.iv_like)
             tv_username = v.findViewById(R.id.tv_username)
             tv_like_count = v.findViewById(R.id.tv_like_count)
             tv_apply_count = v.findViewById(R.id.tv_apply_count)
@@ -121,5 +135,36 @@ class FeedListAdapter(var ctx: FragmentActivity, private var feedList: List<Item
             iv_menu_feed = v.findViewById(R.id.iv_menu_feed)
         }
     }
+
+    private fun postUpdateLike(postLikeRequest: PostLikeRequest, iv_like: ImageView, tv_like_count: TextView, likeCount:Int) {
+        // pb_group_detail.visibility = View.VISIBLE
+        val apiInterface = ApiClient.getRetrofitService(ctx)
+        CoroutineScope(Dispatchers.IO).launch {
+            try {
+                val response = apiInterface.updateLike(postLikeRequest)
+                withContext(Dispatchers.Main) {
+                    // pb_group_detail.visibility = View.GONE
+
+                    try {
+                        //  toast("" + response.body()?.message)
+                        if (response!=null) {
+                            tv_like_count.text =(likeCount+1).toString()
+                            iv_like.setColorFilter(ContextCompat.getColor(ctx, R.color.red), android.graphics.PorterDuff.Mode.MULTIPLY);
+                        } else {
+                            Log.d("resp", "complet else: ")
+                        }
+
+                    } catch (e: Exception) {
+                        Log.d("resp", "cathch: " + e.toString())
+                    }
+                }
+
+            } catch (e: Exception) {
+                Log.d("weweewefw", e.toString())
+            }
+        }
+
+    }
+
 
 }
