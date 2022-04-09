@@ -43,9 +43,12 @@ class SplashFragment : Fragment() {
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
-        var addAdoroCoinsRequest: AddAdoroCoinsRequest =
-            AddAdoroCoinsRequest(580,SessionManager.getUserId() ?: "");
-        addAdoro(addAdoroCoinsRequest)
+       // var addAdoroCoinsRequest: AddAdoroCoinsRequest =
+//            AddAdoroCoinsRequest(580,SessionManager.getUserId() ?: "");
+//        addAdoro(addAdoroCoinsRequest)
+        Handler().postDelayed({
+            terminateFragment()
+        }, 4000)
 
     }
 
@@ -72,9 +75,7 @@ class SplashFragment : Fragment() {
                         Shimmer().cancel()
                         if (response.body()?.OK != null) {
                             val r = response.body()
-                            Handler().postDelayed({
-                                terminateFragment()
-                            }, 3000)
+
                         } else {
                             Toast.makeText(
                                 activity,
