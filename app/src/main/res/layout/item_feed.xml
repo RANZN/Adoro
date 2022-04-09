@@ -27,6 +27,7 @@
                     android:layout_height="40dp"
                     android:scaleType="centerCrop"
                     app:civ_border_width="1dp"
+                    android:layout_marginTop="5dp"
                     android:layout_gravity="center_vertical"
                     app:civ_border_color="@color/colorAccent"
                     android:src="@drawable/ic_account_24" />
@@ -58,6 +59,7 @@
                             android:layout_width="50dp"
                             android:layout_height="50dp"
                             android:padding="15dp"
+                            android:visibility="gone"
                             android:src="@drawable/option_menu" />
                     </LinearLayout>
 
@@ -89,7 +91,8 @@
                         android:layout_width="50dp"
                         android:layout_height="50dp"
                         android:padding="15dp"
-                        android:src="@drawable/favorite_icon" />
+                        android:src="@drawable/favorite_icon"
+                        app:tint="@color/text_gray" />
 
                     <TextView
                         android:id="@+id/tv_like_count"

@@ -21,6 +21,7 @@
     <color name="backgroundColor">#F9F9F9</color>
     <color name="bg_color_default_bubble">#BCE0FD</color>
     <color name="reflection">#222957</color>
+    <color name="red">#FF040E</color>
     <color name="green">#048E09</color>
 
 
