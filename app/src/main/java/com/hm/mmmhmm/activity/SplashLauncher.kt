@@ -15,6 +15,7 @@ class SplashLauncher : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_splash_launcher)
       //  updateToken()
+        SessionManager.init(applicationContext)
         supportFragmentManager.beginTransaction()
             .replace(R.id.frame_layout_splash_launcher, SplashFragment())
             .commit()

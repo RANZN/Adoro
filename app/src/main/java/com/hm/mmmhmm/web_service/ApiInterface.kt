@@ -3,7 +3,10 @@ package com.hm.mmmhmm.web_service
 import com.hm.mmmhmm.models.*
 import okhttp3.MultipartBody
 import okhttp3.RequestBody
+import okhttp3.Response
+import okhttp3.ResponseBody
 import retrofit2.http.*
+import retrofit2.http.Query
 
 interface ApiInterface {
 
@@ -80,9 +83,16 @@ interface ApiInterface {
     suspend fun getCategoryListForGroup(): retrofit2.Response<BaseResponse>
 
 
+
     @POST("_functions/getSpecificCampaignData")
     suspend fun getCampaignDetail(
         @Body() req: RequestCampaign
+    ): retrofit2.Response<BaseResponse>
+
+
+    @POST("_functions/sendSMS")
+    suspend fun sendOTP(
+        @Body() req: OTPRequest
     ): retrofit2.Response<BaseResponse>
 
 
@@ -90,7 +100,7 @@ interface ApiInterface {
     @POST("_functions/updateProfile")
     suspend fun updateProfile(
         @Body() req: UpdateProfileRequest
-    ): retrofit2.Response<BaseResponse>
+    ): retrofit2.Response<ResponseBody>
 
     @POST("_functions/authenticate")
     suspend fun registerNumber(
@@ -220,7 +230,7 @@ interface ApiInterface {
     @POST("_functions/addAdoro")
     suspend fun addAdoro(
         @Body() req: AddAdoroCoinsRequest
-    ): retrofit2.Response<BaseResponse>
+    ): retrofit2.Response<ResponseBody>
 
     @GET("_functions/browseTemplate")
     suspend fun browseTemplate(): retrofit2.Response<BaseResponse>

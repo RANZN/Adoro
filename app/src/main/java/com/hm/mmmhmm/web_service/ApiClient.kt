@@ -32,6 +32,7 @@ object ApiClient {
             .build().create(ApiInterface::class.java)
     }
 
+
     private fun getClient(): OkHttpClient? {
 
         val headerInterceptor = Interceptor { chain ->
