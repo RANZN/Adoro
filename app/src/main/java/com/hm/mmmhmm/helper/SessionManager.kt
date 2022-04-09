@@ -19,11 +19,16 @@ object SessionManager {
     private const val OTP = "otp"
     private const val USER_NAME = "user_name"
     private const val USERNAME = "username"
+    private const val ADORO_COINS = "adoro_coins"
     private const val USER_DATA = "user_data"
     private const val USER_EMAIL = "user_email"
     private const val USER_PHONE = "user_phone"
     private const val USER_IMAGE = "user_image"
     private const val LANGUAGE = "language"
+    private const val ACCOUNT_NUMBER = "account_number"
+    private const val IFSC_CODE = "ifsc_code"
+    private const val BANK_NAME = "bank_name"
+    private const val PAN_CARD = "pan_card"
     private const val FIREBASE_USER_ID = "firebase_user_id"
 
 
@@ -171,6 +176,84 @@ object SessionManager {
         return prefs.getString(
             USERNAME,
             USERNAME
+        )
+    }
+
+
+    fun setAdoroCoins(value: String) {
+        val prefsEditor: SharedPreferences.Editor = prefs.edit()
+        with(prefsEditor) {
+            putString(USERNAME, value)
+            commit()
+        }
+    }
+
+
+    fun getAdoroCoins(): String? {
+        return prefs.getString(
+            USERNAME,
+            USERNAME
+        )
+    }
+
+    fun setAccountNumber(value: String) {
+        val prefsEditor: SharedPreferences.Editor = prefs.edit()
+        with(prefsEditor) {
+            putString(ACCOUNT_NUMBER, value)
+            commit()
+        }
+    }
+
+    fun getAccountNumber(): String? {
+        return prefs.getString(
+            ACCOUNT_NUMBER,
+            ""
+        )
+    }
+
+    fun setIFSC(value: String) {
+        val prefsEditor: SharedPreferences.Editor = prefs.edit()
+        with(prefsEditor) {
+            putString(IFSC_CODE, value)
+            commit()
+        }
+    }
+
+    fun getIFSC(): String? {
+        return prefs.getString(
+            IFSC_CODE,
+            ""
+        )
+    }
+
+
+    fun setBank(value: String) {
+        val prefsEditor: SharedPreferences.Editor = prefs.edit()
+        with(prefsEditor) {
+            putString(BANK_NAME, value)
+            commit()
+        }
+    }
+
+    fun getBank(): String? {
+        return prefs.getString(
+            BANK_NAME,
+            ""
+        )
+    }
+
+    fun setPanNumber(value: String) {
+        val prefsEditor: SharedPreferences.Editor = prefs.edit()
+        with(prefsEditor) {
+            putString(PAN_CARD, value)
+            commit()
+        }
+    }
+
+    fun getPanNumber(): String? {
+        return prefs.getString(
+            PAN_CARD,
+            ""
         )
     }
 

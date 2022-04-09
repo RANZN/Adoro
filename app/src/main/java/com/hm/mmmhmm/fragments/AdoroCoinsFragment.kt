@@ -99,6 +99,7 @@ class AdoroCoinsFragment : Fragment() {
                         if (response.body()?.OK !=null) {
                             val r = response.body()
                             tv_coins.text = r?.OK?.amount+" A"
+                            SessionManager.setAdoroCoins(r?.OK?.amount ?: "")
                             hitShowTrancationsAPI(generalRequest)
                         } else {
                             Toast.makeText(activity,R.string.Something_went_wrong, Toast.LENGTH_SHORT).show()

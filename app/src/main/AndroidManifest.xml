@@ -16,11 +16,15 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".activity.ForgotPassword"/>
-        <activity android:name=".Chat_Module.Inbox"/>
-        <activity android:name=".Chat_Module.Chat_Activity"/>
+        <activity android:name=".activity.ForgotPassword"
+            android:screenOrientation="portrait"/>
+        <activity android:name=".Chat_Module.Inbox"
+            android:screenOrientation="portrait"/>
+        <activity android:name=".Chat_Module.Chat_Activity"
+            android:screenOrientation="portrait"/>
         <activity android:name=".activity.SplashLauncher"
-            android:exported="true">
+            android:exported="true"
+            android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -29,7 +33,8 @@
         </activity>
         <activity
             android:name=".activity.MainActivity"
-            android:windowSoftInputMode="adjustResize" />
+            android:windowSoftInputMode="adjustResize"
+            android:screenOrientation="portrait"/>
         <activity android:name="com.theartofdev.edmodo.cropper.CropImageActivity" />
 
         <meta-data

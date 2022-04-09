@@ -1,18 +1,36 @@
 package com.hm.mmmhmm.fragments
 
+import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import com.hm.mmmhmm.Chat_Module.Inbox
 import com.hm.mmmhmm.R
 import com.hm.mmmhmm.activity.MainActivity
 import com.hm.mmmhmm.adapter.FeedListAdapter
+import com.hm.mmmhmm.helper.ConnectivityObserver
+import com.hm.mmmhmm.helper.SessionManager
+import com.hm.mmmhmm.helper.toast
+import com.hm.mmmhmm.models.ProfileRequest
+import com.hm.mmmhmm.models.RequestAuthenticateNumber
+import com.hm.mmmhmm.models.RequestWithdrawalMoney
+import com.hm.mmmhmm.web_service.ApiClient
 import kotlinx.android.synthetic.main.custom_toolbar.*
+import kotlinx.android.synthetic.main.fragment_groups.*
 import kotlinx.android.synthetic.main.fragment_home.*
+import kotlinx.android.synthetic.main.fragment_login.*
 import kotlinx.android.synthetic.main.fragment_o_t_p_verify.*
+import kotlinx.android.synthetic.main.fragment_o_t_p_verify.btn_verify
+import kotlinx.android.synthetic.main.fragment_withdrawal_request.*
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
+import java.lang.Exception
 
 
 class WithdrawalRequestFragment : Fragment() {
@@ -54,6 +72,28 @@ class WithdrawalRequestFragment : Fragment() {
 
 
     }
+    private fun validateInput() {
+        val withdrawMoney = et_withdraw_money.text.toString()
+        if (withdrawMoney.isNullOrEmpty()) {
+            toast(R.string.enter_phone_number,1)
+        } else if (ConnectivityObserver.isOnline(activity as Context)) {
+
+            var requestRegisterNumber: RequestWithdrawalMoney = RequestWithdrawalMoney(
+               "1234567890" ,
+                withdrawMoney.toInt() ,
+               "Kotak Mahindra Bank" ,
+               "HDD011D" ,
+                SessionManager.getUserName()?:"" ,
+               "HDD011D" ,
+               "Pending" ,
+                SessionManager.getUserId()?:"",
+               SessionManager.getUsername()?:"" ,
+            )
+            sendWithdrawalRequest(requestRegisterNumber)
+
+        }
+
+    }
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
@@ -68,7 +108,35 @@ class WithdrawalRequestFragment : Fragment() {
                     ?.replace(R.id.frame_layout_main,oTPVerifyFragment)?.commit()
             }
         }
+        tv_total_coins.text= SessionManager.getAdoroCoins()
+        btn_verify.setOnClickListener {
+            //todo
+
+        }
 
     }
+    private fun sendWithdrawalRequest( generalRequest: RequestWithdrawalMoney) {
+        pb_withdrawal.visibility = View.VISIBLE
+        val apiInterface = ApiClient.getRetrofitService(requireContext())
+        CoroutineScope(Dispatchers.IO).launch {
+            try {
+                val response = apiInterface.sendWithdrawalRequest(generalRequest)
+                withContext(Dispatchers.Main) {
+                    try {
+                        pb_withdrawal.visibility = View.GONE
+                        if (response.body()?.OK !=null) {
+                            val r = response.body()
 
+                        } else {
+                            Toast.makeText(activity,R.string.Something_went_wrong, Toast.LENGTH_SHORT).show()
+                        }
+                    } catch (e: Exception) {
+                        Toast.makeText(requireActivity(), "" + e.toString(), Toast.LENGTH_SHORT).show()
+                    }
+                }
+            } catch (e: java.lang.Exception) {
+                e.printStackTrace()
+            }
+        }
+    }
 }

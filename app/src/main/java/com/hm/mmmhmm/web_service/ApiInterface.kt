@@ -195,6 +195,12 @@ interface ApiInterface {
         @Body() req: FollowRequest
     ): retrofit2.Response<BaseResponse>
 
+
+    @POST("_functions/sendWithdrawalRequest")
+    suspend fun sendWithdrawalRequest(
+        @Body() req: RequestWithdrawalMoney
+    ): retrofit2.Response<BaseResponse>
+
     @FormUrlEncoded
     @POST("api/update-fbtoken")
     suspend fun updateFcmToken(
