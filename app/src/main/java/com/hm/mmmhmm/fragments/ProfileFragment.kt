@@ -7,32 +7,29 @@ import android.content.Intent
 import android.graphics.Bitmap
 import android.os.Bundle
 import android.provider.MediaStore
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.*
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
-import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
 import com.hm.mmmhmm.Chat_Module.Inbox
 import com.hm.mmmhmm.R
 import com.hm.mmmhmm.activity.MainActivity
-import com.hm.mmmhmm.adapter.AdoroCoinsAdapter
 import com.hm.mmmhmm.adapter.GalleryAdapter
 import com.hm.mmmhmm.helper.ConnectivityObserver
 import com.hm.mmmhmm.helper.SessionManager
 import com.hm.mmmhmm.helper.load
-import com.hm.mmmhmm.helper.toast
 import com.hm.mmmhmm.models.*
 import com.hm.mmmhmm.web_service.ApiClient
 import kotlinx.android.synthetic.main.custom_toolbar.*
-import kotlinx.android.synthetic.main.fragment_adoro_coins.*
-import kotlinx.android.synthetic.main.fragment_home.*
 import kotlinx.android.synthetic.main.fragment_profile.*
-import kotlinx.coroutines.*
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import okhttp3.MediaType
 import okhttp3.MultipartBody
 import okhttp3.RequestBody
@@ -48,9 +45,9 @@ class ProfileFragment : Fragment() {
     var file: File? = null
     var image_body: MultipartBody.Part? = null
 
-    var username: String?=null
-    var name: String ?=null
-    var userId: String?=null
+    var username: String? = null
+    var name: String? = null
+    var userId: String? = null
 
 
     override fun onCreateView(
@@ -77,8 +74,12 @@ class ProfileFragment : Fragment() {
 //        }
         iv_camera.setOnClickListener(View.OnClickListener {
             activity?.supportFragmentManager?.beginTransaction()
-                ?.replace(R.id.frame_layout_main, EditProfileFragment())
-                ?.addToBackStack(null)?.commit()
+                ?.replace(
+                    R.id.frame_layout_main,
+                    EditProfileFragment(),
+                    EditProfileFragment::class.java.simpleName
+                )
+                ?.addToBackStack(EditProfileFragment::class.java.simpleName)?.commit()
         })
 
 
@@ -88,13 +89,13 @@ class ProfileFragment : Fragment() {
                 SessionManager.getUserId(),
                 SessionManager.getUserName(),
                 SessionManager.getUsername()
-            );
+            )
             var personWhomeImFollowingData: PersonWhomeImFollowingData = PersonWhomeImFollowingData(
                 requireArguments().getString("userId") ?: "",
                 name,
                 username
-            );
-            var followRequest: FollowRequest = FollowRequest(myDetail, personWhomeImFollowingData);
+            )
+            var followRequest: FollowRequest = FollowRequest(myDetail, personWhomeImFollowingData)
             followUser(followRequest)
         })
 
@@ -113,21 +114,24 @@ class ProfileFragment : Fragment() {
         if (requireArguments().getString("path") == "search") {
             iv_camera.visibility = View.GONE
             var generalRequest: ProfileRequest =
-                requireArguments().getString("userId")?.let { ProfileRequest(it,SessionManager.getUserId() ?: "") }!!;
+                requireArguments().getString("userId")
+                    ?.let { ProfileRequest(it, SessionManager.getUserId() ?: "") }!!
             getUserData(generalRequest)
         } else {
-            var generalRequest: ProfileRequest = ProfileRequest(SessionManager.getUserId() ?: "",SessionManager.getUserId() ?: "");
+            var generalRequest: ProfileRequest =
+                ProfileRequest(SessionManager.getUserId() ?: "", SessionManager.getUserId() ?: "")
             getUserData(generalRequest)
         }
 
     }
+
     private fun setupToolBar() {
-        // iv_toolbar_icon.setBackgroundResource(R.drawable.hamburger_icon)
+        iv_toolbar_icon.setBackgroundResource(R.drawable.hamburger_icon)
         iv_toolbar_action_inbox.setBackgroundResource(R.drawable.chat)
         iv_toolbar_action_search.setBackgroundResource(R.drawable.iv_search)
-        iv_toolbar_icon.setColorFilter(resources.getColor(R.color.black));
-        iv_toolbar_action_inbox.setColorFilter(resources.getColor(R.color.black));
-        iv_toolbar_action_search.setColorFilter(resources.getColor(R.color.black));
+        iv_toolbar_icon.setColorFilter(resources.getColor(R.color.black))
+        iv_toolbar_action_inbox.setColorFilter(resources.getColor(R.color.black))
+        iv_toolbar_action_search.setColorFilter(resources.getColor(R.color.black))
         tv_toolbar_title.setTextColor(resources.getColor(R.color.black))
         //  tv_toolbar_title.text = resources.getString(R.string.app_name)
         iv_toolbar_icon.setOnClickListener(View.OnClickListener {
@@ -184,15 +188,16 @@ class ProfileFragment : Fragment() {
                             tv_name.text = r?.OK?.items?.get(0)?.name
                             tv_bio.text = r?.OK?.items?.get(0)?.bio
                             //tv_total_posts.text= r?.OK?.items?.get(0)?.bio+"Posts"
-                            tv_total_fans.text = r?.OK?.items?.get(0)?.followerData?.size.toString()+"Fans"
+                            tv_total_fans.text =
+                                r?.OK?.items?.get(0)?.followerData?.size.toString() + "Fans"
                             tv_total_coins.text = r?.OK?.items?.get(0)?.adoroCoins.toString() + "A"
                             tv_toolbar_title.text = r?.OK?.items?.get(0)?.username
-                            userId = r?.OK?.items?.get(0)?._id ?: "";
-                            username = r?.OK?.items?.get(0)?.username ?: "";
-                            name = r?.OK?.items?.get(0)?.name ?: "";
+                            userId = r?.OK?.items?.get(0)?._id ?: ""
+                            username = r?.OK?.items?.get(0)?.username ?: ""
+                            name = r?.OK?.items?.get(0)?.name ?: ""
                             if (SessionManager.getUserId().equals(r?.OK?.items?.get(0)?._id)) {
                                 ll_follow_user.visibility = View.GONE
-                            }else{
+                            } else {
                                 ll_follow_user.visibility = View.VISIBLE
                             }
 //                            SessionManager.setUserId(r?.OK?.items?.get(0)?._id ?: "")
@@ -200,7 +205,7 @@ class ProfileFragment : Fragment() {
 //                            SessionManager.setUserName(r?.OK?.items?.get(0)?.name ?: "")
 //                            SessionManager.setUserPic(r?.OK?.items?.get(0)?.profile ?: "")
                             var showPostlRequest: ShowPostlRequest =
-                                ShowPostlRequest(SessionManager.getUserId() ?: "");
+                                ShowPostlRequest(SessionManager.getUserId() ?: "")
                             getPosts(showPostlRequest)
                         } else {
                             Toast.makeText(
@@ -262,9 +267,9 @@ class ProfileFragment : Fragment() {
                         if (response.body()?.OK != null) {
                             val r = response.body()
                             //todo
-                            btn_follow.text= resources.getString(R.string.following)
-                                Toast.makeText(requireActivity(), r?.OK?.status, Toast.LENGTH_SHORT)
-                                    .show()
+                            btn_follow.text = resources.getString(R.string.following)
+                            Toast.makeText(requireActivity(), r?.OK?.status, Toast.LENGTH_SHORT)
+                                .show()
 
                         } else {
                             Toast.makeText(

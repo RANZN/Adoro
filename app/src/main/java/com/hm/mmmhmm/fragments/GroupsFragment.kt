@@ -104,7 +104,7 @@ class GroupsFragment : Fragment() {
     }
 
     private fun setupToolBar() {
-        // iv_toolbar_icon.setBackgroundResource(R.drawable.hamburger_icon)
+        iv_toolbar_icon.setBackgroundResource(R.drawable.hamburger_icon)
         iv_toolbar_action_inbox.setBackgroundResource(R.drawable.chat)
         iv_toolbar_action_search.setBackgroundResource(R.drawable.iv_search)
         iv_toolbar_icon.setColorFilter(resources.getColor(R.color.black));

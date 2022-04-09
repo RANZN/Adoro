@@ -92,7 +92,7 @@ interface ApiInterface {
     @POST("_functions/updateProfile")
     suspend fun updateProfile(
         @Body() req: UpdateProfileRequest
-    ): retrofit2.Response<BaseResponse>
+    ): retrofit2.Response<ResponseBody>
 
     @POST("_functions/authenticate")
     suspend fun registerNumber(

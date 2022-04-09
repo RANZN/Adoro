@@ -4,9 +4,13 @@ import android.content.ContentResolver
 import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
+import android.graphics.Bitmap
+import android.graphics.Bitmap.CompressFormat
+import android.graphics.BitmapFactory
 import android.net.Uri
 import android.os.Bundle
 import android.provider.MediaStore
+import android.util.Base64
 import android.util.Log
 import android.view.View
 import android.widget.Toast
@@ -16,14 +20,17 @@ import androidx.fragment.app.FragmentManager
 import com.hm.mmmhmm.R
 import com.hm.mmmhmm.fragments.*
 import com.hm.mmmhmm.helper.SessionManager
+import com.hm.mmmhmm.models.CompleteAddress
+import com.hm.mmmhmm.models.UpdateProfileRequest
 import com.hm.mmmhmm.web_service.ApiClient
 import com.theartofdev.edmodo.cropper.CropImage
-import com.theartofdev.edmodo.cropper.CropImageView
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.custom_navigation_view_sidebar.*
+import kotlinx.android.synthetic.main.fragment_edit_profile.*
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import java.io.ByteArrayOutputStream
 
 
 class MainActivity : AppCompatActivity(), View.OnClickListener {
@@ -363,21 +370,90 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
         super.onActivityResult(requestCode, resultCode, data)
 
         if (requestCode == CropImage.PICK_IMAGE_CHOOSER_REQUEST_CODE) {
-            val uri = CropImage.getPickImageResultUri(this, data)
+            val uri = CropImage.getCaptureImageOutputUri(this)
             Log.i(TAG, "onActivityResult: $uri")
-            CropImage.activity(uri).start(this)
+            if (uri.authority?.isEmpty() == true) {
+                Log.i(TAG, "onActivityResult: ${BitmapFactory.decodeFile(uri.path)}")
+//                setImageAndUploadUri(uri)
+            } else {
+                CropImage.activity(uri).start(this)
+            }
         }
+
         if (requestCode == CropImage.CROP_IMAGE_ACTIVITY_REQUEST_CODE) {
             val result = CropImage.getActivityResult(data)
             if (resultCode == RESULT_OK) {
-                // TODO("use this URI")
                 val resultUri = result.uri
+                setImageAndUploadUri(resultUri)
                 Log.i(TAG, "onActivityResult: 3 $resultUri")
             } else if (resultCode == CropImage.CROP_IMAGE_ACTIVITY_RESULT_ERROR_CODE) {
                 val error = result.error
             }
         }
         Toast.makeText(this, "File uploaded successfully!", Toast.LENGTH_SHORT).show()
+
+    }
+
+    private fun setImageAndUploadUri(uri: Uri) {
+        //TODO (Store Previous data somewhere else to use it here)
+
+        val fragment =
+            supportFragmentManager.findFragmentByTag(EditProfileFragment::class.java.simpleName) as EditProfileFragment?
+
+        val drawable = BitmapFactory.decodeFile(uri.path)
+        if (fragment != null) {
+            if (EditProfileFragment.isBanner) {
+                iv_cover_pic_profile.setImageBitmap(drawable)
+                callApi(fragment, drawable, true)
+            } else {
+                iv_profile_pic_profile.setImageBitmap(drawable)
+                callApi(fragment, drawable, false)
+            }
+        }
+    }
+
+    private fun callApi(
+        fragment: EditProfileFragment,
+        drawable: Bitmap,
+        isBanner: Boolean = false
+    ) {
+        fragment.updateProfileAPI(
+            UpdateProfileRequest(
+                SessionManager.getUserId() ?: "",
+                et_account_number.text.toString(),
+                0,
+                0,
+                et_bank_name.text.toString(),
+                CompleteAddress(
+                    et_area_name.text.toString(),
+                    et_city.text.toString(),
+                    et_landmark.text.toString(),
+                    et_state_name.text.toString(),
+                    et_street_address.text.toString(),
+                    if (et_zip_code.text.toString()
+                            .isEmpty()
+                    ) 0 else et_zip_code.text.toString().toInt()
+                ),
+                "",
+                "",
+                "",
+                "",
+                "",
+                9997854380,
+                "",
+                "",
+                if (isBanner) "" else getEncoded64ImageStringFromBitmap(drawable),
+                if (!isBanner) "" else getEncoded64ImageStringFromBitmap(drawable)
+            )
+        )
+    }
+
+    private fun getEncoded64ImageStringFromBitmap(bitmap: Bitmap): String {
+        val stream = ByteArrayOutputStream()
+        bitmap.compress(CompressFormat.JPEG, 70, stream)
+        val byteFormat: ByteArray = stream.toByteArray()
+        // get the base 64 string
+        return Base64.encodeToString(byteFormat, Base64.NO_WRAP)
     }
 
     private fun convertFileToContent(context: Context, file: Uri): Uri {

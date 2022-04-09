@@ -5,7 +5,6 @@ import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.os.Bundle
-import android.provider.MediaStore
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
@@ -25,7 +24,6 @@ import com.hm.mmmhmm.models.CompleteAddress
 import com.hm.mmmhmm.models.UpdateProfileRequest
 import com.hm.mmmhmm.web_service.ApiClient
 import com.theartofdev.edmodo.cropper.CropImage
-import com.theartofdev.edmodo.cropper.CropImageView
 import kotlinx.android.synthetic.main.custom_toolbar.*
 import kotlinx.android.synthetic.main.fragment_edit_profile.*
 import kotlinx.android.synthetic.main.fragment_home.*
@@ -36,6 +34,10 @@ import kotlinx.coroutines.withContext
 
 
 class EditProfileFragment : Fragment() {
+
+    companion object {
+        var isBanner = false
+    }
 
     private val TAG = "edit profile"
     private val genderList = arrayOf("male", "female")
@@ -84,11 +86,14 @@ class EditProfileFragment : Fragment() {
                 9997854380,
                 "",
                 "",
+                "",
+                ""
             )
             updateProfileAPI(updateProfileRequest)
         })
 
         btn_update_profile_pic.setOnClickListener {
+            isBanner = false
             if (checkPermission()) {
                 CropImage.startPickImageActivity(requireActivity())
             } else {
@@ -103,6 +108,7 @@ class EditProfileFragment : Fragment() {
 
         }
         iv_camera.setOnClickListener {
+            isBanner = true
             if (checkPermission()) {
                 CropImage.startPickImageActivity(requireActivity())
             } else {
@@ -154,7 +160,7 @@ class EditProfileFragment : Fragment() {
 //    }
 
     private fun setupToolBar() {
-        // iv_toolbar_icon.setBackgroundResource(R.drawable.hamburger_icon)
+        iv_toolbar_icon.setBackgroundResource(R.drawable.hamburger_icon)
         iv_toolbar_action_inbox.setBackgroundResource(R.drawable.chat)
         iv_toolbar_action_search.setBackgroundResource(R.drawable.iv_search)
         iv_toolbar_icon.setColorFilter(resources.getColor(R.color.black))
@@ -204,18 +210,18 @@ class EditProfileFragment : Fragment() {
         }
     }
 
-    private fun updateProfileAPI(updateProfileRequest: UpdateProfileRequest) {
+    fun updateProfileAPI(updateProfileRequest: UpdateProfileRequest) {
         pb_edit_prof.visibility = View.VISIBLE
         val apiInterface = ApiClient.getRetrofitService(requireContext())
         CoroutineScope(Dispatchers.IO).launch {
             try {
                 val response = apiInterface.updateProfile(updateProfileRequest)
                 withContext(Dispatchers.Main) {
-                    pb_feeds.visibility = View.GONE
+                    pb_edit_prof.visibility = View.GONE
 
                     try {
                         //  toast("" + response.body()?.message)
-                        if (response != null) {
+                        if (response.isSuccessful) {
 
                         } else {
                             Log.d("resp", "complet else: ")

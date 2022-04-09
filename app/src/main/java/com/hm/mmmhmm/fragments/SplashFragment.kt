@@ -47,6 +47,12 @@ class SplashFragment : Fragment() {
         var addAdoroCoinsRequest: AddAdoroCoinsRequest =
             AddAdoroCoinsRequest(580,SessionManager.getUserId() ?: "");
         addAdoro(addAdoroCoinsRequest)
+       // var addAdoroCoinsRequest: AddAdoroCoinsRequest =
+//            AddAdoroCoinsRequest(580,SessionManager.getUserId() ?: "");
+//        addAdoro(addAdoroCoinsRequest)
+        Handler().postDelayed({
+            terminateFragment()
+        }, 4000)
     }
 
     private fun terminateFragment() {
@@ -72,9 +78,7 @@ class SplashFragment : Fragment() {
                         Shimmer().cancel()
                         if (response.isSuccessful) {
                             val r = response.body()
-                            Handler().postDelayed({
-                                terminateFragment()
-                            }, 3000)
+
                         } else {
                             Toast.makeText(
                                 activity,

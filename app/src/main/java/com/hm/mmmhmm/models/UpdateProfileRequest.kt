@@ -14,5 +14,7 @@ data class UpdateProfileRequest(
     val name: String,
     val number: Long,
     val panCardNumber: String,
-    val username: String
+    val username: String,
+    val profile:String,
+    val bannerImage:String
 )
