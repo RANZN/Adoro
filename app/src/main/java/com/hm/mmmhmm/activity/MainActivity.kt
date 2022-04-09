@@ -1,23 +1,29 @@
 package com.hm.mmmhmm.activity
+
+import android.content.ContentResolver
+import android.content.Context
 import android.content.Intent
+import android.content.pm.PackageManager
+import android.net.Uri
 import android.os.Bundle
+import android.provider.MediaStore
 import android.util.Log
 import android.view.View
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.GravityCompat
 import androidx.fragment.app.FragmentManager
-import com.google.android.gms.tasks.OnCompleteListener
 import com.hm.mmmhmm.R
 import com.hm.mmmhmm.fragments.*
-import com.hm.mmmhmm.helper.*
+import com.hm.mmmhmm.helper.SessionManager
 import com.hm.mmmhmm.web_service.ApiClient
+import com.theartofdev.edmodo.cropper.CropImage
+import com.theartofdev.edmodo.cropper.CropImageView
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.custom_navigation_view_sidebar.*
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
-import com.google.firebase.messaging.FirebaseMessaging
 
 
 class MainActivity : AppCompatActivity(), View.OnClickListener {
@@ -29,8 +35,8 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
         setContentView(R.layout.activity_main)
-       // SessionManager.init(this)
-       // GlobleData.ACCESS_TOKEN = SessionManager.getAccessToken().toString()
+        // SessionManager.init(this)
+        // GlobleData.ACCESS_TOKEN = SessionManager.getAccessToken().toString()
 //        iv_profile_pic_navigation.load(
 //            SessionManager.getUserData()?.profilePicture,
 //            R.color.text_gray,
@@ -82,10 +88,11 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
 
     private fun clickMethod() {
         rl_notification.setOnClickListener(View.OnClickListener {
-           // resetView()
+            // resetView()
             clearBackStack()
             supportFragmentManager.beginTransaction()
-                .replace(R.id.frame_layout_main, NotificationFragment()).addToBackStack(null).commit()
+                .replace(R.id.frame_layout_main, NotificationFragment()).addToBackStack(null)
+                .commit()
             drawer_layout.closeDrawers()
         })
 
@@ -109,9 +116,9 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
         })
 
         rl_refer.setOnClickListener(View.OnClickListener {
-           // resetView()
-           // iv_blog_icon.setColorFilter(resources.getColor(R.color.text_gray))
-           // tv_blog_drawer.setTextColor(resources.getColor(R.color.text_gray))
+            // resetView()
+            // iv_blog_icon.setColorFilter(resources.getColor(R.color.text_gray))
+            // tv_blog_drawer.setTextColor(resources.getColor(R.color.text_gray))
 
             clearBackStack()
             supportFragmentManager.beginTransaction()
@@ -206,13 +213,11 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
 //            drawer_layout.closeDrawers()
 //        })
 
-                iv_close_drawer.setOnClickListener(View.OnClickListener {
+        iv_close_drawer.setOnClickListener(View.OnClickListener {
 
             clearBackStack()
             drawer_layout.closeDrawers()
         })
-
-
 
 
 //        --------------EDIT BUTTON TO OPEN EDIT SCREEN------------
@@ -259,7 +264,7 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
 //    }
 
 
-    public fun manageDrawer() {
+    fun manageDrawer() {
         isOpen = drawer_layout.isDrawerOpen(GravityCompat.END)
         Log.d("drawerrrrrrr", isOpen.toString())
 
@@ -289,12 +294,11 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
     }
 
 
-
-
     override fun onClick(v: View?) {
-        when (v?.getId()) {
+        when (v?.id) {
             R.id.liTab_home, R.id.iv_tab_home, R.id.tv_tab_home -> {
-                supportFragmentManager.beginTransaction().replace(R.id.frame_layout_main, HomeFragment())
+                supportFragmentManager.beginTransaction()
+                    .replace(R.id.frame_layout_main, HomeFragment())
                     .commit()
                 view_tab_home.visibility = View.VISIBLE
                 view_tab_group.visibility = View.GONE
@@ -304,33 +308,36 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
                 drawer_layout.closeDrawer(GravityCompat.START)
             }
             R.id.iv_tab_group, R.id.tv_tab_group, R.id.liTab_group -> {
-                supportFragmentManager.beginTransaction().replace(R.id.frame_layout_main, GroupsFragment())
+                supportFragmentManager.beginTransaction()
+                    .replace(R.id.frame_layout_main, GroupsFragment())
                     .commit()
                 view_tab_home.visibility = View.GONE
-                view_tab_group.setVisibility(View.VISIBLE)
-                view_tab_add.setVisibility(View.GONE)
+                view_tab_group.visibility = View.VISIBLE
+                view_tab_add.visibility = View.GONE
                 view_tab_services.visibility = View.GONE
-                view_tab_account.setVisibility(View.GONE)
+                view_tab_account.visibility = View.GONE
                 drawer_layout.closeDrawer(GravityCompat.START)
             }
             R.id.liTab_add, R.id.iv_tab_add, R.id.tv_tab_add -> {
-                supportFragmentManager.beginTransaction().replace(R.id.frame_layout_main, AddFragment())
+                supportFragmentManager.beginTransaction()
+                    .replace(R.id.frame_layout_main, AddFragment())
                     .commit()
                 view_tab_home.visibility = View.GONE
-                view_tab_group.setVisibility(View.GONE)
-                view_tab_add.setVisibility(View.VISIBLE)
+                view_tab_group.visibility = View.GONE
+                view_tab_add.visibility = View.VISIBLE
                 view_tab_services.visibility = View.GONE
-                view_tab_account.setVisibility(View.GONE)
+                view_tab_account.visibility = View.GONE
                 drawer_layout.closeDrawer(GravityCompat.START)
             }
             R.id.iv_tab_service, R.id.tv_tab_service, R.id.liTab_services -> {
-                supportFragmentManager.beginTransaction().replace(R.id.frame_layout_main, ServicesFragment())
+                supportFragmentManager.beginTransaction()
+                    .replace(R.id.frame_layout_main, ServicesFragment())
                     .commit()
                 view_tab_home.visibility = View.GONE
-                view_tab_group.setVisibility(View.GONE)
-                view_tab_add.setVisibility(View.GONE)
+                view_tab_group.visibility = View.GONE
+                view_tab_add.visibility = View.GONE
                 view_tab_services.visibility = View.VISIBLE
-                view_tab_account.setVisibility(View.GONE)
+                view_tab_account.visibility = View.GONE
                 drawer_layout.closeDrawer(GravityCompat.START)
             }
             R.id.iv_tab_account, R.id.tv_tab_account, R.id.liTab_account -> {
@@ -339,13 +346,14 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
                 args.putString("path", "home")
                 args.putString("userId", "")
                 profileFragment.arguments = args
-                supportFragmentManager.beginTransaction().replace(R.id.frame_layout_main, profileFragment)
+                supportFragmentManager.beginTransaction()
+                    .replace(R.id.frame_layout_main, profileFragment)
                     .commit()
                 view_tab_home.visibility = View.GONE
-                view_tab_group.setVisibility(View.GONE)
-                view_tab_add.setVisibility(View.GONE)
+                view_tab_group.visibility = View.GONE
+                view_tab_add.visibility = View.GONE
                 view_tab_services.visibility = View.GONE
-                view_tab_account.setVisibility(View.VISIBLE)
+                view_tab_account.visibility = View.VISIBLE
                 drawer_layout.closeDrawer(GravityCompat.START)
             }
         }
@@ -354,10 +362,47 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
 
-        if (requestCode == 111 && resultCode == RESULT_OK) {
-            val selectedFile = data?.data //The uri with the location of the file
-            Log.d("file:::::", selectedFile.toString())
+        if (requestCode == CropImage.PICK_IMAGE_CHOOSER_REQUEST_CODE) {
+            val uri = CropImage.getPickImageResultUri(this, data)
+            Log.i(TAG, "onActivityResult: $uri")
+            CropImage.activity(uri).start(this)
         }
-        Toast.makeText(this,"File uploaded successfully!", Toast.LENGTH_SHORT).show()
+        if (requestCode == CropImage.CROP_IMAGE_ACTIVITY_REQUEST_CODE) {
+            val result = CropImage.getActivityResult(data)
+            if (resultCode == RESULT_OK) {
+                // TODO("use this URI")
+                val resultUri = result.uri
+                Log.i(TAG, "onActivityResult: 3 $resultUri")
+            } else if (resultCode == CropImage.CROP_IMAGE_ACTIVITY_RESULT_ERROR_CODE) {
+                val error = result.error
+            }
+        }
+        Toast.makeText(this, "File uploaded successfully!", Toast.LENGTH_SHORT).show()
+    }
+
+    private fun convertFileToContent(context: Context, file: Uri): Uri {
+        val cr: ContentResolver = context.contentResolver
+        val imagePath = file.path
+        val uriString =
+            MediaStore.Images.Media.insertImage(cr, imagePath, "picked_image", null)
+        Log.i(TAG, "convertFileToContent: ${Uri.parse(uriString)}")
+        return Uri.parse(uriString)
+    }
+
+    override fun onRequestPermissionsResult(
+        requestCode: Int,
+        permissions: Array<out String>,
+        grantResults: IntArray
+    ) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
+        if (requestCode == 125) {
+            var granted = true
+            for (result in grantResults) {
+                granted = result == PackageManager.PERMISSION_GRANTED
+            }
+            if (granted) {
+                CropImage.startPickImageActivity(this)
+            }
+        }
     }
 }

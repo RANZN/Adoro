@@ -1,40 +1,38 @@
 package com.hm.mmmhmm.fragments
 
-import android.app.DatePickerDialog
+import android.Manifest
 import android.content.Context
 import android.content.Intent
+import android.content.pm.PackageManager
 import android.os.Bundle
+import android.provider.MediaStore
 import android.util.Log
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.*
-import androidx.core.content.ContentProviderCompat
-import androidx.core.content.ContentProviderCompat.requireContext
+import android.widget.AdapterView
+import android.widget.ArrayAdapter
+import android.widget.TextView
+import androidx.core.app.ActivityCompat
+import androidx.core.content.ContextCompat
+import androidx.fragment.app.Fragment
 import com.hm.mmmhmm.Chat_Module.Inbox
-
 import com.hm.mmmhmm.R
 import com.hm.mmmhmm.activity.MainActivity
-import com.hm.mmmhmm.adapter.FeedListAdapter
 import com.hm.mmmhmm.helper.ConnectivityObserver
 import com.hm.mmmhmm.helper.SessionManager
-import com.hm.mmmhmm.helper.toast
 import com.hm.mmmhmm.models.CompleteAddress
-import com.hm.mmmhmm.models.GeneralRequest
-import com.hm.mmmhmm.models.JoinGroupRequest
 import com.hm.mmmhmm.models.UpdateProfileRequest
 import com.hm.mmmhmm.web_service.ApiClient
+import com.theartofdev.edmodo.cropper.CropImage
+import com.theartofdev.edmodo.cropper.CropImageView
 import kotlinx.android.synthetic.main.custom_toolbar.*
-import kotlinx.android.synthetic.main.custom_toolbar.tv_toolbar_title
 import kotlinx.android.synthetic.main.fragment_edit_profile.*
 import kotlinx.android.synthetic.main.fragment_home.*
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
-import java.lang.Exception
-import java.util.*
 
 
 class EditProfileFragment : Fragment() {
@@ -62,7 +60,7 @@ class EditProfileFragment : Fragment() {
         btn_update_profile.setOnClickListener(View.OnClickListener {
             //validation()
 
-            var completeAddress: CompleteAddress =CompleteAddress(
+            var completeAddress: CompleteAddress = CompleteAddress(
                 et_area_name.text.toString(),
                 et_city.text.toString(),
                 et_landmark.text.toString(),
@@ -72,9 +70,9 @@ class EditProfileFragment : Fragment() {
             )
 
             var updateProfileRequest: UpdateProfileRequest = UpdateProfileRequest(
-                SessionManager.getUserId()?:"",
+                SessionManager.getUserId() ?: "",
                 et_account_number.text.toString(),
-               0,
+                0,
                 0,
                 et_bank_name.text.toString(),
                 completeAddress,
@@ -90,21 +88,80 @@ class EditProfileFragment : Fragment() {
             updateProfileAPI(updateProfileRequest)
         })
 
+        btn_update_profile_pic.setOnClickListener {
+            if (checkPermission()) {
+                CropImage.startPickImageActivity(requireActivity())
+            } else {
+                ActivityCompat.requestPermissions(
+                    requireActivity(), arrayOf(
+                        Manifest.permission.CAMERA,
+                        Manifest.permission.READ_EXTERNAL_STORAGE,
+                        Manifest.permission.WRITE_EXTERNAL_STORAGE
+                    ), 125
+                )
+            }
+
+        }
+        iv_camera.setOnClickListener {
+            if (checkPermission()) {
+                CropImage.startPickImageActivity(requireActivity())
+            } else {
+                ActivityCompat.requestPermissions(
+                    requireActivity(), arrayOf(
+                        Manifest.permission.CAMERA,
+                        Manifest.permission.READ_EXTERNAL_STORAGE,
+                        Manifest.permission.WRITE_EXTERNAL_STORAGE
+                    ), 125
+                )
+            }
+        }
+
+
 //        iv_toolbar_icon.setOnClickListener(View.OnClickListener {
 //            activity?.supportFragmentManager?.popBackStack()
 //        })
 
     }
 
+    private fun checkPermission(): Boolean {
+        for (permission in arrayOf(
+            Manifest.permission.CAMERA,
+            Manifest.permission.READ_EXTERNAL_STORAGE,
+            Manifest.permission.WRITE_EXTERNAL_STORAGE
+        )) {
+            if (ContextCompat.checkSelfPermission(
+                    requireContext(),
+                    permission
+                ) != PackageManager.PERMISSION_GRANTED
+            ) {
+                return false
+            }
+        }
+        return true
+    }
+
+//    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+//        super.onActivityResult(requestCode, resultCode, data)
+//
+//        if (requestCode == CropImage.CROP_IMAGE_ACTIVITY_REQUEST_CODE) {
+////
+////            if (resultCode == Activity.RESULT_OK) {
+////                val resultUri: Uri = result.uri
+////            } else if (resultCode == CropImage.CROP_IMAGE_ACTIVITY_RESULT_ERROR_CODE) {
+////                val error = result.error
+////            }
+//        }
+//    }
+
     private fun setupToolBar() {
-        iv_toolbar_icon.setBackgroundResource(R.drawable.hamburger_icon)
+        // iv_toolbar_icon.setBackgroundResource(R.drawable.hamburger_icon)
         iv_toolbar_action_inbox.setBackgroundResource(R.drawable.chat)
         iv_toolbar_action_search.setBackgroundResource(R.drawable.iv_search)
-        iv_toolbar_icon.setColorFilter(resources.getColor(R.color.black));
-        iv_toolbar_action_inbox.setColorFilter(resources.getColor(R.color.black));
-        iv_toolbar_action_search.setColorFilter(resources.getColor(R.color.black));
+        iv_toolbar_icon.setColorFilter(resources.getColor(R.color.black))
+        iv_toolbar_action_inbox.setColorFilter(resources.getColor(R.color.black))
+        iv_toolbar_action_search.setColorFilter(resources.getColor(R.color.black))
         tv_toolbar_title.setTextColor(resources.getColor(R.color.black))
-          tv_toolbar_title.text = resources.getString(R.string.edit_profile)
+        tv_toolbar_title.text = resources.getString(R.string.edit_profile)
         iv_toolbar_icon.setOnClickListener(View.OnClickListener {
             (activity as MainActivity).manageDrawer()
         })
@@ -114,7 +171,8 @@ class EditProfileFragment : Fragment() {
         })
 
         iv_toolbar_action_search.setOnClickListener(View.OnClickListener {
-            (activity as MainActivity).supportFragmentManager.beginTransaction().replace(R.id.frame_layout_main, SearchFragment())
+            (activity as MainActivity).supportFragmentManager.beginTransaction()
+                .replace(R.id.frame_layout_main, SearchFragment())
                 .addToBackStack(null).commit()
         })
 
@@ -128,7 +186,7 @@ class EditProfileFragment : Fragment() {
         spinerAdapter.setDropDownViewResource(android.R.layout.simple_dropdown_item_1line)
         spinner_edit_profile.adapter = spinerAdapter
 
-        spinner_edit_profile.setOnItemSelectedListener(object : AdapterView.OnItemSelectedListener {
+        spinner_edit_profile.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
             override fun onItemSelected(
                 parent: AdapterView<*>,
                 view: View?,
@@ -139,12 +197,13 @@ class EditProfileFragment : Fragment() {
                 (parent.getChildAt(0) as TextView).setTextColor(resources.getColor(R.color.text_gray))
                 val item = parent.getItemAtPosition(position)
                 Log.d("possssss", item.toString() + "<<<<" + position)
-//                    updateView(position)
+                //                    updateView(position)
             }
 
             override fun onNothingSelected(parent: AdapterView<*>) {}
-        })
+        }
     }
+
     private fun updateProfileAPI(updateProfileRequest: UpdateProfileRequest) {
         pb_edit_prof.visibility = View.VISIBLE
         val apiInterface = ApiClient.getRetrofitService(requireContext())
@@ -156,7 +215,7 @@ class EditProfileFragment : Fragment() {
 
                     try {
                         //  toast("" + response.body()?.message)
-                        if (response!=null) {
+                        if (response != null) {
 
                         } else {
                             Log.d("resp", "complet else: ")
@@ -175,7 +234,6 @@ class EditProfileFragment : Fragment() {
     }
 
 }
-
 
 
 //    private fun getUserDetailAPI() {

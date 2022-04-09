@@ -3,6 +3,8 @@ package com.hm.mmmhmm.web_service
 import com.hm.mmmhmm.models.*
 import okhttp3.MultipartBody
 import okhttp3.RequestBody
+import okhttp3.Response
+import okhttp3.ResponseBody
 import retrofit2.http.*
 
 interface ApiInterface {
@@ -214,7 +216,7 @@ interface ApiInterface {
     @POST("_functions/addAdoro")
     suspend fun addAdoro(
         @Body() req: AddAdoroCoinsRequest
-    ): retrofit2.Response<BaseResponse>
+    ): retrofit2.Response<ResponseBody>
 
     @GET("_functions/browseTemplate")
     suspend fun browseTemplate(): retrofit2.Response<BaseResponse>

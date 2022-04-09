@@ -43,15 +43,15 @@ class SplashFragment : Fragment() {
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
+
         var addAdoroCoinsRequest: AddAdoroCoinsRequest =
             AddAdoroCoinsRequest(580,SessionManager.getUserId() ?: "");
         addAdoro(addAdoroCoinsRequest)
-
     }
 
     private fun terminateFragment() {
         if (activity != null) {
-            SessionManager.init(activity as Context)
+            //SessionManager.init(activity?.applicationContext!!)
             if (SessionManager.getLoginStatus().toString().equals("true")) {
                 startActivity(Intent(activity, MainActivity::class.java))
                 activity?.finishAffinity()
@@ -70,7 +70,7 @@ class SplashFragment : Fragment() {
                 withContext(Dispatchers.Main) {
                     try {
                         Shimmer().cancel()
-                        if (response.body()?.OK != null) {
+                        if (response.isSuccessful) {
                             val r = response.body()
                             Handler().postDelayed({
                                 terminateFragment()
