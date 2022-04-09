@@ -112,16 +112,15 @@ class ProfileFragment : Fragment() {
 
         if (requireArguments().getString("path") == "search") {
             iv_camera.visibility = View.GONE
-            var generalRequest: GeneralRequest =
-                requireArguments().getString("userId")?.let { GeneralRequest(it) }!!;
+            var generalRequest: ProfileRequest =
+                requireArguments().getString("userId")?.let { ProfileRequest(it,SessionManager.getUserId() ?: "") }!!;
             getUserData(generalRequest)
         } else {
-            var generalRequest: GeneralRequest = GeneralRequest(SessionManager.getUserId() ?: "");
+            var generalRequest: ProfileRequest = ProfileRequest(SessionManager.getUserId() ?: "",SessionManager.getUserId() ?: "");
             getUserData(generalRequest)
         }
 
     }
-
     private fun setupToolBar() {
         iv_toolbar_icon.setBackgroundResource(R.drawable.hamburger_icon)
         iv_toolbar_action_inbox.setBackgroundResource(R.drawable.chat)
@@ -158,7 +157,7 @@ class ProfileFragment : Fragment() {
     }
 
 
-    private fun getUserData(generalRequest: GeneralRequest) {
+    private fun getUserData(generalRequest: ProfileRequest) {
         pb_prof.visibility = View.VISIBLE
         val apiInterface = ApiClient.getRetrofitService(requireContext())
         CoroutineScope(Dispatchers.IO).launch {

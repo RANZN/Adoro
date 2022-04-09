@@ -56,7 +56,7 @@ class NotificationFragment : Fragment() {
         // pb_cms_page.visibility= View.VISIBLE
 
 
-        var generalRequest: GeneralRequest = GeneralRequest("21d54594-5ee4-4bd2-9276-34042c1da954");
+        var generalRequest: GeneralRequest = GeneralRequest(SessionManager.getUserId()?:"");
         getNotificationListAPI(generalRequest)
 
     }
@@ -85,6 +85,7 @@ class NotificationFragment : Fragment() {
                 }
 
             } catch (e: Exception) {
+                pb_notifications.visibility = View.GONE
                 Log.d("weweewefw", e.toString())
             }
         }

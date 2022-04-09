@@ -15,10 +15,7 @@ import com.hm.mmmhmm.activity.MainActivity
 import com.hm.mmmhmm.adapter.GalleryAdapter
 import com.hm.mmmhmm.helper.SessionManager
 import com.hm.mmmhmm.helper.load
-import com.hm.mmmhmm.models.GeneralRequest
-import com.hm.mmmhmm.models.Item
-import com.hm.mmmhmm.models.JoinGroupRequest
-import com.hm.mmmhmm.models.ShowPostlRequest
+import com.hm.mmmhmm.models.*
 import com.hm.mmmhmm.web_service.ApiClient
 import kotlinx.android.synthetic.main.custom_toolbar.*
 import kotlinx.android.synthetic.main.fragment_group_creation.*
@@ -51,7 +48,7 @@ class GroupsFragment : Fragment() {
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
         setupToolBar()
-        var generalRequest: GeneralRequest = GeneralRequest(SessionManager.getUserId() ?: "");
+        var generalRequest: ProfileRequest = ProfileRequest(SessionManager.getUserId() ?: "",SessionManager.getUserId() ?: "");
         getUserData(generalRequest)
         tv_my_groups.setBackgroundColor(
             ContextCompat.getColor(
@@ -78,7 +75,7 @@ class GroupsFragment : Fragment() {
                     R.color.transparent
                 )
             )
-            var generalRequest: GeneralRequest = GeneralRequest(SessionManager.getUserId() ?: "");
+            var generalRequest: ProfileRequest = ProfileRequest(SessionManager.getUserId() ?: "",SessionManager.getUserId() ?: "");
             getUserData(generalRequest)
         }
         tv_browse_groups.setOnClickListener {
@@ -273,7 +270,7 @@ class GroupsFragment : Fragment() {
         }
     }
 
-    private fun getUserData( generalRequest: GeneralRequest) {
+    private fun getUserData( generalRequest: ProfileRequest) {
         pb_groups.visibility = View.VISIBLE
         val apiInterface = ApiClient.getRetrofitService(requireContext())
         CoroutineScope(Dispatchers.IO).launch {

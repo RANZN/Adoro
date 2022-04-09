@@ -187,7 +187,7 @@ interface ApiInterface {
 
     @POST("_functions/getUserData")
     suspend fun getUserData(
-        @Body() req: GeneralRequest
+        @Body() req: ProfileRequest
     ): retrofit2.Response<BaseResponse>
 
     @POST("_functions/follow")
