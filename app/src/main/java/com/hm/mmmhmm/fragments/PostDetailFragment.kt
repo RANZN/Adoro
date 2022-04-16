@@ -5,15 +5,21 @@ import android.os.Bundle
 import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
+import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ImageView
+import android.widget.PopupMenu
+import android.widget.TextView
 import androidx.core.content.ContentProviderCompat
 import androidx.core.content.ContentProviderCompat.requireContext
 import androidx.core.content.ContextCompat
 import com.hm.mmmhmm.R
 import com.hm.mmmhmm.activity.MainActivity
+import com.hm.mmmhmm.helper.SessionManager
 import com.hm.mmmhmm.helper.load
-import com.hm.mmmhmm.models.RequestCampaign
+import com.hm.mmmhmm.helper.toast
+import com.hm.mmmhmm.models.*
 import com.hm.mmmhmm.web_service.ApiClient
 import kotlinx.android.synthetic.main.custom_toolbar.*
 import kotlinx.android.synthetic.main.fragment_post_detail.*
@@ -28,6 +34,8 @@ class PostDetailFragment : Fragment() {
         super.onCreate(savedInstanceState)
 
     }
+
+    var totalLike:Int=0
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -48,12 +56,46 @@ class PostDetailFragment : Fragment() {
         btn_upload.setOnClickListener {
 
             if (activity != null) {
-
+                val publishMemeFragment = PublishMemeFragment()
+                val args = Bundle()
+                args.putString("campaignId",requireArguments().getString("campaignId"))
+                publishMemeFragment.arguments = args
                 (activity as MainActivity).supportFragmentManager.beginTransaction()
-                    .replace(R.id.frame_layout_main, PublishMemeFragment())
+                    .replace(R.id.frame_layout_main, publishMemeFragment)
                     .commit()
             }
 
+        }
+
+        iv_option_menu.setOnClickListener {
+            val popupMenu = PopupMenu(requireActivity() , iv_option_menu)
+            popupMenu.inflate(R.menu.menu)
+            popupMenu.setOnMenuItemClickListener(object : PopupMenu.OnMenuItemClickListener{
+                override fun onMenuItemClick(item: MenuItem?): Boolean {
+                    when(item?.itemId){
+                        R.id.report -> {
+                            var generalRequest: GeneralRequest = GeneralRequest(requireArguments().getString("campaignId")?:"");
+                            reportCampaign(generalRequest)
+                        }
+
+                    }
+                    return false
+                }
+            })
+            popupMenu.show()
+
+        }
+        iv_like.setOnClickListener {
+            var likeData: LikeData = LikeData(
+                SessionManager.getUserId(),
+               "",
+                SessionManager.getUserPic(),
+                SessionManager.getUserName());
+            var postLikeRequest: CampaignUpdateLikeRequest = CampaignUpdateLikeRequest(
+                requireArguments().getString("campaignId"),
+                likeData);
+            postUpdateLike(postLikeRequest,iv_like,tv_like_count,
+                totalLike)
         }
 
 
@@ -80,6 +122,7 @@ private fun getCampaignDetail(requestCampaign: RequestCampaign) {
 
                 try {
                     //  toast("" + response.body()?.message)
+                        totalLike = response.body()?.OK?.items?.get(0)?.like.toString().toInt()
                     if (response.body()?.OK!=null) {
                         tv_brand_name.text = response.body()?.OK?.items?.get(0)?.brandName
                         tv_description.text = response.body()?.OK?.items?.get(0)?.description
@@ -118,6 +161,62 @@ private fun getCampaignDetail(requestCampaign: RequestCampaign) {
 
 }
 
+    private fun postUpdateLike(postLikeRequest: CampaignUpdateLikeRequest, iv_like: ImageView, tv_like_count: TextView, likeCount:Int) {
+        // pb_group_detail.visibility = View.VISIBLE
+        val apiInterface = ApiClient.getRetrofitService(requireActivity())
+        CoroutineScope(Dispatchers.IO).launch {
+            try {
+                val response = apiInterface.campaignUpdateLike(postLikeRequest)
+                withContext(Dispatchers.Main) {
+                    // pb_group_detail.visibility = View.GONE
+
+                    try {
+                        //  toast("" + response.body()?.message)
+                        if (response!=null) {
+                            tv_like_count.text =(likeCount+1).toString()
+                            iv_like.setColorFilter(ContextCompat.getColor(requireActivity(), R.color.red), android.graphics.PorterDuff.Mode.MULTIPLY);
+                        } else {
+                            Log.d("resp", "complet else: ")
+                        }
+
+                    } catch (e: Exception) {
+                        Log.d("resp", "cathch: " + e.toString())
+                    }
+                }
+
+            } catch (e: Exception) {
+                Log.d("weweewefw", e.toString())
+            }
+        }
 
     }
+
+    private fun reportCampaign(generalRequest: GeneralRequest) {
+        pb_campaign_detail.visibility = View.VISIBLE
+        val apiInterface = ApiClient.getRetrofitService(requireActivity())
+        CoroutineScope(Dispatchers.IO).launch {
+            try {
+                val response = apiInterface.reportCampaign(generalRequest)
+                withContext(Dispatchers.Main) {
+                     pb_campaign_detail.visibility = View.GONE
+                    try {
+                        if (response!=null) {
+                            //toast("" + response.body()?.message)
+                        } else {
+                            Log.d("resp", "complet else: ")
+                        }
+
+                    } catch (e: Exception) {
+                        Log.d("resp", "cathch: " + e.toString())
+                    }
+                }
+
+            } catch (e: Exception) {
+                Log.d("weweewefw", e.toString())
+            }
+        }
+
+    }
+
+}
 

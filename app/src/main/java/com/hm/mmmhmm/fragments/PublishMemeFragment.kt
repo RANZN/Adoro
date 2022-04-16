@@ -1,13 +1,17 @@
 package com.hm.mmmhmm.fragments
 
+import android.Manifest
 import android.app.Dialog
 import android.content.Context
 import android.content.Intent
+import android.content.pm.PackageManager
 import android.graphics.Bitmap
+import android.graphics.BitmapFactory
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
 import android.provider.MediaStore
+import android.util.Base64
 import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
@@ -16,42 +20,73 @@ import android.view.ViewGroup
 import android.view.WindowManager
 import android.widget.Button
 import android.widget.TextView
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.app.ActivityCompat
+import androidx.core.content.ContextCompat
 import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
+import com.canhub.cropper.CropImageContract
+import com.canhub.cropper.CropImageView
+import com.canhub.cropper.options
 import com.hm.mmmhmm.R
 import com.hm.mmmhmm.activity.MainActivity
 import com.hm.mmmhmm.helper.ConnectivityObserver
 import com.hm.mmmhmm.helper.SessionManager
-import com.hm.mmmhmm.helper.load
 import com.hm.mmmhmm.helper.toast
-import com.hm.mmmhmm.models.RequestCampaign
-import com.hm.mmmhmm.models.RequestPublishPost
-import com.hm.mmmhmm.models.RequestRegister
+import com.hm.mmmhmm.models.MemeDetail
+import com.hm.mmmhmm.models.PublishPostRequest
+import com.hm.mmmhmm.models.RequestPublishCampaign
 import com.hm.mmmhmm.web_service.ApiClient
 import kotlinx.android.synthetic.main.custom_toolbar.*
 import kotlinx.android.synthetic.main.custom_toolbar.tv_toolbar_title
+import kotlinx.android.synthetic.main.fragment_add.*
 import kotlinx.android.synthetic.main.fragment_publish_meme.*
-import kotlinx.android.synthetic.main.fragment_signup.*
+import kotlinx.android.synthetic.main.fragment_publish_meme.btn_upload_design
+import kotlinx.android.synthetic.main.fragment_publish_meme.iv_selected_image
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
-import okhttp3.MediaType
 import okhttp3.MultipartBody
-import okhttp3.RequestBody
-import java.io.BufferedOutputStream
-import java.io.File
-import java.io.FileOutputStream
-import java.io.OutputStream
+import java.io.*
 import java.lang.Exception
 
 
 class PublishMemeFragment : Fragment() {
+    private var pickedBanner: Bitmap? = null
     private val TAG = "Publish meme"
     val REQUEST_IMAGE_CAPTURE = 1
     var file: File? = null
     var image_body: MultipartBody.Part? = null
+    private val cropImage = registerForActivityResult(CropImageContract()) { result ->
+        if (result.isSuccessful) {
+            // use the returned uri
+            val uriContent = result.uriContent
+            val uriFilePath = result.getUriFilePath(requireContext()) // optional usage
+
+            Log.i(TAG, "cropImage: $uriContent $uriFilePath")
+
+            val bitmap = BitmapFactory.decodeFile(uriFilePath)
+            pickedBanner = bitmap
+
+            iv_selected_image.setImageBitmap(bitmap)
+
+            if (!uriFilePath.isNullOrBlank()&& !uriFilePath.isNullOrEmpty()) {
+                rl_selected_meme.visibility = View.VISIBLE
+                btn_upload_design.visibility = View.GONE
+            } else {
+                rl_selected_meme.visibility = View.GONE
+                btn_upload_design.visibility = View.VISIBLE
+            }
+
+
+        } else {
+            // an error occurred
+            val exception = result.error
+        }
+    }
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -70,27 +105,43 @@ class PublishMemeFragment : Fragment() {
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
         setupToolBar()
-        btn_upload_design.setOnClickListener(View.OnClickListener {
-//            val intent = Intent()
-//                .setType("*/*")
-//                .setAction(Intent.ACTION_GET_CONTENT)
-//
-//            startActivityForResult(Intent.createChooser(intent, "Select a file"), 111)
 
-             dispatchTakePictureIntent()
+        btn_upload_design.setOnClickListener(View.OnClickListener {
+            EditProfileFragment.isBanner = false
+            if (checkPermission()) {
+                cropImage.launch(options {
+                    setGuidelines(CropImageView.Guidelines.ON)
+                })
+            } else {
+                ActivityCompat.requestPermissions(
+                    requireActivity(), arrayOf(
+                        Manifest.permission.CAMERA,
+                        Manifest.permission.READ_EXTERNAL_STORAGE,
+                        Manifest.permission.WRITE_EXTERNAL_STORAGE
+                    ), 125
+                )
+            }
+        })
+        btn_change_image.setOnClickListener(View.OnClickListener {
+            EditProfileFragment.isBanner = false
+            if (checkPermission()) {
+                cropImage.launch(options {
+                    setGuidelines(CropImageView.Guidelines.ON)
+                })
+            } else {
+                ActivityCompat.requestPermissions(
+                    requireActivity(), arrayOf(
+                        Manifest.permission.CAMERA,
+                        Manifest.permission.READ_EXTERNAL_STORAGE,
+                        Manifest.permission.WRITE_EXTERNAL_STORAGE
+                    ), 125
+                )
+            }
         })
 
         btn_publish.setOnClickListener(View.OnClickListener {
             validateInput()
         })
-        btn_change_image.setOnClickListener(View.OnClickListener {
-            val intent = Intent()
-                .setType("*/*")
-                .setAction(Intent.ACTION_GET_CONTENT)
-
-            startActivityForResult(Intent.createChooser(intent, "Select a file"), 111)
-        })
-
 
     }
 
@@ -99,18 +150,79 @@ class PublishMemeFragment : Fragment() {
         if (description.isNullOrEmpty()) {
             toast(R.string.description, 1)
         } else if (ConnectivityObserver.isOnline(activity as Context)) {
-            val comment = listOf<Any>()
-            val like = listOf<Any>()
-            var requestPublishPost: RequestPublishPost = RequestPublishPost(
-                comment,
+            var memeDetailReq: MemeDetail = MemeDetail(
+                SessionManager.getUserId(),
+                getEncoded64ImageStringFromBitmap(pickedBanner),
                 description,
-                file?.path.toString(),
-                like,
-                "",
-                "")
-          //  publishMeme(requestPublishPost)
-            showDialog()
+                SessionManager.getUserId())
+            var requestPublishPost: RequestPublishCampaign = RequestPublishCampaign(
+                requireArguments().getString("campaignId"),
+                memeDetailReq)
+          publishMeme(requestPublishPost)
+
         }
+    }
+
+
+
+    private fun getEncoded64ImageStringFromBitmap(bitmap: Bitmap?): String {
+        val stream = ByteArrayOutputStream()
+        bitmap?.compress(Bitmap.CompressFormat.JPEG, 70, stream)
+        val byteFormat: ByteArray = stream.toByteArray()
+        // get the base 64 string
+        return Base64.encodeToString(byteFormat, Base64.NO_WRAP)
+    }
+
+
+    private fun publishMeme(generalRequest: RequestPublishCampaign) {
+        pb_upload_meme.visibility = View.VISIBLE
+        val apiInterface = ApiClient.getRetrofitService(requireContext())
+        CoroutineScope(Dispatchers.IO).launch {
+            try {
+                val response = apiInterface.submitMemeToCampaign(generalRequest)
+                withContext(Dispatchers.Main) {
+                    try {
+                        pb_upload_meme.visibility = View.GONE
+                        showDialog()
+
+//                        if (response.body()?.OK != null) {
+//                            val r = response.body()
+////
+//                        } else {
+//                            Toast.makeText(
+//                                activity,
+//                                R.string.Something_went_wrong,
+//                                Toast.LENGTH_SHORT
+//                            ).show()
+//                        }
+                    } catch (e: Exception) {
+                        Toast.makeText(requireActivity(), "" + e.toString(), Toast.LENGTH_SHORT)
+                            .show()
+                    }
+                }
+            } catch (e: java.lang.Exception) {
+                e.printStackTrace()
+            }
+        }
+    }
+
+
+
+    private fun checkPermission(): Boolean {
+        for (permission in arrayOf(
+            Manifest.permission.CAMERA,
+            Manifest.permission.READ_EXTERNAL_STORAGE,
+            Manifest.permission.WRITE_EXTERNAL_STORAGE
+        )) {
+            if (ContextCompat.checkSelfPermission(
+                    requireContext(),
+                    permission
+                ) != PackageManager.PERMISSION_GRANTED
+            ) {
+                return false
+            }
+        }
+        return true
     }
 
 
@@ -163,41 +275,6 @@ class PublishMemeFragment : Fragment() {
 
     }
 
-    /*private fun publishMeme( requestPublishPost: RequestPublishPost) {
-        pb_upload_meme.visibility = View.VISIBLE
-        val apiInterface = ApiClient.getRetrofitService(requireContext())
-        CoroutineScope(Dispatchers.IO).launch {
-            val response = apiInterface.publishPostAPI(image_body!!,requestPublishPost)
-            withContext(Dispatchers.Main) {
-                if (activity != null && pb_upload_meme != null) {
-                    pb_upload_meme?.visibility = View.GONE
-                    SessionManager.init(activity as Context)
-                }
-                try {
-                    if (response.body()?.OK!=null) {
-                        showDialog()
-
-//                        val data = SessionManager.getUserData()
-//                        data?.profilePicture = (response.body()?.data?.get(0) ?: "")
-//                        iv_selected_image.load(
-//                            SessionManager.getUserData()?.profilePicture,
-//                            R.color.text_gray,
-//                            R.color.text_gray,
-//                            true
-//                        )
-                        //toast(response.body()?.message.toString())
-                    } else {
-                        // toast(response.message().toString())
-                    }
-
-                } catch (e: Exception) {
-                    Log.d(TAG, "Exception: " + e.toString())
-                }
-
-            }
-        }
-    }*/
-
     private fun showDialog() {
         val dialog = Dialog(activity as Context)
         dialog.setContentView(R.layout.custom_dialog_publish_meme)
@@ -211,7 +288,8 @@ class PublishMemeFragment : Fragment() {
         // body.text = title
         val yesBtn = dialog.findViewById(R.id.btn_ok) as Button
         yesBtn.setOnClickListener {
-            //todo
+                                    startActivity(Intent(activity, MainActivity::class.java))
+                        activity?.finish()
             dialog.dismiss()
         }
         dialog.show()

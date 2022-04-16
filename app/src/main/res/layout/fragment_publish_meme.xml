@@ -62,10 +62,12 @@
                             android:background="@drawable/bg_button_red"
                             android:paddingVertical="4dp"
                             android:text="@string/upload_design"
-                            android:textColor="@color/black" />
+                            android:textColor="@color/buttonTextColor" />
 
                         <RelativeLayout
+                            android:id="@+id/rl_selected_meme"
                             android:layout_width="match_parent"
+                            android:visibility="gone"
                             android:layout_height="210dp">
 
                             <androidx.cardview.widget.CardView
@@ -90,7 +92,7 @@
                                 android:paddingHorizontal="10dp"
                                 android:paddingVertical="4dp"
                                 android:text="@string/change"
-                                android:textColor="@color/black"
+                                android:textColor="@color/buttonTextColor"
                                 android:textSize="10sp" />
                         </RelativeLayout>
 
@@ -129,7 +131,7 @@
             android:paddingVertical="4dp"
             android:background="@drawable/bg_button_red"
             android:text="@string/publish"
-            android:textColor="@color/black"/>
+            android:textColor="@color/buttonTextColor"/>
     </LinearLayout>
 
     <ProgressBar

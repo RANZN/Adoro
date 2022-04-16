@@ -1,15 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 
 
-
-    <androidx.cardview.widget.CardView
-        xmlns:app="http://schemas.android.com/apk/res-auto"
-        xmlns:android="http://schemas.android.com/apk/res/android"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        app:contentPadding="0dp"
-        android:elevation="1dp"
-        app:cardCornerRadius="5dp">
+<androidx.cardview.widget.CardView xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    xmlns:tools="http://schemas.android.com/tools"
+    app:contentPadding="0dp"
+    android:elevation="1dp"
+    app:cardCornerRadius="5dp">
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
@@ -67,24 +66,26 @@
                 </LinearLayout>
 
             </LinearLayout>
+
             <ImageView
                 android:id="@+id/iv_feed"
                 android:layout_width="match_parent"
-                android:layout_height="220dp"
+                android:layout_height="400dp"
                 android:scaleType="centerCrop"
                 android:src="@drawable/app_logo" />
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="20dp"
+                android:layout_marginTop="15dp"
+                android:paddingHorizontal="10dp"
                 android:orientation="horizontal">
 
                 <LinearLayout
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:orientation="horizontal"
-                    android:gravity="center_vertical|center"
+                    android:gravity="center_vertical|start"
                     android:layout_weight="1">
                     <ImageView
                         android:id="@+id/iv_like"
@@ -103,6 +104,7 @@
                 </LinearLayout>
 
                 <LinearLayout
+                    android:id="@+id/ll_comments"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:orientation="horizontal"
@@ -146,8 +148,16 @@
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
                     android:orientation="horizontal"
-                    android:gravity="center_vertical|center"
+                    android:gravity="center_vertical|end"
                     android:layout_weight="1">
+                    <androidx.recyclerview.widget.RecyclerView
+                        android:id="@+id/recycler_mutual_like_user"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        tools:listitem="@layout/item_feed"
+                        app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"/>
+
                     <ImageView
                         android:id="@+id/iv_mutual_like_users"
                         android:layout_width="20dp"
@@ -175,7 +185,7 @@
                 android:text="Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua"
                 android:textColor="@color/text_gray"
                 android:layout_marginVertical="10dp"
-                android:layout_marginHorizontal="15dp"
+                android:layout_marginHorizontal="25dp"
                 android:textSize="14sp"/>
 
         </LinearLayout>

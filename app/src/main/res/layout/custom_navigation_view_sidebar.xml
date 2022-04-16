@@ -152,9 +152,9 @@
                     android:layout_height="wrap_content"
                     android:layout_centerVertical="true"
                     android:layout_marginLeft="15dp"
-                    android:textColor="@color/white"
                     android:layout_toRightOf="@+id/iv_blog_icon"
-                    android:text="@string/refer"
+                    android:text="@string/refer_earn"
+                    android:textColor="@color/white"
                     android:textSize="18sp" />
 
 

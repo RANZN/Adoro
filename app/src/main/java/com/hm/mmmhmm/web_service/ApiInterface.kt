@@ -132,6 +132,7 @@ interface ApiInterface {
     suspend fun showAdoro(
         @Body() req: GeneralRequest
     ): retrofit2.Response<BaseResponse>
+
     @POST("_functions/deletePost")
     suspend fun deletePost(
         @Body() req: GeneralRequest
@@ -174,9 +175,19 @@ interface ApiInterface {
         @Body() req: GroupDiscussionPostUpdateLikeRequest
     ): retrofit2.Response<BaseResponse>
 
+    @POST("_functions/campaignUpdateLike")
+    suspend fun campaignUpdateLike(
+        @Body() req: CampaignUpdateLikeRequest
+    ): retrofit2.Response<BaseResponse>
+
     @POST("_functions/groupMemePostUpdateLike")
     suspend fun groupMemePostUpdateLike(
         @Body() req: GroupDiscussionPostUpdateLikeRequest
+    ): retrofit2.Response<BaseResponse>
+
+    @POST("_functions/reportCampaign")
+    suspend fun reportCampaign(
+        @Body() req: GeneralRequest
     ): retrofit2.Response<BaseResponse>
 
 
@@ -242,13 +253,27 @@ interface ApiInterface {
         @Field("device_id") device_id: String
     ): retrofit2.Response<DefaultResponse>
 
-    @Multipart
+
     @POST("_functions/publishPost")
     suspend fun publishPostAPI(
-        @Part image: MultipartBody.Part,
-        @Body() requestBody: RequestBody
-    ): retrofit2.Response<BaseResponse>
+        @Body() req: PublishPostRequest
+    ): retrofit2.Response<ResponseBody>
 
+
+
+    @POST("_functions/submitMemeToCampaign")
+    suspend fun submitMemeToCampaign(
+        @Body() req: RequestPublishCampaign
+    ): retrofit2.Response<ResponseBody>
+
+
+//    @Multipart
+//    @POST("_functions/publishPost")
+//    suspend fun publishPostAPI(
+//        @Part image: MultipartBody.Part,
+//        @Body() requestBody: RequestBody
+//    ): retrofit2.Response<BaseResponse>
+//
 
 
 
