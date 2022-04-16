@@ -14,9 +14,9 @@
         android:layout_height="wrap_content"
         android:layout_above="@id/card_write_message"
         android:layout_marginHorizontal="10dp"
-        tools:listitem="@layout/item_comments"
         android:layout_marginTop="?android:attr/actionBarSize"
-        app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager" />
+        app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+        tools:listitem="@layout/item_comments" />
 
 
     <androidx.cardview.widget.CardView
@@ -41,7 +41,7 @@
                 android:layout_marginRight="52dp"
                 android:layout_toRightOf="@id/view"
                 android:background="@null"
-                android:hint="Type your message here..."
+                android:hint="Type your comment..."
                 android:paddingHorizontal="10dp"
                 android:paddingTop="4dp"
                 android:paddingBottom="4dp"
@@ -68,4 +68,13 @@
 
     </androidx.cardview.widget.CardView>
 
+
+
+    <ProgressBar
+        android:visibility="gone"
+        android:id="@+id/pb_comments"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        />
 </RelativeLayout>

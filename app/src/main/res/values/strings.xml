@@ -61,6 +61,7 @@
     <string name="my_groups">My Groups</string>
     <string name="browse_groups">Browse Groups</string>
     <string name="enter">Enter</string>
+    <string name="comment">Comment...</string>
     <string name="announcement">Announcement</string>
     <string name="post">Post</string>
     <string name="discussion">Discussion</string>

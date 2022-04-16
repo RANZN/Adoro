@@ -238,6 +238,12 @@ interface ApiInterface {
         @Body() req: PostTemplateRequest
     ): retrofit2.Response<BaseResponse>
 
+
+    @POST("_functions/updateComment")
+    suspend fun updateComment(
+        @Body() req: PostCommentRequest
+    ): retrofit2.Response<BaseResponse>
+
     @POST("_functions/addAdoro")
     suspend fun addAdoro(
         @Body() req: AddAdoroCoinsRequest

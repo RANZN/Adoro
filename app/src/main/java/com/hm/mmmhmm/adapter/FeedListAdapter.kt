@@ -122,7 +122,7 @@ class FeedListAdapter(var ctx: FragmentActivity, private var feedList: List<Item
             val args = Bundle()
             args.putString("postId", feedList?.get(position)?._id)
             commentsFragment.arguments = args
-            ctx.supportFragmentManager.beginTransaction().replace(R.id.frame_layout_main, commentsFragment)
+            ctx.supportFragmentManager.beginTransaction().replace(R.id.frame_layout_main, commentsFragment).addToBackStack(null)
                 .commit()
         }
     }
