@@ -66,7 +66,7 @@ interface ApiInterface {
     @POST("_functions/getFeed")
     suspend fun getFeed(
         @Body() req: GeneralRequest
-    ): retrofit2.Response<BaseResponse>
+    ): retrofit2.Response<CommentsData>
 
     @POST("_functions/showNotification")
     suspend fun showNotification(

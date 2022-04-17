@@ -98,16 +98,20 @@
         <entry key="..\:/KapilWorkspace/hh_mm-master/hh_mm-master/app/src/main/res/menu/menu.xml" value="0.2015625" />
         <entry key="..\:/KapilWorkspace/hh_mm-master/hh_mm-master/app/src/main/res/mipmap-anydpi-v26/ic_launcher.xml" value="0.1" />
         <entry key="..\:/KapilWorkspace/hh_mm-master/hh_mm-master/app/src/main/res/mipmap-anydpi-v26/ic_launcher_round.xml" value="0.1" />
+        <entry key="..\:/Projects/AdoroApp/app/src/main/res/layout/activity_splash_launcher.xml" value="0.17592592592592593" />
         <entry key="..\:/Projects/AdoroApp/app/src/main/res/layout/custom_navigation_view_sidebar.xml" value="0.20416666666666666" />
+        <entry key="..\:/Projects/AdoroApp/app/src/main/res/layout/custom_toolbar.xml" value="0.17592592592592593" />
         <entry key="..\:/Projects/AdoroApp/app/src/main/res/layout/fragment_add.xml" value="0.20416666666666666" />
         <entry key="..\:/Projects/AdoroApp/app/src/main/res/layout/fragment_comments.xml" value="0.17592592592592593" />
         <entry key="..\:/Projects/AdoroApp/app/src/main/res/layout/fragment_home.xml" value="0.17592592592592593" />
         <entry key="..\:/Projects/AdoroApp/app/src/main/res/layout/fragment_post_detail.xml" value="0.20416666666666666" />
         <entry key="..\:/Projects/AdoroApp/app/src/main/res/layout/fragment_profile.xml" value="0.20416666666666666" />
         <entry key="..\:/Projects/AdoroApp/app/src/main/res/layout/fragment_publish_meme.xml" value="0.20416666666666666" />
+        <entry key="..\:/Projects/AdoroApp/app/src/main/res/layout/fragment_splash.xml" value="0.20416666666666666" />
         <entry key="..\:/Projects/AdoroApp/app/src/main/res/layout/fragment_upload_meme.xml" value="0.20416666666666666" />
         <entry key="..\:/Projects/AdoroApp/app/src/main/res/layout/item_comments.xml" value="0.17592592592592593" />
         <entry key="..\:/Projects/AdoroApp/app/src/main/res/layout/item_feed.xml" value="0.20416666666666666" />
+        <entry key="..\:/Projects/AdoroApp/app/src/main/res/layout/item_mutual_liker.xml" value="0.17592592592592593" />
         <entry key="..\:/Projects/AdoroApp/app/src/main/res/menu/menu.xml" value="0.20416666666666666" />
       </map>
     </option>

@@ -16,6 +16,7 @@ import com.hm.mmmhmm.adapter.FeedListAdapter
 import com.hm.mmmhmm.helper.SessionManager
 import com.hm.mmmhmm.models.GeneralRequest
 import com.hm.mmmhmm.models.Item
+import com.hm.mmmhmm.models.ItemComment
 import com.hm.mmmhmm.web_service.ApiClient
 import kotlinx.android.synthetic.main.custom_toolbar.*
 import kotlinx.android.synthetic.main.fragment_home.*
@@ -29,7 +30,7 @@ import kotlinx.coroutines.withContext
 
 class HomeFragment : Fragment() {
 
-    private var feedList: List<Item>? = null
+    private var feedList: List<ItemComment>? = null
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 

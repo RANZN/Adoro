@@ -1,20 +1,23 @@
 package com.hm.mmmhmm.adapter
 
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
+import android.widget.Toast
 import androidx.fragment.app.FragmentActivity
 import androidx.recyclerview.widget.RecyclerView
 import com.hm.mmmhmm.R
 import com.hm.mmmhmm.helper.load
+import com.hm.mmmhmm.models.Comment
 import com.hm.mmmhmm.models.CommentData
 import com.hm.mmmhmm.models.Item
 import de.hdodenhof.circleimageview.CircleImageView
 
 
-class CommentsAdapter(var ctx: FragmentActivity, private var listData: List<CommentData>? = null) :
+class CommentsAdapter(var ctx: FragmentActivity, var listData: List<Comment>? = null) :
     RecyclerView.Adapter<CommentsAdapter.MyViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MyViewHolder {
@@ -24,10 +27,11 @@ class CommentsAdapter(var ctx: FragmentActivity, private var listData: List<Comm
     }
 
     override fun onBindViewHolder(holder: MyViewHolder, position: Int) {
+
         holder.tv_comment_user_name.text = listData?.get(position)?.userName ?: ""
         holder.tv_comment.text = listData?.get(position)?.text ?: ""
         holder.civ_comment_user.load(
-            listData?.get(position)?.profilePhoto ?: "",
+            listData?.get(0)?.profilePhoto ?: "",
             R.color.text_gray,
             R.color.text_gray,
             true

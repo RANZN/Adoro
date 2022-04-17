@@ -33,7 +33,7 @@ import java.util.*
 
 
 class CommentsFragment : Fragment() {
-    private var feedList: List<Item>? = null
+    private var feedList: List<ItemComment>? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -127,10 +127,9 @@ class CommentsFragment : Fragment() {
                                 if(requireArguments().getString("postId")==Item._id){
                                     recycler_comments.adapter= CommentsAdapter(
                                         requireActivity(),
-                                        Item.comment as List<CommentData>)
+                                        Item.comment)
                                 }
                             }
-
                         } else {
                             Log.d("resp", "complet else: ")
                         }

@@ -18,6 +18,7 @@ import com.hm.mmmhmm.helper.SessionManager
 import com.hm.mmmhmm.helper.load
 import com.hm.mmmhmm.models.*
 import com.hm.mmmhmm.web_service.ApiClient
+import kotlinx.android.synthetic.main.fragment_home.*
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -25,7 +26,7 @@ import kotlinx.coroutines.withContext
 import java.lang.reflect.Field
 
 
-class FeedListAdapter(var ctx: FragmentActivity, private var feedList: List<Item>? = null) :
+class FeedListAdapter(var ctx: FragmentActivity, private var feedList: List<ItemComment>? = null) :
     RecyclerView.Adapter<FeedListAdapter.MyViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MyViewHolder {
@@ -36,7 +37,7 @@ class FeedListAdapter(var ctx: FragmentActivity, private var feedList: List<Item
 
     override fun onBindViewHolder(holder: MyViewHolder, position: Int) {
         holder.tv_username.text = feedList?.get(position)?.username
-        // holder.tv_like_count.text= feedList?.get(position)?.like.size()
+        // holder.tv_apply_count.text= feedList?.get(position)?.like.size()
         //holder.tv_apply_count.text= feedList?.get(position)?.shortDescription
         // holder.tv_time_left.text= "₹"+feedList?.get(position)?.timeLeft.toString()+" left"
 //           holder.tv_apply_count.text= feedList?.get(position)?.comment?.size()
@@ -99,7 +100,9 @@ class FeedListAdapter(var ctx: FragmentActivity, private var feedList: List<Item
 
         }
         holder.tv_like_count.text =
-            (feedList?.get(position)?.like as List<PostLikeData>).size.toString()
+            (feedList?.get(position)?.like as List<Like>).size.toString()
+
+        holder.tv_comment_count.text = (feedList?.get(position)?.comment as List<Comment>).size.toString()
 
         holder.iv_like.setOnClickListener {
             var likeData: PostLikeData = PostLikeData(
@@ -125,6 +128,9 @@ class FeedListAdapter(var ctx: FragmentActivity, private var feedList: List<Item
             ctx.supportFragmentManager.beginTransaction().replace(R.id.frame_layout_main, commentsFragment).addToBackStack(null)
                 .commit()
         }
+        holder.tv_like_status.visibility= if ((feedList?.get(position)?.like as List<Like>).size>1) View.VISIBLE else  View.GONE
+
+       holder.recycler_mutual_like_user.adapter= MutualLikerAdapter(ctx,feedList?.get(position)?.like as List<Like>)
     }
 
 
@@ -142,20 +148,24 @@ class FeedListAdapter(var ctx: FragmentActivity, private var feedList: List<Item
         val iv_like: ImageView
         val tv_username: TextView
         val tv_like_count: TextView
-        val tv_apply_count: TextView
+        val tv_share_count: TextView
         val tv_comment_count: TextView
         val tv_feed_description: TextView
+        val tv_like_status: TextView
         val iv_menu_feed: ImageView
         val ll_comments: LinearLayout
+        val recycler_mutual_like_user: RecyclerView
 
         //
         init {
             iv_user_feed = v.findViewById(R.id.iv_user_feed)
+            recycler_mutual_like_user = v.findViewById(R.id.recycler_mutual_like_user)
             iv_feed = v.findViewById(R.id.iv_feed)
             iv_like = v.findViewById(R.id.iv_like)
+            tv_like_status = v.findViewById(R.id.tv_like_status)
             tv_username = v.findViewById(R.id.tv_username)
             tv_like_count = v.findViewById(R.id.tv_like_count)
-            tv_apply_count = v.findViewById(R.id.tv_apply_count)
+            tv_share_count = v.findViewById(R.id.tv_share_count)
             tv_comment_count = v.findViewById(R.id.tv_comment_count)
             tv_feed_description = v.findViewById(R.id.tv_feed_description)
             iv_menu_feed = v.findViewById(R.id.iv_menu_feed)

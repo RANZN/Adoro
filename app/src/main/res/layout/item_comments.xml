@@ -27,10 +27,9 @@
             android:id="@+id/tv_comment_user_name"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:fontFamily="@font/muli_bold"
             android:text="User Name"
-            android:textColor="@color/colorPrimaryDark"
-            android:textSize="11sp" />
+            android:textColor="@color/black"
+            android:textSize="14sp" />
 
         <TextView
             android:id="@+id/tv_comment"
@@ -38,7 +37,6 @@
             android:layout_height="wrap_content"
             android:text="Welcome! Wow would love to wake"
             android:textSize="11sp"
-            android:fontFamily="@font/muli_regular"
             android:textColor="@color/black"/>
 
     </LinearLayout>
