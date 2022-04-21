@@ -98,7 +98,7 @@ class SignupFragment : Fragment() {
         } else if (!isUsernameAvailable) {
             toast(R.string.username_already_taken, 1)
         } else if (ConnectivityObserver.isOnline(activity as Context)) {
-            var requestRegister: RequestRegister = RequestRegister(name,number?.toLong(),email,username);
+            var requestRegister: RequestRegister = RequestRegister(name,number?.toLong(),email,username,SessionManager.getFCMToken()?:"");
             hitRegisteruserAPI(requestRegister)
 
         }

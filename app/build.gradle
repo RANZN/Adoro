@@ -111,6 +111,8 @@ dependencies {
     implementation 'com.akexorcist:round-corner-progress-bar:2.1.2'
 
     implementation 'com.squareup.picasso:picasso:2.71828'
+    implementation 'pl.droidsonroids.gif:android-gif-drawable:1.2.17'
+
 
 
 }

@@ -92,7 +92,7 @@ class OTPVerifyFragment : Fragment() {
                 //check otp if match call below api
                     if(otp==SessionManager.getOTP()){
                         var loginRequest: RequestLogin =
-                            RequestLogin(requireArguments().getString("number")!!.toLong());
+                            RequestLogin(requireArguments().getString("number")!!.toLong(),SessionManager.getFCMToken()?:"");
                         hitLoginAPI(loginRequest)
                     }else{
                         Toast.makeText(
