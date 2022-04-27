@@ -26,7 +26,7 @@ import kotlinx.coroutines.withContext
 import java.lang.reflect.Field
 
 
-class FeedListAdapter(var ctx: FragmentActivity, private var feedList: List<ItemComment>? = null) :
+class FeedListAdapter(var ctx: FragmentActivity, private var feedList: List<ItemComment>? = null,private var sessionId:Long?=null) :
     RecyclerView.Adapter<FeedListAdapter.MyViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MyViewHolder {

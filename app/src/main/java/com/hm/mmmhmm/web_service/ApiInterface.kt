@@ -63,8 +63,13 @@ interface ApiInterface {
         @Body() req: GeneralRequest
     ): retrofit2.Response<BaseResponse>
 
-    @POST("_functions/getFeed")
+    @POST("_functions/showPost")
     suspend fun getFeed(
+        @Body() req: ShowPostlRequest
+    ): retrofit2.Response<CommentsData>
+
+    @POST("_functions/getSpecificPostDetail")
+    suspend fun getSpecificPostDetail(
         @Body() req: GeneralRequest
     ): retrofit2.Response<CommentsData>
 
@@ -139,9 +144,9 @@ interface ApiInterface {
     ): retrofit2.Response<BaseResponse>
 
 
-    @POST("_functions/showPost")
-    suspend fun showPost(
-        @Body() req: ShowPostlRequest
+    @POST("_functions/getProfilePost")
+    suspend fun getProfilePost(
+        @Body() req: GeneralRequest
     ): retrofit2.Response<BaseResponse>
 
     @POST("_functions/showTrancations")
@@ -220,6 +225,12 @@ interface ApiInterface {
     @POST("_functions/follow")
     suspend fun follow(
         @Body() req: FollowRequest
+    ): retrofit2.Response<BaseResponse>
+
+
+    @POST("_functions/getSessionID")
+    suspend fun getSessionID(
+        @Body() req: GeneralRequest
     ): retrofit2.Response<BaseResponse>
 
 

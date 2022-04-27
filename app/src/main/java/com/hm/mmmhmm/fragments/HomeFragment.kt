@@ -17,9 +17,11 @@ import com.hm.mmmhmm.helper.SessionManager
 import com.hm.mmmhmm.models.GeneralRequest
 import com.hm.mmmhmm.models.Item
 import com.hm.mmmhmm.models.ItemComment
+import com.hm.mmmhmm.models.ShowPostlRequest
 import com.hm.mmmhmm.web_service.ApiClient
 import kotlinx.android.synthetic.main.custom_toolbar.*
 import kotlinx.android.synthetic.main.fragment_home.*
+import kotlinx.android.synthetic.main.fragment_profile.*
 import kotlinx.android.synthetic.main.fragment_services.*
 import kotlinx.android.synthetic.main.item_job_list.*
 import kotlinx.coroutines.CoroutineScope
@@ -31,6 +33,7 @@ import kotlinx.coroutines.withContext
 class HomeFragment : Fragment() {
 
     private var feedList: List<ItemComment>? = null
+    private  var sessionId: Long?=null
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
@@ -72,10 +75,42 @@ class HomeFragment : Fragment() {
         super.onActivityCreated(savedInstanceState)
         setupToolBar()
         var generalRequest: GeneralRequest = GeneralRequest(SessionManager.getUserId()?:"");
-        getFeedListAPI(generalRequest)
+        getSessionForPosts(generalRequest)
+    }
+    private fun getSessionForPosts(generalRequest: GeneralRequest) {
+        pb_feeds.visibility = View.VISIBLE
+        val apiInterface = ApiClient.getRetrofitService(requireContext())
+        CoroutineScope(Dispatchers.IO).launch {
+            try {
+                val response = apiInterface.getSessionID(generalRequest)
+                withContext(Dispatchers.Main) {
+                    try {
+                        pb_feeds.visibility = View.GONE
+                        if (response.body()?.OK != null) {
+                            val r = response.body()
+                            sessionId= r?.OK?.items?.get(0)?.sessionId
+                            var showPostlRequest: ShowPostlRequest =
+                                ShowPostlRequest(r?.OK?.items?.get(0)?.sessionId ?:0);
+                            getFeedListAPI(showPostlRequest)
+                        } else {
+                            Toast.makeText(
+                                activity,
+                                R.string.Something_went_wrong,
+                                Toast.LENGTH_SHORT
+                            ).show()
+                        }
+                    } catch (e: java.lang.Exception) {
+                        Toast.makeText(requireActivity(), "" + e.toString(), Toast.LENGTH_SHORT)
+                            .show()
+                    }
+                }
+            } catch (e: java.lang.Exception) {
+                e.printStackTrace()
+            }
+        }
     }
 
-    private fun getFeedListAPI(generalRequest: GeneralRequest) {
+    private fun getFeedListAPI(generalRequest: ShowPostlRequest) {
         pb_feeds.visibility = View.VISIBLE
         val apiInterface = ApiClient.getRetrofitService(requireContext())
         CoroutineScope(Dispatchers.IO).launch {
@@ -88,7 +123,7 @@ class HomeFragment : Fragment() {
                         //  toast("" + response.body()?.message)
                         if (response!=null) {
                             feedList = response.body()?.OK?.items
-                            recycler_feed_list.adapter= FeedListAdapter(requireActivity(),feedList)
+                            recycler_feed_list.adapter= FeedListAdapter(requireActivity(),feedList, sessionId)
 
                         } else {
                             Log.d("resp", "complet else: ")

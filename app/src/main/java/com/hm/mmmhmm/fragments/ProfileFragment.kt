@@ -219,8 +219,8 @@ class ProfileFragment : Fragment() {
 //                            SessionManager.setUsername(r?.OK?.items?.get(0)?.username ?: "")
 //                            SessionManager.setUserName(r?.OK?.items?.get(0)?.name ?: "")
 //                            SessionManager.setUserPic(r?.OK?.items?.get(0)?.profile ?: "")
-                            var showPostlRequest: ShowPostlRequest =
-                                ShowPostlRequest(SessionManager.getUserId() ?: "");
+                            var showPostlRequest: GeneralRequest =
+                                GeneralRequest(SessionManager.getUserId() ?: "");
                             getPosts(showPostlRequest)
                         } else {
                             Toast.makeText(
@@ -240,12 +240,14 @@ class ProfileFragment : Fragment() {
         }
     }
 
-    private fun getPosts(showPostRequest: ShowPostlRequest) {
+
+
+    private fun getPosts(showPostRequest: GeneralRequest) {
         pb_prof.visibility = View.VISIBLE
         val apiInterface = ApiClient.getRetrofitService(requireContext())
         CoroutineScope(Dispatchers.IO).launch {
             try {
-                val response = apiInterface.showPost(showPostRequest)
+                val response = apiInterface.getProfilePost(showPostRequest)
                 withContext(Dispatchers.Main) {
                     try {
                         pb_prof.visibility = View.GONE

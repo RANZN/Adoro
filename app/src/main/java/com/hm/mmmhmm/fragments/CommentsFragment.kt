@@ -8,6 +8,7 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import com.hm.mmmhmm.Chat_Module.Inbox
 import com.hm.mmmhmm.R
 import com.hm.mmmhmm.activity.MainActivity
@@ -16,6 +17,7 @@ import com.hm.mmmhmm.adapter.FeedListAdapter
 import com.hm.mmmhmm.adapter.NotificationsAdapter
 import com.hm.mmmhmm.helper.ConnectivityObserver
 import com.hm.mmmhmm.helper.SessionManager
+import com.hm.mmmhmm.helper.load
 import com.hm.mmmhmm.helper.toast
 import com.hm.mmmhmm.models.*
 import com.hm.mmmhmm.web_service.ApiClient
@@ -51,9 +53,9 @@ class CommentsFragment : Fragment() {
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
         setupToolBar()
-        var generalRequest: GeneralRequest = GeneralRequest(SessionManager.getUserId() ?: "");
-        getFeedListAPI(generalRequest)
 
+        var generalRequest: GeneralRequest = GeneralRequest(requireArguments().getString("postId") ?: "");
+        getSpecificPostDetail(generalRequest)
         send_message_button.setOnClickListener {
             validateInput()
 
@@ -84,52 +86,44 @@ class CommentsFragment : Fragment() {
         return sdf.format(Date())
     }
     private fun setupToolBar() {
-        iv_toolbar_icon.setBackgroundResource(R.drawable.hamburger_icon)
-        iv_toolbar_action_inbox.setBackgroundResource(R.drawable.chat)
-        iv_toolbar_action_search.setBackgroundResource(R.drawable.iv_search)
+        iv_toolbar_icon.setBackgroundResource(R.drawable.ic_back_arrow)
         iv_toolbar_icon.setColorFilter(resources.getColor(R.color.black));
-        iv_toolbar_action_inbox.setColorFilter(resources.getColor(R.color.black));
-        iv_toolbar_action_search.setColorFilter(resources.getColor(R.color.black));
-        tv_toolbar_title.setTextColor(resources.getColor(R.color.black))
-        tv_toolbar_title.text = resources.getString(R.string.app_name)
         iv_toolbar_icon.setOnClickListener(View.OnClickListener {
-            (activity as MainActivity).manageDrawer()
+            (activity as MainActivity).onBackPressed()
         })
-
-        iv_toolbar_action_inbox.setOnClickListener(View.OnClickListener {
-            startActivity(Intent(activity, Inbox::class.java))
-        })
-
-        iv_toolbar_action_search.setOnClickListener(View.OnClickListener {
-            (activity as MainActivity).supportFragmentManager.beginTransaction()
-                .replace(R.id.frame_layout_main, SearchFragment())
-                .addToBackStack(null).commit()
-        })
-
-
     }
 
-
-    private fun getFeedListAPI(generalRequest: GeneralRequest) {
+    private fun getSpecificPostDetail(generalRequest: GeneralRequest) {
         pb_comments.visibility = View.VISIBLE
         val apiInterface = ApiClient.getRetrofitService(requireContext())
         CoroutineScope(Dispatchers.IO).launch {
             try {
-                val response = apiInterface.getFeed(generalRequest)
+                val response = apiInterface.getSpecificPostDetail(generalRequest)
                 withContext(Dispatchers.Main) {
                     pb_comments.visibility = View.GONE
 
                     try {
                         //  toast("" + response.body()?.message)
                         if (response!=null) {
-                            feedList = response.body()?.OK?.items
-                            for(Item in feedList!!){
-                                if(requireArguments().getString("postId")==Item._id){
-                                    recycler_comments.adapter= CommentsAdapter(
-                                        requireActivity(),
-                                        Item.comment)
-                                }
-                            }
+                            var data= response.body()?.OK?.items?.get(0)
+                            recycler_comments.adapter= CommentsAdapter(
+                                requireActivity(),
+                                data?.comment)
+
+                          //  tv_username.text = data?.username
+                            tv_feed_description.text = data?.description
+//                            iv_user_feed.load(
+//                                data?.profile,
+//                                R.color.text_gray,
+//                                R.color.text_gray,
+//                                true
+//                            )
+                            iv_feed.load(
+                                data?.image,
+                                R.color.text_gray,
+                                R.color.text_gray,
+                                false
+                            )
                         } else {
                             Log.d("resp", "complet else: ")
                         }
@@ -146,6 +140,7 @@ class CommentsFragment : Fragment() {
 
     }
 
+
     private fun postComment(generalRequest: PostCommentRequest) {
         pb_comments.visibility = View.VISIBLE
         val apiInterface = ApiClient.getRetrofitService(requireContext())
@@ -158,8 +153,17 @@ class CommentsFragment : Fragment() {
                     try {
                         //  toast("" + response.body()?.message)
                         if (response!=null) {
-                            var generalRequest: GeneralRequest = GeneralRequest(SessionManager.getUserId() ?: "");
-                            getFeedListAPI(generalRequest)
+                            if(response.body()?.OK?.status=="success"){
+                                var generalRequest: GeneralRequest = GeneralRequest(requireArguments().getString("postId") ?: "");
+                                getSpecificPostDetail(generalRequest)
+                            }else{
+                                Toast.makeText(
+                                    activity,
+                                    R.string.Something_went_wrong,
+                                    Toast.LENGTH_SHORT
+                                ).show()
+                            }
+
                         } else {
                             Log.d("resp", "complet else: ")
                         }

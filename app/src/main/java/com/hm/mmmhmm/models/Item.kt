@@ -49,5 +49,6 @@ data class Item(
     val privacy: String?,
     var requriementType: String?,
     var message: String?,
+    var sessionId: Long?,
     var winnerDetails: List<WinnerDetail>?
 )

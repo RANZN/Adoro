@@ -18,6 +18,7 @@ import androidx.appcompat.widget.AppCompatEditText;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.firebase.client.Firebase;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
@@ -73,7 +74,7 @@ public class Chat_Activity extends AppCompatActivity {
     private AppCompatEditText et_message;
     String Thumb_Image1;
     String chat_user_token;
-
+    private Firebase reference1, reference2;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -104,6 +105,9 @@ public class Chat_Activity extends AppCompatActivity {
         thumb_image = getIntent().getStringExtra("thumb_image");
         mDatabaseReference = FirebaseDatabase.getInstance().getReference().child("users");
         mNotificationReference = FirebaseDatabase.getInstance().getReference().child("notifications");
+        Firebase.setAndroidContext(this);
+//        reference1 = new Firebase("https://balloon-2f5cc-default-rtdb.firebaseio.com/Messages/" + sessionManager.getFIREBASE_ID() + "_" + userFirebaseId);
+//        reference2 = new Firebase("https://balloon-2f5cc-default-rtdb.firebaseio.com/Messages/" + userFirebaseId + "_" + sessionManager.getFIREBASE_ID());
 
 
         mRootReference = FirebaseDatabase.getInstance().getReference();
@@ -350,7 +354,7 @@ public class Chat_Activity extends AppCompatActivity {
                         @SuppressWarnings("VisibleForTests")
                         //    String download_url = task.getResult().getDownloadUrl().toString();
 
-                                Map messageMap = new HashMap();
+                        Map messageMap = new HashMap();
                         // messageMap.put("message", download_url);
                         messageMap.put("seen", false);
                         messageMap.put("type", "image");
