@@ -23,6 +23,8 @@ import com.google.firebase.database.ValueEventListener;
 import com.hm.mmmhmm.R;
 import com.squareup.picasso.Picasso;
 
+import java.util.Objects;
+
 import de.hdodenhof.circleimageview.CircleImageView;
 
 public class Inbox extends AppCompatActivity {
@@ -56,7 +58,7 @@ public class Inbox extends AppCompatActivity {
         chat_list = (RecyclerView) findViewById(R.id.chat_list);
         //--GETTING CURRENT USER ID---
         mAuth = FirebaseAuth.getInstance();
-        mCurrent_user_id = mAuth.getCurrentUser().getUid();
+        mCurrent_user_id = Objects.requireNonNull(mAuth.getCurrentUser()).getUid();
         //---REFERENCE TO CHATS CHILD IN FIREBASE DATABASE-----
         mConvDatabase = FirebaseDatabase.getInstance().getReference().child("chats").child(mCurrent_user_id);
         //---OFFLINE FEATURE---

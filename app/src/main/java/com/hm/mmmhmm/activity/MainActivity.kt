@@ -43,7 +43,7 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
             .commit()
         clickMethod()
 
-        //updateFcmToken()
+       // updateFcmToken()
 
         liTab_home.setOnClickListener(this)
         iv_tab_home.setOnClickListener(this)

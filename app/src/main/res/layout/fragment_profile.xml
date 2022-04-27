@@ -38,6 +38,7 @@
                         android:layout_height="138dp"
                         android:layout_gravity="center_horizontal"
                         android:background="@drawable/bg_cover"
+                        android:scaleType="centerCrop"
                         android:src="@drawable/app_logo" />
 
                     <de.hdodenhof.circleimageview.CircleImageView

@@ -44,9 +44,6 @@ class SplashFragment : Fragment() {
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
 
-        var addAdoroCoinsRequest: AddAdoroCoinsRequest =
-            AddAdoroCoinsRequest(580,SessionManager.getUserId() ?: "");
-        addAdoro(addAdoroCoinsRequest)
        // var addAdoroCoinsRequest: AddAdoroCoinsRequest =
 //            AddAdoroCoinsRequest(580,SessionManager.getUserId() ?: "");
 //        addAdoro(addAdoroCoinsRequest)

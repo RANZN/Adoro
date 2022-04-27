@@ -30,7 +30,8 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.Query;
 import com.google.firebase.database.ServerValue;
 import com.google.firebase.database.ValueEventListener;
-import com.google.firebase.iid.FirebaseInstanceId;
+//import com.google.firebase.iid.FirebaseInstanceId;
+import com.google.firebase.messaging.FirebaseMessaging;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
@@ -133,18 +134,31 @@ public class Chat_Activity extends AppCompatActivity {
 //                    Thumb_Image1=Utility.getpic(Chat_Activity.this);
 //                }
                 Thumb_Image1="";
+                Map chatAddMap = new HashMap();
+                Map chatUserMap = new HashMap();
                 if (!dataSnapshot.hasChild(mCurrentUserId)) {
-                    String token_id = FirebaseInstanceId.getInstance().getToken();
-                    Map chatAddMap = new HashMap();
-                    chatAddMap.put("image", "default");
+                    FirebaseMessaging.getInstance().getToken()
+                            .addOnCompleteListener(new OnCompleteListener<String>() {
+                                @Override
+                                public void onComplete(@NonNull Task<String> task) {
+                                    if (!task.isSuccessful()) {
+                                        Log.w("TAG", "Fetching FCM registration token failed", task.getException());
+                                        return;
+                                    }
+                                    // Get new FCM registration token
+                                    String token = task.getResult();
+                                    final String token_id= token;
+                                    chatAddMap.put("image", "default");
 //                    chatAddMap.put("name", SessionManager.getUserName();
-                    chatAddMap.put("name", "kapil");
-                    chatAddMap.put("online", true);
-                    chatAddMap.put("status", "HELLO");
-                    chatAddMap.put("device_token", token_id);
-                    chatAddMap.put("thumb_image", Thumb_Image1);
-                    Map chatUserMap = new HashMap();
-                    chatUserMap.put("users/" + mCurrentUserId, chatAddMap);
+                                    chatAddMap.put("name", "kapil");
+                                    chatAddMap.put("online", true);
+                                    chatAddMap.put("status", "HELLO");
+                                    chatAddMap.put("device_token", token_id);
+                                    chatAddMap.put("thumb_image", Thumb_Image1);
+                                    chatUserMap.put("users/" + mCurrentUserId, chatAddMap);
+                                }
+                            });
+
 
                     mRootReference.updateChildren(chatUserMap, new DatabaseReference.CompletionListener() {
                         @Override

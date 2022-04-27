@@ -91,11 +91,6 @@ dependencies {
     implementation 'com.squareup.picasso:picasso:2.71828'
     implementation 'pl.droidsonroids.gif:android-gif-drawable:1.2.17'
 
-//
-
-    //FIreBase analitics
-    implementation 'com.google.firebase:firebase-analytics:19.0.0'
-    implementation "com.google.firebase:firebase-core:19.0.0"
 
     //-----FIREBASE DATABASE---
     implementation 'com.google.firebase:firebase-database:19.2.1'
@@ -118,6 +113,11 @@ dependencies {
 
     implementation 'com.squareup.picasso:picasso:2.71828'
     implementation 'com.firebase:firebase-client-android:2.5.2+'
+
+    //FIreBase analitics
+    implementation 'com.google.firebase:firebase-analytics:19.0.0'
+    implementation "com.google.firebase:firebase-messaging:22.0.0"
+    implementation "com.google.firebase:firebase-core:19.0.0"
 
 
 }
