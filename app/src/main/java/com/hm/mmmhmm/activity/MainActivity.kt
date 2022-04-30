@@ -194,6 +194,7 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
             supportFragmentManager.beginTransaction()
                 .replace(R.id.frame_layout_main, AdoroCoinsFragment()).addToBackStack(null)
                 .commit()
+
             drawer_layout.closeDrawers()
         })
 

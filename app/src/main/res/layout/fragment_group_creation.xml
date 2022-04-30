@@ -35,7 +35,7 @@
                     android:orientation="horizontal">
 
                     <de.hdodenhof.circleimageview.CircleImageView
-                        android:id="@+id/iv_profile_pic_profile"
+                        android:id="@+id/iv_profile_pic_group"
                         android:layout_width="60dp"
                         android:layout_height="60dp"
                         android:layout_gravity="center_horizontal"
@@ -43,7 +43,7 @@
                         android:src="@drawable/ic_account_24" />
 
                     <Button
-                        android:id="@+id/btn_update_profile_pic"
+                        android:id="@+id/btn_update_profile_group"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginStart="20dp"

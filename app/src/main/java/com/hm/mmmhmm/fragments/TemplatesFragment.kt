@@ -59,6 +59,11 @@ class TemplatesFragment : Fragment() {
         super.onActivityCreated(savedInstanceState)
         setupToolBar()
         // pb_cms_page.visibility= View.VISIBLE
+
+        iv_create_template.setOnClickListener {
+            //todo
+
+        }
         tv_my_template.setBackgroundColor(ContextCompat.getColor(requireActivity(),R.color.colorAccent))
         tv_browse_template.setBackgroundColor(ContextCompat.getColor(requireActivity(),R.color.transparent))
         tv_my_template.setOnClickListener {

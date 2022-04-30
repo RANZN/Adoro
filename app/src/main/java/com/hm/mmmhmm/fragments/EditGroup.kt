@@ -21,28 +21,23 @@ import com.canhub.cropper.CropImageView
 import com.canhub.cropper.options
 import com.hm.mmmhmm.R
 import com.hm.mmmhmm.activity.MainActivity
-import com.hm.mmmhmm.adapter.FeedListAdapter
-import com.hm.mmmhmm.adapter.GroupAnnouncementAdapter
-import com.hm.mmmhmm.adapter.GroupDiscussionAdapter
+import com.hm.mmmhmm.adapter.GroupRequestsAdapter
 import com.hm.mmmhmm.helper.CommanFunction
 import com.hm.mmmhmm.helper.ConnectivityObserver
-import com.hm.mmmhmm.helper.SessionManager
 import com.hm.mmmhmm.helper.toast
 import com.hm.mmmhmm.models.CreateGroupRequest
 import com.hm.mmmhmm.models.Item
-import com.hm.mmmhmm.models.RequestRegister
 import com.hm.mmmhmm.web_service.ApiClient
 import kotlinx.android.synthetic.main.custom_toolbar.*
 import kotlinx.android.synthetic.main.custom_toolbar.tv_toolbar_title
 import kotlinx.android.synthetic.main.fragment_edit_group.*
+import kotlinx.android.synthetic.main.fragment_edit_profile.*
 import kotlinx.android.synthetic.main.fragment_group_creation.*
 import kotlinx.android.synthetic.main.fragment_group_creation.btn_create_group
 import kotlinx.android.synthetic.main.fragment_group_creation.et_group_about
 import kotlinx.android.synthetic.main.fragment_group_creation.et_group_name
-import kotlinx.android.synthetic.main.fragment_group_detail.*
-import kotlinx.android.synthetic.main.fragment_groups.*
-import kotlinx.android.synthetic.main.fragment_signup.*
-import kotlinx.android.synthetic.main.fragment_signup.et_username
+import kotlinx.android.synthetic.main.fragment_group_joining_requests.*
+import kotlinx.android.synthetic.main.fragment_group_joining_requests.iv_back
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -50,16 +45,14 @@ import kotlinx.coroutines.withContext
 import java.io.ByteArrayOutputStream
 import java.lang.Exception
 
-
-class FragmentGroupCreation : Fragment() {
+class EditGroup : Fragment() {
 
     val types = arrayOf("Group Privacy", "Public")
     private var categoryList: List<Item>? = null
     var visibilityType =types[0]
     var t:View?=null
     var category:String?=null
-
-    private val TAG = "create group"
+    private val TAG = "edit group"
 
     private var pickedProfile: Bitmap? = null
     private val cropImage = registerForActivityResult(CropImageContract()) { result ->
@@ -72,8 +65,8 @@ class FragmentGroupCreation : Fragment() {
 
             val bitmap = BitmapFactory.decodeFile(uriFilePath)
 
-            pickedProfile = bitmap
-            iv_profile_pic_group.setImageBitmap(bitmap)
+                pickedProfile = bitmap
+            iv_group_pic.setImageBitmap(bitmap)
 
         } else {
             // an error occurred
@@ -90,7 +83,7 @@ class FragmentGroupCreation : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        t=inflater.inflate(R.layout.fragment_group_creation, container, false)
+        t=inflater.inflate(R.layout.fragment_edit_group, container, false)
         val spinner = t?.findViewById<Spinner>(R.id.spinner_group_privacy)
         spinner?.adapter = activity?.applicationContext?.let {
             ArrayAdapter(
@@ -99,14 +92,14 @@ class FragmentGroupCreation : Fragment() {
                 types
             )
         } as SpinnerAdapter
-        spinner?.onItemSelectedListener = object :AdapterView.OnItemSelectedListener{
+        spinner?.onItemSelectedListener = object : AdapterView.OnItemSelectedListener{
             override fun onNothingSelected(parent: AdapterView<*>?) {
                 println("erreur")
             }
 
             override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
                 val type = parent?.getItemAtPosition(position).toString()
-               // Toast.makeText(activity,type, Toast.LENGTH_LONG).show()
+                // Toast.makeText(activity,type, Toast.LENGTH_LONG).show()
                 println(type)
                 visibilityType= type
             }
@@ -121,8 +114,10 @@ class FragmentGroupCreation : Fragment() {
         btn_create_group.setOnClickListener {
             validateInput()
         }
-
-        btn_update_profile_group.setOnClickListener {
+        iv_back.setOnClickListener {
+            (activity as MainActivity).onBackPressed()
+        }
+        btn_update_group_pic.setOnClickListener {
             EditProfileFragment.isBanner = false
             if (checkPermission()) {
                 cropImage.launch(options {
@@ -139,8 +134,35 @@ class FragmentGroupCreation : Fragment() {
             }
 
         }
+        recycler_group_members.adapter= GroupRequestsAdapter(requireActivity())
 
     }
+
+    private fun getEncoded64ImageStringFromBitmap(bitmap: Bitmap?): String {
+        val stream = ByteArrayOutputStream()
+        bitmap?.compress(Bitmap.CompressFormat.JPEG, 70, stream)
+        val byteFormat: ByteArray = stream.toByteArray()
+        // get the base 64 string
+        return Base64.encodeToString(byteFormat, Base64.NO_WRAP)
+    }
+
+    private fun checkPermission(): Boolean {
+        for (permission in arrayOf(
+            Manifest.permission.CAMERA,
+            Manifest.permission.READ_EXTERNAL_STORAGE,
+            Manifest.permission.WRITE_EXTERNAL_STORAGE
+        )) {
+            if (ContextCompat.checkSelfPermission(
+                    requireContext(),
+                    permission
+                ) != PackageManager.PERMISSION_GRANTED
+            ) {
+                return false
+            }
+        }
+        return true
+    }
+
 
     private fun setupToolBar() {
         iv_toolbar_icon.setBackgroundResource(R.drawable.hamburger_icon)
@@ -189,7 +211,7 @@ class FragmentGroupCreation : Fragment() {
                             Toast.makeText(activity,"Group created successfully!", Toast.LENGTH_LONG).show()
 
                             startActivity(Intent(activity, MainActivity::class.java))
-                                activity?.finish()
+                            activity?.finish()
 
 
                         } else {
@@ -209,14 +231,14 @@ class FragmentGroupCreation : Fragment() {
     }
 
     private fun getCategoryListForGroup( ) {
-        pb_create_group.visibility = View.VISIBLE
+        pb_update_group.visibility = View.VISIBLE
         val apiInterface = ApiClient.getRetrofitService(requireContext())
         CoroutineScope(Dispatchers.IO).launch {
             try {
                 val response = apiInterface.getCategoryListForGroup()
                 withContext(Dispatchers.Main) {
                     try {
-                        pb_create_group.visibility = View.GONE
+                        pb_update_group.visibility = View.GONE
                         if (response.body()?.OK !=null) {
                             val r = response.body()
                             categoryList = r?.OK?.items
@@ -259,32 +281,5 @@ class FragmentGroupCreation : Fragment() {
             }
         }
     }
-
-
-    private fun getEncoded64ImageStringFromBitmap(bitmap: Bitmap?): String {
-        val stream = ByteArrayOutputStream()
-        bitmap?.compress(Bitmap.CompressFormat.JPEG, 70, stream)
-        val byteFormat: ByteArray = stream.toByteArray()
-        // get the base 64 string
-        return Base64.encodeToString(byteFormat, Base64.NO_WRAP)
-    }
-
-    private fun checkPermission(): Boolean {
-        for (permission in arrayOf(
-            Manifest.permission.CAMERA,
-            Manifest.permission.READ_EXTERNAL_STORAGE,
-            Manifest.permission.WRITE_EXTERNAL_STORAGE
-        )) {
-            if (ContextCompat.checkSelfPermission(
-                    requireContext(),
-                    permission
-                ) != PackageManager.PERMISSION_GRANTED
-            ) {
-                return false
-            }
-        }
-        return true
-    }
-
 
 }

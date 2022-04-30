@@ -98,4 +98,11 @@
     <string name="edit">Edit</string>
     <string name="city">City</string>
     <string name="report">Report</string>
+    <string name="accept">Accept</string>
+    <string name="joining_requests">Joining Requests</string>
+    <string name="people_who_are_willing_to_join_your_group">People who are willing to join your group</string>
+    <string name="group_creation">Group Creation</string>
+    <string name="group_members">Group Members</string>
+    <string name="create_template">Create Template</string>
+    <string name="sign_up">Sign Up</string>
 </resources>

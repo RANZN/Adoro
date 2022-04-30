@@ -40,11 +40,13 @@ class WalkThroughFragment : Fragment() {
         super.onActivityCreated(savedInstanceState)
         getWalkThroughList()
         btn_next_walk.setOnClickListener(View.OnClickListener {
-            if (view_pager_walkthrough.currentItem == 2) {
-                stopFragment()
-            } else {
-                view_pager_walkthrough.setCurrentItem(view_pager_walkthrough.currentItem + 1, true)
-            }
+            stopFragment()
+//            if (view_pager_walkthrough.currentItem == 2) {
+//                stopFragment()
+//            } else {
+//                view_pager_walkthrough.setCurrentItem(view_pager_walkthrough.currentItem + 1, true)
+//            }
+
         })
 
         tvSkip.setOnClickListener {
@@ -111,7 +113,7 @@ class WalkThroughFragment : Fragment() {
                 list?.get(position)?.image,
                 R.color.text_gray,
                 R.color.text_gray,
-                true
+                false
             )
 
             collection.addView(view, 0)
