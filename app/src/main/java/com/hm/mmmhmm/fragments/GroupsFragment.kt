@@ -323,7 +323,7 @@ class GroupsFragment : Fragment() {
                         pb_groups.visibility = View.GONE
                         if (response.body()?.OK !=null) {
                             val r = response.body()
-
+                            recycler_groups.adapter = GroupsAdapter(r?.OK?.items?.get(0)?.items)
                         } else {
                             Toast.makeText(activity,R.string.Something_went_wrong, Toast.LENGTH_SHORT).show()
                         }

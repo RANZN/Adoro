@@ -3,6 +3,7 @@ package com.hm.mmmhmm.models
 data class Item(
     val _createdDate: String?,
     val _id: String?,
+    val items: List<Item>?,
     val _owner: String?,
     val _updatedDate: String?,
     val appliedNumber: Int?,
