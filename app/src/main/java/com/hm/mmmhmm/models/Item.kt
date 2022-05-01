@@ -8,6 +8,7 @@ data class Item(
     val appliedNumber: Int?,
     val brandLogo: String?,
     val brandName: String?,
+    val status: String?,
     val campignImage: String?,
     val comment: Object?,
     val cost: String?,

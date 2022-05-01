@@ -7,6 +7,7 @@ import android.content.pm.PackageManager
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.os.Bundle
+import android.text.Editable
 import android.util.Base64
 import android.util.Log
 import android.view.LayoutInflater
@@ -15,6 +16,7 @@ import android.view.ViewGroup
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
 import android.widget.TextView
+import android.widget.Toast
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
@@ -26,11 +28,18 @@ import com.hm.mmmhmm.R
 import com.hm.mmmhmm.activity.MainActivity
 import com.hm.mmmhmm.helper.ConnectivityObserver
 import com.hm.mmmhmm.helper.SessionManager
+import com.hm.mmmhmm.helper.load
 import com.hm.mmmhmm.models.CompleteAddress
+import com.hm.mmmhmm.models.GeneralRequest
+import com.hm.mmmhmm.models.ProfileRequest
 import com.hm.mmmhmm.models.UpdateProfileRequest
 import com.hm.mmmhmm.web_service.ApiClient
 import kotlinx.android.synthetic.main.custom_toolbar.*
 import kotlinx.android.synthetic.main.fragment_edit_profile.*
+import kotlinx.android.synthetic.main.fragment_edit_profile.iv_camera
+import kotlinx.android.synthetic.main.fragment_edit_profile.iv_cover_pic_profile
+import kotlinx.android.synthetic.main.fragment_edit_profile.iv_profile_pic_profile
+import kotlinx.android.synthetic.main.fragment_profile.*
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -71,6 +80,11 @@ class EditProfileFragment : Fragment() {
 
     private val TAG = "edit profile"
     private val genderList = arrayOf("male", "female")
+
+
+    var username: String? = null
+    var name: String? = null
+    var userId: String? = null
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -83,6 +97,10 @@ class EditProfileFragment : Fragment() {
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
         setupToolBar()
+        iv_back.setOnClickListener {
+            (activity as MainActivity).onBackPressed()
+        }
+
         setupSpinner()
         if (ConnectivityObserver.isOnline(activity as Context)) {
             // getUserDetailAPI()
@@ -156,6 +174,10 @@ class EditProfileFragment : Fragment() {
                 )
             }
         }
+
+        var generalRequest: ProfileRequest =
+            ProfileRequest(SessionManager.getUserId() ?: "", SessionManager.getUserId() ?: "")
+        getUserData(generalRequest)
     }
 
     private fun getEncoded64ImageStringFromBitmap(bitmap: Bitmap?): String {
@@ -190,8 +212,8 @@ class EditProfileFragment : Fragment() {
         iv_toolbar_icon.setColorFilter(resources.getColor(R.color.black))
         iv_toolbar_action_inbox.setColorFilter(resources.getColor(R.color.black))
         iv_toolbar_action_search.setColorFilter(resources.getColor(R.color.black))
-        tv_toolbar_title.setTextColor(resources.getColor(R.color.black))
-        tv_toolbar_title.text = resources.getString(R.string.edit_profile)
+//        tv_toolbar_title.setTextColor(resources.getColor(R.color.black))
+//        tv_toolbar_title.text = resources.getString(R.string.edit_profile)
         iv_toolbar_icon.setOnClickListener(View.OnClickListener {
             (activity as MainActivity).manageDrawer()
         })
@@ -263,45 +285,69 @@ class EditProfileFragment : Fragment() {
 
     }
 
+    private fun getUserData(generalRequest: ProfileRequest) {
+        pb_edit_prof.visibility = View.VISIBLE
+        val apiInterface = ApiClient.getRetrofitService(requireContext())
+        CoroutineScope(Dispatchers.IO).launch {
+            try {
+                val response = apiInterface.getUserData(generalRequest)
+                withContext(Dispatchers.Main) {
+                    try {
+                        pb_edit_prof.visibility = View.GONE
+                        if (response.body()?.OK != null) {
+                            val r = response.body()
+
+                            iv_profile_pic_profile.load(
+                                r?.OK?.items?.get(0)?.profile,
+                                R.color.text_gray,
+                                R.color.text_gray,
+                                true
+                            )
+                            iv_cover_pic_profile.load(
+                                r?.OK?.items?.get(0)?.bannerImage,
+                                R.color.text_gray,
+                                R.color.text_gray,
+                                false
+                            )
+                            et_full_name.text = Editable.Factory.getInstance().newEditable(r?.OK?.items?.get(0)?.name)
+                            et_username.text = Editable.Factory.getInstance().newEditable(r?.OK?.items?.get(0)?.username)
+                            et_bio.text = Editable.Factory.getInstance().newEditable(r?.OK?.items?.get(0)?.bio)
+                            et_email.text = Editable.Factory.getInstance().newEditable(r?.OK?.items?.get(0)?.email)
+                            et_street_address.text = Editable.Factory.getInstance().newEditable(r?.OK?.items?.get(0)?.completeAddress?.streetAddress)
+                            et_landmark.text = Editable.Factory.getInstance().newEditable(r?.OK?.items?.get(0)?.completeAddress?.landmark)
+                            et_area_name.text = Editable.Factory.getInstance().newEditable(r?.OK?.items?.get(0)?.completeAddress?.areaName)
+                            et_city.text = Editable.Factory.getInstance().newEditable(r?.OK?.items?.get(0)?.completeAddress?.city)
+                            et_state_name.text = Editable.Factory.getInstance().newEditable(r?.OK?.items?.get(0)?.completeAddress?.state)
+                            et_zip_code.text = Editable.Factory.getInstance().newEditable(r?.OK?.items?.get(0)?.completeAddress?.zipCode.toString())
+                            et_bank_name.text = Editable.Factory.getInstance().newEditable(r?.OK?.items?.get(0)?.bankName)
+                            et_beneficiary_name.text = Editable.Factory.getInstance().newEditable(r?.OK?.items?.get(0)?.bankName)
+                            et_account_number.text = Editable.Factory.getInstance().newEditable(r?.OK?.items?.get(0)?.accountNumber)
+                            et_ifsc_code.text = Editable.Factory.getInstance().newEditable(r?.OK?.items?.get(0)?.ifseCode)
+
+                            //tv_toolbar_title.text = r?.OK?.items?.get(0)?.username
+                            userId = r?.OK?.items?.get(0)?._id ?: "";
+                            username = r?.OK?.items?.get(0)?.username ?: "";
+                            name = r?.OK?.items?.get(0)?.name ?: "";
+//
+                        } else {
+                            Toast.makeText(
+                                activity,
+                                R.string.Something_went_wrong,
+                                Toast.LENGTH_SHORT
+                            ).show()
+                        }
+                    } catch (e: java.lang.Exception) {
+                        Toast.makeText(requireActivity(), "" + e.toString(), Toast.LENGTH_SHORT)
+                            .show()
+                    }
+                }
+            } catch (e: java.lang.Exception) {
+                e.printStackTrace()
+            }
+        }
+    }
+
+
 }
 
-
-//    private fun getUserDetailAPI() {
-//        pb_update_prof.visibility = View.VISIBLE
-//        val apiInterface = ApiClient.getRetrofitService(requireContext())
-//        CoroutineScope(Dispatchers.IO).launch {
-//            try {
-//
-//
-//                val response = apiInterface.getUserDetailApi()
-//                withContext(Dispatchers.Main) {
-//
-//                    try {
-//                        pb_update_prof.visibility = View.GONE
-//                        if (response.isSuccessful && response.body()?.status == 200) {
-//                            val model = response.body()
-//                            et_full_name_ep.setText(model?.data?.name)
-//                            et_email_ep.setText(model?.data?.email)
-//                            et_address_ep.setText(model?.data?.address)
-//                            et_phone_ep.setText(model?.data?.phone)
-//                            Log.d("sdsadsa", model?.data?.gender.toString())
-//                            spinner_edit_profile.setSelection(genderList.indexOf(model?.data?.gender))
-//                            et_dob_ep.setText(model?.data?.dob)
-//                            et_identity_ep.setText(model?.data?.identityNumber)
-//                            et_sexual_orient_ep.setText(model?.data?.sexualOrientation)
-//                        } else {
-//                      //      toast(response.body()?.message.toString())
-//                        }
-//                    } catch (e: Exception) {
-//                        if (activity != null)
-//                            Toast.makeText(activity, "" + e.toString(), Toast.LENGTH_SHORT).show()
-//                    }
-//                }
-//            } catch (e: Exception) {
-//
-//            }
-//
-//        }
-//    }
-//
 

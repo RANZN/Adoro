@@ -209,8 +209,8 @@ class AddFragment : Fragment() {
         iv_toolbar_icon.setColorFilter(resources.getColor(R.color.black));
         iv_toolbar_action_inbox.setColorFilter(resources.getColor(R.color.black));
         iv_toolbar_action_search.setColorFilter(resources.getColor(R.color.black));
-        tv_toolbar_title.setTextColor(resources.getColor(R.color.black))
-        tv_toolbar_title.text = resources.getString(R.string.app_name)
+//        tv_toolbar_title.setTextColor(resources.getColor(R.color.black))
+//        tv_toolbar_title.text = resources.getString(R.string.app_name)
         iv_toolbar_icon.setOnClickListener(View.OnClickListener {
             (activity as MainActivity).manageDrawer()
         })

@@ -39,7 +39,7 @@
                         android:layout_gravity="center_horizontal"
                         android:background="@drawable/bg_cover"
                         android:scaleType="centerCrop"
-                        android:src="@drawable/app_logo" />
+                        android:src="@drawable/adoro_banner" />
 
                     <de.hdodenhof.circleimageview.CircleImageView
                         android:id="@+id/iv_profile_pic_profile"

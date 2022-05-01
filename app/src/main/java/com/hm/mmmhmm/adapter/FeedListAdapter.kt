@@ -1,5 +1,6 @@
 package com.hm.mmmhmm.adapter
 
+import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
@@ -8,6 +9,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.*
 import androidx.core.content.ContextCompat
+import androidx.core.content.ContextCompat.startActivity
 import androidx.fragment.app.FragmentActivity
 import androidx.recyclerview.widget.RecyclerView
 import com.hm.mmmhmm.R
@@ -19,6 +21,7 @@ import com.hm.mmmhmm.helper.load
 import com.hm.mmmhmm.models.*
 import com.hm.mmmhmm.web_service.ApiClient
 import kotlinx.android.synthetic.main.fragment_home.*
+import kotlinx.android.synthetic.main.fragment_refer.*
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -57,6 +60,14 @@ class FeedListAdapter(var ctx: FragmentActivity, private var feedList: List<Item
         holder.itemView.setOnClickListener {
             //todo
 
+        }
+
+        holder.iv_share.setOnClickListener {
+            val intent= Intent()
+            intent.action= Intent.ACTION_SEND
+            intent.putExtra(Intent.EXTRA_TEXT,"Hey Check out this Great app:"+"test")
+            intent.type="text/plain"
+            ctx.startActivity(Intent.createChooser(intent,"Share To:"))
         }
         holder.iv_menu_feed.setOnClickListener {
             val popupMenu = PopupMenu(ctx, holder.iv_menu_feed)
@@ -128,6 +139,8 @@ class FeedListAdapter(var ctx: FragmentActivity, private var feedList: List<Item
             ctx.supportFragmentManager.beginTransaction().replace(R.id.frame_layout_main, commentsFragment).addToBackStack(null)
                 .commit()
         }
+
+        holder.tv_like_status.text= "and "+(feedList?.get(position)?.like as List<Like>).size.toString()+" others "+ ctx.getResources().getString(R.string.also_liked_the_post)
         holder.tv_like_status.visibility= if ((feedList?.get(position)?.like as List<Like>).size>1) View.VISIBLE else  View.GONE
 
        holder.recycler_mutual_like_user.adapter= MutualLikerAdapter(ctx,feedList?.get(position)?.like as List<Like>)
@@ -144,6 +157,7 @@ class FeedListAdapter(var ctx: FragmentActivity, private var feedList: List<Item
 
     inner class MyViewHolder(v: View) : RecyclerView.ViewHolder(v) {
         val iv_user_feed: ImageView
+        val iv_share: ImageView
         val iv_feed: ImageView
         val iv_like: ImageView
         val tv_username: TextView
@@ -159,6 +173,7 @@ class FeedListAdapter(var ctx: FragmentActivity, private var feedList: List<Item
         //
         init {
             iv_user_feed = v.findViewById(R.id.iv_user_feed)
+            iv_share = v.findViewById(R.id.iv_share)
             recycler_mutual_like_user = v.findViewById(R.id.recycler_mutual_like_user)
             iv_feed = v.findViewById(R.id.iv_feed)
             iv_like = v.findViewById(R.id.iv_like)
