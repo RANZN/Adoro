@@ -7,6 +7,7 @@ import android.content.Intent
 import android.graphics.Bitmap
 import android.os.Bundle
 import android.provider.MediaStore
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -188,26 +189,24 @@ class ProfileFragment : Fragment() {
                             tv_name.text = r?.OK?.items?.get(0)?.name
                             tv_bio.text = r?.OK?.items?.get(0)?.bio
                             //tv_total_posts.text= r?.OK?.items?.get(0)?.bio+"Posts"
-                            tv_total_fans.text = r?.OK?.items?.get(0)?.followerData?.size.toString()+"Fans"
-                            tv_total_coins.text = r?.OK?.items?.get(0)?.adoroCoins.toString() + "A"
+                            tv_total_fans.text = (r?.OK?.items?.get(0)?.followerData?.size?:0).toString()+" Fans"
+                            tv_total_coins.text = (r?.OK?.items?.get(0)?.adoroCoins?:0).toString() + " A"
                             tv_toolbar_title.text = r?.OK?.items?.get(0)?.username
                             userId = r?.OK?.items?.get(0)?._id ?: "";
                             username = r?.OK?.items?.get(0)?.username ?: "";
                             name = r?.OK?.items?.get(0)?.name ?: "";
-//                            if (SessionManager.getUserId().equals(r?.OK?.items?.get(0)?._id)) {
-//                                ll_follow_user.visibility = View.GONE
-//                            }else{
-//                                ll_follow_user.visibility = View.VISIBLE
-//                            }
-                            if (r?.OK?.relation=="follower"){
+                            if (r?.relation=="follower"){
                                 ll_follow_user.visibility = View.VISIBLE
                                 btn_follow.text= "Follow Back"
-                            }else if(r?.OK?.relation=="following"){
+                            }
+                           else if(r?.relation=="following"){
                                 ll_follow_user.visibility = View.VISIBLE
                                 btn_follow.text= "Unfollow"
-                            }else if(r?.OK?.relation=="ownProfile"){
+                            }
+                            else if(r?.relation=="ownProfile"){
                                 ll_follow_user.visibility = View.GONE
-                            }else if(r?.OK?.relation=="newVisitor"){
+                            }
+                            else if(r?.relation=="newVisitor"){
                                 ll_follow_user.visibility = View.VISIBLE
                                 btn_follow.text= "Follow"
                             }/*else if(r?.OK?.relation=="mutual"){
