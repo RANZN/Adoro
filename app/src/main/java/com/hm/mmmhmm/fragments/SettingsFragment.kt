@@ -64,11 +64,8 @@ class SettingsFragment : Fragment() {
         }
 
         rl_logout.setOnClickListener(View.OnClickListener {
-//            Toast.makeText(applicationContext,"Logout", Toast.LENGTH_SHORT).show()
-
             showDialog()
         })
-        // pb_cms_page.visibility= View.GONE
 
     }
     private fun showDialog() {

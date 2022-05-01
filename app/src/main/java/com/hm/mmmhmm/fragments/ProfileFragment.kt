@@ -183,7 +183,7 @@ class ProfileFragment : Fragment() {
                                 r?.OK?.items?.get(0)?.bannerImage,
                                 R.color.text_gray,
                                 R.color.text_gray,
-                                true
+                                false
                             )
                             tv_name.text = r?.OK?.items?.get(0)?.name
                             tv_bio.text = r?.OK?.items?.get(0)?.bio

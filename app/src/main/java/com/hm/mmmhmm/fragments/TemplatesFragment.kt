@@ -58,8 +58,8 @@ class TemplatesFragment : Fragment() {
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
         setupToolBar()
-        // pb_cms_page.visibility= View.VISIBLE
-
+        tv_my_template.setTextColor(resources.getColor(R.color.white))
+        tv_browse_template.setTextColor(resources.getColor(R.color.black))
         iv_create_template.setOnClickListener {
             //todo
 
@@ -69,6 +69,8 @@ class TemplatesFragment : Fragment() {
         tv_my_template.setOnClickListener {
             tv_my_template.setBackgroundColor(ContextCompat.getColor(requireActivity(),R.color.colorAccent))
             tv_browse_template.setBackgroundColor(ContextCompat.getColor(requireActivity(),R.color.transparent))
+            tv_my_template.setTextColor(resources.getColor(R.color.white))
+            tv_browse_template.setTextColor(resources.getColor(R.color.black))
             var requestShowMyTemplate: RequestShowMyTemplate =
                 RequestShowMyTemplate(SessionManager.getUserId() ?: "");
             getMyTemplate(requestShowMyTemplate)
@@ -76,6 +78,9 @@ class TemplatesFragment : Fragment() {
         tv_browse_template.setOnClickListener {
             tv_browse_template.setBackgroundColor(ContextCompat.getColor(requireActivity(),R.color.colorAccent))
             tv_my_template.setBackgroundColor(ContextCompat.getColor(requireActivity(),R.color.transparent))
+
+            tv_my_template.setTextColor(resources.getColor(R.color.black))
+            tv_browse_template.setTextColor(resources.getColor(R.color.white))
             getBrowseTemplate()
         }
 

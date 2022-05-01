@@ -49,6 +49,8 @@ class GroupsFragment : Fragment() {
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
         setupToolBar()
+        tv_my_groups.setTextColor(resources.getColor(R.color.white))
+        tv_browse_groups.setTextColor(resources.getColor(R.color.black))
         var generalRequest: ProfileRequest = ProfileRequest(SessionManager.getUserId() ?: "",SessionManager.getUserId() ?: "");
         getUserData(generalRequest)
         tv_my_groups.setBackgroundColor(
@@ -76,6 +78,8 @@ class GroupsFragment : Fragment() {
                     R.color.transparent
                 )
             )
+            tv_my_groups.setTextColor(resources.getColor(R.color.white))
+            tv_browse_groups.setTextColor(resources.getColor(R.color.black))
             var generalRequest: ProfileRequest = ProfileRequest(SessionManager.getUserId() ?: "",SessionManager.getUserId() ?: "");
             getUserData(generalRequest)
         }
@@ -86,6 +90,8 @@ class GroupsFragment : Fragment() {
                     R.color.colorAccent
                 )
             )
+            tv_my_groups.setTextColor(resources.getColor(R.color.black))
+            tv_browse_groups.setTextColor(resources.getColor(R.color.white))
             tv_my_groups.setBackgroundColor(
                 ContextCompat.getColor(
                     requireActivity(),

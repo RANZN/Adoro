@@ -60,8 +60,7 @@
                         android:layout_height="wrap_content"
                         android:layout_marginTop="15dp"
                         android:orientation="horizontal"
-                        android:paddingHorizontal="10dp"
-                        android:visibility="gone">
+                        android:paddingHorizontal="10dp">
 
                         <LinearLayout
                             android:layout_width="0dp"
@@ -83,37 +82,41 @@
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:text="0"
+                                android:visibility="gone"
                                 android:textColor="@color/black" />
-                        </LinearLayout>
-
-                        <LinearLayout
-                            android:id="@+id/ll_comments"
-                            android:layout_width="0dp"
-                            android:layout_height="wrap_content"
-                            android:layout_weight="1"
-                            android:gravity="center_vertical|center"
-                            android:orientation="horizontal">
-
-                            <ImageView
-                                android:layout_width="50dp"
-                                android:layout_height="50dp"
-                                android:padding="15dp"
-                                android:src="@drawable/applied_icon" />
-
-                            <TextView
-                                android:id="@+id/tv_comment_count"
+                            <LinearLayout
+                                android:id="@+id/ll_comments"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:text="0"
-                                android:textColor="@color/black" />
+                                android:gravity="center_vertical|center"
+                                android:visibility="gone"
+                                android:orientation="horizontal">
+
+                                <ImageView
+                                    android:layout_width="50dp"
+                                    android:layout_height="50dp"
+                                    android:padding="15dp"
+                                    android:src="@drawable/iv_comments" />
+
+                                <TextView
+                                    android:id="@+id/tv_comment_count"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:text="0"
+                                    android:visibility="gone"
+                                    android:textColor="@color/black" />
+                            </LinearLayout>
                         </LinearLayout>
+
+
 
                         <LinearLayout
                             android:id="@+id/ll_share_post"
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"
                             android:layout_weight="1"
-                            android:gravity="center_vertical|center"
+                            android:paddingEnd="10dp"
+                            android:gravity="center_vertical|end"
                             android:orientation="horizontal">
 
                             <ImageView
@@ -131,32 +134,34 @@
                                 android:textColor="@color/black" />
                         </LinearLayout>
 
-                        <LinearLayout
-                            android:layout_width="0dp"
-                            android:layout_height="match_parent"
-                            android:layout_gravity="center_vertical"
-                            android:layout_weight="1"
-                            android:gravity="center_vertical"
-                            android:orientation="horizontal">
 
-                            <androidx.recyclerview.widget.RecyclerView
-                                android:id="@+id/recycler_mutual_like_user"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:orientation="horizontal"
-                                app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-                                tools:listitem="@layout/item_mutual_liker" />
 
-                            <TextView
-                                android:id="@+id/tv_like_status"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:layout_marginStart="10dp"
-                                android:text="@string/also_liked_the_post"
-                                android:textColor="@color/black"
-                                android:textSize="11sp" />
-                        </LinearLayout>
+                    </LinearLayout>
 
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_gravity="center_vertical"
+                        android:gravity="center_vertical"
+                        android:layout_marginHorizontal="20dp"
+                        android:orientation="horizontal">
+
+                        <androidx.recyclerview.widget.RecyclerView
+                            android:id="@+id/recycler_mutual_like_user"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:orientation="horizontal"
+                            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+                            tools:listitem="@layout/item_mutual_liker" />
+
+                        <TextView
+                            android:id="@+id/tv_like_status"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="10dp"
+                            android:text="@string/also_liked_the_post"
+                            android:textColor="@color/black"
+                            android:textSize="11sp" />
                     </LinearLayout>
 
 
