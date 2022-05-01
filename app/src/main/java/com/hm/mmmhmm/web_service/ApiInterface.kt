@@ -58,6 +58,11 @@ interface ApiInterface {
     suspend fun getResults(): retrofit2.Response<BaseResponse>
 
 
+    @POST("_functions/sendChat")
+    suspend fun sendChat(
+        @Body() req: GeneralRequest
+    ): retrofit2.Response<BaseResponse>
+
     @POST("_functions/getSpecificResultData")
     suspend fun getSpecificResultData(
         @Body() req: GeneralRequest
