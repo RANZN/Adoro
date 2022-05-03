@@ -98,7 +98,7 @@ class SignupFragment : Fragment() {
         } else if (!isUsernameAvailable) {
             toast(R.string.username_already_taken, 1)
         } else if (ConnectivityObserver.isOnline(activity as Context)) {
-            var requestRegister: RequestRegister = RequestRegister(name,number?.toLong(),email,username);
+            var requestRegister: RequestRegister = RequestRegister(name,number?.toLong(),email,username,SessionManager.getFCMToken()?:"");
             hitRegisteruserAPI(requestRegister)
 
         }
@@ -152,10 +152,6 @@ class SignupFragment : Fragment() {
                         if (response.body()?.OK != null) {
 //                        Toast.makeText(activity," "+response.body()?.message, Toast.LENGTH_SHORT).show()
                             val r = response.body()
-
-//                            SessionManager.init(activity as Context)
-//                            SessionManager.setAccessToken(response.body()?.data?.token.toString())
-
                             SessionManager.init(activity as Context)
                             SessionManager.setLoginStatus("true")
                             SessionManager.setUserId(response.body()?.OK!!._id)

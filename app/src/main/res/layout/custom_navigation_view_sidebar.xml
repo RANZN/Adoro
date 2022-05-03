@@ -152,9 +152,9 @@
                     android:layout_height="wrap_content"
                     android:layout_centerVertical="true"
                     android:layout_marginLeft="15dp"
-                    android:textColor="@color/white"
                     android:layout_toRightOf="@+id/iv_blog_icon"
-                    android:text="@string/refer"
+                    android:text="@string/refer_earn"
+                    android:textColor="@color/white"
                     android:textSize="18sp" />
 
 
@@ -286,7 +286,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/edit_text_height"
                 android:layout_marginTop="5dp"
-                android:visibility="visible">
+                android:visibility="gone">
 
                 <ImageView
                     android:id="@+id/iv_about_icon"
@@ -316,7 +316,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/edit_text_height"
                 android:layout_marginTop="5dp"
-                android:visibility="visible">
+                android:visibility="gone">
 
                 <ImageView
                     android:id="@+id/iv_terms_icon"
@@ -347,7 +347,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/edit_text_height"
                 android:layout_marginTop="5dp"
-                android:visibility="visible">
+                android:visibility="gone">
 
                 <ImageView
                     android:id="@+id/iv_privacy_icon"
@@ -365,6 +365,38 @@
                     android:layout_marginLeft="15dp"
                     android:layout_toRightOf="@+id/iv_privacy_icon"
                     android:text="@string/privacy"
+                    android:textColor="@color/white"
+                    android:textSize="18sp" />
+
+
+
+            </RelativeLayout>
+
+            <!--            Line 10-->
+            <RelativeLayout
+                android:id="@+id/rl_nav_logout"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/edit_text_height"
+                android:layout_marginTop="5dp"
+                android:visibility="visible">
+
+                <ImageView
+                    android:id="@+id/iv_logout_icon"
+                    android:layout_width="18dp"
+                    android:layout_height="18dp"
+                    android:layout_centerVertical="true"
+                    android:scaleType="fitXY"
+                    android:src="@drawable/logout_icon3"
+                    app:tint="@color/white" />
+
+                <TextView
+                    android:id="@+id/tv_logout_text"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:layout_marginLeft="15dp"
+                    android:layout_toRightOf="@+id/iv_logout_icon"
+                    android:text="@string/logout"
                     android:textColor="@color/white"
                     android:textSize="18sp" />
 

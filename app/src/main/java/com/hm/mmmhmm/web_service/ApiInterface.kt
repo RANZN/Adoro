@@ -6,6 +6,7 @@ import okhttp3.RequestBody
 import okhttp3.Response
 import okhttp3.ResponseBody
 import retrofit2.http.*
+import retrofit2.http.Query
 
 interface ApiInterface {
 
@@ -57,15 +58,25 @@ interface ApiInterface {
     suspend fun getResults(): retrofit2.Response<BaseResponse>
 
 
+    @POST("_functions/sendChat")
+    suspend fun sendChat(
+        @Body() req: GeneralRequest
+    ): retrofit2.Response<BaseResponse>
+
     @POST("_functions/getSpecificResultData")
     suspend fun getSpecificResultData(
         @Body() req: GeneralRequest
     ): retrofit2.Response<BaseResponse>
 
-    @POST("_functions/getFeed")
+    @POST("_functions/showPost")
     suspend fun getFeed(
+        @Body() req: ShowPostlRequest
+    ): retrofit2.Response<CommentsData>
+
+    @POST("_functions/getSpecificPostDetail")
+    suspend fun getSpecificPostDetail(
         @Body() req: GeneralRequest
-    ): retrofit2.Response<BaseResponse>
+    ): retrofit2.Response<CommentsData>
 
     @POST("_functions/showNotification")
     suspend fun showNotification(
@@ -82,9 +93,16 @@ interface ApiInterface {
     suspend fun getCategoryListForGroup(): retrofit2.Response<BaseResponse>
 
 
+
     @POST("_functions/getSpecificCampaignData")
     suspend fun getCampaignDetail(
         @Body() req: RequestCampaign
+    ): retrofit2.Response<BaseResponse>
+
+
+    @POST("_functions/sendSMS")
+    suspend fun sendOTP(
+        @Body() req: OTPRequest
     ): retrofit2.Response<BaseResponse>
 
 
@@ -124,15 +142,16 @@ interface ApiInterface {
     suspend fun showAdoro(
         @Body() req: GeneralRequest
     ): retrofit2.Response<BaseResponse>
+
     @POST("_functions/deletePost")
     suspend fun deletePost(
         @Body() req: GeneralRequest
     ): retrofit2.Response<BaseResponse>
 
 
-    @POST("_functions/showPost")
-    suspend fun showPost(
-        @Body() req: ShowPostlRequest
+    @POST("_functions/getProfilePost")
+    suspend fun getProfilePost(
+        @Body() req: GeneralRequest
     ): retrofit2.Response<BaseResponse>
 
     @POST("_functions/showTrancations")
@@ -166,9 +185,25 @@ interface ApiInterface {
         @Body() req: GroupDiscussionPostUpdateLikeRequest
     ): retrofit2.Response<BaseResponse>
 
+    @POST("_functions/campaignUpdateLike")
+    suspend fun campaignUpdateLike(
+        @Body() req: CampaignUpdateLikeRequest
+    ): retrofit2.Response<BaseResponse>
+
     @POST("_functions/groupMemePostUpdateLike")
     suspend fun groupMemePostUpdateLike(
         @Body() req: GroupDiscussionPostUpdateLikeRequest
+    ): retrofit2.Response<BaseResponse>
+
+    @POST("_functions/reportCampaign")
+    suspend fun reportCampaign(
+        @Body() req: GeneralRequest
+    ): retrofit2.Response<BaseResponse>
+
+
+    @POST("_functions/updateLike")
+    suspend fun updateLike(
+        @Body() req: PostLikeRequest
     ): retrofit2.Response<BaseResponse>
 
     @POST("_functions/searchAccount")
@@ -198,6 +233,12 @@ interface ApiInterface {
     ): retrofit2.Response<BaseResponse>
 
 
+    @POST("_functions/getSessionID")
+    suspend fun getSessionID(
+        @Body() req: GeneralRequest
+    ): retrofit2.Response<BaseResponse>
+
+
     @POST("_functions/sendWithdrawalRequest")
     suspend fun sendWithdrawalRequest(
         @Body() req: RequestWithdrawalMoney
@@ -211,6 +252,12 @@ interface ApiInterface {
     @POST("_functions/postTemplate")
     suspend fun postTemplate(
         @Body() req: PostTemplateRequest
+    ): retrofit2.Response<BaseResponse>
+
+
+    @POST("_functions/updateComment")
+    suspend fun updateComment(
+        @Body() req: PostCommentRequest
     ): retrofit2.Response<BaseResponse>
 
     @POST("_functions/addAdoro")
@@ -228,13 +275,27 @@ interface ApiInterface {
         @Field("device_id") device_id: String
     ): retrofit2.Response<DefaultResponse>
 
-    @Multipart
+
     @POST("_functions/publishPost")
     suspend fun publishPostAPI(
-        @Part image: MultipartBody.Part,
-        @Body() requestBody: RequestBody
-    ): retrofit2.Response<BaseResponse>
+        @Body() req: PublishPostRequest
+    ): retrofit2.Response<ResponseBody>
 
+
+
+    @POST("_functions/submitMemeToCampaign")
+    suspend fun submitMemeToCampaign(
+        @Body() req: RequestPublishCampaign
+    ): retrofit2.Response<ResponseBody>
+
+
+//    @Multipart
+//    @POST("_functions/publishPost")
+//    suspend fun publishPostAPI(
+//        @Part image: MultipartBody.Part,
+//        @Body() requestBody: RequestBody
+//    ): retrofit2.Response<BaseResponse>
+//
 
 
 

@@ -3,11 +3,13 @@ package com.hm.mmmhmm.models
 data class Item(
     val _createdDate: String?,
     val _id: String?,
+    val items: List<Item>?,
     val _owner: String?,
     val _updatedDate: String?,
     val appliedNumber: Int?,
     val brandLogo: String?,
     val brandName: String?,
+    val status: String?,
     val campignImage: String?,
     val comment: Object?,
     val cost: String?,
@@ -20,6 +22,9 @@ data class Item(
     val number: Long?,
     val panCardNumber: String?,
     val username: String?,
+    val text: String?,
+    val profilePhoto: String?,
+    val userName: String?,
     val dob: String?,
     val followerData: List<Any>?,
     val followingData: List<FollowingData>?,
@@ -46,5 +51,6 @@ data class Item(
     val privacy: String?,
     var requriementType: String?,
     var message: String?,
+    var sessionId: Long?,
     var winnerDetails: List<WinnerDetail>?
 )

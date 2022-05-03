@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical">
+
+    <LinearLayout
+        android:id="@+id/layoutChat"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="15dp"
+        android:orientation="vertical"
+        android:layout_weight="1">
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+            <TextView
+                android:id="@+id/tvUserName"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textSize="17dp"
+                android:text="Aniket100"
+                android:layout_weight="1"
+                android:fontFamily="@font/opensans_regular"
+                android:textColor="@color/teal_200"
+                android:gravity="start"/>
+
+            <ImageView
+                android:id="@+id/ivBlock"
+                android:layout_width="20dp"
+                android:layout_height="20dp"
+                android:visibility="gone"
+                android:src="@drawable/blocked"
+                app:tint="@android:color/holo_red_dark" />
+        </LinearLayout>
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content">
+            <TextView
+                android:id="@+id/tv_From"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="13dp"
+                android:maxLines="2"
+                android:ellipsize="end"
+                android:text="You: "
+                android:visibility="gone"
+                android:textStyle="bold"
+                android:fontFamily="@font/opensans_regular"
+                android:textColor="#D1D1D1" />
+
+            <TextView
+                android:id="@+id/tv_Msg"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="13dp"
+                android:maxLines="2"
+                android:ellipsize="end"
+                android:text="Hello Aniket, Are you there?"
+                android:fontFamily="@font/opensans_regular"
+                android:textColor="#D1D1D1" />
+
+        </LinearLayout>
+
+    </LinearLayout>
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="@color/black"/>
+
+</LinearLayout>

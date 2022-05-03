@@ -4,6 +4,7 @@ import android.content.Intent
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
+import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
 import android.widget.*
@@ -48,6 +49,8 @@ class GroupsFragment : Fragment() {
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
         setupToolBar()
+        tv_my_groups.setTextColor(resources.getColor(R.color.white))
+        tv_browse_groups.setTextColor(resources.getColor(R.color.black))
         var generalRequest: ProfileRequest = ProfileRequest(SessionManager.getUserId() ?: "",SessionManager.getUserId() ?: "");
         getUserData(generalRequest)
         tv_my_groups.setBackgroundColor(
@@ -75,6 +78,8 @@ class GroupsFragment : Fragment() {
                     R.color.transparent
                 )
             )
+            tv_my_groups.setTextColor(resources.getColor(R.color.white))
+            tv_browse_groups.setTextColor(resources.getColor(R.color.black))
             var generalRequest: ProfileRequest = ProfileRequest(SessionManager.getUserId() ?: "",SessionManager.getUserId() ?: "");
             getUserData(generalRequest)
         }
@@ -85,6 +90,8 @@ class GroupsFragment : Fragment() {
                     R.color.colorAccent
                 )
             )
+            tv_my_groups.setTextColor(resources.getColor(R.color.black))
+            tv_browse_groups.setTextColor(resources.getColor(R.color.white))
             tv_my_groups.setBackgroundColor(
                 ContextCompat.getColor(
                     requireActivity(),
@@ -160,6 +167,39 @@ class GroupsFragment : Fragment() {
                     ?.replace(R.id.frame_layout_main, groupDetailFragment)
                     ?.addToBackStack(null)?.commit()
             }
+
+            holder.iv_menu_group.setOnClickListener {
+                val popupMenu = PopupMenu(requireActivity(), holder.iv_menu_group)
+                popupMenu.inflate(R.menu.menu)
+                popupMenu.setOnMenuItemClickListener(object : PopupMenu.OnMenuItemClickListener {
+                    override fun onMenuItemClick(item: MenuItem?): Boolean {
+                        when (item?.itemId) {
+                            R.id.delete -> {
+                                // here are the logic to delete an item from the list
+//                        val tempLang = languageList[position]
+//                        languageList.remove(tempLang)
+//                        rvAdapter.notifyDataSetChanged()
+                                return true
+                            }
+                            // in the same way you can implement others
+                        R.id.edit -> {
+                             val editGroup = EditGroup()
+                            val args = android.os.Bundle()
+                            args.putString("groupId", groupsList?.get(position)?._id)
+                            editGroup.arguments = args
+                            activity?.supportFragmentManager?.beginTransaction()
+                                ?.replace(R.id.frame_layout_main, editGroup)
+                                ?.addToBackStack(null)?.commit()
+                            return true
+                        }
+
+                        }
+                        return false
+                    }
+                })
+                popupMenu.show()
+
+            }
             holder.btn_enter.setOnClickListener {
                 var groupDetail: com.hm.mmmhmm.models.GroupDetail = com.hm.mmmhmm.models.GroupDetail(
                 groupsList?.get(position)?._id,
@@ -190,6 +230,7 @@ class GroupsFragment : Fragment() {
 
         inner class MyViewHolder(v: View) : RecyclerView.ViewHolder(v) {
             val iv_group_pic: ImageView
+            val iv_menu_group: ImageView
             val tv_group_name: TextView
             val tv_detail: TextView
             val tv_group_privacy: TextView
@@ -198,6 +239,7 @@ class GroupsFragment : Fragment() {
 
             init {
                 iv_group_pic = v.findViewById(R.id.iv_group_pic)
+                iv_menu_group = v.findViewById(R.id.iv_menu_group)
                 tv_group_name = v.findViewById(R.id.tv_group_name)
                 tv_detail = v.findViewById(R.id.tv_detail)
                 tv_group_privacy = v.findViewById(R.id.tv_group_privacy)
@@ -281,7 +323,7 @@ class GroupsFragment : Fragment() {
                         pb_groups.visibility = View.GONE
                         if (response.body()?.OK !=null) {
                             val r = response.body()
-
+                            recycler_groups.adapter = GroupsAdapter(r?.OK?.items?.get(0)?.items)
                         } else {
                             Toast.makeText(activity,R.string.Something_went_wrong, Toast.LENGTH_SHORT).show()
                         }

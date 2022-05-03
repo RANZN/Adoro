@@ -1,17 +1,25 @@
 package com.hm.mmmhmm.activity
 
 //import com.theartofdev.edmodo.cropper.CropImage
+import android.app.Dialog
 import android.content.Intent
 import android.content.pm.PackageManager
+import android.graphics.Color
+import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
 import android.util.Log
 import android.view.View
+import android.view.Window
+import android.view.WindowManager
+import android.widget.Button
+import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.GravityCompat
 import androidx.fragment.app.FragmentManager
 import com.hm.mmmhmm.R
 import com.hm.mmmhmm.fragments.*
+import com.hm.mmmhmm.helper.GlobleData
 import com.hm.mmmhmm.helper.SessionManager
 import com.hm.mmmhmm.web_service.ApiClient
 import kotlinx.android.synthetic.main.activity_main.*
@@ -43,7 +51,7 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
             .commit()
         clickMethod()
 
-        //updateFcmToken()
+       // updateFcmToken()
 
         liTab_home.setOnClickListener(this)
         iv_tab_home.setOnClickListener(this)
@@ -194,9 +202,13 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
             supportFragmentManager.beginTransaction()
                 .replace(R.id.frame_layout_main, AdoroCoinsFragment()).addToBackStack(null)
                 .commit()
+
             drawer_layout.closeDrawers()
         })
 
+        rl_nav_logout.setOnClickListener(View.OnClickListener {
+            showDialog()
+        })
 
 //        --------------------------------------
 
@@ -258,7 +270,35 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
 //        })
 //    }
 
-
+    private fun showDialog() {
+        val btn_no: Button
+        val btn_yes: Button
+        val tv_logout_text: TextView
+        val dialog = Dialog(this)
+        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE)
+        dialog.setCancelable(true)
+        dialog.setContentView(R.layout.dialog_logout)
+        dialog.window!!.setLayout(
+            WindowManager.LayoutParams.MATCH_PARENT,
+            WindowManager.LayoutParams.WRAP_CONTENT
+        )
+        dialog.window!!.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
+        tv_logout_text = dialog.findViewById(R.id.tv_logout_text)
+        btn_no = dialog.findViewById(R.id.btn_no)
+        btn_yes = dialog.findViewById(R.id.btn_yes)
+        btn_no.setOnClickListener { dialog.dismiss() }
+        btn_yes.setOnClickListener {
+            logoutUserFromAppSession()
+        }
+        dialog.show()
+    }
+    fun logoutUserFromAppSession() {
+        SessionManager.setLoginStatus("false")
+        SessionManager.logout()
+        GlobleData.goToLoginScreen = true
+        startActivity(Intent(this, SplashLauncher::class.java))
+        this.finish()
+    }
     fun manageDrawer() {
         isOpen = drawer_layout.isDrawerOpen(GravityCompat.END)
         Log.d("drawerrrrrrr", isOpen.toString())

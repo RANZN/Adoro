@@ -289,6 +289,64 @@ object SessionManager {
     }
 
 
+    fun setChat(v: Boolean) {
+        val prefsEditor: SharedPreferences.Editor = prefs.edit()
+        with(prefsEditor) {
+            putBoolean("isChat", v)
+            commit()
+        }
+    }
+
+
+    fun setFriend(lat: String) {
+        val prefsEditor: SharedPreferences.Editor = prefs.edit()
+        with(prefsEditor) {
+            putString("friendID", lat)
+            commit()
+        }
+    }
+    fun getFriend(): String? {
+        return prefs.getString(
+            "friendID",
+            "friendID"
+        )
+    }
+
+    fun isChat(): Boolean {
+        return prefs.getBoolean(
+            "isChat",
+           false
+        )
+    }
+
+    fun getUserNameId(): String? {
+        return prefs.getString(
+            "usernameid",
+            "usernameid"
+        )
+    }
+    fun setUserNameId(fName: String?) {
+        val prefsEditor: SharedPreferences.Editor = prefs.edit()
+        with(prefsEditor) {
+            putString("usernameid", fName)
+            commit()
+        }
+    }
+    fun setselectedUserNameId(fName: String?) {
+        val prefsEditor: SharedPreferences.Editor = prefs.edit()
+        with(prefsEditor) {
+            putString("selected_id", fName)
+            commit()
+        }
+    }
+
+    fun getselectedUserNameId(): String? {
+        return prefs.getString(
+            "selected_id",
+            ""
+        )
+    }
+
     //    -----/LOG OUT /-------------
     fun logout() {
         val prefsEditor: SharedPreferences.Editor = prefs.edit()

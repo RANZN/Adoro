@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:background="@color/white"
+    tools:context=".fragments.ProfileFragment">
+
+    <androidx.appcompat.widget.LinearLayoutCompat
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+
+        <include layout="@layout/custom_toolbar" />
+
+        <androidx.appcompat.widget.LinearLayoutCompat
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <ImageView
+                android:id="@+id/iv_back"
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                android:layout_alignParentStart="true"
+                android:layout_marginHorizontal="10dp"
+                android:src="@drawable/ic_back_arrow"
+                app:tint="@color/black" />
+
+            <androidx.appcompat.widget.LinearLayoutCompat
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginHorizontal="20dp"
+                    android:text="@string/joining_requests"
+                    android:textColor="@color/black"
+                    android:textSize="18sp"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginHorizontal="20dp"
+                    android:layout_marginTop="10dp"
+                    android:text="@string/people_who_are_willing_to_join_your_group"
+                    android:textColor="@color/black"
+                    android:textSize="18sp" />
+            </androidx.appcompat.widget.LinearLayoutCompat>
+
+            <TextView
+                android:id="@+id/tv_toolbar_title"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:layout_marginHorizontal="20dp"
+                android:gravity="center"
+                android:text=""
+                android:textColor="@color/black"
+                android:textSize="18sp"
+                android:visibility="gone" />
+
+        </androidx.appcompat.widget.LinearLayoutCompat>
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/recycler_group_request"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginVertical="10dp"
+            android:orientation="vertical"
+            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+            tools:listitem="@layout/item_requests" />
+
+
+    </androidx.appcompat.widget.LinearLayoutCompat>
+
+    <ProgressBar
+        android:id="@+id/pb_joining_requests"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        android:visibility="gone" />
+
+</RelativeLayout>

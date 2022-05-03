@@ -4,8 +4,11 @@
 
     <item android:id="@+id/delete"
         android:title="@string/delete"/>
-<!--    <item android:id="@+id/edit"-->
-<!--        android:title="@string/edit"/>-->
+    <item android:id="@+id/report"
+        android:title="@string/report"/>
+
+    <item android:id="@+id/edit"
+        android:title="@string/edit"/>
 
 <!--    <item android:id="@+id/setting"-->
 <!--        android:title="Delete"-->

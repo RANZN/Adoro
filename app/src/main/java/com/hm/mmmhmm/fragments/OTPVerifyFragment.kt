@@ -90,9 +90,18 @@ class OTPVerifyFragment : Fragment() {
 
             } else {
                 //check otp if match call below api
-                var loginRequest: RequestLogin =
-                    RequestLogin(requireArguments().getString("number")!!.toLong());
-                hitLoginAPI(loginRequest)
+                    if(otp==SessionManager.getOTP()){
+                        var loginRequest: RequestLogin =
+                            RequestLogin(requireArguments().getString("number")!!.toLong(),SessionManager.getFCMToken()?:"");
+                        hitLoginAPI(loginRequest)
+                    }else{
+                        Toast.makeText(
+                            activity,
+                            "Wrong OTP!",
+                            Toast.LENGTH_SHORT
+                        ).show()
+                    }
+
 
             }
 

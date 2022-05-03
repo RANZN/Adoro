@@ -14,6 +14,7 @@ import com.hm.mmmhmm.helper.CommanFunction
 import com.hm.mmmhmm.helper.ConnectivityObserver
 import com.hm.mmmhmm.helper.SessionManager
 import com.hm.mmmhmm.helper.toast
+import com.hm.mmmhmm.models.OTPRequest
 import com.hm.mmmhmm.models.RequestAuthenticateNumber
 import com.hm.mmmhmm.models.RequestLogin
 import com.hm.mmmhmm.web_service.ApiClient
@@ -87,13 +88,55 @@ class RegisterNumberFragment : Fragment() {
                         pb_login.visibility = View.GONE
                         if (response.body()?.OK?.length ==0) {
                             val r = response.body()
-
+                            var otpRequest: OTPRequest = OTPRequest(et_register_number.text.toString());
+                            hitSendOTPAPI(otpRequest)
                            // SessionManager.init(activity as Context)
 //                            val rand = Random()
 //                            SessionManager.setOTP(rand.nextInt(10000).toString())
 
                             //call send otp api here
 
+//                            val oTPVerifyFragment = OTPVerifyFragment()
+//                            val args = Bundle()
+//                            args.putString("path", "register")
+//                            args.putString("number", et_register_number.text.toString())
+//                            oTPVerifyFragment.arguments = args
+//                            if (activity != null) {
+//                                activity?.supportFragmentManager?.beginTransaction()
+//                                    ?.replace(R.id.frame_layout_splash_launcher,oTPVerifyFragment)?.commit()
+//                            }
+
+
+                        } else {
+                            Toast.makeText(activity,R.string.user_already_registered, Toast.LENGTH_SHORT).show()
+
+//                            CommanFunction.handleApiError(
+//                                response.errorBody()?.charStream(),
+//                                requireContext()
+//                            )
+                        }
+                    } catch (e: java.lang.Exception) {
+                        Toast.makeText(requireActivity(), "" + e.toString(), Toast.LENGTH_SHORT).show()
+                    }
+                }
+            } catch (e: java.lang.Exception) {
+
+            }
+        }
+    }
+
+    private fun hitSendOTPAPI( otpRequest: OTPRequest) {
+        //  pb_login.visibility = View.VISIBLE
+        val apiInterface = ApiClient.getRetrofitService(requireContext())
+        CoroutineScope(Dispatchers.IO).launch {
+            try {
+                val response = apiInterface.sendOTP(otpRequest)
+                withContext(Dispatchers.Main) {
+
+                    try {
+                        // pb_login.visibility = View.GONE
+                        if (response.body()?.OK?.status =="Sucess") {
+                            SessionManager.setOTP(response.body()?.OK?.otp?:"")
                             val oTPVerifyFragment = OTPVerifyFragment()
                             val args = Bundle()
                             args.putString("path", "register")
@@ -104,14 +147,8 @@ class RegisterNumberFragment : Fragment() {
                                     ?.replace(R.id.frame_layout_splash_launcher,oTPVerifyFragment)?.commit()
                             }
 
-
                         } else {
-                            Toast.makeText(activity,R.string.user_already_registered, Toast.LENGTH_SHORT).show()
-
-//                            CommanFunction.handleApiError(
-//                                response.errorBody()?.charStream(),
-//                                requireContext()
-//                            )
+                            Toast.makeText(activity,"Somethings wents wrongs!", Toast.LENGTH_SHORT).show()
                         }
                     } catch (e: java.lang.Exception) {
                         Toast.makeText(requireActivity(), "" + e.toString(), Toast.LENGTH_SHORT).show()

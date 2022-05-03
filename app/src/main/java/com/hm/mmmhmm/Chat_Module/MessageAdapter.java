@@ -11,8 +11,6 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import com.hm.mmmhmm.helper.SessionManager;
-
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.firebase.auth.FirebaseAuth;
@@ -24,10 +22,6 @@ import com.google.firebase.database.ValueEventListener;
 import com.hm.mmmhmm.R;
 import com.squareup.picasso.NetworkPolicy;
 import com.squareup.picasso.Picasso;
-//import com.guideapp.R;
-//import com.guideapp.Utility.Utility;
-//import com.squareup.picasso.NetworkPolicy;
-//import com.squareup.picasso.Picasso;
 
 import java.util.Calendar;
 import java.util.GregorianCalendar;

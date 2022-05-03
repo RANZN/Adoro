@@ -7,6 +7,7 @@ import android.content.Intent
 import android.graphics.Bitmap
 import android.os.Bundle
 import android.provider.MediaStore
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -183,29 +184,42 @@ class ProfileFragment : Fragment() {
                                 r?.OK?.items?.get(0)?.bannerImage,
                                 R.color.text_gray,
                                 R.color.text_gray,
-                                true
+                                false
                             )
                             tv_name.text = r?.OK?.items?.get(0)?.name
                             tv_bio.text = r?.OK?.items?.get(0)?.bio
                             //tv_total_posts.text= r?.OK?.items?.get(0)?.bio+"Posts"
-                            tv_total_fans.text =
-                                r?.OK?.items?.get(0)?.followerData?.size.toString() + "Fans"
-                            tv_total_coins.text = r?.OK?.items?.get(0)?.adoroCoins.toString() + "A"
+                            tv_total_fans.text = (r?.OK?.items?.get(0)?.followerData?.size?:0).toString()+" Fans"
+                            tv_total_coins.text = (r?.OK?.items?.get(0)?.adoroCoins?:0).toString() + " A"
                             tv_toolbar_title.text = r?.OK?.items?.get(0)?.username
-                            userId = r?.OK?.items?.get(0)?._id ?: ""
-                            username = r?.OK?.items?.get(0)?.username ?: ""
-                            name = r?.OK?.items?.get(0)?.name ?: ""
-                            if (SessionManager.getUserId().equals(r?.OK?.items?.get(0)?._id)) {
-                                ll_follow_user.visibility = View.GONE
-                            } else {
+                            userId = r?.OK?.items?.get(0)?._id ?: "";
+                            username = r?.OK?.items?.get(0)?.username ?: "";
+                            name = r?.OK?.items?.get(0)?.name ?: "";
+                            if (r?.relation=="follower"){
                                 ll_follow_user.visibility = View.VISIBLE
+                                btn_follow.text= "Follow Back"
                             }
+                           else if(r?.relation=="following"){
+                                ll_follow_user.visibility = View.VISIBLE
+                                btn_follow.text= "Unfollow"
+                            }
+                            else if(r?.relation=="ownProfile"){
+                                ll_follow_user.visibility = View.GONE
+                            }
+                            else if(r?.relation=="newVisitor"){
+                                ll_follow_user.visibility = View.VISIBLE
+                                btn_follow.text= "Follow"
+                            }/*else if(r?.OK?.relation=="mutual"){
+                                ll_follow_user.visibility = View.VISIBLE
+                                btn_follow.text= "Unfollow"
+                            }*/
+                            //follower(follow back button to show),following(unfollow button to show), ownProfile(no button), newVisitor(follow button to show)
 //                            SessionManager.setUserId(r?.OK?.items?.get(0)?._id ?: "")
 //                            SessionManager.setUsername(r?.OK?.items?.get(0)?.username ?: "")
 //                            SessionManager.setUserName(r?.OK?.items?.get(0)?.name ?: "")
 //                            SessionManager.setUserPic(r?.OK?.items?.get(0)?.profile ?: "")
-                            var showPostlRequest: ShowPostlRequest =
-                                ShowPostlRequest(SessionManager.getUserId() ?: "")
+                            var showPostlRequest: GeneralRequest =
+                                GeneralRequest(SessionManager.getUserId() ?: "");
                             getPosts(showPostlRequest)
                         } else {
                             Toast.makeText(
@@ -225,12 +239,14 @@ class ProfileFragment : Fragment() {
         }
     }
 
-    private fun getPosts(showPostRequest: ShowPostlRequest) {
+
+
+    private fun getPosts(showPostRequest: GeneralRequest) {
         pb_prof.visibility = View.VISIBLE
         val apiInterface = ApiClient.getRetrofitService(requireContext())
         CoroutineScope(Dispatchers.IO).launch {
             try {
-                val response = apiInterface.showPost(showPostRequest)
+                val response = apiInterface.getProfilePost(showPostRequest)
                 withContext(Dispatchers.Main) {
                     try {
                         pb_prof.visibility = View.GONE
@@ -267,7 +283,7 @@ class ProfileFragment : Fragment() {
                         if (response.body()?.OK != null) {
                             val r = response.body()
                             //todo
-                            btn_follow.text = resources.getString(R.string.following)
+                            btn_follow.text= resources.getString(R.string.following)
                             Toast.makeText(requireActivity(), r?.OK?.status, Toast.LENGTH_SHORT)
                                 .show()
 
@@ -288,80 +304,8 @@ class ProfileFragment : Fragment() {
             }
         }
     }
-
-    private fun dispatchTakePictureIntent() {
-        Intent(MediaStore.ACTION_IMAGE_CAPTURE).also { takePictureIntent ->
-            takePictureIntent.resolveActivity(requireActivity().packageManager)?.also {
-                startActivityForResult(takePictureIntent, REQUEST_IMAGE_CAPTURE)
-            }
-        }
-    }
-
-    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        super.onActivityResult(requestCode, resultCode, data)
-        if (requestCode == REQUEST_IMAGE_CAPTURE && resultCode == AppCompatActivity.RESULT_OK) {
-            val imageBitmap = data?.extras?.get("data") as Bitmap
-//            user_profile_ep.setImageBitmap(imageBitmap)
-            Glide.with(this).load(imageBitmap).apply(RequestOptions.circleCropTransform())
-                .into(iv_profile_pic_profile)
-            convertToFile(imageBitmap)
-        }
-    }
-
-    private fun convertToFile(bitmap: Bitmap) {
-        file = File(activity?.cacheDir, "propic")
-        val os: OutputStream = BufferedOutputStream(FileOutputStream(file))
-        bitmap.compress(Bitmap.CompressFormat.JPEG, 100, os)
-        os.close()
-
-//        ----------CALLING API--------
-        if (file != null) {
-            image_body = MultipartBody.Part.createFormData(
-                "image", file?.name,
-                (RequestBody.create(MediaType.parse("multipart/form-data"), file))
-            )
-            // updateProfilePicAPI() //API CALL<<<<<<<<<<<<<<<<<<<<<<<<<<<<
-        }
-    }
-
-//    private fun updateProfilePicAPI( ) {
-//        pb_prof.visibility = View.VISIBLE
-//        val apiInterface = ApiClient.getRetrofitService(requireContext())
-//        CoroutineScope(Dispatchers.IO).launch {
-//            try {
-//                val response = apiInterface.getUserData(generalRequest)
-//                withContext(Dispatchers.Main) {
-//                    try {
-//                        pb_prof.visibility = View.GONE
-//                        if (response.body()?.OK !=null) {
-//                            val r = response.body()
-//
-////                        iv_profile_pic_profile.load(
-////                            model?.data?.profilePicture.toString(),
-////                            R.color.text_gray,
-////                            R.color.text_gray,
-////                            true
-////                        )
-//                            tv_name.text= r?.OK?.items?.get(0)?.name
-//                            tv_toolbar_title.text =r?.OK?.items?.get(0)?.username
-////                        tv_email_prof.setText(model?.data?.email)
-////                        tv_address_prof.setText(model?.data?.address)
-////                        tv_phone_prof.setText(model?.data?.phone)
-//                        } else {
-//                            Toast.makeText(activity,R.string.Something_went_wrong, Toast.LENGTH_SHORT).show()
-//                        }
-//                    } catch (e: java.lang.Exception) {
-//                        Toast.makeText(requireActivity(), "" + e.toString(), Toast.LENGTH_SHORT).show()
-//                    }
-//                }
-//            } catch (e: java.lang.Exception) {
-//                e.printStackTrace()
-//            }
-//        }
-//    }
-
-
 }
+
 
 
 

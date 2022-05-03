@@ -2,16 +2,19 @@
 <resources>
     <color name="colorPrimary">#2699FB</color>
     <color name="colorPrimaryDark">#BCE0FD</color>
-    <color name="colorAccent">#FFEF50</color>
+    <color name="colorAccent">#000000</color>
 
 
 
     <color name="text_black">#140b0e</color>
     <color name="text_gray">#726d6f</color>
+    <color name="username_text">#3D4351</color>
 
     <color name="white">#ffffff</color>
     <color name="white_transparent">#A1FFFFFF</color>
     <color name="transparent">#00000000</color>
+    <color name="edittext_bg">#32C6C6C6</color>
+    <color name="teal_200">#08CCD0</color>
 
     <color name="bg_color_spiner">#fcf5f7</color>
     <color name="bg_color_red_button">#000000</color>
@@ -21,6 +24,7 @@
     <color name="backgroundColor">#F9F9F9</color>
     <color name="bg_color_default_bubble">#BCE0FD</color>
     <color name="reflection">#222957</color>
+    <color name="red">#FF040E</color>
     <color name="green">#048E09</color>
 
 

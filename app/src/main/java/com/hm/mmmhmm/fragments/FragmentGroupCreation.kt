@@ -1,14 +1,24 @@
 package com.hm.mmmhmm.fragments
 
+import android.Manifest
 import android.content.Context
 import android.content.Intent
+import android.content.pm.PackageManager
+import android.graphics.Bitmap
+import android.graphics.BitmapFactory
 import android.os.Bundle
+import android.util.Base64
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.*
+import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
+import com.canhub.cropper.CropImageContract
+import com.canhub.cropper.CropImageView
+import com.canhub.cropper.options
 import com.hm.mmmhmm.R
 import com.hm.mmmhmm.activity.MainActivity
 import com.hm.mmmhmm.adapter.FeedListAdapter
@@ -23,7 +33,12 @@ import com.hm.mmmhmm.models.Item
 import com.hm.mmmhmm.models.RequestRegister
 import com.hm.mmmhmm.web_service.ApiClient
 import kotlinx.android.synthetic.main.custom_toolbar.*
+import kotlinx.android.synthetic.main.custom_toolbar.tv_toolbar_title
+import kotlinx.android.synthetic.main.fragment_edit_group.*
 import kotlinx.android.synthetic.main.fragment_group_creation.*
+import kotlinx.android.synthetic.main.fragment_group_creation.btn_create_group
+import kotlinx.android.synthetic.main.fragment_group_creation.et_group_about
+import kotlinx.android.synthetic.main.fragment_group_creation.et_group_name
 import kotlinx.android.synthetic.main.fragment_group_detail.*
 import kotlinx.android.synthetic.main.fragment_groups.*
 import kotlinx.android.synthetic.main.fragment_signup.*
@@ -32,6 +47,7 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+import java.io.ByteArrayOutputStream
 import java.lang.Exception
 
 
@@ -42,6 +58,29 @@ class FragmentGroupCreation : Fragment() {
     var visibilityType =types[0]
     var t:View?=null
     var category:String?=null
+
+    private val TAG = "create group"
+
+    private var pickedProfile: Bitmap? = null
+    private val cropImage = registerForActivityResult(CropImageContract()) { result ->
+        if (result.isSuccessful) {
+            // use the returned uri
+            val uriContent = result.uriContent
+            val uriFilePath = result.getUriFilePath(requireContext()) // optional usage
+
+            Log.i(TAG, "cropImage: $uriContent $uriFilePath")
+
+            val bitmap = BitmapFactory.decodeFile(uriFilePath)
+
+            pickedProfile = bitmap
+            iv_profile_pic_group.setImageBitmap(bitmap)
+
+        } else {
+            // an error occurred
+            val exception = result.error
+        }
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
@@ -81,6 +120,24 @@ class FragmentGroupCreation : Fragment() {
         getCategoryListForGroup()
         btn_create_group.setOnClickListener {
             validateInput()
+        }
+
+        btn_update_profile_group.setOnClickListener {
+            EditProfileFragment.isBanner = false
+            if (checkPermission()) {
+                cropImage.launch(options {
+                    setGuidelines(CropImageView.Guidelines.ON)
+                })
+            } else {
+                ActivityCompat.requestPermissions(
+                    requireActivity(), arrayOf(
+                        Manifest.permission.CAMERA,
+                        Manifest.permission.READ_EXTERNAL_STORAGE,
+                        Manifest.permission.WRITE_EXTERNAL_STORAGE
+                    ), 125
+                )
+            }
+
         }
 
     }
@@ -202,4 +259,32 @@ class FragmentGroupCreation : Fragment() {
             }
         }
     }
+
+
+    private fun getEncoded64ImageStringFromBitmap(bitmap: Bitmap?): String {
+        val stream = ByteArrayOutputStream()
+        bitmap?.compress(Bitmap.CompressFormat.JPEG, 70, stream)
+        val byteFormat: ByteArray = stream.toByteArray()
+        // get the base 64 string
+        return Base64.encodeToString(byteFormat, Base64.NO_WRAP)
+    }
+
+    private fun checkPermission(): Boolean {
+        for (permission in arrayOf(
+            Manifest.permission.CAMERA,
+            Manifest.permission.READ_EXTERNAL_STORAGE,
+            Manifest.permission.WRITE_EXTERNAL_STORAGE
+        )) {
+            if (ContextCompat.checkSelfPermission(
+                    requireContext(),
+                    permission
+                ) != PackageManager.PERMISSION_GRANTED
+            ) {
+                return false
+            }
+        }
+        return true
+    }
+
+
 }

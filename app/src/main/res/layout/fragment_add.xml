@@ -52,6 +52,39 @@
                     android:text="@string/choose_design"
                     android:textColor="@color/buttonTextColor" />
 
+                <RelativeLayout
+                    android:id="@+id/rl_selected_image"
+                    android:layout_width="match_parent"
+                    android:layout_height="210dp"
+                    android:visibility="gone"
+                    android:layout_below="@id/btn_choose_design">
+
+                    <androidx.cardview.widget.CardView
+                        android:layout_width="match_parent"
+                        android:layout_height="195dp"
+                        app:cardCornerRadius="10dp">
+                        <ImageView
+                            android:id="@+id/iv_selected_image"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:src="@drawable/no_image_available" />
+                    </androidx.cardview.widget.CardView>
+
+                    <Button
+                        android:id="@+id/btn_change_selected_image"
+                        android:layout_width="wrap_content"
+                        android:layout_height="30dp"
+                        android:layout_alignParentBottom="true"
+                        android:layout_centerHorizontal="true"
+                        android:layout_marginTop="4dp"
+                        android:background="@drawable/bg_button_red"
+                        android:paddingHorizontal="10dp"
+                        android:paddingVertical="4dp"
+                        android:text="@string/change"
+                        android:textColor="@color/buttonTextColor"
+                        android:textSize="10sp" />
+                </RelativeLayout>
+
 
                 <TextView
                     android:layout_width="wrap_content"
@@ -60,6 +93,7 @@
                     android:layout_centerHorizontal="true"
                     android:text="@string/accept_terms_amp_conditions"
                     android:textColor="@color/black"
+                    android:visibility="gone"
                     android:textSize="16sp" />
             </RelativeLayout>
 
@@ -81,7 +115,7 @@
 
     <ProgressBar
         android:visibility="gone"
-        android:id="@+id/pb_campaign_detail"
+        android:id="@+id/pb_publish_post"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_centerInParent="true"

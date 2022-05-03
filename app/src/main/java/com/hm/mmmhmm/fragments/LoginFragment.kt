@@ -10,6 +10,8 @@ import android.widget.Toast
 import com.hm.mmmhmm.R
 import com.hm.mmmhmm.activity.MainActivity
 import com.hm.mmmhmm.helper.*
+import com.hm.mmmhmm.models.GeneralRequest
+import com.hm.mmmhmm.models.OTPRequest
 import com.hm.mmmhmm.models.RequestAuthenticateNumber
 import com.hm.mmmhmm.models.RequestLogin
 import com.hm.mmmhmm.web_service.ApiClient
@@ -92,15 +94,59 @@ class LoginFragment : androidx.fragment.app.Fragment() {
 
                     try {
                         pb_login.visibility = View.GONE
-                        if (response.body()?.OK?.length ==1) {
+                        if (response.body()?.OK?.length !=0) {
                             val r = response.body()
 
                            SessionManager.init(activity as Context)
-                            val rand = Random()
-                            SessionManager.setOTP(rand.nextInt(10000).toString())
+                            //val rand = Random()
+                            //SessionManager.setOTP(rand.nextInt(10000).toString())
 
-                            //call send otp api here
+                            var otpRequest: OTPRequest = OTPRequest(et_email_login.text.toString());
+                            hitSendOTPAPI(otpRequest)
 
+
+
+//                            val oTPVerifyFragment = OTPVerifyFragment()
+//                            val args = Bundle()
+//                            args.putString("path", "login")
+//                            args.putString("number", et_email_login.text.toString())
+//                            oTPVerifyFragment.arguments = args
+//                            if (activity != null) {
+//                                activity?.supportFragmentManager?.beginTransaction()
+//                                    ?.replace(R.id.frame_layout_splash_launcher,oTPVerifyFragment)?.commit()
+//                            }
+
+                        } else {
+                            Toast.makeText(activity,"User is not registered with us!", Toast.LENGTH_SHORT).show()
+
+//                            CommanFunction.handleApiError(
+//                                response.errorBody()?.charStream(),
+//                                requireContext()
+//                            )
+                        }
+                    } catch (e: java.lang.Exception) {
+                        Toast.makeText(requireActivity(), "" + e.toString(), Toast.LENGTH_SHORT).show()
+                    }
+                }
+            } catch (e: java.lang.Exception) {
+
+            }
+        }
+    }
+
+    private fun hitSendOTPAPI( otpRequest: OTPRequest) {
+      //  pb_login.visibility = View.VISIBLE
+        val apiInterface = ApiClient.getRetrofitService(requireContext())
+        CoroutineScope(Dispatchers.IO).launch {
+            try {
+                val response = apiInterface.sendOTP(otpRequest)
+                withContext(Dispatchers.Main) {
+
+                    try {
+                       // pb_login.visibility = View.GONE
+                        if (response.body()?.OK?.status =="Sucess") {
+                            SessionManager.setOTP(response.body()?.OK?.otp?:"")
+                            val r = response.body()
                             val oTPVerifyFragment = OTPVerifyFragment()
                             val args = Bundle()
                             args.putString("path", "login")
@@ -112,12 +158,7 @@ class LoginFragment : androidx.fragment.app.Fragment() {
                             }
 
                         } else {
-                            Toast.makeText(activity,"User is not registered with us!", Toast.LENGTH_SHORT).show()
-
-//                            CommanFunction.handleApiError(
-//                                response.errorBody()?.charStream(),
-//                                requireContext()
-//                            )
+                            Toast.makeText(activity,"Somethings wents wrongs!", Toast.LENGTH_SHORT).show()
                         }
                     } catch (e: java.lang.Exception) {
                         Toast.makeText(requireActivity(), "" + e.toString(), Toast.LENGTH_SHORT).show()

@@ -11,6 +11,7 @@ import com.hm.mmmhmm.R
 import com.hm.mmmhmm.activity.MainActivity
 import com.hm.mmmhmm.adapter.GalleryAdapter
 import com.hm.mmmhmm.adapter.NotificationsAdapter
+import com.hm.mmmhmm.adapter.TemplateAdapter
 import com.hm.mmmhmm.helper.SessionManager
 import com.hm.mmmhmm.models.RequestShowMyTemplate
 import com.hm.mmmhmm.models.ShowPostlRequest
@@ -57,12 +58,19 @@ class TemplatesFragment : Fragment() {
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
         setupToolBar()
-        // pb_cms_page.visibility= View.VISIBLE
+        tv_my_template.setTextColor(resources.getColor(R.color.white))
+        tv_browse_template.setTextColor(resources.getColor(R.color.black))
+        iv_create_template.setOnClickListener {
+            //todo
+
+        }
         tv_my_template.setBackgroundColor(ContextCompat.getColor(requireActivity(),R.color.colorAccent))
         tv_browse_template.setBackgroundColor(ContextCompat.getColor(requireActivity(),R.color.transparent))
         tv_my_template.setOnClickListener {
             tv_my_template.setBackgroundColor(ContextCompat.getColor(requireActivity(),R.color.colorAccent))
             tv_browse_template.setBackgroundColor(ContextCompat.getColor(requireActivity(),R.color.transparent))
+            tv_my_template.setTextColor(resources.getColor(R.color.white))
+            tv_browse_template.setTextColor(resources.getColor(R.color.black))
             var requestShowMyTemplate: RequestShowMyTemplate =
                 RequestShowMyTemplate(SessionManager.getUserId() ?: "");
             getMyTemplate(requestShowMyTemplate)
@@ -70,6 +78,9 @@ class TemplatesFragment : Fragment() {
         tv_browse_template.setOnClickListener {
             tv_browse_template.setBackgroundColor(ContextCompat.getColor(requireActivity(),R.color.colorAccent))
             tv_my_template.setBackgroundColor(ContextCompat.getColor(requireActivity(),R.color.transparent))
+
+            tv_my_template.setTextColor(resources.getColor(R.color.black))
+            tv_browse_template.setTextColor(resources.getColor(R.color.white))
             getBrowseTemplate()
         }
 
@@ -90,7 +101,7 @@ class TemplatesFragment : Fragment() {
                         pb_templates.visibility = View.GONE
                         if (response.body()?.OK != null) {
                             val r = response.body()
-                            rv_gallery.adapter = GalleryAdapter(r?.OK?.items)
+                            rv_gallery.adapter = TemplateAdapter(r?.OK?.items)
                         } else {
                             Toast.makeText(
                                 activity,
@@ -120,7 +131,7 @@ class TemplatesFragment : Fragment() {
                         pb_templates.visibility = View.GONE
                         if (response.body()?.OK != null) {
                             val r = response.body()
-                            rv_gallery.adapter = GalleryAdapter(r?.OK?.items)
+                            rv_gallery.adapter = TemplateAdapter(r?.OK?.items)
                         } else {
                             Toast.makeText(
                                 activity,

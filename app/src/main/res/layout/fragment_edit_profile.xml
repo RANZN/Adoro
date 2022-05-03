@@ -26,15 +26,49 @@
                 android:layout_centerInParent="true"
                 android:orientation="vertical">
 
-                <TextView
-                    android:layout_width="wrap_content"
+                <androidx.appcompat.widget.LinearLayoutCompat
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_centerVertical="true"
-                    android:layout_marginTop="20dp"
-                    android:layout_marginHorizontal="20dp"
-                    android:text="@string/basic_information"
-                    android:textColor="@color/black"
-                    android:textSize="18sp" />
+                    android:orientation="horizontal">
+
+                    <ImageView
+                        android:id="@+id/iv_back"
+                        android:layout_width="24dp"
+                        android:layout_height="24dp"
+                        android:layout_alignParentStart="true"
+                        android:layout_marginHorizontal="10dp"
+                        android:src="@drawable/ic_back_arrow"
+                        app:tint="@color/black" />
+
+                    <androidx.appcompat.widget.LinearLayoutCompat
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical">
+
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginHorizontal="20dp"
+                            android:text="@string/basic_information"
+                            android:textColor="@color/black"
+                            android:textSize="18sp" />
+                    </androidx.appcompat.widget.LinearLayoutCompat>
+
+                    <TextView
+                        android:id="@+id/tv_toolbar_title"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_vertical"
+                        android:layout_marginHorizontal="20dp"
+                        android:gravity="center"
+                        android:text=""
+                        android:textColor="@color/black"
+                        android:textSize="18sp"
+                        android:visibility="gone" />
+
+                </androidx.appcompat.widget.LinearLayoutCompat>
+
 
                 <RelativeLayout
                     android:id="@+id/rlImage"
@@ -49,7 +83,8 @@
                         android:layout_height="130dp"
                         android:layout_gravity="center_horizontal"
                         android:background="@drawable/bg_cover"
-                        android:src="@drawable/app_logo" />
+                        android:scaleType="fitXY"
+                        android:src="@drawable/adoro_banner" />
 
                     <ImageView
                         android:id="@+id/iv_camera"
@@ -66,15 +101,15 @@
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:gravity="center"
                     android:layout_marginHorizontal="20dp"
                     android:layout_marginTop="20dp"
+                    android:gravity="center"
                     android:orientation="horizontal">
 
                     <de.hdodenhof.circleimageview.CircleImageView
                         android:id="@+id/iv_profile_pic_profile"
-                        android:layout_width="60dp"
-                        android:layout_height="60dp"
+                        android:layout_width="90dp"
+                        android:layout_height="90dp"
                         android:layout_gravity="center_horizontal"
                         android:scaleType="centerCrop"
                         android:src="@drawable/ic_account_24" />
@@ -85,8 +120,8 @@
                         android:layout_height="wrap_content"
                         android:layout_marginStart="20dp"
                         android:background="@drawable/bg_button_red"
-                        android:text="@string/update_profile_image"
                         android:paddingHorizontal="40dp"
+                        android:text="@string/update_profile_image"
                         android:textColor="@color/buttonTextColor"
                         android:textSize="14sp" />
                 </LinearLayout>
@@ -95,11 +130,11 @@
                     android:id="@+id/et_full_name"
                     android:layout_width="match_parent"
                     android:layout_height="50dp"
-                    android:inputType="textPersonName"
+                    android:layout_marginHorizontal="20dp"
                     android:layout_marginTop="16dp"
                     android:background="@drawable/bg_edittext"
                     android:hint="@string/full_name"
-                    android:layout_marginHorizontal="20dp"
+                    android:inputType="textPersonName"
                     android:paddingHorizontal="10dp"
                     android:paddingLeft="5dp"
                     android:singleLine="true"
@@ -111,111 +146,135 @@
                     android:id="@+id/et_username"
                     android:layout_width="match_parent"
                     android:layout_height="50dp"
+                    android:layout_marginHorizontal="20dp"
                     android:layout_marginTop="16dp"
                     android:background="@drawable/bg_edittext"
                     android:hint="@string/username"
                     android:inputType="text"
-                    android:layout_marginHorizontal="20dp"
                     android:paddingHorizontal="10dp"
                     android:paddingLeft="5dp"
                     android:singleLine="true"
                     android:textColor="@color/text_black"
                     android:textColorHint="@color/text_gray"
                     android:textSize="16sp" />
+
                 <EditText
                     android:id="@+id/et_phone"
                     android:layout_width="match_parent"
                     android:layout_height="50dp"
+                    android:layout_marginHorizontal="20dp"
                     android:layout_marginTop="16dp"
                     android:background="@drawable/bg_edittext"
                     android:hint="@string/phone_number"
-                    android:layout_marginHorizontal="20dp"
+                    android:inputType="number"
                     android:paddingHorizontal="10dp"
                     android:paddingLeft="5dp"
-                    android:inputType="number"
                     android:singleLine="true"
                     android:textColor="@color/text_black"
                     android:textColorHint="@color/text_gray"
                     android:textSize="16sp" />
+
+                <EditText
+                    android:id="@+id/et_bio"
+                    android:layout_width="match_parent"
+                    android:layout_height="50dp"
+                    android:layout_marginHorizontal="20dp"
+                    android:layout_marginTop="16dp"
+                    android:background="@drawable/bg_edittext"
+                    android:hint="@string/bio"
+                    android:inputType="text"
+                    android:maxLines="3"
+                    android:paddingHorizontal="10dp"
+                    android:paddingLeft="5dp"
+                    android:singleLine="true"
+                    android:textColor="@color/text_black"
+                    android:textColorHint="@color/text_gray"
+                    android:textSize="16sp" />
+
                 <EditText
                     android:id="@+id/et_email"
                     android:layout_width="match_parent"
                     android:layout_height="50dp"
+                    android:layout_marginHorizontal="20dp"
                     android:layout_marginTop="16dp"
                     android:background="@drawable/bg_edittext"
                     android:hint="@string/email_address"
-                    android:layout_marginHorizontal="20dp"
+                    android:inputType="textEmailAddress"
                     android:paddingHorizontal="10dp"
                     android:paddingLeft="5dp"
-                    android:inputType="textEmailAddress"
                     android:singleLine="true"
                     android:textColor="@color/text_black"
                     android:textColorHint="@color/text_gray"
                     android:textSize="16sp" />
+
                 <EditText
                     android:id="@+id/et_street_address"
                     android:layout_width="match_parent"
                     android:layout_height="50dp"
+                    android:layout_marginHorizontal="20dp"
                     android:layout_marginTop="16dp"
                     android:background="@drawable/bg_edittext"
                     android:hint="@string/street_address"
-                    android:layout_marginHorizontal="20dp"
                     android:paddingHorizontal="10dp"
                     android:paddingLeft="5dp"
                     android:singleLine="true"
                     android:textColor="@color/text_black"
                     android:textColorHint="@color/text_gray"
                     android:textSize="16sp" />
+
                 <EditText
                     android:id="@+id/et_landmark"
                     android:layout_width="match_parent"
                     android:layout_height="50dp"
+                    android:layout_marginHorizontal="20dp"
                     android:layout_marginTop="16dp"
                     android:background="@drawable/bg_edittext"
                     android:hint="@string/landmark"
-                    android:layout_marginHorizontal="20dp"
                     android:paddingHorizontal="10dp"
                     android:paddingLeft="5dp"
                     android:singleLine="true"
                     android:textColor="@color/text_black"
                     android:textColorHint="@color/text_gray"
                     android:textSize="16sp" />
+
                 <EditText
                     android:id="@+id/et_area_name"
                     android:layout_width="match_parent"
                     android:layout_height="50dp"
+                    android:layout_marginHorizontal="20dp"
                     android:layout_marginTop="16dp"
                     android:background="@drawable/bg_edittext"
                     android:hint="@string/area_name"
-                    android:layout_marginHorizontal="20dp"
                     android:paddingHorizontal="10dp"
                     android:paddingLeft="5dp"
                     android:singleLine="true"
                     android:textColor="@color/text_black"
                     android:textColorHint="@color/text_gray"
                     android:textSize="16sp" />
+
                 <EditText
                     android:id="@+id/et_city"
                     android:layout_width="match_parent"
                     android:layout_height="50dp"
+                    android:layout_marginHorizontal="20dp"
                     android:layout_marginTop="16dp"
                     android:background="@drawable/bg_edittext"
                     android:hint="@string/city"
-                    android:layout_marginHorizontal="20dp"
                     android:paddingHorizontal="10dp"
                     android:paddingLeft="5dp"
                     android:singleLine="true"
                     android:textColor="@color/text_black"
                     android:textColorHint="@color/text_gray"
                     android:textSize="16sp" />
+
                 <EditText
                     android:id="@+id/et_state_name"
                     android:layout_width="match_parent"
                     android:layout_height="50dp"
+                    android:layout_marginHorizontal="20dp"
                     android:layout_marginTop="16dp"
                     android:background="@drawable/bg_edittext"
                     android:hint="@string/state_name"
-                    android:layout_marginHorizontal="20dp"
                     android:paddingHorizontal="10dp"
                     android:paddingLeft="5dp"
                     android:singleLine="true"
@@ -239,8 +298,8 @@
                 <RelativeLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="16dp"
                     android:layout_marginHorizontal="20dp"
+                    android:layout_marginTop="16dp"
                     android:background="@drawable/bg_edittext">
 
                     <Spinner
@@ -248,14 +307,15 @@
                         android:layout_width="match_parent"
                         android:layout_height="@dimen/edit_text_height" />
                 </RelativeLayout>
+
                 <EditText
                     android:id="@+id/et_zip_code"
                     android:layout_width="match_parent"
                     android:layout_height="50dp"
+                    android:layout_marginHorizontal="20dp"
                     android:layout_marginTop="16dp"
                     android:background="@drawable/bg_edittext"
                     android:hint="@string/zip_code"
-                    android:layout_marginHorizontal="20dp"
                     android:paddingHorizontal="10dp"
                     android:paddingLeft="5dp"
                     android:singleLine="true"
@@ -267,19 +327,20 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_centerVertical="true"
-                    android:layout_marginTop="40dp"
                     android:layout_marginHorizontal="20dp"
+                    android:layout_marginTop="40dp"
                     android:text="@string/bank_information"
                     android:textColor="@color/black"
                     android:textSize="18sp" />
+
                 <EditText
                     android:id="@+id/et_bank_name"
                     android:layout_width="match_parent"
                     android:layout_height="50dp"
+                    android:layout_marginHorizontal="20dp"
                     android:layout_marginTop="16dp"
                     android:background="@drawable/bg_edittext"
                     android:hint="@string/bank_name"
-                    android:layout_marginHorizontal="20dp"
                     android:paddingHorizontal="10dp"
                     android:paddingLeft="5dp"
                     android:singleLine="true"
@@ -292,38 +353,40 @@
                     android:id="@+id/et_beneficiary_name"
                     android:layout_width="match_parent"
                     android:layout_height="50dp"
+                    android:layout_marginHorizontal="20dp"
                     android:layout_marginTop="16dp"
                     android:background="@drawable/bg_edittext"
                     android:hint="Beneficiary Name"
-                    android:layout_marginHorizontal="20dp"
                     android:paddingHorizontal="10dp"
                     android:paddingLeft="5dp"
                     android:singleLine="true"
                     android:textColor="@color/text_black"
                     android:textColorHint="@color/text_gray"
                     android:textSize="16sp" />
+
                 <EditText
                     android:id="@+id/et_account_number"
                     android:layout_width="match_parent"
                     android:layout_height="50dp"
+                    android:layout_marginHorizontal="20dp"
                     android:layout_marginTop="16dp"
                     android:background="@drawable/bg_edittext"
                     android:hint="@string/account_number"
-                    android:layout_marginHorizontal="20dp"
                     android:paddingHorizontal="10dp"
                     android:paddingLeft="5dp"
                     android:singleLine="true"
                     android:textColor="@color/text_black"
                     android:textColorHint="@color/text_gray"
                     android:textSize="16sp" />
+
                 <EditText
                     android:id="@+id/et_ifsc_code"
                     android:layout_width="match_parent"
                     android:layout_height="50dp"
+                    android:layout_marginHorizontal="20dp"
                     android:layout_marginTop="16dp"
                     android:background="@drawable/bg_edittext"
                     android:hint="@string/ifsc_code"
-                    android:layout_marginHorizontal="20dp"
                     android:paddingHorizontal="10dp"
                     android:paddingLeft="5dp"
                     android:singleLine="true"
@@ -346,13 +409,8 @@
                     android:textSize="18sp" />
 
 
-
             </LinearLayout>
         </ScrollView>
-
-
-
-
 
 
     </androidx.appcompat.widget.LinearLayoutCompat>

@@ -1,3 +1,3 @@
 package com.hm.mmmhmm.models
 
-class ProfileRequest internal constructor(var _id: String, var requestedBy: String)
+class ProfileRequest internal constructor(var _id: String, var requestedFrom: String)

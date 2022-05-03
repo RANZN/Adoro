@@ -18,6 +18,7 @@ import androidx.appcompat.widget.AppCompatEditText;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.firebase.client.Firebase;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
@@ -29,7 +30,8 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.Query;
 import com.google.firebase.database.ServerValue;
 import com.google.firebase.database.ValueEventListener;
-import com.google.firebase.iid.FirebaseInstanceId;
+//import com.google.firebase.iid.FirebaseInstanceId;
+import com.google.firebase.messaging.FirebaseMessaging;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
@@ -73,7 +75,7 @@ public class Chat_Activity extends AppCompatActivity {
     private AppCompatEditText et_message;
     String Thumb_Image1;
     String chat_user_token;
-
+    private Firebase reference1, reference2;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -104,6 +106,9 @@ public class Chat_Activity extends AppCompatActivity {
         thumb_image = getIntent().getStringExtra("thumb_image");
         mDatabaseReference = FirebaseDatabase.getInstance().getReference().child("users");
         mNotificationReference = FirebaseDatabase.getInstance().getReference().child("notifications");
+        Firebase.setAndroidContext(this);
+//        reference1 = new Firebase("https://balloon-2f5cc-default-rtdb.firebaseio.com/Messages/" + sessionManager.getFIREBASE_ID() + "_" + userFirebaseId);
+//        reference2 = new Firebase("https://balloon-2f5cc-default-rtdb.firebaseio.com/Messages/" + userFirebaseId + "_" + sessionManager.getFIREBASE_ID());
 
 
         mRootReference = FirebaseDatabase.getInstance().getReference();
@@ -129,18 +134,31 @@ public class Chat_Activity extends AppCompatActivity {
 //                    Thumb_Image1=Utility.getpic(Chat_Activity.this);
 //                }
                 Thumb_Image1="";
+                Map chatAddMap = new HashMap();
+                Map chatUserMap = new HashMap();
                 if (!dataSnapshot.hasChild(mCurrentUserId)) {
-                    String token_id = FirebaseInstanceId.getInstance().getToken();
-                    Map chatAddMap = new HashMap();
-                    chatAddMap.put("image", "default");
+                    FirebaseMessaging.getInstance().getToken()
+                            .addOnCompleteListener(new OnCompleteListener<String>() {
+                                @Override
+                                public void onComplete(@NonNull Task<String> task) {
+                                    if (!task.isSuccessful()) {
+                                        Log.w("TAG", "Fetching FCM registration token failed", task.getException());
+                                        return;
+                                    }
+                                    // Get new FCM registration token
+                                    String token = task.getResult();
+                                    final String token_id= token;
+                                    chatAddMap.put("image", "default");
 //                    chatAddMap.put("name", SessionManager.getUserName();
-                    chatAddMap.put("name", "kapil");
-                    chatAddMap.put("online", true);
-                    chatAddMap.put("status", "HELLO");
-                    chatAddMap.put("device_token", token_id);
-                    chatAddMap.put("thumb_image", Thumb_Image1);
-                    Map chatUserMap = new HashMap();
-                    chatUserMap.put("users/" + mCurrentUserId, chatAddMap);
+                                    chatAddMap.put("name", "kapil");
+                                    chatAddMap.put("online", true);
+                                    chatAddMap.put("status", "HELLO");
+                                    chatAddMap.put("device_token", token_id);
+                                    chatAddMap.put("thumb_image", Thumb_Image1);
+                                    chatUserMap.put("users/" + mCurrentUserId, chatAddMap);
+                                }
+                            });
+
 
                     mRootReference.updateChildren(chatUserMap, new DatabaseReference.CompletionListener() {
                         @Override
@@ -350,7 +368,7 @@ public class Chat_Activity extends AppCompatActivity {
                         @SuppressWarnings("VisibleForTests")
                         //    String download_url = task.getResult().getDownloadUrl().toString();
 
-                                Map messageMap = new HashMap();
+                        Map messageMap = new HashMap();
                         // messageMap.put("message", download_url);
                         messageMap.put("seen", false);
                         messageMap.put("type", "image");
