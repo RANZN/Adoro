@@ -190,7 +190,9 @@ class ProfileFragment : Fragment() {
                             tv_bio.text = r?.OK?.items?.get(0)?.bio
                             //tv_total_posts.text= r?.OK?.items?.get(0)?.bio+"Posts"
                             tv_total_fans.text = (r?.OK?.items?.get(0)?.followerData?.size?:0).toString()+" Fans"
+                            total_fans.text = (r?.OK?.items?.get(0)?.followerData?.size?:0).toString()+" Fans"
                             tv_total_coins.text = (r?.OK?.items?.get(0)?.adoroCoins?:0).toString() + " A"
+                            total_coins.text = (r?.OK?.items?.get(0)?.adoroCoins?:0).toString() + " A"
                             tv_toolbar_title.text = r?.OK?.items?.get(0)?.username
                             userId = r?.OK?.items?.get(0)?._id ?: "";
                             username = r?.OK?.items?.get(0)?.username ?: "";
