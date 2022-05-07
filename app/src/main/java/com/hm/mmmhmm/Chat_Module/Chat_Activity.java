@@ -20,7 +20,10 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.firebase.client.Firebase;
 import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
@@ -115,10 +118,10 @@ public class Chat_Activity extends AppCompatActivity {
         mImageStorage = FirebaseStorage.getInstance().getReference();
 
         mAuth = FirebaseAuth.getInstance();
-        mCurrentUserId = mAuth.getCurrentUser().getUid();
+         mCurrentUserId = mAuth.getUid();
         Log.d("mchat",mChatUser);
         Log.d("mcurrent",mCurrentUserId);
-        mMessageAdapter = new MessageAdapter(messagesList, Chat_Activity.this);
+        //mMessageAdapter = new MessageAdapter(messagesList, Chat_Activity.this);
 
         chat_message_list.setAdapter(mMessageAdapter);
         loadMessages();
@@ -233,7 +236,7 @@ public class Chat_Activity extends AppCompatActivity {
 
                         }
                     });
-                    Log.d("image",thumb_image);
+                    //Log.d("image",thumb_image);
                     Map chatAddMap = new HashMap();
                     chatAddMap.put("seen", true);
                     chatAddMap.put("time_stamp", ServerValue.TIMESTAMP);

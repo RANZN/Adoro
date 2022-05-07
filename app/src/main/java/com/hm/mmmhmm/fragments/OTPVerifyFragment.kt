@@ -6,6 +6,7 @@ import android.content.Intent
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -14,6 +15,9 @@ import android.widget.Button
 import android.widget.TextView
 import android.widget.Toast
 import androidx.fragment.app.Fragment
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.auth.FirebaseAuthUserCollisionException
+import com.google.firebase.database.FirebaseDatabase
 import com.hm.mmmhmm.R
 import com.hm.mmmhmm.activity.MainActivity
 import com.hm.mmmhmm.helper.CommanFunction
@@ -23,19 +27,14 @@ import com.hm.mmmhmm.helper.toast
 import com.hm.mmmhmm.models.RequestLogin
 import com.hm.mmmhmm.web_service.ApiClient
 import kotlinx.android.synthetic.main.custom_toolbar.*
-import kotlinx.android.synthetic.main.fragment_login.*
 import kotlinx.android.synthetic.main.fragment_o_t_p_verify.*
-import kotlinx.android.synthetic.main.fragment_o_t_p_verify.pb_login
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+import org.json.JSONObject
 
 class OTPVerifyFragment : Fragment() {
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-    }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -57,7 +56,7 @@ class OTPVerifyFragment : Fragment() {
         setupToolBar()
         //GlobleData.goToLoginScreen = false
         if (requireArguments().getString("path") == "register") {
-            tv_signup_terms.visibility = View.VISIBLE;
+            tv_signup_terms.visibility = View.VISIBLE
         }
 
 
@@ -90,17 +89,20 @@ class OTPVerifyFragment : Fragment() {
 
             } else {
                 //check otp if match call below api
-                    if(otp==SessionManager.getOTP()){
-                        var loginRequest: RequestLogin =
-                            RequestLogin(requireArguments().getString("number")!!.toLong(),SessionManager.getFCMToken()?:"");
-                        hitLoginAPI(loginRequest)
-                    }else{
-                        Toast.makeText(
-                            activity,
-                            "Wrong OTP!",
-                            Toast.LENGTH_SHORT
-                        ).show()
-                    }
+                if (otp == SessionManager.getOTP()) {
+                    var loginRequest: RequestLogin =
+                        RequestLogin(
+                            requireArguments().getString("number")!!.toLong(),
+                            SessionManager.getFCMToken() ?: ""
+                        )
+                    hitLoginAPI(loginRequest)
+                } else {
+                    Toast.makeText(
+                        activity,
+                        "Wrong OTP!",
+                        Toast.LENGTH_SHORT
+                    ).show()
+                }
 
 
             }
@@ -117,7 +119,7 @@ class OTPVerifyFragment : Fragment() {
         dialog.window?.setLayout(
             WindowManager.LayoutParams.MATCH_PARENT,
             WindowManager.LayoutParams.MATCH_PARENT
-        );
+        )
 //        dialog.window?.clearFlags(WindowManager.LayoutParams.FLAG_DIM_BEHIND)
         dialog.setCancelable(false)
         val body = dialog.findViewById(R.id.tvBody) as TextView
@@ -130,7 +132,7 @@ class OTPVerifyFragment : Fragment() {
             //todo
             if (activity != null) {
                 activity?.supportFragmentManager?.beginTransaction()
-                    ?.replace(R.id.frame_layout_main,HomeFragment())?.commit()
+                    ?.replace(R.id.frame_layout_main, HomeFragment())?.commit()
             }
             dialog.dismiss()
         }
@@ -159,10 +161,22 @@ class OTPVerifyFragment : Fragment() {
                             SessionManager.setLoginStatus("true")
                             SessionManager.setUserId(response.body()?.OK!!.items[0]._id)
                             SessionManager.setUserId(response.body()?.OK?.items?.get(0)?._id ?: "")
-                            SessionManager.setUsername(response.body()?.OK?.items?.get(0)?.username ?: "")
-                            SessionManager.setUserName(response.body()?.OK?.items?.get(0)?.name ?: "")
-                            SessionManager.setUserPic(response.body()?.OK?.items?.get(0)?.profile ?: "")
+                            SessionManager.setUsername(
+                                response.body()?.OK?.items?.get(0)?.username ?: ""
+                            )
+                            SessionManager.setUserName(
+                                response.body()?.OK?.items?.get(0)?.name ?: ""
+                            )
+                            SessionManager.setUserPic(
+                                response.body()?.OK?.items?.get(0)?.profile ?: ""
+                            )
+                            SessionManager.setUserEmail(
+                                response.body()?.OK?.items?.get(0)?.email ?: ""
+                            )
                             startActivity(Intent(activity, MainActivity::class.java))
+
+                            loginUserForFirebase()
+
                             activity?.finish()
 
 
@@ -173,7 +187,8 @@ class OTPVerifyFragment : Fragment() {
                             )
                         }
                     } catch (e: Exception) {
-                        Toast.makeText(requireActivity(), "" + e.toString(), Toast.LENGTH_SHORT).show()
+                        Toast.makeText(requireActivity(), "" + e.toString(), Toast.LENGTH_SHORT)
+                            .show()
                     }
                 }
             } catch (e: Exception) {
@@ -182,5 +197,45 @@ class OTPVerifyFragment : Fragment() {
         }
     }
 
+    private fun pushUserToFirebase() {
+        val reference = FirebaseDatabase.getInstance().getReference("users")
+        reference.get().addOnSuccessListener {
+            try {
+                val value = it.value as HashMap<String?, Any>
+                value.apply {
+                    put(SessionManager.getFirebaseID(), HashMap<String, Any?>().apply {
+                        put("userId", SessionManager.getFirebaseID())
+                        put("userName", SessionManager.getUserName())
+                        put("email", SessionManager.getUserEmail())
+                    })
+                }
+                reference.updateChildren(value)
+            } catch (e: java.lang.Exception) {
+                e.printStackTrace()
+            }
+        }
+    }
 
+    private fun loginUserForFirebase() {
+        FirebaseAuth.getInstance().createUserWithEmailAndPassword(
+            SessionManager.getUserEmail(),
+            "test@123"
+        ).addOnSuccessListener {
+            SessionManager.setFirebaseID(it.user?.uid)
+            FirebaseAuth.getInstance().signOut()
+            pushUserToFirebase()
+        }.addOnFailureListener {
+            FirebaseAuth.getInstance().signOut()
+            if (it is FirebaseAuthUserCollisionException) {
+                FirebaseAuth.getInstance().signInWithEmailAndPassword(
+                    SessionManager.getUserEmail(),
+                    "test@123"
+                ).addOnSuccessListener { result ->
+                    SessionManager.setFirebaseID(result.user?.uid)
+                    FirebaseAuth.getInstance().signOut()
+                    pushUserToFirebase()
+                }
+            }
+        }
+    }
 }

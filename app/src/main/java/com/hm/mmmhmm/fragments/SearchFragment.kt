@@ -431,7 +431,8 @@ class SearchFragment : Fragment() {
                         pb_search.visibility = View.GONE
                         Toast.makeText(requireActivity(), "Group Joined" , Toast.LENGTH_SHORT)
                             .show()
-                        if (response.body()?.OK != null) {
+                        // Add ?.OK
+                        if (response.body() != null) {
                             val r = response.body()
 //                            Toast.makeText(requireActivity(), "" + e.toString(), Toast.LENGTH_SHORT)
 //                                .show()

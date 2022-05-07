@@ -4,19 +4,19 @@ package com.hm.mmmhmm.fragments
 
 import android.content.Context
 import android.content.Intent
-import android.graphics.Bitmap
 import android.os.Bundle
-import android.provider.MediaStore
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
-import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
-import com.bumptech.glide.Glide
-import com.bumptech.glide.request.RequestOptions
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.auth.FirebaseAuthUserCollisionException
+import com.google.firebase.database.FirebaseDatabase
+import com.hm.mmmhmm.Chat_Module.ChatActivity
+import com.hm.mmmhmm.Chat_Module.Chat_Activity
 import com.hm.mmmhmm.Chat_Module.Inbox
+import com.hm.mmmhmm.Chat_Module.InboxActivity
 import com.hm.mmmhmm.R
 import com.hm.mmmhmm.activity.MainActivity
 import com.hm.mmmhmm.adapter.GalleryAdapter
@@ -31,13 +31,8 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
-import okhttp3.MediaType
 import okhttp3.MultipartBody
-import okhttp3.RequestBody
-import java.io.BufferedOutputStream
 import java.io.File
-import java.io.FileOutputStream
-import java.io.OutputStream
 
 
 class ProfileFragment : Fragment() {
@@ -49,6 +44,8 @@ class ProfileFragment : Fragment() {
     var username: String? = null
     var name: String? = null
     var userId: String? = null
+
+    var currentEmail = ""
 
 
     override fun onCreateView(
@@ -100,6 +97,47 @@ class ProfileFragment : Fragment() {
             followUser(followRequest)
         })
 
+        iv_inbox.setOnClickListener {
+            FirebaseAuth.getInstance().createUserWithEmailAndPassword(
+                currentEmail,
+                "test@123"
+            ).addOnSuccessListener {
+                val id = it.user?.uid
+                pushUserToFirebase(id)
+                FirebaseAuth.getInstance().signOut()
+                requireActivity().startActivity(
+                    Intent(
+                        requireContext(),
+                        ChatActivity::class.java
+                    ).apply {
+                        putExtra("user_id", id)
+                        putExtra("user_name", username)
+                    }
+                )
+            }.addOnFailureListener {
+                FirebaseAuth.getInstance().signOut()
+                if (it is FirebaseAuthUserCollisionException) {
+                    FirebaseAuth.getInstance().signInWithEmailAndPassword(
+                        currentEmail,
+                        "test@123"
+                    ).addOnSuccessListener { result ->
+                        val id = result.user?.uid
+                        pushUserToFirebase(id)
+                        FirebaseAuth.getInstance().signOut()
+                        requireActivity().startActivity(
+                            Intent(
+                                requireContext(),
+                                ChatActivity::class.java
+                            ).apply {
+                                putExtra("user_id", id)
+                                putExtra("user_name", username)
+                            }
+                        )
+                    }
+                }
+            }
+        }
+
 //        iv_camera.setOnClickListener(View.OnClickListener {
 ////            CropImage.startPickImageActivity(activity as Activity)
 //            dispatchTakePictureIntent()
@@ -126,6 +164,25 @@ class ProfileFragment : Fragment() {
 
     }
 
+    private fun pushUserToFirebase(user:String?) {
+        val reference = FirebaseDatabase.getInstance().getReference("users")
+        reference.get().addOnSuccessListener {
+            try {
+                val value = it.value as HashMap<String?, Any>
+                value.apply {
+                    put(user, HashMap<String, Any?>().apply {
+                        put("userId", user)
+                        put("userName", username)
+                        put("email", currentEmail)
+                    })
+                }
+                reference.updateChildren(value)
+            } catch (e: java.lang.Exception) {
+                e.printStackTrace()
+            }
+        }
+    }
+
     private fun setupToolBar() {
         iv_toolbar_icon.setBackgroundResource(R.drawable.hamburger_icon)
         iv_toolbar_action_inbox.setBackgroundResource(R.drawable.chat)
@@ -140,7 +197,7 @@ class ProfileFragment : Fragment() {
         })
 
         iv_toolbar_action_inbox.setOnClickListener(View.OnClickListener {
-            startActivity(Intent(activity, Inbox::class.java))
+            startActivity(Intent(activity, InboxActivity::class.java))
         })
 
         iv_toolbar_action_search.setOnClickListener(View.OnClickListener {
@@ -189,26 +246,26 @@ class ProfileFragment : Fragment() {
                             tv_name.text = r?.OK?.items?.get(0)?.name
                             tv_bio.text = r?.OK?.items?.get(0)?.bio
                             //tv_total_posts.text= r?.OK?.items?.get(0)?.bio+"Posts"
-                            tv_total_fans.text = (r?.OK?.items?.get(0)?.followerData?.size?:0).toString()+" Fans"
-                            tv_total_coins.text = (r?.OK?.items?.get(0)?.adoroCoins?:0).toString() + " A"
+                            tv_total_fans.text =
+                                (r?.OK?.items?.get(0)?.followerData?.size ?: 0).toString() + " Fans"
+                            tv_total_coins.text =
+                                (r?.OK?.items?.get(0)?.adoroCoins ?: 0).toString() + " A"
                             tv_toolbar_title.text = r?.OK?.items?.get(0)?.username
-                            userId = r?.OK?.items?.get(0)?._id ?: "";
-                            username = r?.OK?.items?.get(0)?.username ?: "";
-                            name = r?.OK?.items?.get(0)?.name ?: "";
-                            if (r?.relation=="follower"){
+                            userId = r?.OK?.items?.get(0)?._id ?: ""
+                            username = r?.OK?.items?.get(0)?.username ?: ""
+                            name = r?.OK?.items?.get(0)?.name ?: ""
+                            currentEmail = r?.OK?.items?.get(0)?.email ?: ""
+                            if (r?.relation == "follower") {
                                 ll_follow_user.visibility = View.VISIBLE
-                                btn_follow.text= "Follow Back"
-                            }
-                           else if(r?.relation=="following"){
+                                btn_follow.text = "Follow Back"
+                            } else if (r?.relation == "following") {
                                 ll_follow_user.visibility = View.VISIBLE
-                                btn_follow.text= "Unfollow"
-                            }
-                            else if(r?.relation=="ownProfile"){
+                                btn_follow.text = "Unfollow"
+                            } else if (r?.relation == "ownProfile") {
                                 ll_follow_user.visibility = View.GONE
-                            }
-                            else if(r?.relation=="newVisitor"){
+                            } else if (r?.relation == "newVisitor") {
                                 ll_follow_user.visibility = View.VISIBLE
-                                btn_follow.text= "Follow"
+                                btn_follow.text = "Follow"
                             }/*else if(r?.OK?.relation=="mutual"){
                                 ll_follow_user.visibility = View.VISIBLE
                                 btn_follow.text= "Unfollow"
@@ -219,7 +276,7 @@ class ProfileFragment : Fragment() {
 //                            SessionManager.setUserName(r?.OK?.items?.get(0)?.name ?: "")
 //                            SessionManager.setUserPic(r?.OK?.items?.get(0)?.profile ?: "")
                             var showPostlRequest: GeneralRequest =
-                                GeneralRequest(SessionManager.getUserId() ?: "");
+                                GeneralRequest(SessionManager.getUserId() ?: "")
                             getPosts(showPostlRequest)
                         } else {
                             Toast.makeText(
@@ -238,7 +295,6 @@ class ProfileFragment : Fragment() {
             }
         }
     }
-
 
 
     private fun getPosts(showPostRequest: GeneralRequest) {
@@ -283,7 +339,7 @@ class ProfileFragment : Fragment() {
                         if (response.body()?.OK != null) {
                             val r = response.body()
                             //todo
-                            btn_follow.text= resources.getString(R.string.following)
+                            btn_follow.text = resources.getString(R.string.following)
                             Toast.makeText(requireActivity(), r?.OK?.status, Toast.LENGTH_SHORT)
                                 .show()
 

@@ -3,11 +3,15 @@ package com.hm.mmmhmm.Chat_Module;
 import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -21,14 +25,16 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 import com.hm.mmmhmm.R;
+import com.hm.mmmhmm.helper.SessionManager;
 import com.squareup.picasso.Picasso;
 
-import java.util.Objects;
+import java.util.List;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 
 public class Inbox extends AppCompatActivity {
 
+    String thumb_image = "";
     private ImageView iv_back;
     private RelativeLayout rl_header;
     private RecyclerView chat_list;
@@ -37,7 +43,7 @@ public class Inbox extends AppCompatActivity {
     private DatabaseReference mMessageDatabase;
     private FirebaseAuth mAuth;
     private String mCurrent_user_id;
-    String thumb_image = "";
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -46,8 +52,8 @@ public class Inbox extends AppCompatActivity {
     }
 
     private void initView() {
-        iv_back = (ImageView) findViewById(R.id.iv_back);
-        rl_header = (RelativeLayout) findViewById(R.id.rl_header);
+        iv_back = findViewById(R.id.iv_back);
+        rl_header = findViewById(R.id.rl_header);
 
         iv_back.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -55,10 +61,10 @@ public class Inbox extends AppCompatActivity {
                 onBackPressed();
             }
         });
-        chat_list = (RecyclerView) findViewById(R.id.chat_list);
+        chat_list = findViewById(R.id.chat_list);
         //--GETTING CURRENT USER ID---
         mAuth = FirebaseAuth.getInstance();
-        mCurrent_user_id = Objects.requireNonNull(mAuth.getCurrentUser()).getUid();
+        mCurrent_user_id = SessionManager.INSTANCE.getUserId();  //Objects.requireNonNull(mAuth.getCurrentUser()).getUid();
         //---REFERENCE TO CHATS CHILD IN FIREBASE DATABASE-----
         mConvDatabase = FirebaseDatabase.getInstance().getReference().child("chats").child(mCurrent_user_id);
         //---OFFLINE FEATURE---
@@ -67,12 +73,33 @@ public class Inbox extends AppCompatActivity {
         mUsersDatabase.keepSynced(true);
         mMessageDatabase = FirebaseDatabase.getInstance().getReference().child("messages").child(mCurrent_user_id);
 
+        Log.i("TAG", "initView: " + mCurrent_user_id);
+
     }
+
     @Override
     public void onStart() {
         super.onStart();
 
         //---ADDING THE RECYCLERVIEW TO FIREBASE DATABASE DIRECTLY----
+
+//        mUsersDatabase.addValueEventListener(new ValueEventListener() {
+//            @Override
+//            public void onDataChange(@NonNull DataSnapshot snapshot) {
+//                List<User> users = new ArrayList<>();
+//                for (DataSnapshot snap : snapshot.getChildren()) {
+//                    User value = snap.getValue(User.class);
+//                    users.add(value);
+//                }
+//
+//                chat_list.setAdapter(new UserAdapter(users));
+//            }
+//
+//            @Override
+//            public void onCancelled(@NonNull DatabaseError error) {
+//
+//            }
+//        });
 
         //--ORDERING THE MESSAGE BY TIME----
         Query conversationQuery = mConvDatabase.orderByChild("time_stamp");
@@ -146,7 +173,7 @@ public class Inbox extends AppCompatActivity {
                         convViewHolder.mView.setOnClickListener(new View.OnClickListener() {
                             @Override
                             public void onClick(View v) {
-                                Intent chatIntent = new Intent(Inbox.this, Chat_Activity.class);
+                                Intent chatIntent = new Intent(Inbox.this, ChatActivity.class);
                                 chatIntent.putExtra("firebase_user_id", list_user_id);
                                 chatIntent.putExtra("User_Name", userName);
                                 chatIntent.putExtra("thumb_image", image);
@@ -192,8 +219,33 @@ public class Inbox extends AppCompatActivity {
             }
         };
 
-       chat_list.setAdapter(friendsConvAdapter);
+        chat_list.setAdapter(friendsConvAdapter);
 
+    }
+
+    static class UserAdapter extends RecyclerView.Adapter<Chat_User_adapter> {
+        List<User> users;
+
+        public UserAdapter(List<User> user) {
+            this.users = user;
+        }
+
+        @NonNull
+        @Override
+        public Chat_User_adapter onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+            return new Chat_User_adapter(LayoutInflater.from(parent.getContext()).inflate(R.layout.chat_inbox_adapter, parent, false));
+        }
+
+        @Override
+        public void onBindViewHolder(@NonNull Chat_User_adapter holder, int position) {
+            holder.setName(users.get(position).getUserName());
+            holder.onItemClick(users.get(position));
+        }
+
+        @Override
+        public int getItemCount() {
+            return users.size();
+        }
     }
 
     public static class Chat_User_adapter extends RecyclerView.ViewHolder {
@@ -247,5 +299,20 @@ public class Inbox extends AppCompatActivity {
 //              userOnlineView.setVisibility(View.INVISIBLE);
 //          }
         }
+
+        public void onItemClick(User user) {
+            mView.findViewById(R.id.linear_rel).setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    Intent intent = new Intent(mView.getContext(), ChatActivity.class);
+                    intent.putExtra("user_name", user.getUserName());
+                    intent.putExtra("user_id", user.getUserId());
+                    mView.getContext().startActivity(intent);
+                }
+            });
+
+        }
+
+
     }
 }

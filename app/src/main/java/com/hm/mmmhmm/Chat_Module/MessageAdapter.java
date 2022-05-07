@@ -10,6 +10,7 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -24,6 +25,7 @@ import com.squareup.picasso.NetworkPolicy;
 import com.squareup.picasso.Picasso;
 
 import java.util.Calendar;
+import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.List;
 
@@ -35,12 +37,12 @@ public class MessageAdapter extends RecyclerView.Adapter<MessageAdapter.MessageV
     DatabaseReference mDatabaseReference;
     DatabaseReference mConvDatabase;
     Context context;
-    private List<Messages> mMessagesList;
+    private List<Message> mMessagesList;
     private FirebaseAuth mAuth;
     String thumb_image = "";
 
     //-----GETTING LIST OF ALL MESSAGES FROM CHAT ACTIVITY ----
-    public MessageAdapter(List<Messages> mMessagesList, Context context) {
+    public MessageAdapter(List<Message> mMessagesList, Context context) {
         this.mMessagesList = mMessagesList;
         this.context = context;
     }
@@ -60,14 +62,14 @@ public class MessageAdapter extends RecyclerView.Adapter<MessageAdapter.MessageV
     //----SETTING EACH HOLDER WITH DATA----
     @Override
     public void onBindViewHolder(final MessageViewHolder holder, int position) {
-        String current_user_id = mAuth.getCurrentUser().getUid();
-        Messages mes = mMessagesList.get(position);
-        String from_user_id = mes.getFrom();
-        String message_type = mes.getType();
+//        String current_user_id = mAuth.getCurrentUser().getUid();
+        Message mes = mMessagesList.get(position);
+        String from_user_id = mes.getReceiver();
+        String message_type = "text";
 
         //----CHANGING TIMESTAMP TO TIME-----
 
-        long timeStamp = mes.getTime();
+        long timeStamp = mMessagesList.get(position).getTime();
         Calendar calendar = GregorianCalendar.getInstance();
         calendar.setTimeInMillis(timeStamp);
         String[] cal = calendar.getTime().toString().split(" ");
@@ -80,36 +82,36 @@ public class MessageAdapter extends RecyclerView.Adapter<MessageAdapter.MessageV
 
         mDatabaseReference = FirebaseDatabase.getInstance().getReference().child("users").child(from_user_id);
 
-        mConvDatabase = FirebaseDatabase.getInstance().getReference().child("chats").child(from_user_id);
+        mConvDatabase = FirebaseDatabase.getInstance().getReference().child("messages").child(from_user_id);
 //        //---ADDING NAME THUMB_IMAGE TO THE HOLDER----
 
 
-        mDatabaseReference.addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                String name = dataSnapshot.child("name").getValue().toString();
-                String image = dataSnapshot.child("thumb_image").getValue().toString();
-                if(thumb_image.equals("default")){
-
-                }else {
-//                    holder.recieve_image.load(image,
-//                            R.color.text_gray,
-//                            R.color.text_gray,
-//                            true
-//            );
-                    Picasso.get().load(image)
-                            .error(R.mipmap.ic_launcher)
-                            .priority(Picasso.Priority.HIGH)
-                            .networkPolicy(NetworkPolicy.NO_CACHE).into(holder.recieve_image);
-                }
-
-            }
-
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
-
-            }
-        });
+//        mDatabaseReference.addValueEventListener(new ValueEventListener() {
+//            @Override
+//            public void onDataChange(DataSnapshot dataSnapshot) {
+//                String name = dataSnapshot.child("name").getValue().toString();
+//                String image = dataSnapshot.child("thumb_image").getValue().toString();
+//                if(thumb_image.equals("default")){
+//
+//                }else {
+////                    holder.recieve_image.load(image,
+////                            R.color.text_gray,
+////                            R.color.text_gray,
+////                            true
+////            );
+//                    Picasso.get().load(image)
+//                            .error(R.mipmap.ic_launcher)
+//                            .priority(Picasso.Priority.HIGH)
+//                            .networkPolicy(NetworkPolicy.NO_CACHE).into(holder.recieve_image);
+//                }
+//
+//            }
+//
+//            @Override
+//            public void onCancelled(DatabaseError databaseError) {
+//
+//            }
+//        });
 
 
         //---ADDING  THUMB_IMAGE TO THE HOLDER----
@@ -152,7 +154,7 @@ public class MessageAdapter extends RecyclerView.Adapter<MessageAdapter.MessageV
 //
 //            }
 //        });
-
+//
 //        mConvDatabase.child(from_user_id).addValueEventListener(new ValueEventListener() {
 //            @Override
 //            public void onDataChange(DataSnapshot dataSnapshot) {

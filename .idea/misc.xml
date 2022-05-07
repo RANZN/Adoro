@@ -152,6 +152,12 @@
         <entry key="..\:/Projects/AdoroApp/app/src/main/res/layout/username_layout.xml" value="0.2" />
         <entry key="..\:/Projects/AdoroApp/app/src/main/res/menu/menu.xml" value="0.20416666666666666" />
         <entry key="..\:/Projects/AdoroApp/app/src/main/res/menu/popup_menu.xml" value="0.2" />
+        <entry key="..\:/projects/adoro/app/src/main/res/layout/activity__chat.xml" value="0.1" />
+        <entry key="..\:/projects/adoro/app/src/main/res/layout/activity_chat.xml" value="0.175" />
+        <entry key="..\:/projects/adoro/app/src/main/res/layout/activity_inbox.xml" value="0.1921875" />
+        <entry key="..\:/projects/adoro/app/src/main/res/layout/chat_inbox_adapter.xml" value="0.16041666666666668" />
+        <entry key="..\:/projects/adoro/app/src/main/res/layout/fragment_edit_profile.xml" value="0.18923076923076923" />
+        <entry key="..\:/projects/adoro/app/src/main/res/layout/fragment_profile.xml" value="0.1921875" />
       </map>
     </option>
   </component>

@@ -14,6 +14,7 @@ class SplashLauncher : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_splash_launcher)
+        SessionManager.init(this)
         updateToken()
         supportFragmentManager.beginTransaction()
             .replace(R.id.frame_layout_splash_launcher, SplashFragment())
@@ -30,7 +31,6 @@ class SplashLauncher : AppCompatActivity() {
 
             // Get new FCM registration token
             val token = task.result
-            SessionManager.init(this)
             SessionManager.setFcmToken(token ?: "")
             // Log and toast
             Log.d("sdfdfsd", token!!)

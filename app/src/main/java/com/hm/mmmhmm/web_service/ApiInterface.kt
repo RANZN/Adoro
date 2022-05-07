@@ -163,7 +163,7 @@ interface ApiInterface {
     @POST("_functions/addMemberToGroup")
     suspend fun addMemberToGroup(
         @Body() req: JoinGroupRequest
-    ): retrofit2.Response<BaseResponse>
+    ): retrofit2.Response<ResponseBody>
 
     @POST("_functions/showAnnouncement")
     suspend fun showAnnouncement(
