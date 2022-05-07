@@ -138,7 +138,7 @@ class ServicesFragment : Fragment() {
                 args.putString("campaignId", campaignList?.get(position)?._id)
                 postDetailFragment.arguments = args
                 (activity as MainActivity).supportFragmentManager.beginTransaction().replace(R.id.frame_layout_main, postDetailFragment)
-                    .commit()
+                    .addToBackStack(null).commit()
 
             }
         }

@@ -30,12 +30,12 @@ class CMSPageFragment : Fragment() {
         return inflater.inflate(R.layout.fragment_cms_page, container, false)
     }
     private fun setupToolBar() {
-        iv_toolbar_icon.setBackgroundResource(R.drawable.hamburger_icon)
+        iv_toolbar_icon.setBackgroundResource(R.drawable.ic_back_arrow)
         iv_toolbar_icon.setColorFilter(resources.getColor(R.color.black));
         tv_toolbar_title.setTextColor(resources.getColor(R.color.black))
         tv_toolbar_title.text = requireArguments().getString("title").toString()
         iv_toolbar_icon.setOnClickListener(View.OnClickListener {
-            (activity as MainActivity).manageDrawer()
+            (activity as MainActivity).onBackPressed()
         })
 
 

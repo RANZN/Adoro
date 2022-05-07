@@ -50,7 +50,7 @@ class AdoroCoinsFragment : Fragment() {
     }
 
     private fun setupToolBar() {
-        iv_toolbar_icon.setBackgroundResource(R.drawable.hamburger_icon)
+        iv_toolbar_icon.setBackgroundResource(R.drawable.ic_back_arrow)
         iv_toolbar_action_inbox.setBackgroundResource(R.drawable.chat)
         iv_toolbar_action_search.setBackgroundResource(R.drawable.iv_search)
         iv_toolbar_icon.setColorFilter(resources.getColor(R.color.black));
@@ -59,7 +59,7 @@ class AdoroCoinsFragment : Fragment() {
         tv_toolbar_title.setTextColor(resources.getColor(R.color.black))
         tv_toolbar_title.text = resources.getString(R.string.adoro_coins)
         iv_toolbar_icon.setOnClickListener(View.OnClickListener {
-            (activity as MainActivity).manageDrawer()
+            (activity as MainActivity).onBackPressed()
         })
 
         iv_toolbar_action_inbox.setOnClickListener(View.OnClickListener {

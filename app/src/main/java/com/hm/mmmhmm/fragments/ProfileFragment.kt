@@ -127,7 +127,7 @@ class ProfileFragment : Fragment() {
     }
 
     private fun setupToolBar() {
-        iv_toolbar_icon.setBackgroundResource(R.drawable.hamburger_icon)
+        //iv_toolbar_icon.setBackgroundResource(R.drawable.hamburger_icon)
         iv_toolbar_action_inbox.setBackgroundResource(R.drawable.chat)
         iv_toolbar_action_search.setBackgroundResource(R.drawable.iv_search)
         iv_toolbar_icon.setColorFilter(resources.getColor(R.color.black))
@@ -135,9 +135,9 @@ class ProfileFragment : Fragment() {
         iv_toolbar_action_search.setColorFilter(resources.getColor(R.color.black))
         tv_toolbar_title.setTextColor(resources.getColor(R.color.black))
         //  tv_toolbar_title.text = resources.getString(R.string.app_name)
-        iv_toolbar_icon.setOnClickListener(View.OnClickListener {
-            (activity as MainActivity).manageDrawer()
-        })
+//        iv_toolbar_icon.setOnClickListener(View.OnClickListener {
+//            (activity as MainActivity).manageDrawer()
+//        })
 
         iv_toolbar_action_inbox.setOnClickListener(View.OnClickListener {
             startActivity(Intent(activity, Inbox::class.java))
@@ -200,17 +200,33 @@ class ProfileFragment : Fragment() {
                             if (r?.relation=="follower"){
                                 ll_follow_user.visibility = View.VISIBLE
                                 btn_follow.text= "Follow Back"
+                                iv_toolbar_icon.setBackgroundResource(R.drawable.ic_back_arrow)
+                                iv_toolbar_icon.setOnClickListener(View.OnClickListener {
+                                    (activity as MainActivity).onBackPressed()
+                                })
                             }
                            else if(r?.relation=="following"){
                                 ll_follow_user.visibility = View.VISIBLE
                                 btn_follow.text= "Unfollow"
+                                iv_toolbar_icon.setBackgroundResource(R.drawable.ic_back_arrow)
+                                iv_toolbar_icon.setOnClickListener(View.OnClickListener {
+                                    (activity as MainActivity).onBackPressed()
+                                })
                             }
                             else if(r?.relation=="ownProfile"){
                                 ll_follow_user.visibility = View.GONE
+                                iv_toolbar_icon.setBackgroundResource(R.drawable.hamburger_icon)
+                                iv_toolbar_icon.setOnClickListener(View.OnClickListener {
+                                    (activity as MainActivity).manageDrawer()
+                                })
                             }
                             else if(r?.relation=="newVisitor"){
                                 ll_follow_user.visibility = View.VISIBLE
                                 btn_follow.text= "Follow"
+                                iv_toolbar_icon.setBackgroundResource(R.drawable.ic_back_arrow)
+                                iv_toolbar_icon.setOnClickListener(View.OnClickListener {
+                                    (activity as MainActivity).onBackPressed()
+                                })
                             }/*else if(r?.OK?.relation=="mutual"){
                                 ll_follow_user.visibility = View.VISIBLE
                                 btn_follow.text= "Unfollow"

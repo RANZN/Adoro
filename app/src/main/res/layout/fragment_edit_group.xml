@@ -142,29 +142,33 @@
 
                 <RelativeLayout
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
+                    android:layout_height="@dimen/edit_text_height"
                     android:layout_marginHorizontal="20dp"
                     android:layout_marginTop="16dp"
+                    android:gravity="center_vertical"
                     android:background="@drawable/bg_edittext">
 
                     <Spinner
                         android:id="@+id/spinner_group_privacy"
                         style="@style/mySpinnerItemStyle"
                         android:layout_width="match_parent"
-                        android:layout_height="@dimen/edit_text_height" />
+                        android:layout_marginHorizontal="10dp"
+                        android:layout_height="wrap_content" />
                 </RelativeLayout>
 
                 <RelativeLayout
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
+                    android:layout_height="@dimen/edit_text_height"
                     android:layout_marginHorizontal="20dp"
                     android:layout_marginTop="16dp"
+                    android:gravity="center_vertical"
                     android:background="@drawable/bg_edittext">
 
                     <Spinner
                         android:id="@+id/spinner_category"
                         android:layout_width="match_parent"
-                        android:layout_height="@dimen/edit_text_height"
+                        android:layout_height="wrap_content"
+                        android:layout_marginHorizontal="10dp"
                         android:gravity="center_vertical" />
                 </RelativeLayout>
 
