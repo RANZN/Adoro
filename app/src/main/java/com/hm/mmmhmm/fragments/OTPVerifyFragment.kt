@@ -20,6 +20,7 @@ import com.hm.mmmhmm.helper.CommanFunction
 import com.hm.mmmhmm.helper.ConnectivityObserver
 import com.hm.mmmhmm.helper.SessionManager
 import com.hm.mmmhmm.helper.toast
+import com.hm.mmmhmm.models.OTPRequest
 import com.hm.mmmhmm.models.RequestLogin
 import com.hm.mmmhmm.web_service.ApiClient
 import kotlinx.android.synthetic.main.custom_toolbar.*
@@ -56,13 +57,19 @@ class OTPVerifyFragment : Fragment() {
         super.onActivityCreated(savedInstanceState)
         setupToolBar()
         //GlobleData.goToLoginScreen = false
-        if (requireArguments().getString("path") == "register") {
+        if (requireArguments().getString("path") == "register"||requireArguments().getString("path")=="login") {
             tv_signup_terms.visibility = View.VISIBLE;
+            tv_resend_otp.visibility=View.VISIBLE
         }
 
 
         btn_verify.setOnClickListener(View.OnClickListener {
             validateInput()
+        })
+
+        tv_resend_otp.setOnClickListener(View.OnClickListener {
+            var otpRequest: OTPRequest = OTPRequest(requireArguments().getString("number").toString());
+            hitSendOTPAPI(otpRequest)
         })
 
 
@@ -181,6 +188,44 @@ class OTPVerifyFragment : Fragment() {
             }
         }
     }
+
+
+    private fun hitSendOTPAPI( otpRequest: OTPRequest) {
+          pb_login.visibility = View.VISIBLE
+        val apiInterface = ApiClient.getRetrofitService(requireContext())
+        CoroutineScope(Dispatchers.IO).launch {
+            try {
+                val response = apiInterface.sendOTP(otpRequest)
+                withContext(Dispatchers.Main) {
+
+                    try {
+                        pb_login.visibility = View.GONE
+                        if (response.body()?.OK?.status =="Sucess") {
+                            SessionManager.setOTP(response.body()?.OK?.otp?:"")
+                            val r = response.body()
+                            val oTPVerifyFragment = OTPVerifyFragment()
+                            val args = Bundle()
+                            args.putString("path", "login")
+                            args.putString("number", et_email_login.text.toString())
+                            oTPVerifyFragment.arguments = args
+                            if (activity != null) {
+                                activity?.supportFragmentManager?.beginTransaction()
+                                    ?.replace(R.id.frame_layout_splash_launcher,oTPVerifyFragment)?.commit()
+                            }
+
+                        } else {
+                            Toast.makeText(activity,"Somethings wents wrongs!", Toast.LENGTH_SHORT).show()
+                        }
+                    } catch (e: java.lang.Exception) {
+                        Toast.makeText(requireActivity(), "" + e.toString(), Toast.LENGTH_SHORT).show()
+                    }
+                }
+            } catch (e: java.lang.Exception) {
+
+            }
+        }
+    }
+
 
 
 }

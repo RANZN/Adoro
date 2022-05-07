@@ -55,6 +55,17 @@
                     android:textSize="16sp" />
 
                 <TextView
+                    android:id="@+id/tv_resend_otp"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="20dp"
+                    android:layout_gravity="center"
+                    android:text="Resend OTP"
+                    android:visibility="gone"
+                    android:textColor="@color/black"
+                    android:textSize="18sp" />
+
+                <TextView
                     android:id="@+id/tv_signup_terms"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
