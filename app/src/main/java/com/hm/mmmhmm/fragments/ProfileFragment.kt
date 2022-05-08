@@ -285,16 +285,8 @@ class ProfileFragment : Fragment() {
                                 iv_toolbar_icon.setOnClickListener(View.OnClickListener {
                                     (activity as MainActivity).onBackPressed()
                                 })
-                                btn_follow.text = "Follow Back"
-                            } else if (r?.relation == "following") {
-                                ll_follow_user.visibility = View.VISIBLE
-                                btn_follow.text = "Unfollow"
-                            } else if (r?.relation == "ownProfile") {
-                                ll_follow_user.visibility = View.GONE
-                            } else if (r?.relation == "newVisitor") {
-                                ll_follow_user.visibility = View.VISIBLE
-                                btn_follow.text = "Follow"
-                            }/*else if(r?.OK?.relation=="mutual"){
+                            }
+                            /*else if(r?.OK?.relation=="mutual"){
                                 ll_follow_user.visibility = View.VISIBLE
                                 btn_follow.text= "Unfollow"
                             }*/

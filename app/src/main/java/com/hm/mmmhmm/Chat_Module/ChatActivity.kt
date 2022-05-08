@@ -12,11 +12,9 @@ import kotlinx.android.synthetic.main.fragment_login.*
 
 class ChatActivity : AppCompatActivity() {
     private var mList: ArrayList<Message?> = ArrayList()
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity__chat)
-
         init()
         setupChatList(SessionManager.getFirebaseID(), intent.getStringExtra("user_id"))
     }
@@ -83,7 +81,6 @@ class ChatActivity : AppCompatActivity() {
             override fun onCancelled(error: DatabaseError) {
                 // TODO("Not yet implemented")
             }
-
         })
     }
 }
