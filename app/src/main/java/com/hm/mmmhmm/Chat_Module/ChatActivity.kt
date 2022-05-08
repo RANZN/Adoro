@@ -3,12 +3,11 @@ package com.hm.mmmhmm.Chat_Module
 import android.os.Bundle
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.firebase.database.*
 import com.hm.mmmhmm.R
 import com.hm.mmmhmm.helper.SessionManager
-import com.hm.mmmhmm.helper.toast
 import kotlinx.android.synthetic.main.activity__chat.*
-import kotlinx.android.synthetic.main.fragment_login.*
 
 class ChatActivity : AppCompatActivity() {
     private var mList: ArrayList<Message?> = ArrayList()
@@ -27,7 +26,7 @@ class ChatActivity : AppCompatActivity() {
 
         send_message_button.setOnClickListener {
             if (message.isNullOrEmpty()) {
-                Toast.makeText(this,R.string.enter_your_message,Toast.LENGTH_SHORT ).show();
+                Toast.makeText(this, R.string.enter_your_message, Toast.LENGTH_SHORT).show()
                 return@setOnClickListener
             }
             sendMessage(
@@ -64,6 +63,7 @@ class ChatActivity : AppCompatActivity() {
                 val message = snapshot.getValue(Message::class.java)
                 if (message?.receiver == first && message?.sender == second || message?.sender == first && message?.receiver == second) {
                     mList.add(message)
+                    (chat_message_list.layoutManager as LinearLayoutManager).scrollToPosition(mList.size - 1)
                     mAdapter.notifyDataSetChanged()
                 }
             }

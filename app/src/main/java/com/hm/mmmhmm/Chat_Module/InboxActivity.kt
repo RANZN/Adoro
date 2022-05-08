@@ -18,7 +18,6 @@ class InboxActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_inbox)
-        Log.i("Sanjeev", "onCreate: called")
         init()
     }
 
@@ -46,7 +45,6 @@ class InboxActivity : AppCompatActivity() {
 //                            addContact(message?.sender)
                         }
                     }
-                    Log.i("Sanjeev", "onDataChange: $list")
                     pb_inbox.visibility= View.GONE
 
                     addContact(list)

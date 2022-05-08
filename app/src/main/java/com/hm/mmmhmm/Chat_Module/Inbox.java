@@ -240,6 +240,7 @@ public class Inbox extends AppCompatActivity {
         public void onBindViewHolder(@NonNull Chat_User_adapter holder, int position) {
             holder.setName(users.get(position).getUserName());
             holder.onItemClick(users.get(position));
+            // holder.setTime(users.get(position).);
         }
 
         @Override
