@@ -2,6 +2,7 @@ package com.hm.mmmhmm.Chat_Module
 
 import android.os.Bundle
 import android.util.Log
+import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
@@ -23,6 +24,10 @@ class InboxActivity : AppCompatActivity() {
 
     private fun init() {
         mAdapter = Inbox.UserAdapter(users)
+        iv_back.setOnClickListener {
+            onBackPressed()
+        }
+        pb_inbox.visibility= View.VISIBLE
         chat_list.adapter = mAdapter
         FirebaseDatabase.getInstance().getReference("chats")
             .addValueEventListener(object : ValueEventListener {
@@ -42,6 +47,8 @@ class InboxActivity : AppCompatActivity() {
                         }
                     }
                     Log.i("Sanjeev", "onDataChange: $list")
+                    pb_inbox.visibility= View.GONE
+
                     addContact(list)
                 }
 
@@ -63,6 +70,7 @@ class InboxActivity : AppCompatActivity() {
                         } catch (e: Exception) {
                             e.printStackTrace()
                         }
+
                         Log.i("TAG", "onDataChange: $user")
                         if (userIds.contains(user?.userId)) {
                             if (!containsUser(user)) {
