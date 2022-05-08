@@ -22,13 +22,22 @@
         android:theme="@style/AppTheme"
         android:usesCleartextTraffic="true">
         <activity
+            android:name=".chat.ChatActivity"
+            android:launchMode="singleTop"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".Chat_Module.InboxActivity"
+            android:launchMode="singleTop"
+            android:screenOrientation="portrait" />
+        <activity
             android:name=".activity.ForgotPassword"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".Chat_Module.Inbox"
+            android:name=".Chat_Module.ChatActivity"
+            android:launchMode="singleTop"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".Chat_Module.Chat_Activity"
+            android:name=".Chat_Module.Inbox"
             android:screenOrientation="portrait" />
         <activity
             android:name=".activity.SplashLauncher"
@@ -44,8 +53,9 @@
             android:name=".activity.MainActivity"
             android:screenOrientation="portrait"
             android:windowSoftInputMode="adjustResize" />
-        <activity android:name="com.canhub.cropper.CropImageActivity"
-            android:theme="@style/Base.Theme.AppCompat"/>
+        <activity
+            android:name="com.canhub.cropper.CropImageActivity"
+            android:theme="@style/Base.Theme.AppCompat" />
 
         <meta-data
             android:name="com.google.firebase.messaging.default_notification_color"
@@ -62,8 +72,8 @@
         <provider
             android:name="androidx.core.content.FileProvider"
             android:authorities="{{applicationId}}"
-            android:grantUriPermissions="true"
-            android:exported="false">
+            android:exported="false"
+            android:grantUriPermissions="true">
             <meta-data
                 android:name="android.support.FILE_PROVIDER_PATHS"
                 android:resource="@xml/my_paths" />

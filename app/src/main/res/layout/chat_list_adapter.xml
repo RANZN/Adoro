@@ -36,18 +36,19 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="1">
+
                 <TextView
+                    android:id="@+id/sender_message"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:textColor="@android:color/white"
-                    android:text="Hello Recently I came across an exciting video on th internet"
-                    android:id="@+id/sender_message"
-                    android:textSize="17sp"
+                    android:background="@color/green"
                     android:paddingLeft="15dp"
-                    android:paddingRight="15dp"
                     android:paddingTop="5dp"
+                    android:paddingRight="15dp"
                     android:paddingBottom="5dp"
-                    android:background="@color/green"/>
+                    android:text="Hello Recently I came across an exciting video on th internet"
+                    android:textColor="@android:color/white"
+                    android:textSize="17sp" />
 
             </RelativeLayout>
 

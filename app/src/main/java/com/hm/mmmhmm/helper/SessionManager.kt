@@ -81,6 +81,7 @@ object SessionManager {
             commit()
         }
     }
+
     fun getUserId(): String? {
         return prefs.getString(
             USER_ID,
@@ -100,7 +101,6 @@ object SessionManager {
     fun getOTP(): String? {
         return prefs.getString(OTP, OTP)
     }
-
 
 
     fun setUserData(userData: UserData?) {
@@ -134,6 +134,7 @@ object SessionManager {
             LOGIN_STATUS
         )
     }
+
     fun setUserPic(image: String) {
         val prefsEditor: SharedPreferences.Editor = prefs.edit()
         with(prefsEditor) {
@@ -273,7 +274,7 @@ object SessionManager {
         )
     }
 
-    fun setFirbaseID(id: String?) {
+    fun setFirebaseID(id: String?) {
         val prefsEditor: SharedPreferences.Editor = prefs.edit()
         with(prefsEditor) {
             putString(FIREBASE_USER_ID, id)
@@ -281,7 +282,7 @@ object SessionManager {
         }
     }
 
-    fun getFirbaseID(): String? {
+    fun getFirebaseID(): String? {
         return prefs.getString(
             FIREBASE_USER_ID,
             FIREBASE_USER_ID
@@ -305,6 +306,7 @@ object SessionManager {
             commit()
         }
     }
+
     fun getFriend(): String? {
         return prefs.getString(
             "friendID",
@@ -315,7 +317,7 @@ object SessionManager {
     fun isChat(): Boolean {
         return prefs.getBoolean(
             "isChat",
-           false
+            false
         )
     }
 
@@ -325,6 +327,7 @@ object SessionManager {
             "usernameid"
         )
     }
+
     fun setUserNameId(fName: String?) {
         val prefsEditor: SharedPreferences.Editor = prefs.edit()
         with(prefsEditor) {
@@ -332,6 +335,7 @@ object SessionManager {
             commit()
         }
     }
+
     fun setselectedUserNameId(fName: String?) {
         val prefsEditor: SharedPreferences.Editor = prefs.edit()
         with(prefsEditor) {
@@ -356,5 +360,11 @@ object SessionManager {
         }
     }
 
+    fun setUserEmail(email: String) {
+        prefs.edit().putString(USER_EMAIL, email).commit()
+    }
 
+    fun getUserEmail(): String {
+        return prefs.getString(USER_EMAIL, "")!!
+    }
 }

@@ -1,11 +1,13 @@
 package com.hm.mmmhmm.fragments
 
+import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import com.hm.mmmhmm.Chat_Module.ChatActivity
 import com.hm.mmmhmm.R
 import com.hm.mmmhmm.activity.MainActivity
 import com.hm.mmmhmm.adapter.ResultAdapter
@@ -62,12 +64,9 @@ class ResultDetailFragment : Fragment() {
         })
 
         iv_toolbar_action_inbox.setOnClickListener(View.OnClickListener {
-            val inboxFragment = InboxFragment()
-            val args = Bundle()
-            inboxFragment.arguments = args
-            //                args.putString("campaignId", campaignList?.get(position)?._id)
-            (activity as MainActivity).supportFragmentManager.beginTransaction().replace(R.id.frame_layout_main, inboxFragment)
-                .addToBackStack(null) .commit()
+        //todo
+            startActivity(Intent(activity as MainActivity, ChatActivity::class.java))
+
         })
 
         iv_toolbar_action_search.setOnClickListener(View.OnClickListener {

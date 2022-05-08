@@ -11,6 +11,7 @@ import android.widget.*
 import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
 import com.hm.mmmhmm.Chat_Module.Inbox
+import com.hm.mmmhmm.Chat_Module.InboxActivity
 import com.hm.mmmhmm.R
 import com.hm.mmmhmm.activity.MainActivity
 import com.hm.mmmhmm.adapter.GalleryAdapter
@@ -124,7 +125,7 @@ class GroupsFragment : Fragment() {
         })
 
         iv_toolbar_action_inbox.setOnClickListener(View.OnClickListener {
-            startActivity(Intent(activity, Inbox::class.java))
+            startActivity(Intent(activity, InboxActivity::class.java))
         })
 
         iv_toolbar_action_search.setOnClickListener(View.OnClickListener {
@@ -290,7 +291,8 @@ class GroupsFragment : Fragment() {
                           pb_groups.visibility = View.GONE
                         Toast.makeText(requireActivity(), "Group Joined" , Toast.LENGTH_SHORT)
                             .show()
-                        if (response.body()?.OK != null) {
+                        // ADD ?.OK
+                        if (response.body() != null) {
                             val r = response.body()
 //                            Toast.makeText(requireActivity(), "" + e.toString(), Toast.LENGTH_SHORT)
 //                                .show()

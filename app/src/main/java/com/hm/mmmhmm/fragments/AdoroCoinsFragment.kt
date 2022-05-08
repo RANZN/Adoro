@@ -15,6 +15,7 @@ import android.widget.Button
 import android.widget.TextView
 import android.widget.Toast
 import com.hm.mmmhmm.Chat_Module.Inbox
+import com.hm.mmmhmm.Chat_Module.InboxActivity
 import com.hm.mmmhmm.R
 import com.hm.mmmhmm.activity.MainActivity
 import com.hm.mmmhmm.adapter.AdoroCoinsAdapter
@@ -63,7 +64,7 @@ class AdoroCoinsFragment : Fragment() {
         })
 
         iv_toolbar_action_inbox.setOnClickListener(View.OnClickListener {
-            startActivity(Intent(activity, Inbox::class.java))
+            startActivity(Intent(activity, InboxActivity::class.java))
         })
 
         iv_toolbar_action_search.setOnClickListener(View.OnClickListener {
