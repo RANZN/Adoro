@@ -8,6 +8,7 @@
 
     <color name="text_black">#140b0e</color>
     <color name="text_gray">#726d6f</color>
+    <color name="light_gray">#A6A6A6</color>
     <color name="username_text">#3D4351</color>
 
     <color name="white">#ffffff</color>

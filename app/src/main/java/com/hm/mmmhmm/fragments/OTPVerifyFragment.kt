@@ -162,7 +162,7 @@ class OTPVerifyFragment : Fragment() {
                         if (response.body()?.OK != null) {
                             Toast.makeText(
                                 activity,
-                                "Hi " + response.body()?.OK!!.items[0].name + ", Welcome to ADARO! ",
+                                "Hi " + response.body()?.OK!!.items[0].name + ", Welcome to "+R.string.app_name+"!",
                                 Toast.LENGTH_SHORT
                             ).show()
 //                            val r = response.body()
