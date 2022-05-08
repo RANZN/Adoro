@@ -90,8 +90,8 @@
             android:orientation="horizontal">
 
             <de.hdodenhof.circleimageview.CircleImageView
-                android:layout_width="25dp"
-                android:layout_height="25dp"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
                 android:id="@+id/recieve_image"
                 android:layout_gravity="bottom"
                 android:scaleType="centerCrop"
@@ -110,7 +110,7 @@
                 android:paddingTop="5dp"
                 android:paddingBottom="5dp"
                 android:layout_marginStart="10dp"
-                android:background="@color/white_transparent"/>
+                android:background="@drawable/bg_comments"/>
         </LinearLayout>
 
     </LinearLayout>
@@ -120,9 +120,9 @@
         android:textSize="12sp"
         android:text="12:45"
         android:id="@+id/time_recieve"
-        android:layout_marginLeft="44dp"
+        android:layout_marginStart="54dp"
         android:layout_marginTop="2dp"
-        android:layout_marginRight="4dp"
+        android:layout_marginRight="8dp"
         android:layout_marginBottom="2dp"
         android:layout_gravity="left"
         android:gravity="left|center"/>

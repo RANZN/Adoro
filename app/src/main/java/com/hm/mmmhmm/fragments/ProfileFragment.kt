@@ -189,7 +189,7 @@ class ProfileFragment : Fragment() {
         iv_toolbar_action_inbox.setColorFilter(resources.getColor(R.color.black))
         iv_toolbar_action_search.setColorFilter(resources.getColor(R.color.black))
         tv_toolbar_title.setTextColor(resources.getColor(R.color.black))
-        //  tv_toolbar_title.text = resources.getString(R.string.app_name)
+        //tv_toolbar_title.text = resources.getString(R.string.app_name)
 //        iv_toolbar_icon.setOnClickListener(View.OnClickListener {
 //            (activity as MainActivity).manageDrawer()
 //        })
@@ -248,7 +248,8 @@ class ProfileFragment : Fragment() {
                             total_fans.text = (r?.OK?.items?.get(0)?.followerData?.size?:0).toString()+" Fans"
                             tv_total_coins.text = (r?.OK?.items?.get(0)?.adoroCoins?:0).toString() + " A"
                             total_coins.text = (r?.OK?.items?.get(0)?.adoroCoins?:0).toString() + " A"
-
+                            tv_toolbar_title.visibility= View.VISIBLE
+                            iv_toolbar_app_icon.visibility= View.GONE
                             tv_toolbar_title.text = r?.OK?.items?.get(0)?.username
                             userId = r?.OK?.items?.get(0)?._id ?: ""
                             username = r?.OK?.items?.get(0)?.username ?: ""

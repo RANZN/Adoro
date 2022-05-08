@@ -51,7 +51,6 @@ public class MessageAdapter extends RecyclerView.Adapter<MessageAdapter.MessageV
     //---CREATING SINGLE HOLDER AND RETURNING ITS VIEW---
     @Override
     public MessageViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-
         View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.chat_list_adapter, parent, false);
         mAuth = FirebaseAuth.getInstance();
         mDatabaseReference = FirebaseDatabase.getInstance().getReference();

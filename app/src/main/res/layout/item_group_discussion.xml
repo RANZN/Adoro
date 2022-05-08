@@ -136,7 +136,7 @@ android:orientation="horizontal">
         android:layout_width="50dp"
         android:layout_height="50dp"
         android:padding="15dp"
-        android:src="@drawable/applied_icon" />
+        android:src="@drawable/iv_comments" />
 
     <TextView
         android:id="@+id/tv_apply_count"
