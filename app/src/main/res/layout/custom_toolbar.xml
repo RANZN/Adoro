@@ -34,11 +34,13 @@
             android:visibility="gone"
             android:layout_marginHorizontal="20dp"
             android:textSize="18sp"
+            android:layout_centerInParent="true"
             android:textColor="@color/black"
             android:text=""/>
 
 
         <ImageView
+            android:id="@+id/iv_toolbar_app_icon"
             android:layout_width="55dp"
             android:layout_height="55dp"
             android:layout_centerInParent="true"

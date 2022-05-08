@@ -40,13 +40,12 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_centerInParent="true"
-                    android:layout_centerHorizontal="true"
                     android:layout_gravity="center_horizontal"
                     android:fontFamily="@font/roboto_regular"
                     android:gravity="center_vertical"
                     android:maxLength="20"
                     android:singleLine="true"
-                    android:text="Chat"
+                    android:text="@string/inbox"
                     android:textColor="@color/black"
                     android:textSize="20sp" />
 
@@ -61,6 +60,7 @@
             android:scrollbars="none"
             app:spanCount="2"
             app:reverseLayout="true"
+            tools:listitem="@layout/chat_inbox_adapter"
             app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"/>
 
     </LinearLayout>
