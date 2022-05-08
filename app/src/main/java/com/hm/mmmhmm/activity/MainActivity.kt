@@ -17,6 +17,7 @@ import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.GravityCompat
 import androidx.fragment.app.FragmentManager
+import com.google.firebase.database.FirebaseDatabase
 import com.hm.mmmhmm.R
 import com.hm.mmmhmm.fragments.*
 import com.hm.mmmhmm.helper.GlobleData
@@ -51,7 +52,7 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
             .commit()
         clickMethod()
 
-       // updateFcmToken()
+        // updateFcmToken()
 
         liTab_home.setOnClickListener(this)
         iv_tab_home.setOnClickListener(this)
@@ -292,6 +293,7 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
         }
         dialog.show()
     }
+
     fun logoutUserFromAppSession() {
         SessionManager.setLoginStatus("false")
         SessionManager.logout()
@@ -299,6 +301,7 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
         startActivity(Intent(this, SplashLauncher::class.java))
         this.finish()
     }
+
     fun manageDrawer() {
         isOpen = drawer_layout.isDrawerOpen(GravityCompat.END)
         Log.d("drawerrrrrrr", isOpen.toString())
@@ -415,5 +418,19 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
                 // TODO("show why we need permission")
             }
         }
+    }
+
+    override fun onStart() {
+        super.onStart()
+        FirebaseDatabase.getInstance().getReference("users")
+            .child(SessionManager.getFirebaseID() ?: "")
+            .updateChildren(HashMap<String, Any?>().apply { put("isOnline", true) })
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        FirebaseDatabase.getInstance().getReference("users")
+            .child(SessionManager.getFirebaseID() ?: "")
+            .updateChildren(HashMap<String, Any?>().apply { put("isOnline", false) })
     }
 }

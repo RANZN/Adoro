@@ -6,7 +6,6 @@ import android.content.Intent
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -28,14 +27,11 @@ import com.hm.mmmhmm.models.OTPRequest
 import com.hm.mmmhmm.models.RequestLogin
 import com.hm.mmmhmm.web_service.ApiClient
 import kotlinx.android.synthetic.main.custom_toolbar.*
-import kotlinx.android.synthetic.main.fragment_login.*
 import kotlinx.android.synthetic.main.fragment_o_t_p_verify.*
-import kotlinx.android.synthetic.main.fragment_o_t_p_verify.pb_login
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
-import org.json.JSONObject
 
 class OTPVerifyFragment : Fragment() {
 
@@ -58,13 +54,14 @@ class OTPVerifyFragment : Fragment() {
         super.onActivityCreated(savedInstanceState)
         setupToolBar()
         //GlobleData.goToLoginScreen = false
-        if (requireArguments().getString("path") == "register"||requireArguments().getString("path")=="login") {
+        if (requireArguments().getString("path") == "register" || requireArguments().getString("path") == "login") {
             tv_signup_terms.visibility = View.VISIBLE
-            tv_resend_otp.visibility=View.VISIBLE
+            tv_resend_otp.visibility = View.VISIBLE
         }
         tv_resend_otp.setOnClickListener(View.OnClickListener {
-                      var otpRequest: OTPRequest = OTPRequest(requireArguments().getString("number").toString());
-                       hitSendOTPAPI(otpRequest)
+            var otpRequest: OTPRequest =
+                OTPRequest(requireArguments().getString("number").toString())
+            hitSendOTPAPI(otpRequest)
         })
 
 
@@ -216,6 +213,7 @@ class OTPVerifyFragment : Fragment() {
                         put("userId", SessionManager.getFirebaseID())
                         put("userName", SessionManager.getUserName())
                         put("email", SessionManager.getUserEmail())
+                        put("isOnline", true)
                     })
                 }
                 reference.updateChildren(value)
@@ -247,7 +245,8 @@ class OTPVerifyFragment : Fragment() {
             }
         }
     }
-    private fun hitSendOTPAPI( otpRequest: OTPRequest) {
+
+    private fun hitSendOTPAPI(otpRequest: OTPRequest) {
         pb_login.visibility = View.VISIBLE
         val apiInterface = ApiClient.getRetrofitService(requireContext())
         CoroutineScope(Dispatchers.IO).launch {
@@ -257,8 +256,8 @@ class OTPVerifyFragment : Fragment() {
 
                     try {
                         pb_login.visibility = View.GONE
-                        if (response.body()?.OK?.status =="Sucess") {
-                            SessionManager.setOTP(response.body()?.OK?.otp?:"")
+                        if (response.body()?.OK?.status == "Sucess") {
+                            SessionManager.setOTP(response.body()?.OK?.otp ?: "")
                             val r = response.body()
                             val oTPVerifyFragment = OTPVerifyFragment()
                             val args = Bundle()
@@ -267,14 +266,17 @@ class OTPVerifyFragment : Fragment() {
                             oTPVerifyFragment.arguments = args
                             if (activity != null) {
                                 activity?.supportFragmentManager?.beginTransaction()
-                                    ?.replace(R.id.frame_layout_splash_launcher,oTPVerifyFragment)?.commit()
+                                    ?.replace(R.id.frame_layout_splash_launcher, oTPVerifyFragment)
+                                    ?.commit()
                             }
 
                         } else {
-                            Toast.makeText(activity,"Somethings wents wrongs!", Toast.LENGTH_SHORT).show()
+                            Toast.makeText(activity, "Somethings went wrong!", Toast.LENGTH_SHORT)
+                                .show()
                         }
                     } catch (e: java.lang.Exception) {
-                        Toast.makeText(requireActivity(), "" + e.toString(), Toast.LENGTH_SHORT).show()
+                        Toast.makeText(requireActivity(), "" + e.toString(), Toast.LENGTH_SHORT)
+                            .show()
                     }
                 }
             } catch (e: java.lang.Exception) {

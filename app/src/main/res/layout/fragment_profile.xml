@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:background="@color/white"
     tools:context=".fragments.ProfileFragment">
 
@@ -67,8 +67,8 @@
                     android:layout_height="wrap_content"
                     android:layout_marginHorizontal="20dp"
                     android:layout_marginTop="10dp"
-                    android:visibility="gone"
-                    android:orientation="horizontal">
+                    android:orientation="horizontal"
+                    android:visibility="gone">
 
                     <TextView
                         android:id="@+id/tv_name"
@@ -178,23 +178,24 @@
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="50dp"
-                    android:orientation="horizontal"
+                    android:layout_marginHorizontal="20dp"
                     android:gravity="center_vertical"
-                    android:layout_marginHorizontal="20dp">
+                    android:orientation="horizontal">
 
                     <androidx.cardview.widget.CardView
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
-                        app:cardElevation="4dp"
-                        app:cardCornerRadius="5dp">
+                        app:cardCornerRadius="5dp"
+                        app:cardElevation="4dp">
+
                         <TextView
                             android:id="@+id/total_posts"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
+                            android:layout_gravity="center"
                             android:layout_marginVertical="7dp"
                             android:text="0 Post"
-                            android:layout_gravity="center"
                             android:textColor="@color/black"
                             android:textSize="14sp" />
                     </androidx.cardview.widget.CardView>
@@ -203,18 +204,19 @@
                     <androidx.cardview.widget.CardView
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
-                        android:layout_weight="1"
                         android:layout_marginHorizontal="20dp"
-                        app:cardElevation="4dp"
-                        app:cardCornerRadius="5dp">
+                        android:layout_weight="1"
+                        app:cardCornerRadius="5dp"
+                        app:cardElevation="4dp">
+
                         <TextView
                             android:id="@+id/total_fans"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_centerVertical="true"
                             android:layout_gravity="center"
-                            android:text="0 Fans"
                             android:layout_marginVertical="7dp"
+                            android:text="0 Fans"
                             android:textColor="@color/black"
                             android:textSize="14sp" />
                     </androidx.cardview.widget.CardView>
@@ -223,18 +225,19 @@
                     <androidx.cardview.widget.CardView
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        app:cardElevation="4dp"
                         android:layout_gravity="center"
-                        app:cardCornerRadius="5dp">
+                        android:layout_weight="1"
+                        app:cardCornerRadius="5dp"
+                        app:cardElevation="4dp">
+
                         <TextView
                             android:id="@+id/total_coins"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_centerVertical="true"
-                            android:text="0 C"
                             android:layout_gravity="center"
                             android:layout_marginVertical="7dp"
+                            android:text="0 C"
                             android:textColor="@color/black"
                             android:textSize="14sp" />
                     </androidx.cardview.widget.CardView>
