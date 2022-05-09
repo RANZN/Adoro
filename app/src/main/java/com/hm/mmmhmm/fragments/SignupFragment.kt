@@ -155,6 +155,11 @@ class SignupFragment : Fragment() {
                             SessionManager.init(activity as Context)
                             SessionManager.setLoginStatus("true")
                             SessionManager.setUserId(response.body()?.OK!!._id)
+
+                            SessionManager.setRefrerCode(
+                                response.body()?.OK?.referCode ?: ""
+                            )
+
                             showDialog()
 
                         } else {

@@ -57,11 +57,8 @@ interface ApiInterface {
     @GET("_functions/getResults")
     suspend fun getResults(): retrofit2.Response<BaseResponse>
 
-
-    @POST("_functions/sendChat")
-    suspend fun sendChat(
-        @Body() req: GeneralRequest
-    ): retrofit2.Response<BaseResponse>
+    @GET("_functions/getContest")
+    suspend fun getContest(): retrofit2.Response<GetContestModel>
 
     @POST("_functions/getSpecificResultData")
     suspend fun getSpecificResultData(
@@ -97,7 +94,7 @@ interface ApiInterface {
     @POST("_functions/getSpecificCampaignData")
     suspend fun getCampaignDetail(
         @Body() req: RequestCampaign
-    ): retrofit2.Response<BaseResponse>
+    ): retrofit2.Response<CampaignDetailModel>
 
 
     @POST("_functions/sendSMS")

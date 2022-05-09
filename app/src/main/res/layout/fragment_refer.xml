@@ -16,7 +16,13 @@
            android:id="@+id/tv_refer_description"
            android:layout_width="match_parent"
            android:layout_marginHorizontal="20dp"
-           android:text="Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum"
+           android:text="Copy the below link and share it with your friends
+
+When they will download the app through your link
+
+You will get instant Rs.2 in your wallet
+
+And when your referred friend earn its first earning, then also you will get 5% from the there first earning."
            android:layout_height="wrap_content"/>
 
         <RelativeLayout
@@ -36,7 +42,7 @@
                 android:layout_height="wrap_content"
                 android:layout_alignParentStart="true"
                 android:layout_toStartOf="@id/iv_copy_refer_code"
-                android:text="https://www.webhood.net/"
+                android:text=""
                 android:textColor="@color/black" />
 
             <ImageView

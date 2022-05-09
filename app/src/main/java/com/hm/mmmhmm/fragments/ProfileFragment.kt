@@ -234,7 +234,9 @@ class ProfileFragment : Fragment() {
                         pb_prof.visibility = View.GONE
                         if (response.body()?.OK != null) {
                             val r = response.body()
-
+                            SessionManager.setRefrerCode(
+                                response.body()?.OK?.referCode ?: ""
+                            )
                             iv_profile_pic_profile.load(
                                 r?.OK?.items?.get(0)?.profile,
                                 R.color.text_gray,

@@ -18,6 +18,7 @@ import androidx.fragment.app.Fragment
 import androidx.test.core.app.ApplicationProvider.getApplicationContext
 import com.hm.mmmhmm.R
 import com.hm.mmmhmm.activity.MainActivity
+import com.hm.mmmhmm.helper.SessionManager
 import com.hm.mmmhmm.helper.copyToClipboard
 import kotlinx.android.synthetic.main.custom_toolbar.*
 import kotlinx.android.synthetic.main.fragment_cms_page.*
@@ -56,14 +57,15 @@ class ReferFragment : Fragment() {
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
         setupToolBar()
+        tv_refer_code.text=SessionManager.getReferCode()
         iv_copy_refer_code.setOnClickListener {
-            activity?.copyToClipboard(tv_refer_code.text.toString())
+            activity?.copyToClipboard(SessionManager.getReferCode())
             tv_copied_msg.visibility =View.VISIBLE
         }
         iv_share_refer_code.setOnClickListener {
             val intent= Intent()
             intent.action=Intent.ACTION_SEND
-            intent.putExtra(Intent.EXTRA_TEXT,"Hey Check out this Great app:"+tv_refer_code.text)
+            intent.putExtra(Intent.EXTRA_TEXT,"Hey Check out this Great app:"+SessionManager.getReferCode())
             intent.type="text/plain"
             startActivity(Intent.createChooser(intent,"Share To:"))
         }

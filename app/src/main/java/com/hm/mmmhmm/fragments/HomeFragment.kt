@@ -15,6 +15,7 @@ import com.hm.mmmhmm.R
 import com.hm.mmmhmm.activity.MainActivity
 import com.hm.mmmhmm.adapter.FeedListAdapter
 import com.hm.mmmhmm.helper.SessionManager
+import com.hm.mmmhmm.helper.load
 import com.hm.mmmhmm.models.GeneralRequest
 import com.hm.mmmhmm.models.Item
 import com.hm.mmmhmm.models.ItemComment
@@ -119,13 +120,52 @@ class HomeFragment : Fragment() {
                 val response = apiInterface.getFeed(generalRequest)
                 withContext(Dispatchers.Main) {
                     pb_feeds.visibility = View.GONE
-
                     try {
-                        //  toast("" + response.body()?.message)
                         if (response!=null) {
                             feedList = response.body()?.OK?.items
+                            getContest()
                             recycler_feed_list.adapter= FeedListAdapter(requireActivity(),feedList, sessionId)
 
+                        } else {
+                            Log.d("resp", "complet else: ")
+                        }
+
+                    } catch (e: Exception) {
+                        Log.d("resp", "cathch: " + e.toString())
+                    }
+                }
+
+            } catch (e: Exception) {
+                Log.d("weweewefw", e.toString())
+            }
+        }
+
+    }
+
+    private fun getContest() {
+        pb_feeds.visibility = View.VISIBLE
+        val apiInterface = ApiClient.getRetrofitService(requireContext())
+        CoroutineScope(Dispatchers.IO).launch {
+            try {
+                val response = apiInterface.getContest()
+                withContext(Dispatchers.Main) {
+                    pb_feeds.visibility = View.GONE
+                    try {
+                        if (response!=null) {
+                            iv_contest.load(
+                                response.body()?.OK?.featuredImage?:"https://static.wixstatic.com/media/6efda8_6ec75aa2cdc7452fa80e02b7d43520d8~mv2.png/v1/fill/w_207,h_75,al_c,q_85,usm_0.66_1.00_0.01,enc_auto/Webhood%20official%20logo%20banner.png",
+                                R.color.text_gray,
+                                R.color.text_gray,
+                                false
+                            )
+                            iv_contest.setOnClickListener {
+                                val postDetailFragment = PostDetailFragment()
+                                val args = Bundle()
+                                args.putString("campaignId", response.body()?.OK?._id)
+                                postDetailFragment.arguments = args
+                                (activity as MainActivity).supportFragmentManager.beginTransaction().replace(R.id.frame_layout_main, postDetailFragment).addToBackStack(null).commit()
+
+                            }
                         } else {
                             Log.d("resp", "complet else: ")
                         }

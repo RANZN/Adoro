@@ -99,10 +99,11 @@
                         android:id="@+id/spinner_group_privacy"
                         style="@style/mySpinnerItemStyle"
                         android:layout_width="match_parent"
-                        android:gravity="center_vertical"
+                        android:layout_height="wrap_content"
                         android:layout_marginHorizontal="10dp"
-                        android:layout_height="wrap_content" />
+                        android:textAlignment="center" />
                 </RelativeLayout>
+
                 <RelativeLayout
                     android:layout_width="match_parent"
                     android:layout_height="@dimen/edit_text_height"
@@ -116,7 +117,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginHorizontal="10dp"
-                        android:gravity="center_vertical"/>
+                        android:textAlignment="center" />
                 </RelativeLayout>
 
 

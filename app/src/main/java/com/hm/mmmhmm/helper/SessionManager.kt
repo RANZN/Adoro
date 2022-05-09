@@ -22,6 +22,7 @@ object SessionManager {
     private const val ADORO_COINS = "adoro_coins"
     private const val USER_DATA = "user_data"
     private const val USER_EMAIL = "user_email"
+    private const val referCode = "refer_code"
     private const val USER_PHONE = "user_phone"
     private const val USER_IMAGE = "user_image"
     private const val LANGUAGE = "language"
@@ -366,5 +367,13 @@ object SessionManager {
 
     fun getUserEmail(): String {
         return prefs.getString(USER_EMAIL, "")!!
+    }
+
+    fun setRefrerCode(value: String) {
+        prefs.edit().putString(referCode, value).commit()
+    }
+
+    fun getReferCode(): String {
+        return prefs.getString(referCode, "")!!
     }
 }

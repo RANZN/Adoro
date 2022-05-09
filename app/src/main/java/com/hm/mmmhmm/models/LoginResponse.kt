@@ -25,6 +25,7 @@ data class ItemLoginResponse(
      val number: Long,
     val username: String,
     val profile: String,
+    val referCode: String,
 )
 
 data class QueryLoginResponse(

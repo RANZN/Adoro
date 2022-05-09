@@ -138,8 +138,7 @@ class ServicesFragment : Fragment() {
                 val args = Bundle()
                 args.putString("campaignId", campaignList?.get(position)?._id)
                 postDetailFragment.arguments = args
-                (activity as MainActivity).supportFragmentManager.beginTransaction().replace(R.id.frame_layout_main, postDetailFragment)
-                    .addToBackStack(null).commit()
+                (activity as MainActivity).supportFragmentManager.beginTransaction().replace(R.id.frame_layout_main, postDetailFragment).addToBackStack(null).commit()
 
             }
         }

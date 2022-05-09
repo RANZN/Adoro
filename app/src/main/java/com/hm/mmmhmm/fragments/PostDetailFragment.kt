@@ -122,14 +122,14 @@ private fun getCampaignDetail(requestCampaign: RequestCampaign) {
 
                 try {
                     //  toast("" + response.body()?.message)
-                        totalLike = response.body()?.OK?.items?.get(0)?.like.toString().toInt()
+                        totalLike = response.body()?.OK?.items?.get(0)?.like?.size?:0
                     if (response.body()?.OK!=null) {
                         tv_brand_name.text = response.body()?.OK?.items?.get(0)?.brandName
                         tv_description.text = response.body()?.OK?.items?.get(0)?.description
                         tv_short_description.text = response.body()?.OK?.items?.get(0)?.shortDescription
-                        tv_like_count.text = response.body()?.OK?.items?.get(0)?.like.toString()
+                        tv_like_count.text = response.body()?.OK?.items?.get(0)?.like?.size.toString()
                         tv_apply_count.text = response.body()?.OK?.items?.get(0)?.appliedNumber.toString()
-                        tv_comment_count.text = response.body()?.OK?.items?.get(0)?.comment.toString()
+                        tv_comment_count.text = response.body()?.OK?.items?.get(0)?.comment?.size.toString()
                         iv_profile_pic_profile.load(
                             response.body()?.OK?.items?.get(0)?.brandLogo,
                             R.color.text_gray,
@@ -138,7 +138,7 @@ private fun getCampaignDetail(requestCampaign: RequestCampaign) {
                         )
 
                         iv_campaign.load(
-                            response.body()?.OK?.items?.get(0)?.campignImage,
+                            response.body()?.OK?.items?.get(0)?.logoOnPost,
                             R.color.text_gray,
                             R.color.text_gray,
                             true

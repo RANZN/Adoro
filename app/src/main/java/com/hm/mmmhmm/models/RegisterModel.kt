@@ -11,5 +11,5 @@ data class OKSignupResponse(
     val email: String,
     val name: String,
     val number: Long,
-    val username: String
-)
+    val username: String,
+    val referCode: String,)

@@ -179,6 +179,10 @@ class OTPVerifyFragment : Fragment() {
                             SessionManager.setUserEmail(
                                 response.body()?.OK?.items?.get(0)?.email ?: ""
                             )
+
+                            SessionManager.setRefrerCode(
+                                response.body()?.OK?.items?.get(0)?.referCode ?: ""
+                            )
                             startActivity(Intent(activity, MainActivity::class.java))
 
                             loginUserForFirebase()

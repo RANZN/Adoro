@@ -53,7 +53,7 @@ import java.lang.Exception
 
 class FragmentGroupCreation : Fragment() {
 
-    val types = arrayOf("Group Privacy", "Public")
+    val types = arrayOf("Private", "Public")
     private var categoryList: List<Item>? = null
     var visibilityType =types[0]
     var t:View?=null

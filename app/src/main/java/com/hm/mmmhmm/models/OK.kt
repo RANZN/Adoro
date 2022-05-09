@@ -6,6 +6,7 @@ data class OK(
     val query: Query?,
     val totalCount: Int?,
     val _createdDate: String?,
+    val referCode: String?,
     val _id: String?,
     val _updatedDate: String?,
     val comment: List<Any>?,
