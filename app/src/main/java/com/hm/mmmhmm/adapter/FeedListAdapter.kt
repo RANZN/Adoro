@@ -20,6 +20,7 @@ import com.hm.mmmhmm.helper.SessionManager
 import com.hm.mmmhmm.helper.load
 import com.hm.mmmhmm.models.*
 import com.hm.mmmhmm.web_service.ApiClient
+import com.hm.mmmhmm.web_service.ApiClient.BASE_URL
 import kotlinx.android.synthetic.main.fragment_home.*
 import kotlinx.android.synthetic.main.fragment_refer.*
 import kotlinx.coroutines.CoroutineScope
@@ -65,7 +66,8 @@ class FeedListAdapter(var ctx: FragmentActivity, private var feedList: List<Item
         holder.iv_share.setOnClickListener {
             val intent= Intent()
             intent.action= Intent.ACTION_SEND
-            intent.putExtra(Intent.EXTRA_TEXT,"Hey Check out this Great app:"+"test")
+            intent.putExtra(Intent.EXTRA_TEXT,
+                BASE_URL+"?"+"&postId="+ feedList?.get(position)?.id)
             intent.type="text/plain"
             ctx.startActivity(Intent.createChooser(intent,"Share To:"))
         }

@@ -25,10 +25,6 @@ import kotlinx.coroutines.withContext
 import java.lang.String
 import java.util.*
 
-/**
- * A simple [Fragment] subclass.
- */
-
 class LoginFragment : androidx.fragment.app.Fragment() {
 
     override fun onCreateView(

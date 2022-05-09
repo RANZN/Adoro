@@ -6,6 +6,7 @@ import android.content.Intent
 import android.content.pm.PackageManager
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
+import android.net.Uri
 import android.os.Bundle
 import android.util.Log
 import android.view.View
@@ -38,7 +39,6 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
-        setContentView(R.layout.activity_main)
         // SessionManager.init(this)
         // GlobleData.ACCESS_TOKEN = SessionManager.getAccessToken().toString()
 //        iv_profile_pic_navigation.load(
@@ -47,7 +47,12 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
 //            R.color.text_gray,
 //            true
 //        )
-
+        val uri: Uri? = intent.data
+        if (uri != null) {
+            val parameters: List<String> = uri.getPathSegments()
+            val param = parameters[parameters.size - 1]
+            Log.d("uri data", param)
+        }
         supportFragmentManager.beginTransaction().replace(R.id.frame_layout_main, HomeFragment())
             .commit()
         clickMethod()
@@ -427,8 +432,22 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
             .updateChildren(HashMap<String, Any?>().apply { put("isOnline", true) })
     }
 
+    override fun onResume() {
+        super.onResume()
+        FirebaseDatabase.getInstance().getReference("users")
+            .child(SessionManager.getFirebaseID() ?: "")
+            .updateChildren(HashMap<String, Any?>().apply { put("isOnline", true) })
+    }
+
     override fun onDestroy() {
         super.onDestroy()
+        FirebaseDatabase.getInstance().getReference("users")
+            .child(SessionManager.getFirebaseID() ?: "")
+            .updateChildren(HashMap<String, Any?>().apply { put("isOnline", false) })
+    }
+
+    override fun onStop() {
+        super.onStop()
         FirebaseDatabase.getInstance().getReference("users")
             .child(SessionManager.getFirebaseID() ?: "")
             .updateChildren(HashMap<String, Any?>().apply { put("isOnline", false) })
