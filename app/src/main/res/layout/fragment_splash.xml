@@ -7,23 +7,23 @@
     tools:context=".fragments.SplashFragment">
 
 
-<!--    <ImageView-->
-<!--        android:layout_width="match_parent"-->
-<!--        android:layout_height="match_parent"-->
-<!--        android:scaleType="centerCrop"-->
-<!--        android:src="@drawable/bg_splash2" />-->
+    <ImageView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:scaleType="centerCrop"
+        android:src="@drawable/bg_splash_screen" />
 
-<!--    <ImageView-->
-<!--        android:layout_width="99dp"-->
-<!--        android:layout_height="93dp"-->
-<!--        android:layout_centerInParent="true"-->
-<!--        android:src="@drawable/app_logo" />-->
+<!--    <ImageView
+        android:layout_width="99dp"
+        android:layout_height="93dp"
+        android:layout_centerInParent="true"
+        android:src="@drawable/app_logo" />-->
 
-    <pl.droidsonroids.gif.GifTextView
+<!--    <pl.droidsonroids.gif.GifTextView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:background="@drawable/adoro_splash"
-        />
+        />-->
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -40,6 +40,7 @@
             android:text="@string/managed_by_company"
             android:textColor="@color/blue"
             android:textSize="16sp"
+            android:visibility="gone"
             android:textStyle="bold" />
 
         <!--        <com.romainpiel.shimmer.ShimmerTextView-->

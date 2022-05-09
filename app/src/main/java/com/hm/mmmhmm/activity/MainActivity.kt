@@ -53,6 +53,16 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
             val param = parameters[parameters.size - 1]
             Log.d("uri data", param)
         }
+
+        //use below code to open specific post
+//        val commentsFragment = CommentsFragment()
+//        val args = Bundle()
+//        args.putString("postId", "")
+//        commentsFragment.arguments = args
+//        supportFragmentManager.beginTransaction().replace(R.id.frame_layout_main, commentsFragment).addToBackStack(null)
+//            .commit()
+
+
         supportFragmentManager.beginTransaction().replace(R.id.frame_layout_main, HomeFragment())
             .commit()
         clickMethod()
