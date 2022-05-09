@@ -240,6 +240,8 @@ public class Inbox extends AppCompatActivity {
         public void onBindViewHolder(@NonNull Chat_User_adapter holder, int position) {
             holder.setName(users.get(position).getUserName());
             holder.onItemClick(users.get(position));
+            holder.setTime(users.get(position).getTime());
+            holder.setMessage(users.get(position).getLastMessage(), false);
         }
 
         @Override
@@ -259,16 +261,17 @@ public class Inbox extends AppCompatActivity {
 
         @SuppressLint("ResourceAsColor")
         public void setMessage(String message, boolean isSeen) {
-//
+            TextView textView = mView.findViewById(R.id.last_message);
+            textView.setText(message+": ");
         }
 
         //--SETTING BOLD FOR NOT SEEN MESSAGES---
         public void setTime(String time) {
-            TextView tv_time = mView.findViewById(R.id.chat_last_time);
-            GetTimeAgo getTimeAgo = new GetTimeAgo();
-            long lastTime = Long.parseLong(time);
-            String lastSeen = GetTimeAgo.getTimeAgo(lastTime, getTimeAgo);
-            tv_time.setText("Last Message: " + lastSeen);
+            TextView tv_time = mView.findViewById(R.id.last_time);
+//            GetTimeAgo getTimeAgo = new GetTimeAgo();
+//            long lastTime = Long.parseLong(time);
+//            String lastSeen = GetTimeAgo.getTimeAgo(lastTime, getTimeAgo);
+            tv_time.setText(time);
 
 
             //--SETTING BOLD FOR NOT SEEN MESSAGES---
@@ -301,12 +304,13 @@ public class Inbox extends AppCompatActivity {
         }
 
         public void onItemClick(User user) {
-            mView.findViewById(R.id.linear_rel).setOnClickListener(new View.OnClickListener() {
+            mView.findViewById(R.id.user_ll).setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
                     Intent intent = new Intent(mView.getContext(), ChatActivity.class);
                     intent.putExtra("user_name", user.getUserName());
                     intent.putExtra("user_id", user.getUserId());
+                    intent.putExtra("isOnline", user.isOnline());
                     mView.getContext().startActivity(intent);
                 }
             });

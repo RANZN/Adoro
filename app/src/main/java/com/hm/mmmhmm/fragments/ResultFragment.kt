@@ -11,6 +11,7 @@ import android.widget.Button
 import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
 import com.hm.mmmhmm.Chat_Module.ChatActivity
+import com.hm.mmmhmm.Chat_Module.InboxActivity
 import com.hm.mmmhmm.R
 import com.hm.mmmhmm.activity.MainActivity
 import com.hm.mmmhmm.activity.SplashLauncher
@@ -63,7 +64,7 @@ class ResultFragment : Fragment() {
 
         iv_toolbar_action_inbox.setOnClickListener(View.OnClickListener {
       //todo
-            startActivity(Intent(activity as MainActivity, ChatActivity::class.java))
+            startActivity(Intent(activity as MainActivity, InboxActivity::class.java))
 
         })
 

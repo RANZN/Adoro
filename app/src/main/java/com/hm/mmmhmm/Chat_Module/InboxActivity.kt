@@ -18,7 +18,6 @@ class InboxActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_inbox)
-        Log.i("Sanjeev", "onCreate: called")
         init()
     }
 
@@ -27,7 +26,7 @@ class InboxActivity : AppCompatActivity() {
         iv_back.setOnClickListener {
             onBackPressed()
         }
-        pb_inbox.visibility= View.VISIBLE
+        pb_inbox.visibility = View.VISIBLE
         chat_list.adapter = mAdapter
         FirebaseDatabase.getInstance().getReference("chats")
             .addValueEventListener(object : ValueEventListener {
@@ -38,16 +37,13 @@ class InboxActivity : AppCompatActivity() {
                         if (message?.sender == SessionManager.getFirebaseID()) {
                             if (!list.contains(message?.receiver))
                                 list.add(message?.receiver)
-//                            addContact(message?.receiver)
                         }
                         if (message?.receiver == SessionManager.getFirebaseID()) {
                             if (!list.contains(message?.sender))
                                 list.add(message?.sender)
-//                            addContact(message?.sender)
                         }
                     }
-                    Log.i("Sanjeev", "onDataChange: $list")
-                    pb_inbox.visibility= View.GONE
+                    pb_inbox.visibility = View.GONE
 
                     addContact(list)
                 }
@@ -74,8 +70,7 @@ class InboxActivity : AppCompatActivity() {
                         Log.i("TAG", "onDataChange: $user")
                         if (userIds.contains(user?.userId)) {
                             if (!containsUser(user)) {
-                                users.add(user)
-                                mAdapter?.notifyDataSetChanged()
+                                lastMessage(user)
                             }
                         }
                     }
@@ -87,6 +82,17 @@ class InboxActivity : AppCompatActivity() {
                     // TODO("Not yet implemented")
                 }
             })
+    }
+
+    private fun lastMessage(data: User?) {
+        FirebaseDatabase.getInstance().getReference("message").child(data?.userId ?: "").get()
+            .addOnSuccessListener {
+                val value = it.value as Map<String, Any?>
+                data?.lastMessage = value["message"] as String?
+                data?.time = GetTimeAgo.getTimeAgo(value["time"].toString().toLong(), null)
+                users.add(data)
+                mAdapter?.notifyDataSetChanged()
+            }
     }
 
     private fun containsUser(user: User?): Boolean {

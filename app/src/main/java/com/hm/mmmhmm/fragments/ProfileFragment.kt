@@ -96,6 +96,7 @@ class ProfileFragment : Fragment() {
         })
 
         iv_inbox.setOnClickListener {
+            pb_prof.visibility = View.VISIBLE
             FirebaseAuth.getInstance().createUserWithEmailAndPassword(
                 currentEmail,
                 "test@123"
@@ -103,6 +104,7 @@ class ProfileFragment : Fragment() {
                 val id = it.user?.uid
                 pushUserToFirebase(id)
                 FirebaseAuth.getInstance().signOut()
+                pb_prof.visibility = View.GONE
                 requireActivity().startActivity(
                     Intent(
                         requireContext(),
@@ -122,6 +124,7 @@ class ProfileFragment : Fragment() {
                         val id = result.user?.uid
                         pushUserToFirebase(id)
                         FirebaseAuth.getInstance().signOut()
+                        pb_prof.visibility = View.GONE
                         requireActivity().startActivity(
                             Intent(
                                 requireContext(),
@@ -162,7 +165,7 @@ class ProfileFragment : Fragment() {
 
     }
 
-    private fun pushUserToFirebase(user:String?) {
+    private fun pushUserToFirebase(user: String?) {
         val reference = FirebaseDatabase.getInstance().getReference("users")
         reference.get().addOnSuccessListener {
             try {
@@ -172,9 +175,12 @@ class ProfileFragment : Fragment() {
                         put("userId", user)
                         put("userName", username)
                         put("email", currentEmail)
+                        put("isOnline", false)
                     })
                 }
-                reference.updateChildren(value)
+                if (!value.containsKey(user)) {
+                    reference.updateChildren(value)
+                }
             } catch (e: java.lang.Exception) {
                 e.printStackTrace()
             }
@@ -244,12 +250,16 @@ class ProfileFragment : Fragment() {
                             tv_name.text = r?.OK?.items?.get(0)?.name
                             tv_bio.text = r?.OK?.items?.get(0)?.bio
                             //tv_total_posts.text= r?.OK?.items?.get(0)?.bio+"Posts"
-                            tv_total_fans.text = (r?.OK?.items?.get(0)?.followerData?.size?:0).toString()+" Fans"
-                            total_fans.text = (r?.OK?.items?.get(0)?.followerData?.size?:0).toString()+" Fans"
-                            tv_total_coins.text = (r?.OK?.items?.get(0)?.adoroCoins?:0).toString() + " A"
-                            total_coins.text = (r?.OK?.items?.get(0)?.adoroCoins?:0).toString() + " A"
-                            tv_toolbar_title.visibility= View.VISIBLE
-                            iv_toolbar_app_icon.visibility= View.GONE
+                            tv_total_fans.text =
+                                (r?.OK?.items?.get(0)?.followerData?.size ?: 0).toString() + " Fans"
+                            total_fans.text =
+                                (r?.OK?.items?.get(0)?.followerData?.size ?: 0).toString() + " Fans"
+                            tv_total_coins.text =
+                                (r?.OK?.items?.get(0)?.adoroCoins ?: 0).toString() + " A"
+                            total_coins.text =
+                                (r?.OK?.items?.get(0)?.adoroCoins ?: 0).toString() + " A"
+                            tv_toolbar_title.visibility = View.VISIBLE
+                            iv_toolbar_app_icon.visibility = View.GONE
                             tv_toolbar_title.text = r?.OK?.items?.get(0)?.username
                             userId = r?.OK?.items?.get(0)?._id ?: ""
                             username = r?.OK?.items?.get(0)?.username ?: ""
@@ -257,30 +267,27 @@ class ProfileFragment : Fragment() {
                             currentEmail = r?.OK?.items?.get(0)?.email ?: ""
                             if (r?.relation == "follower") {
                                 ll_follow_user.visibility = View.VISIBLE
-                                btn_follow.text= "Follow Back"
+                                btn_follow.text = "Follow Back"
                                 iv_toolbar_icon.setBackgroundResource(R.drawable.ic_back_arrow)
                                 iv_toolbar_icon.setOnClickListener(View.OnClickListener {
                                     (activity as MainActivity).onBackPressed()
                                 })
-                            }
-                           else if(r?.relation=="following"){
+                            } else if (r?.relation == "following") {
                                 ll_follow_user.visibility = View.VISIBLE
-                                btn_follow.text= "Unfollow"
+                                btn_follow.text = "Unfollow"
                                 iv_toolbar_icon.setBackgroundResource(R.drawable.ic_back_arrow)
                                 iv_toolbar_icon.setOnClickListener(View.OnClickListener {
                                     (activity as MainActivity).onBackPressed()
                                 })
-                            }
-                            else if(r?.relation=="ownProfile"){
+                            } else if (r?.relation == "ownProfile") {
                                 ll_follow_user.visibility = View.GONE
                                 iv_toolbar_icon.setBackgroundResource(R.drawable.hamburger_icon)
                                 iv_toolbar_icon.setOnClickListener(View.OnClickListener {
                                     (activity as MainActivity).manageDrawer()
                                 })
-                            }
-                            else if(r?.relation=="newVisitor"){
+                            } else if (r?.relation == "newVisitor") {
                                 ll_follow_user.visibility = View.VISIBLE
-                                btn_follow.text= "Follow"
+                                btn_follow.text = "Follow"
                                 iv_toolbar_icon.setBackgroundResource(R.drawable.ic_back_arrow)
                                 iv_toolbar_icon.setOnClickListener(View.OnClickListener {
                                     (activity as MainActivity).onBackPressed()

@@ -8,6 +8,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import com.hm.mmmhmm.Chat_Module.ChatActivity
+import com.hm.mmmhmm.Chat_Module.InboxActivity
 import com.hm.mmmhmm.R
 import com.hm.mmmhmm.activity.MainActivity
 import com.hm.mmmhmm.adapter.ResultAdapter
@@ -65,7 +66,7 @@ class ResultDetailFragment : Fragment() {
 
         iv_toolbar_action_inbox.setOnClickListener(View.OnClickListener {
         //todo
-            startActivity(Intent(activity as MainActivity, ChatActivity::class.java))
+            startActivity(Intent(activity as MainActivity, InboxActivity::class.java))
 
         })
 

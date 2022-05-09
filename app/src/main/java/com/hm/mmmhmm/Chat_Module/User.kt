@@ -8,4 +8,10 @@ class User {
 
     var email: String? = ""
 
+    var isOnline: Boolean = false
+
+    var lastMessage: String? = ""
+
+    var time: String = ""
+
 }

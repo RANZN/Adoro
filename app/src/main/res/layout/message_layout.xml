@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/Message_Layout"
-    xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:orientation="vertical">
@@ -10,49 +9,49 @@
         android:id="@+id/layoutLeft"
         android:layout_width="300dp"
         android:layout_height="wrap_content"
-        android:visibility="gone"
-        android:orientation="vertical"
-        android:layout_marginTop="5dp">
+        android:layout_marginTop="5dp"
+        android:orientation="vertical">
+
         <TextView
             android:id="@+id/tvsendername"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textColor="@color/green"
-            android:layout_marginTop="5dp"
-            android:layout_marginLeft="20dp"
-            android:gravity="center"
             android:layout_gravity="top"
-            android:fontFamily="@font/opensans_semibold"/>
+            android:layout_marginLeft="20dp"
+            android:layout_marginTop="5dp"
+            android:fontFamily="@font/opensans_semibold"
+            android:gravity="center"
+            android:textColor="@color/green" />
 
         <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:orientation="vertical"
             android:layout_below="@+id/tvsendername"
             android:layout_gravity="left"
-            android:layout_marginLeft="10dp">
+            android:layout_marginLeft="10dp"
+            android:orientation="vertical">
+
             <TextView
                 android:id="@+id/tvLeftMessage"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Hi Aniket"
-                android:textColor="@color/white"
+                android:background="@drawable/right_chatbubble_9"
                 android:fontFamily="@font/opensans_regular"
                 android:paddingHorizontal="20dp"
                 android:paddingVertical="10dp"
-                android:background="@drawable/right_chatbubble_9"/>
+                android:textColor="@color/white" />
+
             <TextView
                 android:id="@+id/tvLeftTime"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_centerInParent="true"
-                android:textColor="#888888"
-                android:visibility="gone"
-                android:textSize="10sp"
                 android:layout_marginTop="5dp"
+
                 android:fontFamily="@font/opensans_regular"
                 android:text="20 minutes ago"
-                />
+                android:textColor="#888888"
+                android:textSize="10sp" />
 
         </LinearLayout>
     </RelativeLayout>
@@ -61,72 +60,73 @@
         android:id="@+id/layoutRight"
         android:layout_width="300dp"
         android:layout_height="wrap_content"
-        android:layout_marginTop="15dp"
-        android:visibility="gone"
-        android:layout_gravity="end">
+        android:layout_gravity="end"
+        android:layout_marginTop="15dp">
 
         <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_gravity="end"
-            android:orientation="vertical"
             android:layout_alignParentEnd="true"
-            android:layout_marginRight="10dp">
+            android:layout_gravity="end"
+            android:layout_marginRight="10dp"
+            android:orientation="vertical">
+
             <TextView
                 android:id="@+id/tvRightMessage"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Hello Aniket, Are you there?"
-                android:textColor="@color/white"
+                android:background="@drawable/right_chatbubble_9"
+                android:fontFamily="@font/opensans_regular"
                 android:paddingHorizontal="20dp"
                 android:paddingVertical="10dp"
-                android:fontFamily="@font/opensans_regular"
-                android:background="@drawable/right_chatbubble_9"/>
+                android:textColor="@color/white" />
+
             <RelativeLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
+
                 <TextView
                     android:id="@+id/tvSeen"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:textColor="#888888"
                     android:layout_gravity="end"
-                    android:textSize="10sp"
                     android:layout_marginTop="5dp"
-                    android:visibility="gone"
                     android:fontFamily="@font/opensans_regular"
                     android:text="seen"
-                    />
+
+                    android:textColor="#888888"
+                    android:textSize="10sp" />
+
                 <TextView
                     android:id="@+id/tvRightTime"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_centerInParent="true"
-                    android:textColor="#888888"
-                    android:layout_gravity="end"
-                    android:textSize="10sp"
                     android:layout_alignParentEnd="true"
+                    android:layout_centerInParent="true"
+                    android:layout_gravity="end"
                     android:layout_marginTop="5dp"
-                    android:visibility="gone"
                     android:fontFamily="@font/opensans_regular"
-                    android:text="20 minutes ago"
+                    android:textColor="#888888"
+
+                    android:textSize="10sp"
+
                     />
 
 
             </RelativeLayout>
 
         </LinearLayout>
-<!--        <TextView-->
-<!--            android:layout_width="35dp"-->
-<!--            android:layout_height="35dp"-->
-<!--            android:textColor="@color/black"-->
-<!--            android:layout_marginTop="5dp"-->
-<!--            android:text="A"-->
-<!--            android:gravity="center"-->
-<!--            android:visibility="gone"-->
-<!--            android:layout_gravity="top"-->
-<!--            android:fontFamily="@font/opensans_semibold"-->
-<!--            android:background="@drawable/white_circle"/>-->
+        <!--        <TextView-->
+        <!--            android:layout_width="35dp"-->
+        <!--            android:layout_height="35dp"-->
+        <!--            android:textColor="@color/black"-->
+        <!--            android:layout_marginTop="5dp"-->
+        <!--            android:text="A"-->
+        <!--            android:gravity="center"-->
+        <!--            android:visibility="gone"-->
+        <!--            android:layout_gravity="top"-->
+        <!--            android:fontFamily="@font/opensans_semibold"-->
+        <!--            android:background="@drawable/white_circle"/>-->
 
     </RelativeLayout>
 
