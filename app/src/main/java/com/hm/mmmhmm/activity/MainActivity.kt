@@ -47,12 +47,7 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
 //            R.color.text_gray,
 //            true
 //        )
-        val uri: Uri? = intent.data
-        if (uri != null) {
-            val parameters: List<String> = uri.getPathSegments()
-            val param = parameters[parameters.size - 1]
-            Log.d("uri data", param)
-        }
+
 
         //use below code to open specific post
 //        val commentsFragment = CommentsFragment()
@@ -88,6 +83,31 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
         liTab_account.setOnClickListener(this)
         iv_tab_account.setOnClickListener(this)
         tv_tab_account.setOnClickListener(this)
+
+        val uri: Uri? = intent.data
+        Log.i("Sanjeev", "onCreate: $uri")
+        if (uri != null) {
+            for (i in uri.queryParameterNames) {
+                if (i == "postId") {
+                    // TODO("Change this fragment to whatever fragment")
+                    val frag = PostDetailFragment()
+                    supportFragmentManager.beginTransaction()
+                        .replace(
+                            R.id.frame_layout_main,
+                            frag::class.java,
+                            Bundle().apply {
+                                putString(
+                                    "campaignId",
+                                    uri.getQueryParameter("postId")
+                                )
+                            },
+                            frag::class.java.simpleName
+                        )
+                        .commit()
+                    break
+                }
+            }
+        }
 
     }
 
