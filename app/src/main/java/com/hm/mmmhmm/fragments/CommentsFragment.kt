@@ -57,7 +57,7 @@ class CommentsFragment : Fragment() {
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
         setupToolBar()
-
+        Log.d("ghghgh",requireArguments().getString("postId")?:"");
         var generalRequest: GeneralRequest = GeneralRequest(requireArguments().getString("postId") ?: "");
         getSpecificPostDetail(generalRequest)
         send_message_button.setOnClickListener {

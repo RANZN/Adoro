@@ -90,14 +90,14 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
             for (i in uri.queryParameterNames) {
                 if (i == "postId") {
                     // TODO("Change this fragment to whatever fragment")
-                    val frag = PostDetailFragment()
+                    val frag = CommentsFragment()
                     supportFragmentManager.beginTransaction()
                         .replace(
                             R.id.frame_layout_main,
                             frag::class.java,
                             Bundle().apply {
                                 putString(
-                                    "campaignId",
+                                    "postId",
                                     uri.getQueryParameter("postId")
                                 )
                             },
