@@ -41,7 +41,7 @@ class ChatActivity : AppCompatActivity() {
             onBackPressed()
         }
     }
-
+    
     private fun registerToToggleOnlineOffline() {
         FirebaseDatabase.getInstance().getReference("users")
             .child(intent.getStringExtra("user_id") ?: "")
