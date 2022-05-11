@@ -117,6 +117,14 @@ class FeedListAdapter(var ctx: FragmentActivity, private var feedList: List<Item
 
         holder.tv_comment_count.text = (feedList?.get(position)?.comment as List<Comment>).size.toString()
 
+        for (Like in feedList?.get(position)?.like as List<Like>) {
+           if(Like.id==SessionManager.getUserId()){
+               holder.iv_like.setColorFilter(
+                   ContextCompat.getColor(ctx, R.color.red),
+                   android.graphics.PorterDuff.Mode.MULTIPLY
+               )
+           }
+        }
         holder.iv_like.setOnClickListener {
             var likeData: PostLikeData = PostLikeData(
                 SessionManager.getUserId(),
@@ -211,7 +219,7 @@ class FeedListAdapter(var ctx: FragmentActivity, private var feedList: List<Item
                             iv_like.setColorFilter(
                                 ContextCompat.getColor(ctx, R.color.red),
                                 android.graphics.PorterDuff.Mode.MULTIPLY
-                            );
+                            )
                         } else {
                             Log.d("resp", "complet else: ")
                         }

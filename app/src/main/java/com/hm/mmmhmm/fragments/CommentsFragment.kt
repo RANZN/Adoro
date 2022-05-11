@@ -3,6 +3,9 @@ package com.hm.mmmhmm.fragments
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
+import android.os.Handler
+import android.os.Looper
+import android.text.Editable
 import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
@@ -54,6 +57,9 @@ class CommentsFragment : Fragment() {
         return inflater.inflate(R.layout.fragment_comments, container, false)
     }
 
+    override fun onResume() {
+        super.onResume()
+    }
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
         setupToolBar()
@@ -72,6 +78,7 @@ class CommentsFragment : Fragment() {
             intent.type="text/plain"
             startActivity(Intent.createChooser(intent,"Share To:"))
         }
+
         iv_like.setOnClickListener {
             var likeData: PostLikeData = PostLikeData(
                 SessionManager.getUserId(),
@@ -168,12 +175,19 @@ class CommentsFragment : Fragment() {
                 val response = apiInterface.getSpecificPostDetail(generalRequest)
                 withContext(Dispatchers.Main) {
                     pb_comments.visibility = View.GONE
-
+                    onResume()
                     try {
                         //  toast("" + response.body()?.message)
                         if (response!=null) {
                             var data= response.body()?.OK?.items?.get(0)
-
+                            for (Like in (data?.like as List<Like>)) {
+                                if(Like.id==SessionManager.getUserId()){
+                                    iv_like.setColorFilter(
+                                        ContextCompat.getColor(requireActivity(), R.color.red),
+                                        android.graphics.PorterDuff.Mode.MULTIPLY
+                                    )
+                                }
+                            }
                             tv_like_status.text= "and "+(data?.like as List<Like>).size.toString()+" others "+ getResources().getString(R.string.also_liked_the_post)
                             tv_like_status.visibility= if ((data.like as List<Like>).size>1) View.VISIBLE else  View.GONE
 
@@ -223,28 +237,28 @@ class CommentsFragment : Fragment() {
                 val response = apiInterface.updateComment(generalRequest)
                 withContext(Dispatchers.Main) {
                     pb_comments.visibility = View.GONE
+                    Handler(Looper.getMainLooper()).postDelayed(
+                        {
+                            if (response!=null) {
+                                if(response.body()?.OK?.status=="success"){
+                                    et_comment.text= Editable.Factory.getInstance().newEditable("")
+                                    var generalRequest: GeneralRequest = GeneralRequest(requireArguments().getString("postId") ?: "");
+                                    getSpecificPostDetail(generalRequest)
+                                }else{
+                                    Toast.makeText(
+                                        activity,
+                                        R.string.Something_went_wrong,
+                                        Toast.LENGTH_SHORT
+                                    ).show()
+                                }
 
-                    try {
-                        //  toast("" + response.body()?.message)
-                        if (response!=null) {
-                            if(response.body()?.OK?.items?.get(0)?.status=="success"){
-                                var generalRequest: GeneralRequest = GeneralRequest(requireArguments().getString("postId") ?: "");
-                                getSpecificPostDetail(generalRequest)
-                            }else{
-                                Toast.makeText(
-                                    activity,
-                                    R.string.Something_went_wrong,
-                                    Toast.LENGTH_SHORT
-                                ).show()
+                            } else {
+                                Log.d("resp", "complet else: ")
                             }
+                        },
+                        2000 // value in milliseconds
+                    )
 
-                        } else {
-                            Log.d("resp", "complet else: ")
-                        }
-
-                    } catch (e: Exception) {
-                        Log.d("resp", "cathch: " + e.toString())
-                    }
                 }
 
             } catch (e: Exception) {

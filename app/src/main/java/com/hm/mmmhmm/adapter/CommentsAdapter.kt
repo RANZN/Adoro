@@ -30,6 +30,7 @@ class CommentsAdapter(var ctx: FragmentActivity, var listData: List<Comment>? = 
 
         holder.tv_comment_user_name.text = listData?.get(position)?.userName ?: ""
         holder.tv_comment.text = listData?.get(position)?.text ?: ""
+        holder.tv_time.text = listData?.get(position)?.dateTime ?: ""
         holder.civ_comment_user.load(
             listData?.get(0)?.profilePhoto ?: "",
             R.color.text_gray,
@@ -51,10 +52,12 @@ class CommentsAdapter(var ctx: FragmentActivity, var listData: List<Comment>? = 
         val civ_comment_user: CircleImageView
         val tv_comment_user_name: TextView
         val tv_comment: TextView
+        val tv_time: TextView
         init {
             civ_comment_user = v.findViewById(R.id.civ_comment_user)
             tv_comment_user_name = v.findViewById(R.id.tv_comment_user_name)
             tv_comment = v.findViewById(R.id.tv_comment)
+            tv_time = v.findViewById(R.id.tv_time)
         }
     }
 }

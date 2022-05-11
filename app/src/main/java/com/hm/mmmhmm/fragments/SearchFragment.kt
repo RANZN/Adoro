@@ -36,7 +36,7 @@ import java.lang.Exception
 
 
 class SearchFragment : Fragment() {
-    var searchType: String?=null
+    var searchType: String?="account"
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 

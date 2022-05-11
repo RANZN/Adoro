@@ -88,7 +88,7 @@ class EditGroup : Fragment() {
         spinner?.adapter = activity?.applicationContext?.let {
             ArrayAdapter(
                 it,
-                R.layout.support_simple_spinner_dropdown_item,
+                android.R.layout.simple_dropdown_item_1line,
                 types
             )
         } as SpinnerAdapter
@@ -252,7 +252,7 @@ class EditGroup : Fragment() {
                             spinner?.adapter = activity?.applicationContext?.let {
                                 ArrayAdapter(
                                     it,
-                                    R.layout.support_simple_spinner_dropdown_item,
+                                    android.R.layout.simple_dropdown_item_1line,
                                     listCategory
                                 )
                             } as SpinnerAdapter

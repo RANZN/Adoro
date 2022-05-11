@@ -17,28 +17,43 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_gravity="center_vertical"
         android:layout_marginLeft="10dp"
-        android:background="@drawable/bg_comments"
-        android:padding="10dp"
         android:orientation="vertical">
-
-        <androidx.appcompat.widget.AppCompatTextView
-            android:id="@+id/tv_comment_user_name"
-            android:layout_width="wrap_content"
+        <LinearLayout
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="User Name"
-            android:textColor="@color/black"
-            android:textSize="14sp" />
+            android:layout_gravity="center_vertical"
+            android:background="@drawable/bg_comments"
+            android:padding="10dp"
+            android:orientation="vertical">
 
+            <androidx.appcompat.widget.AppCompatTextView
+                android:id="@+id/tv_comment_user_name"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="User Name"
+                android:textColor="@color/black"
+                android:textSize="14sp" />
+
+            <TextView
+                android:id="@+id/tv_comment"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Welcome! Wow would love to wake"
+                android:textSize="11sp"
+                android:textColor="@color/black"/>
+
+        </LinearLayout>
         <TextView
-            android:id="@+id/tv_comment"
+            android:id="@+id/tv_time"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Welcome! Wow would love to wake"
+            android:text=""
+            android:layout_marginHorizontal="10dp"
             android:textSize="11sp"
             android:textColor="@color/black"/>
-
     </LinearLayout>
+
+
 
 </LinearLayout>

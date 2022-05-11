@@ -85,7 +85,7 @@
                         android:layout_height="56dp"
                         android:layout_gravity="bottom"
                         android:layout_weight="1"
-                        android:visibility="gone"
+                        android:visibility="visible"
                         android:orientation="vertical">
                         <View
                             android:id="@+id/view_tab_group"

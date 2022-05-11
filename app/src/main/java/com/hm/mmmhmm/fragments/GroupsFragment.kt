@@ -1,20 +1,16 @@
 package com.hm.mmmhmm.fragments
 
+import android.R.menu
 import android.content.Intent
 import android.os.Bundle
-import androidx.fragment.app.Fragment
-import android.view.LayoutInflater
-import android.view.MenuItem
-import android.view.View
-import android.view.ViewGroup
+import android.view.*
 import android.widget.*
 import androidx.core.content.ContextCompat
+import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.RecyclerView
-import com.hm.mmmhmm.Chat_Module.Inbox
 import com.hm.mmmhmm.Chat_Module.InboxActivity
 import com.hm.mmmhmm.R
 import com.hm.mmmhmm.activity.MainActivity
-import com.hm.mmmhmm.adapter.GalleryAdapter
 import com.hm.mmmhmm.helper.SessionManager
 import com.hm.mmmhmm.helper.load
 import com.hm.mmmhmm.models.*
@@ -172,6 +168,10 @@ class GroupsFragment : Fragment() {
             holder.iv_menu_group.setOnClickListener {
                 val popupMenu = PopupMenu(requireActivity(), holder.iv_menu_group)
                 popupMenu.inflate(R.menu.menu)
+
+                popupMenu.getMenu().findItem(R.id.report).setVisible(false);
+                popupMenu.getMenu().findItem(R.id.delete).setVisible(false);
+
                 popupMenu.setOnMenuItemClickListener(object : PopupMenu.OnMenuItemClickListener {
                     override fun onMenuItemClick(item: MenuItem?): Boolean {
                         when (item?.itemId) {
@@ -203,18 +203,20 @@ class GroupsFragment : Fragment() {
             }
             holder.btn_enter.setOnClickListener {
                 var groupDetail: com.hm.mmmhmm.models.GroupDetail = com.hm.mmmhmm.models.GroupDetail(
-                groupsList?.get(position)?._id,
-                groupsList?.get(position)?.category,
-                groupsList?.get(position)?.description,
-                groupsList?.get(position)?.groupName,
-                groupsList?.get(position)?.groupProfile,
-                groupsList?.get(position)?.privacy,)
+                    groupsList?.get(position)?._id,
+                    groupsList?.get(position)?.category,
+                    groupsList?.get(position)?.description,
+                    groupsList?.get(position)?.groupName,
+                    groupsList?.get(position)?.groupProfile,
+                    groupsList?.get(position)?.privacy,
+                )
 
                 var memberDetail: com.hm.mmmhmm.models.MemberDetail = com.hm.mmmhmm.models.MemberDetail(
                     SessionManager.getUserName(),
                     SessionManager.getUserPic(),
                     SessionManager.getUserId(),
-                    SessionManager.getUsername(),)
+                    SessionManager.getUsername(),
+                )
                 var joinGroupRequest: JoinGroupRequest = JoinGroupRequest(groupDetail,memberDetail)
                 joinGroup(joinGroupRequest)
 
