@@ -3,7 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/colorPrimary"
+    android:background="@color/white"
     android:orientation="vertical">
 
     <RelativeLayout
@@ -48,7 +48,8 @@
                     android:layout_width="18dp"
                     android:layout_height="18dp"
                     android:layout_centerVertical="true"
-                    android:src="@drawable/drawer_bell" />
+                    android:src="@drawable/drawer_bell"
+                    app:tint="@color/black" />
 
                 <TextView
                     android:id="@+id/tv_notification_drawer"
@@ -56,10 +57,19 @@
                     android:layout_height="wrap_content"
                     android:layout_centerVertical="true"
                     android:layout_marginLeft="15dp"
-                    android:textColor="@color/white"
                     android:layout_toRightOf="@+id/iv_notification_icon"
                     android:text="@string/notification"
+                    android:textColor="@color/black"
                     android:textSize="18sp" />
+
+                <ImageView
+                    android:layout_width="20dp"
+                    android:layout_height="20dp"
+                    android:layout_alignParentEnd="true"
+                    android:layout_centerVertical="true"
+                    android:rotation="180"
+                    android:scaleType="fitXY"
+                    android:src="@drawable/ic_back_arrow" />
 
 
             </RelativeLayout>
@@ -114,7 +124,8 @@
                     android:layout_height="18dp"
                     android:layout_centerVertical="true"
                     android:scaleType="fitXY"
-                    android:src="@drawable/drawer_wallet" />
+                    android:src="@drawable/drawer_wallet"
+                    app:tint="@color/black"/>
 
                 <TextView
                     android:id="@+id/tv_adro_coins_drawer"
@@ -122,12 +133,19 @@
                     android:layout_height="wrap_content"
                     android:layout_centerVertical="true"
                     android:layout_marginLeft="15dp"
-                    android:textColor="@color/white"
                     android:layout_toRightOf="@+id/iv_adoro_coins"
                     android:text="@string/adoro_coins"
+                    android:textColor="@color/black"
                     android:textSize="18sp" />
 
-
+                <ImageView
+                    android:layout_width="20dp"
+                    android:layout_height="20dp"
+                    android:layout_alignParentEnd="true"
+                    android:layout_centerVertical="true"
+                    android:rotation="180"
+                    android:scaleType="fitXY"
+                    android:src="@drawable/ic_back_arrow" />
             </RelativeLayout>
 
             <!--        Line 4-->
@@ -144,7 +162,8 @@
                     android:layout_height="18dp"
                     android:layout_centerVertical="true"
                     android:scaleType="fitXY"
-                    android:src="@drawable/drawer_refer" />
+                    android:src="@drawable/drawer_refer"
+                    app:tint="@color/black"/>
 
                 <TextView
                     android:id="@+id/tv_refer_drawer"
@@ -154,10 +173,17 @@
                     android:layout_marginLeft="15dp"
                     android:layout_toRightOf="@+id/iv_blog_icon"
                     android:text="@string/refer_earn"
-                    android:textColor="@color/white"
+                    android:textColor="@color/black"
                     android:textSize="18sp" />
 
-
+                <ImageView
+                    android:layout_width="20dp"
+                    android:layout_height="20dp"
+                    android:layout_alignParentEnd="true"
+                    android:layout_centerVertical="true"
+                    android:rotation="180"
+                    android:scaleType="fitXY"
+                    android:src="@drawable/ic_back_arrow" />
 
             </RelativeLayout>
 
@@ -175,7 +201,8 @@
                     android:layout_height="18dp"
                     android:layout_centerVertical="true"
                     android:scaleType="fitXY"
-                    android:src="@drawable/result" />
+                    android:src="@drawable/result"
+                    app:tint="@color/black"/>
 
                 <TextView
                     android:id="@+id/tv_result_drawer"
@@ -185,10 +212,17 @@
                     android:layout_marginLeft="15dp"
                     android:layout_toRightOf="@+id/iv_subs_icon"
                     android:text="@string/result"
-                    android:textColor="@color/white"
+                    android:textColor="@color/black"
                     android:textSize="18sp" />
 
-
+                <ImageView
+                    android:layout_width="20dp"
+                    android:layout_height="20dp"
+                    android:layout_alignParentEnd="true"
+                    android:layout_centerVertical="true"
+                    android:rotation="180"
+                    android:scaleType="fitXY"
+                    android:src="@drawable/ic_back_arrow" />
             </RelativeLayout>
 
             <!--            Line 5-->
@@ -205,7 +239,8 @@
                     android:layout_height="18dp"
                     android:layout_centerVertical="true"
                     android:scaleType="fitXY"
-                    android:src="@drawable/drawer_template" />
+                    android:src="@drawable/drawer_template"
+                    app:tint="@color/black"/>
 
                 <TextView
                     android:id="@+id/tv_template_drawer"
@@ -215,10 +250,17 @@
                     android:layout_marginLeft="15dp"
                     android:layout_toRightOf="@+id/iv_template_icon"
                     android:text="Template"
-                    android:textColor="@color/white"
+                    android:textColor="@color/black"
                     android:textSize="18sp" />
 
-
+                <ImageView
+                    android:layout_width="20dp"
+                    android:layout_height="20dp"
+                    android:layout_alignParentEnd="true"
+                    android:layout_centerVertical="true"
+                    android:rotation="180"
+                    android:scaleType="fitXY"
+                    android:src="@drawable/ic_back_arrow" />
 
             </RelativeLayout>
             <!--            Line 5-->
@@ -235,7 +277,8 @@
                     android:layout_height="18dp"
                     android:layout_centerVertical="true"
                     android:scaleType="fitXY"
-                    android:src="@drawable/drawer_settings" />
+                    android:src="@drawable/drawer_settings"
+                    app:tint="@color/black"/>
 
                 <TextView
                     android:id="@+id/tv_settings_drawer"
@@ -245,10 +288,17 @@
                     android:layout_marginLeft="15dp"
                     android:layout_toRightOf="@+id/iv_settings_icon"
                     android:text="@string/settings"
-                    android:textColor="@color/white"
+                    android:textColor="@color/black"
                     android:textSize="18sp" />
 
-
+                <ImageView
+                    android:layout_width="20dp"
+                    android:layout_height="20dp"
+                    android:layout_alignParentEnd="true"
+                    android:layout_centerVertical="true"
+                    android:rotation="180"
+                    android:scaleType="fitXY"
+                    android:src="@drawable/ic_back_arrow" />
 
             </RelativeLayout>
             <!--            Line 5-->
@@ -265,7 +315,8 @@
                     android:layout_height="18dp"
                     android:layout_centerVertical="true"
                     android:scaleType="fitXY"
-                    android:src="@drawable/drawer_call" />
+                    android:src="@drawable/drawer_call"
+                    app:tint="@color/black"/>
 
                 <TextView
                     android:id="@+id/tv_support_drawer"
@@ -275,10 +326,17 @@
                     android:layout_marginLeft="15dp"
                     android:layout_toRightOf="@+id/iv_support_icon"
                     android:text="@string/support"
-                    android:textColor="@color/white"
+                    android:textColor="@color/black"
                     android:textSize="18sp" />
 
-
+                <ImageView
+                    android:layout_width="20dp"
+                    android:layout_height="20dp"
+                    android:layout_alignParentEnd="true"
+                    android:layout_centerVertical="true"
+                    android:rotation="180"
+                    android:scaleType="fitXY"
+                    android:src="@drawable/ic_back_arrow" />
             </RelativeLayout>
             <!--            Line 5-->
             <RelativeLayout
@@ -304,7 +362,7 @@
                     android:layout_marginLeft="15dp"
                     android:layout_toRightOf="@+id/iv_about_icon"
                     android:text="About"
-                    android:textColor="@color/white"
+                    android:textColor="@color/black"
                     android:textSize="18sp" />
 
 
@@ -334,7 +392,7 @@
                     android:layout_marginLeft="15dp"
                     android:layout_toRightOf="@+id/iv_terms_icon"
                     android:text="Terms"
-                    android:textColor="@color/white"
+                    android:textColor="@color/black"
                     android:textSize="18sp" />
 
 
@@ -365,7 +423,7 @@
                     android:layout_marginLeft="15dp"
                     android:layout_toRightOf="@+id/iv_privacy_icon"
                     android:text="@string/privacy"
-                    android:textColor="@color/white"
+                    android:textColor="@color/black"
                     android:textSize="18sp" />
 
 
@@ -387,7 +445,7 @@
                     android:layout_centerVertical="true"
                     android:scaleType="fitXY"
                     android:src="@drawable/logout_icon3"
-                    app:tint="@color/white" />
+                    app:tint="@color/black" />
 
                 <TextView
                     android:id="@+id/tv_logout_text"
@@ -397,10 +455,17 @@
                     android:layout_marginLeft="15dp"
                     android:layout_toRightOf="@+id/iv_logout_icon"
                     android:text="@string/logout"
-                    android:textColor="@color/white"
+                    android:textColor="@color/black"
                     android:textSize="18sp" />
 
-
+                <ImageView
+                    android:layout_width="20dp"
+                    android:layout_height="20dp"
+                    android:layout_alignParentEnd="true"
+                    android:layout_centerVertical="true"
+                    android:rotation="180"
+                    android:scaleType="fitXY"
+                    android:src="@drawable/ic_back_arrow" />
 
             </RelativeLayout>
 

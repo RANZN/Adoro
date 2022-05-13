@@ -3,9 +3,35 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:background="@color/backgroundColor"
     tools:context=".fragments.LoginFragment">
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
 
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="4"
+            >
+
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="5"
+            android:background="@drawable/bg_login_one"
+            >
+
+
+        </LinearLayout>
+
+
+    </LinearLayout>
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -15,26 +41,32 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:gravity="center"
             android:orientation="vertical">
-            <include layout="@layout/custom_toolbar" />
 
-            <LinearLayout
+            <ImageView
+                android:id="@+id/iv_toolbar_app_icon"
+                android:layout_width="wrap_content"
+                android:layout_height="51dp"
+                android:layout_gravity="center_horizontal"
+                android:src="@drawable/login_screen_logo" />
+
+            <View
+                android:layout_width="100dp"
+                android:layout_height="1dp"
+                android:layout_marginTop="20dp"
+                android:background="@color/white"/>
+
+            <androidx.cardview.widget.CardView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginHorizontal="16dp"
-                android:layout_marginTop="60dp"
-                android:background="@color/white_transparent"
+                android:layout_marginTop="40dp"
+                android:layout_marginHorizontal="40dp"
+                app:cardElevation="2dp"
+                app:cardCornerRadius="27dp"
+                android:layout_gravity="center"
                 android:orientation="vertical">
 
-                <TextView
-                    android:id="@+id/tv_select_language"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="24dp"
-                    android:gravity="center"
-                    android:text="@string/login"
-                    android:textColor="@color/text_black"
-                    android:textSize="24sp" />
 
                 <EditText
                     android:id="@+id/et_email_login"
@@ -43,8 +75,6 @@
                     android:layout_marginHorizontal="20dp"
                     android:layout_marginTop="16dp"
                     android:layout_marginBottom="70dp"
-                    android:background="@drawable/bg_edittext"
-                    android:gravity="center"
                     android:hint="@string/phone_number"
                     android:inputType="number"
                     android:paddingLeft="5dp"
@@ -96,56 +126,40 @@
                 </LinearLayout>
 
 
-            </LinearLayout>
-
-            <LinearLayout
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center_horizontal"
-                android:layout_marginTop="36dp"
-                android:layout_marginBottom="58dp"
-                android:orientation="horizontal">
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@string/not_having_account"
-                    android:textColor="@color/text_gray"
-                    android:textSize="16sp" />
-
-                <TextView
-                    android:id="@+id/tv_register"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginLeft="2dp"
-                    android:text="@string/signup_here"
-                    android:textColor="@color/colorPrimary"
-                    android:textSize="16sp" />
+            </androidx.cardview.widget.CardView>
 
 
-            </LinearLayout>
-
-            <Space
-                android:layout_width="match_parent"
-                android:layout_height="0dp"
-                android:layout_weight="1" />
 
             <Button
                 android:id="@+id/btn_next_login"
-                android:layout_width="match_parent"
-                android:layout_height="48dp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
                 android:layout_alignParentBottom="true"
                 android:layout_marginHorizontal="16dp"
                 android:layout_marginTop="48dp"
                 android:layout_marginBottom="40dp"
-                android:background="@drawable/bg_button_red"
-                android:text="Continue"
+                android:background="@drawable/bg_buttonview"
+                android:text=""
                 android:textColor="@color/buttonTextColor"
                 android:textSize="18sp" />
 
         </LinearLayout>
 
     </ScrollView>
+
+    <TextView
+        android:id="@+id/tv_register"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentEnd="true"
+        android:layout_marginTop="47dp"
+        android:layout_marginEnd="30dp"
+        android:background="@drawable/bg_button_white"
+        android:paddingHorizontal="20dp"
+        android:paddingVertical="5dp"
+        android:text="@string/sign_up"
+        android:textColor="@color/colorPrimary"
+        android:textSize="16sp" />
 
 
     <ProgressBar

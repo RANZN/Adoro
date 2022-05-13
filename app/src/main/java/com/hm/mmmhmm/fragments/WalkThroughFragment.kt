@@ -40,16 +40,19 @@ class WalkThroughFragment : Fragment() {
         super.onActivityCreated(savedInstanceState)
         getWalkThroughList()
         btn_next_walk.setOnClickListener(View.OnClickListener {
-            stopFragment()
-//            if (view_pager_walkthrough.currentItem == 2) {
-//                stopFragment()
-//            } else {
-//                view_pager_walkthrough.setCurrentItem(view_pager_walkthrough.currentItem + 1, true)
-//            }
+            //stopFragment()
+            if (view_pager_walkthrough.currentItem == 2) {
+                stopFragment()
+            } else {
+                view_pager_walkthrough.setCurrentItem(view_pager_walkthrough.currentItem + 1, true)
+            }
 
         })
 
         tvSkip.setOnClickListener {
+            stopFragment()
+        }
+        btn_go.setOnClickListener {
             stopFragment()
         }
 
@@ -91,10 +94,16 @@ class WalkThroughFragment : Fragment() {
 
         if (position == 0) {
             iv_dot1.background = resources.getDrawable(R.drawable.bubble_active)
+            ll_next.visibility= View.VISIBLE
+            ll_go.visibility= View.GONE
         } else if (position == 1) {
+            ll_next.visibility= View.VISIBLE
+            ll_go.visibility= View.GONE
             iv_dot2.background = resources.getDrawable(R.drawable.bubble_active)
         } else if (position == 2) {
             iv_dot3.background = resources.getDrawable(R.drawable.bubble_active)
+            ll_next.visibility= View.GONE
+            ll_go.visibility= View.VISIBLE
         }
     }
 

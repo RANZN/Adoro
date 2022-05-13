@@ -54,9 +54,24 @@ class OTPVerifyFragment : Fragment() {
         super.onActivityCreated(savedInstanceState)
         setupToolBar()
         //GlobleData.goToLoginScreen = false
-        if (requireArguments().getString("path") == "register" || requireArguments().getString("path") == "login") {
-            tv_signup_terms.visibility = View.VISIBLE
+        if (requireArguments().getString("path") == "register") {
+            //tv_signup_terms.visibility = View.VISIBLE
             tv_resend_otp.visibility = View.VISIBLE
+            ll_signup.visibility = View.VISIBLE
+            ll_login.visibility = View.GONE
+            tv_resend_otp.setTextColor(resources.getColor(R.color.black))
+            iv_logo_otp.background = resources.getDrawable(R.drawable.logo_signup)
+
+
+        }
+        if ( requireArguments().getString("path") == "login") {
+            //tv_signup_terms.visibility = View.VISIBLE
+            tv_resend_otp.visibility = View.VISIBLE
+            ll_login.visibility = View.VISIBLE
+            ll_signup.visibility = View.GONE
+            tv_resend_otp.setTextColor(resources.getColor(R.color.white))
+            iv_logo_otp.background = resources.getDrawable(R.drawable.login_screen_logo)
+
         }
         tv_resend_otp.setOnClickListener(View.OnClickListener {
             var otpRequest: OTPRequest =

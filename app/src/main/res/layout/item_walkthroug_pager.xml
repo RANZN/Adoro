@@ -24,28 +24,7 @@ android:orientation="vertical">
 
 </LinearLayout>
 
-    <TextView
-        android:id="@+id/tv_headline"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="40dp"
-        android:gravity="center_horizontal"
-        android:text="Here is our title"
-        android:textAlignment="center"
-        android:textColor="#140b0e"
-        android:textSize="35sp" />
 
-    <TextView
-        android:id="@+id/tv_description"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="30dp"
-        android:layout_below="@id/tv_headline"
-        android:gravity="center_horizontal"
-        android:text="And here is our description "
-        android:textAlignment="center"
-        android:textColor="#140b0e"
-        android:textSize="16sp" />
 
 <!--    <ImageView-->
 <!--        android:layout_width="match_parent"-->
@@ -57,8 +36,32 @@ android:orientation="vertical">
         android:id="@+id/image"
         android:layout_width="match_parent"
         android:layout_height="350dp"
-        android:layout_marginTop="40dp"
+        android:layout_marginTop="84dp"
         android:layout_centerInParent="true"
         android:scaleType="centerCrop"
+        android:layout_marginHorizontal="20dp"
         android:src="@drawable/walkthrough_one" />
+
+    <TextView
+        android:id="@+id/tv_headline"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="40dp"
+        android:gravity="center_horizontal"
+        android:text="Here is our title"
+        android:textAlignment="center"
+        android:textColor="#140b0e"
+        android:textSize="24sp" />
+
+    <TextView
+        android:id="@+id/tv_description"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="15dp"
+        android:layout_below="@id/tv_headline"
+        android:gravity="center_horizontal"
+        android:text="And here is our description "
+        android:textAlignment="center"
+        android:textColor="#140b0e"
+        android:textSize="16sp" />
 </androidx.appcompat.widget.LinearLayoutCompat>

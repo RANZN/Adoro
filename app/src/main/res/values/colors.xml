@@ -8,6 +8,7 @@
 
     <color name="text_black">#140b0e</color>
     <color name="text_gray">#726d6f</color>
+    <color name="gray">#808080</color>
     <color name="light_gray">#A6A6A6</color>
     <color name="username_text">#3D4351</color>
 
@@ -27,6 +28,10 @@
     <color name="reflection">#222957</color>
     <color name="red">#FF040E</color>
     <color name="green">#048E09</color>
+
+    <color name="gradient1">#FFFF00</color>
+    <color name="gradient2">#FFC0CB</color>
+    <color name="gradient3">#00FFFF</color>
 
 
 </resources>
