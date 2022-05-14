@@ -47,7 +47,7 @@
             <ImageView
                 android:id="@+id/iv_toolbar_app_icon"
                 android:layout_width="wrap_content"
-                android:layout_height="51dp"
+                android:layout_height="wrap_content"
                 android:layout_gravity="center_horizontal"
                 android:src="@drawable/login_screen_logo" />
 
@@ -133,13 +133,13 @@
             <Button
                 android:id="@+id/btn_next_login"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignParentBottom="true"
-                android:layout_marginHorizontal="16dp"
+                android:layout_height="42dp"
+                android:paddingHorizontal="25dp"
                 android:layout_marginTop="48dp"
                 android:layout_marginBottom="40dp"
-                android:background="@drawable/bg_buttonview"
-                android:text=""
+                android:background="@drawable/bg_buttun_gradient"
+                android:text="@string/submit"
+                android:textAllCaps="false"
                 android:textColor="@color/buttonTextColor"
                 android:textSize="18sp" />
 

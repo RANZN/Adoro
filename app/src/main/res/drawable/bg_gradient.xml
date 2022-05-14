@@ -5,7 +5,7 @@
     <stroke android:color="#0a0909"
         android:width="0dp"/>
 
-    <corners android:radius="20dp"/>
+   <!-- <corners android:radius="20dp"/>-->
 
     <gradient android:angle="45"
         android:type="linear"

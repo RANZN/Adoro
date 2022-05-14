@@ -54,7 +54,7 @@
             <ImageView
                 android:id="@+id/iv_toolbar_app_icon"
                 android:layout_width="wrap_content"
-                android:layout_height="51dp"
+                android:layout_height="wrap_content"
                 android:layout_gravity="center_horizontal"
                 android:src="@drawable/logo_signup" />
 
@@ -139,11 +139,12 @@
             <Button
                 android:id="@+id/btn_next_signup"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_height="42dp"
                 android:paddingHorizontal="30dp"
-                android:layout_alignParentBottom="true"
                 android:layout_margin="30dp"
-                android:background="@drawable/bg_buttonview"
+                android:background="@drawable/bg_buttun_gradient"
+                android:text="@string/submit"
+                android:textAllCaps="false"
                 android:textColor="@color/buttonTextColor"
                 android:textSize="18sp" />
 

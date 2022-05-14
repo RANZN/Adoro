@@ -62,7 +62,7 @@ class ReferFragment : Fragment() {
             activity?.copyToClipboard(SessionManager.getReferCode())
             tv_copied_msg.visibility =View.VISIBLE
         }
-        iv_share_refer_code.setOnClickListener {
+        btn_app_share.setOnClickListener {
             val intent= Intent()
             intent.action=Intent.ACTION_SEND
             intent.putExtra(Intent.EXTRA_TEXT,"Hey Check out this Great app:"+SessionManager.getReferCode())

@@ -120,6 +120,9 @@ dependencies {
     implementation "com.google.firebase:firebase-core:19.0.0"
 
 
+    implementation 'com.intuit.ssp:ssp-android:1.0.5'
+    implementation 'com.intuit.sdp:sdp-android:1.0.5'
+
 }
 
 apply plugin: 'com.google.gms.google-services'

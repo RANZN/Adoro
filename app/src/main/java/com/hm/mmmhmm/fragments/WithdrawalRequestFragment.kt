@@ -126,8 +126,9 @@ class WithdrawalRequestFragment : Fragment() {
                         pb_withdrawal.visibility = View.GONE
                         if (response.body()?.OK !=null) {
                             val r = response.body()
-                            Toast.makeText(activity,"Withdraw request sent to admin!", Toast.LENGTH_SHORT).show()
-                            stopFragment()
+                            (activity as MainActivity).supportFragmentManager.beginTransaction().replace(R.id.frame_layout_main, VerifyWithdrawal())
+                                .addToBackStack(null).commit()
+
                         } else {
                             Toast.makeText(activity,R.string.Something_went_wrong, Toast.LENGTH_SHORT).show()
                         }

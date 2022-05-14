@@ -4,7 +4,32 @@
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
 
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="5"
+            android:rotation="180"
+            android:background="@drawable/bg_login_one">
+
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="4"
+            >
+
+
+        </LinearLayout>
+
+
+    </LinearLayout>
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -12,62 +37,118 @@
 
         <include layout="@layout/custom_toolbar"/>
 
-       <TextView
-           android:id="@+id/tv_refer_description"
-           android:layout_width="match_parent"
-           android:layout_marginHorizontal="20dp"
-           android:text="Copy the below link and share it with your friends
-
-When they will download the app through your link
-
-You will get instant Rs.2 in your wallet
-
-And when your referred friend earn its first earning, then also you will get 5% from the there first earning."
-           android:layout_height="wrap_content"/>
-
-        <RelativeLayout
-            android:id="@+id/ll_refer_code"
+        <TextView
             android:layout_width="match_parent"
-            android:layout_height="42dp"
-            android:layout_marginTop="40dp"
-            android:gravity="center_vertical"
-            android:background="@drawable/bg_edittext"
-            android:paddingHorizontal="10dp"
+            android:layout_marginHorizontal="51dp"
+            android:text="@string/refer_earn"
+            android:textSize="36sp"
+            android:textColor="@color/white"
+            android:gravity="center"
+            android:textFontWeight="600"
+            android:fontFamily="@font/poppins_regular"
+            android:layout_height="wrap_content"/>
+
+
+
+        <androidx.cardview.widget.CardView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="30dp"
             android:layout_marginHorizontal="20dp"
-            android:orientation="horizontal">
-
-            <TextView
-                android:id="@+id/tv_refer_code"
-                android:layout_width="wrap_content"
+            app:cardElevation="2dp"
+            app:cardCornerRadius="27dp"
+            android:layout_gravity="center"
+            android:orientation="vertical">
+            <LinearLayout
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_alignParentStart="true"
-                android:layout_toStartOf="@id/iv_copy_refer_code"
-                android:text=""
-                android:textColor="@color/black" />
+                android:orientation="vertical">
 
-            <ImageView
-                android:id="@+id/iv_copy_refer_code"
-                android:layout_width="20dp"
-                android:layout_height="20dp"
-                android:layout_marginEnd="10dp"
-                android:layout_toStartOf="@id/iv_share_refer_code"
-                android:src="@drawable/iv_copy"
-                app:tint="@color/black" />
 
-            <ImageView
-                android:id="@+id/iv_share_refer_code"
-                android:layout_width="20dp"
-                android:layout_height="20dp"
-                android:layout_alignParentEnd="true"
-                android:src="@drawable/iv_share"
-                app:tint="@color/black" />
-        </RelativeLayout>
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/copy_the_link_below_share_it_with_your_friends"
+                    android:textSize="16sp"
+                    android:layout_marginTop="20dp"
+                    android:textColor="@color/black"
+                    android:fontFamily="@font/poppins_regular"
+                    android:layout_marginHorizontal="20dp"/>
+
+                <RelativeLayout
+                    android:id="@+id/ll_refer_code"
+                    android:layout_width="match_parent"
+                    android:layout_height="45dp"
+                    android:layout_marginTop="40dp"
+                    android:gravity="center_vertical"
+                    android:background="@drawable/bg_light_button"
+                    android:paddingHorizontal="10dp"
+                    android:layout_marginBottom="38dp"
+                    android:layout_marginHorizontal="20dp"
+                    android:orientation="horizontal">
+
+
+                    <ImageView
+                        android:id="@+id/iv_share_refer_code"
+                        android:layout_width="20dp"
+                        android:layout_height="20dp"
+                        android:layout_alignParentStart="true"
+                        android:src="@drawable/iv_link"
+                        app:tint="@color/black" />
+                    <TextView
+                        android:id="@+id/tv_refer_code"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_toEndOf="@id/iv_share_refer_code"
+                        android:layout_toStartOf="@id/iv_copy_refer_code"
+                        android:text=""
+                        android:layout_marginHorizontal="10dp"
+                        android:textColor="@color/black" />
+
+                    <ImageView
+                        android:id="@+id/iv_copy_refer_code"
+                        android:layout_width="20dp"
+                        android:layout_height="20dp"
+                        android:layout_alignParentEnd="true"
+                        android:layout_marginEnd="10dp"
+                        android:src="@drawable/iv_clipboard"
+                        app:tint="@color/black" />
+
+                </RelativeLayout>
+            </LinearLayout>
+
+        </androidx.cardview.widget.CardView>
+
+
+        <Button
+            android:id="@+id/btn_app_share"
+            android:layout_width="wrap_content"
+            android:layout_height="42dp"
+            android:paddingHorizontal="25dp"
+            android:layout_marginTop="60dp"
+            android:layout_marginBottom="40dp"
+            android:background="@drawable/bg_buttun_gradient"
+            android:text="@string/share"
+            android:layout_gravity="center_horizontal"
+            android:textAllCaps="false"
+            android:textColor="@color/buttonTextColor"
+            android:textSize="18sp" />
+
+        <TextView
+            android:id="@+id/tv_refer_description"
+            android:layout_width="match_parent"
+            android:layout_marginHorizontal="51dp"
+            android:text="@string/app_share_msg"
+            android:textSize="14sp"
+            android:layout_height="wrap_content"/>
+
 
         <TextView
             android:id="@+id/tv_copied_msg"
             android:layout_width="match_parent"
             android:layout_marginHorizontal="20dp"
             android:layout_marginTop="40dp"
+            android:fontFamily="@font/poppins_regular"
             android:text="Link copied! Now share with your friends."
             android:textColor="@color/green"
             android:visibility="gone"

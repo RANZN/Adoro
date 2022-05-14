@@ -99,7 +99,7 @@ class AdoroCoinsFragment : Fragment() {
                         pb_adoro_coins.visibility = View.GONE
                         if (response.body()?.OK !=null) {
                             val r = response.body()
-                            tv_coins.text = r?.OK?.amount+" A"
+                           // tv_coins.text = r?.OK?.amount+" C"
                             SessionManager.setAdoroCoins(r?.OK?.amount ?: "")
                             hitShowTrancationsAPI(generalRequest)
                         } else {

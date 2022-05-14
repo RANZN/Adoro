@@ -6,23 +6,80 @@
     android:background="@color/white"
     android:orientation="vertical">
 
-    <RelativeLayout
+
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="120dp"
+        android:layout_height="180dp"
         android:gravity="center_vertical"
-        android:background="@color/colorPrimaryDark">
+        android:orientation="vertical"
+        android:background="@drawable/bg_gradient_splash">
 
         <ImageView
             android:id="@+id/iv_close_drawer"
-            android:layout_width="40dp"
-            android:layout_height="40dp"
-            android:layout_gravity="center_vertical"
-            android:layout_marginStart="40dp"
+            android:layout_width="24dp"
+            android:layout_height="24dp"
+            android:layout_alignParentStart="true"
+            android:layout_alignParentTop="true"
             android:scaleType="centerCrop"
-            android:src="@drawable/cancel"
-            app:tint="@color/colorPrimary" />
+            android:layout_margin="20dp"
+            android:src="@drawable/ic_back_arrow"
+            app:tint="@color/white" />
 
-    </RelativeLayout>
+
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="20dp"
+            android:layout_marginBottom="25dp">
+
+
+            <de.hdodenhof.circleimageview.CircleImageView
+                android:id="@+id/iv_user"
+                android:layout_width="85dp"
+                android:layout_height="85dp"
+                android:layout_gravity="center_horizontal"
+                android:scaleType="centerCrop"
+                android:layout_marginTop="24dp"
+                android:src="@drawable/ic_account_24" />
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="20dp"
+                android:orientation="vertical">
+
+
+                <TextView
+                    android:id="@+id/tv_user"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Cheon Yeo Woon"
+                    android:textFontWeight="700"
+                    android:layout_marginTop="10dp"
+                    android:textColor="@color/white"
+                    android:textSize="20sp" />
+
+                <TextView
+                    android:id="@+id/tv_followers"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="0   Followers"
+                    android:textColor="@color/white"
+                    android:textSize="14sp" />
+
+                <TextView
+                    android:id="@+id/tv_total_coins"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="28  adoro"
+                    android:textColor="@color/white"
+                    android:textSize="14sp" />
+
+            </LinearLayout>
+        </LinearLayout>
+
+    </LinearLayout>
 
 
     <!--    LISTING-->
@@ -48,8 +105,7 @@
                     android:layout_width="18dp"
                     android:layout_height="18dp"
                     android:layout_centerVertical="true"
-                    android:src="@drawable/drawer_bell"
-                    app:tint="@color/black" />
+                    android:src="@drawable/iv_bell" />
 
                 <TextView
                     android:id="@+id/tv_notification_drawer"
@@ -124,8 +180,7 @@
                     android:layout_height="18dp"
                     android:layout_centerVertical="true"
                     android:scaleType="fitXY"
-                    android:src="@drawable/drawer_wallet"
-                    app:tint="@color/black"/>
+                    android:src="@drawable/iv_dollar" />
 
                 <TextView
                     android:id="@+id/tv_adro_coins_drawer"
@@ -162,8 +217,8 @@
                     android:layout_height="18dp"
                     android:layout_centerVertical="true"
                     android:scaleType="fitXY"
-                    android:src="@drawable/drawer_refer"
-                    app:tint="@color/black"/>
+                    android:src="@drawable/iv_refer"
+                    app:tint="@color/black" />
 
                 <TextView
                     android:id="@+id/tv_refer_drawer"
@@ -201,8 +256,8 @@
                     android:layout_height="18dp"
                     android:layout_centerVertical="true"
                     android:scaleType="fitXY"
-                    android:src="@drawable/result"
-                    app:tint="@color/black"/>
+                    android:src="@drawable/iv_result"
+                    app:tint="@color/black" />
 
                 <TextView
                     android:id="@+id/tv_result_drawer"
@@ -240,7 +295,7 @@
                     android:layout_centerVertical="true"
                     android:scaleType="fitXY"
                     android:src="@drawable/drawer_template"
-                    app:tint="@color/black"/>
+                    app:tint="@color/black" />
 
                 <TextView
                     android:id="@+id/tv_template_drawer"
@@ -277,8 +332,7 @@
                     android:layout_height="18dp"
                     android:layout_centerVertical="true"
                     android:scaleType="fitXY"
-                    android:src="@drawable/drawer_settings"
-                    app:tint="@color/black"/>
+                    android:src="@drawable/iv_settings" />
 
                 <TextView
                     android:id="@+id/tv_settings_drawer"
@@ -315,8 +369,7 @@
                     android:layout_height="18dp"
                     android:layout_centerVertical="true"
                     android:scaleType="fitXY"
-                    android:src="@drawable/drawer_call"
-                    app:tint="@color/black"/>
+                    android:src="@drawable/iv_support" />
 
                 <TextView
                     android:id="@+id/tv_support_drawer"
@@ -444,8 +497,7 @@
                     android:layout_height="18dp"
                     android:layout_centerVertical="true"
                     android:scaleType="fitXY"
-                    android:src="@drawable/logout_icon3"
-                    app:tint="@color/black" />
+                    android:src="@drawable/iv_logout1"/>
 
                 <TextView
                     android:id="@+id/tv_logout_text"

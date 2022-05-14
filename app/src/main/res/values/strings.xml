@@ -112,4 +112,13 @@
     <string name="bio">Bio</string>
     <string name="select">Select</string>
     <string name="inbox">Inbox</string>
+    <string name="submit">Submit</string>
+    <string name="verify">Verify</string>
+    <string name="app_share_msg">When your friends will download the app with the referal code, you will get instant Rs. 2 in your wallet . And when your friend earn its first earning , then you will also get 5% from there first earning</string>
+    <string name="copy_the_link_below_share_it_with_your_friends"><![CDATA[Copy the link below & share it with your friends]]></string>
+    <string name="share">Share</string>
+    <string name="coins">Coins</string>
+    <string name="you_have_earned">You have earned</string>
+    <string name="withdrawl_amount">Withdrawl Amount</string>
+    <string name="enter_the_withdrawl_amount">Enter the withdrawl amount</string>
 </resources>

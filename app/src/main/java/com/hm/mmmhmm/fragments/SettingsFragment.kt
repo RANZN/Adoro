@@ -54,12 +54,12 @@ class SettingsFragment : Fragment() {
             if (switch_notification.isChecked){
                 //todo
                 //switch_notification.setTextColor(Color.WHITE)
-                switch_notification.text=  resources.getString(R.string.notification)+"(On)"
+                tv_notification_status.text=  resources.getString(R.string.notification)+"(On)"
             }
             else{
                // todo
                 //switch_notification.setTextColor(Color.BLACK)
-                switch_notification.text=  resources.getString(R.string.notification)+"(Off)"
+                tv_notification_status.text=  resources.getString(R.string.notification)+"(Off)"
             }
         }
 
