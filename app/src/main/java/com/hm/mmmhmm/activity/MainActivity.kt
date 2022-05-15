@@ -434,7 +434,7 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
-        Toast.makeText(this, "File uploaded successfully!", Toast.LENGTH_SHORT).show()
+     //   Toast.makeText(this, "File uploaded successfully!", Toast.LENGTH_SHORT).show()
 
     }
 

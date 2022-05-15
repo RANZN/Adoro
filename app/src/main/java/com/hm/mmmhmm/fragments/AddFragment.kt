@@ -8,31 +8,25 @@ import android.graphics.BitmapFactory
 import android.os.Bundle
 import android.util.Base64
 import android.util.Log
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
+import androidx.fragment.app.Fragment
 import com.canhub.cropper.CropImageContract
 import com.canhub.cropper.CropImageView
 import com.canhub.cropper.options
-import com.hm.mmmhmm.Chat_Module.Inbox
 import com.hm.mmmhmm.Chat_Module.InboxActivity
 import com.hm.mmmhmm.R
 import com.hm.mmmhmm.activity.MainActivity
 import com.hm.mmmhmm.helper.SessionManager
-import com.hm.mmmhmm.helper.load
-import com.hm.mmmhmm.models.ProfileRequest
 import com.hm.mmmhmm.models.PublishPostRequest
-import com.hm.mmmhmm.models.ShowPostlRequest
 import com.hm.mmmhmm.web_service.ApiClient
 import kotlinx.android.synthetic.main.custom_toolbar.*
 import kotlinx.android.synthetic.main.fragment_add.*
 import kotlinx.android.synthetic.main.fragment_edit_profile.*
-import kotlinx.android.synthetic.main.fragment_edit_profile.iv_cover_pic_profile
-import kotlinx.android.synthetic.main.fragment_edit_profile.iv_profile_pic_profile
 import kotlinx.android.synthetic.main.fragment_login.*
 import kotlinx.android.synthetic.main.fragment_profile.*
 import kotlinx.coroutines.CoroutineScope
@@ -40,7 +34,6 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import java.io.ByteArrayOutputStream
-import java.lang.Exception
 
 class AddFragment : Fragment() {
 
@@ -60,13 +53,19 @@ class AddFragment : Fragment() {
             val bitmap = BitmapFactory.decodeFile(uriFilePath)
             pickedBanner = bitmap
 
-            iv_selected_image.setImageBitmap(bitmap)
+
+            iv_selected_image.setImageBitmap(pickedBanner)
 
             if (!uriFilePath.isNullOrBlank()&& !uriFilePath.isNullOrEmpty()) {
                 rl_selected_image.visibility = View.VISIBLE
-                btn_choose_design.visibility = View.GONE
+                ll_after_image_selection.visibility = View.VISIBLE
+                ll_choose_image.visibility = View.GONE
+                val bits: List<String> = (file?:"").split("/")
+                val lastOne = bits[bits.size - 1]
+                tv_file_name.text= lastOne
             } else {
                 rl_selected_image.visibility = View.GONE
+                ll_after_image_selection.visibility = View.GONE
                 btn_choose_design.visibility = View.VISIBLE
             }
 
@@ -85,7 +84,7 @@ class AddFragment : Fragment() {
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
         setupToolBar()
-        btn_choose_design.setOnClickListener(View.OnClickListener {
+        ll_choose_image.setOnClickListener(View.OnClickListener {
             EditProfileFragment.isBanner = false
             if (checkPermission()) {
                 cropImage.launch(options {
@@ -132,6 +131,11 @@ class AddFragment : Fragment() {
                 )
             publishPost(generalRequest)
         }
+
+       /* iv_cancel_selected_image.setOnClickListener {
+            //todo
+            pickedBanner=null
+        }*/
     }
 
     private fun getEncoded64ImageStringFromBitmap(bitmap: Bitmap?): String {

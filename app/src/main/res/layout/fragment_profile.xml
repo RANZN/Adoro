@@ -29,37 +29,81 @@
                     android:id="@+id/rlImage"
                     android:layout_width="match_parent"
                     android:layout_height="165dp"
-                    android:layout_marginHorizontal="20dp"
                     android:layout_marginTop="20dp">
 
                     <ImageView
                         android:id="@+id/iv_cover_pic_profile"
                         android:layout_width="match_parent"
-                        android:layout_height="138dp"
+                        android:layout_height="@dimen/_170sdp"
                         android:layout_gravity="center_horizontal"
-                        android:background="@drawable/bg_cover"
                         android:scaleType="centerCrop"
                         android:src="@drawable/adoro_banner" />
 
-                    <de.hdodenhof.circleimageview.CircleImageView
-                        android:id="@+id/iv_profile_pic_profile"
-                        android:layout_width="90dp"
-                        android:layout_height="90dp"
+                    <FrameLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:background="@drawable/bg_image_gradient_bottom" />
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        android:layout_marginHorizontal="20dp"
                         android:layout_alignParentBottom="true"
-                        android:layout_gravity="center_horizontal"
-                        android:scaleType="centerCrop"
-                        android:src="@drawable/ic_account_24" />
+                        android:layout_marginBottom="20dp">
+
+                        <de.hdodenhof.circleimageview.CircleImageView
+                            android:id="@+id/iv_profile_pic_profile"
+                            android:layout_width="80dp"
+                            android:layout_height="80dp"
+                            android:layout_gravity="center_horizontal"
+                            android:background="@drawable/bg_circle_gradient"
+                            android:padding="5dp"
+                            android:scaleType="centerCrop"
+                            android:src="@drawable/ic_account_24" />
+
+                        <LinearLayout
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="20dp"
+                            android:orientation="vertical">
+                            <TextView
+                                android:id="@+id/tv_name"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text=""
+                                android:inputType="textPersonName"
+                                android:textFontWeight="700"
+                                android:fontFamily="@font/poppins_regular"
+                                android:textColor="@color/white"
+                                android:textSize="20sp" />
+                            <TextView
+                                android:id="@+id/tv_bio"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text=""
+                                android:layout_marginTop="10dp"
+                                android:fontFamily="@font/poppins_regular"
+                                android:textColor="@color/white"
+                                android:textSize="14sp" />
+                        </LinearLayout>
+
+                    </LinearLayout>
+
 
                     <ImageView
                         android:id="@+id/iv_camera"
                         android:layout_width="30dp"
                         android:layout_height="30dp"
-                        android:layout_alignParentRight="true"
-                        android:layout_alignParentBottom="true"
-                        android:layout_marginBottom="10dp"
+                        android:layout_alignParentTop="true"
+                        android:layout_alignParentEnd="true"
+                        android:layout_margin="@dimen/_10sdp"
                         android:clickable="true"
                         android:focusable="true"
-                        android:src="@drawable/caera_icon2" />
+                        android:padding="@dimen/_5sdp"
+                        android:src="@drawable/ic_edit_cover"
+                        android:background="@drawable/caera_icon2"
+                        android:visibility="visible" />
                 </RelativeLayout>
 
                 <LinearLayout
@@ -71,11 +115,9 @@
                     android:visibility="gone">
 
                     <TextView
-                        android:id="@+id/tv_name"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_centerVertical="true"
-                        android:layout_toRightOf="@+id/iv_back_icon_profile"
                         android:text=""
                         android:textColor="@color/black"
                         android:textSize="18sp" />
@@ -126,22 +168,12 @@
                     android:layout_centerVertical="true"
                     android:layout_marginHorizontal="20dp"
                     android:layout_marginTop="10dp"
+                    android:visibility="gone"
                     android:layout_toRightOf="@+id/iv_back_icon_profile"
                     android:text="Memer"
                     android:textColor="@color/black"
                     android:textSize="16sp" />
 
-                <TextView
-                    android:id="@+id/tv_bio"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_centerVertical="true"
-                    android:layout_marginHorizontal="20dp"
-                    android:layout_marginTop="10dp"
-                    android:layout_toRightOf="@+id/iv_back_icon_profile"
-                    android:text=""
-                    android:textColor="@color/black"
-                    android:textSize="16sp" />
 
                 <LinearLayout
                     android:id="@+id/ll_follow_user"
@@ -178,6 +210,7 @@
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="50dp"
+                    android:layout_marginTop="20dp"
                     android:layout_marginHorizontal="20dp"
                     android:gravity="center_vertical"
                     android:orientation="horizontal">
@@ -187,17 +220,35 @@
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
                         app:cardCornerRadius="5dp"
-                        app:cardElevation="4dp">
+                        app:cardElevation="0dp">
 
-                        <TextView
-                            android:id="@+id/total_posts"
+                        <LinearLayout
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_gravity="center"
-                            android:layout_marginVertical="7dp"
-                            android:text="0 Post"
-                            android:textColor="@color/black"
-                            android:textSize="14sp" />
+                            android:gravity="center_vertical"
+                            android:orientation="horizontal">
+                            <TextView
+                                android:id="@+id/total_posts"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="0"
+                                android:layout_gravity="center_vertical"
+                                android:textStyle="bold"
+                                android:fontFamily="@font/poppins_regular"
+                                android:textColor="@color/black"
+                                android:textFontWeight="700"
+                                android:textSize="20sp" />
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="@string/posts"
+                                android:fontFamily="@font/poppins_regular"
+                                android:layout_marginStart="@dimen/_5sdp"
+                                android:textColor="@color/black"
+                                android:textSize="18sp" />
+                        </LinearLayout>
+
                     </androidx.cardview.widget.CardView>
 
 
@@ -207,18 +258,35 @@
                         android:layout_marginHorizontal="20dp"
                         android:layout_weight="1"
                         app:cardCornerRadius="5dp"
-                        app:cardElevation="4dp">
+                        app:cardElevation="0dp">
 
-                        <TextView
-                            android:id="@+id/total_fans"
+
+
+                        <LinearLayout
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:layout_centerVertical="true"
                             android:layout_gravity="center"
-                            android:layout_marginVertical="7dp"
-                            android:text="0 Fans"
-                            android:textColor="@color/black"
-                            android:textSize="14sp" />
+                            android:gravity="center_vertical"
+                            android:orientation="horizontal">
+                            <TextView
+                                android:id="@+id/total_fans"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="0"
+                                android:layout_gravity="center_vertical"
+                                android:textFontWeight="700"
+                                android:textStyle="bold"
+                                android:fontFamily="@font/poppins_regular"
+                                android:textColor="@color/black"
+                                android:textSize="20sp" />
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="@string/fans"
+                                android:layout_marginStart="@dimen/_5sdp"
+                                android:textColor="@color/black"
+                                android:textSize="18sp" />
+                        </LinearLayout>
                     </androidx.cardview.widget.CardView>
 
 
@@ -228,22 +296,46 @@
                         android:layout_gravity="center"
                         android:layout_weight="1"
                         app:cardCornerRadius="5dp"
-                        app:cardElevation="4dp">
+                        app:cardElevation="0dp">
 
-                        <TextView
-                            android:id="@+id/total_coins"
+
+
+                        <LinearLayout
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:layout_centerVertical="true"
                             android:layout_gravity="center"
-                            android:layout_marginVertical="7dp"
-                            android:text="0 C"
-                            android:textColor="@color/black"
-                            android:textSize="14sp" />
+                            android:gravity="center_vertical"
+                            android:orientation="horizontal">
+                            <TextView
+                                android:id="@+id/total_coins"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="0"
+                                android:textFontWeight="700"
+                                android:layout_gravity="center_vertical"
+                                android:textStyle="bold"
+                                android:fontFamily="@font/poppins_regular"
+                                android:textColor="@color/black"
+                                android:textSize="20sp" />
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="adoro"
+                                android:layout_marginStart="@dimen/_5sdp"
+                                android:textColor="@color/black"
+                                android:textSize="18sp" />
+                        </LinearLayout>
                     </androidx.cardview.widget.CardView>
 
 
                 </LinearLayout>
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:layout_marginTop="10dp"
+                    android:layout_marginHorizontal="20dp"
+                    android:background="@drawable/bg_gradient" />
 
 
                 <com.akexorcist.roundcornerprogressbar.IconRoundCornerProgressBar
@@ -256,6 +348,7 @@
                     app:rcBackgroundPadding="2dp"
                     app:rcMax="100"
                     app:rcProgress="40"
+                    android:visibility="gone"
                     app:rcProgressColor="@color/colorAccent"
                     app:rcRadius="10dp"
                     app:rcSecondaryProgress="60" />
@@ -269,15 +362,34 @@
                     android:layout_marginTop="10dp"
                     android:layout_toRightOf="@+id/iv_back_icon_profile"
                     android:text="0% completed"
+                    android:visibility="gone"
                     android:textAllCaps="true"
                     android:textColor="@color/text_gray"
                     android:textSize="16sp" />
+
+                <View
+                    android:layout_width="@dimen/_70sdp"
+                    android:layout_height="2dp"
+                    android:layout_marginTop="20dp"
+                    android:layout_gravity="center_horizontal"
+                    android:background="@color/gray"/>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/posts"
+                    android:layout_marginHorizontal="20dp"
+                    android:layout_marginTop="20dp"
+                    android:textColor="@color/text_black"
+                    android:textSize="18sp"
+                    android:textFontWeight="500"
+                    android:fontFamily="@font/poppins_regular" />
 
                 <androidx.recyclerview.widget.RecyclerView
                     android:id="@+id/rv_gallery"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginHorizontal="20dp"
+                    android:layout_marginHorizontal="15dp"
                     android:layout_marginTop="20dp"
                     android:nestedScrollingEnabled="false"
                     app:layoutManager="androidx.recyclerview.widget.GridLayoutManager"

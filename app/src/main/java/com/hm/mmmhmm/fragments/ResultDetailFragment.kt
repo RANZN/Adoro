@@ -96,7 +96,7 @@ class ResultDetailFragment : Fragment() {
                             )
 
                             tv_brand_name.text =response.body()?.OK?.items?.get(0)?.brandName
-                            tv_type_title.text =response.body()?.OK?.items?.get(0)?.requriementType
+                            //tv_type_title.text =response.body()?.OK?.items?.get(0)?.requriementType
                             iv_brand_pic.load(
                                 response.body()?.OK?.items?.get(0)?.brandLogo,
                                 R.color.text_gray,

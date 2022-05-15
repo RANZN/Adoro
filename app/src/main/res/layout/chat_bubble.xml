@@ -31,7 +31,7 @@
             android:fontFamily="@font/opensans_regular"
             android:paddingHorizontal="20dp"
             android:paddingVertical="10dp"
-            android:textColor="@color/white" />
+            android:textColor="@color/black" />
 
         <androidx.appcompat.widget.LinearLayoutCompat
             android:layout_width="wrap_content"

@@ -253,13 +253,11 @@ class ProfileFragment : Fragment() {
                             tv_bio.text = r?.OK?.items?.get(0)?.bio
                             //tv_total_posts.text= r?.OK?.items?.get(0)?.bio+"Posts"
                             tv_total_fans.text =
-                                (r?.OK?.items?.get(0)?.followerData?.size ?: 0).toString() + " Fans"
-                            total_fans.text =
-                                (r?.OK?.items?.get(0)?.followerData?.size ?: 0).toString() + " Fans"
+                                (r?.OK?.items?.get(0)?.followerData?.size ?: 0).toString()
                             tv_total_coins.text =
-                                (r?.OK?.items?.get(0)?.adoroCoins ?: 0).toString() + " A"
+                                (r?.OK?.items?.get(0)?.adoroCoins ?: 0).toString()
                             total_coins.text =
-                                (r?.OK?.items?.get(0)?.adoroCoins ?: 0).toString() + " A"
+                                (r?.OK?.items?.get(0)?.adoroCoins ?: 0).toString()
                             tv_toolbar_title.visibility = View.VISIBLE
                             iv_toolbar_app_icon.visibility = View.GONE
                             tv_toolbar_title.text = r?.OK?.items?.get(0)?.username

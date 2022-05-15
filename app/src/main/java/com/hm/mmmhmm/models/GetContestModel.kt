@@ -21,12 +21,19 @@ data class OKGetContest(
     var featuredImage: String?,
     var grandTotal: String?,
     var gst: Int?,
-    var like: List<Any>?,
-    var memeData: List<Any>?,
+    var like: List<Like>?,
+    var memeData: List<MemeData>?,
     var quantity: Int?,
     var reportCounting: Int?,
     var serviceSubCategory: String?,
     var serviceType: String?,
     var shortDescription: String?,
     var total: Int?
+)
+
+data class MemeData(
+    var _id: String?,
+    var image: String?,
+    var profile: String?,
+    var username: String?
 )

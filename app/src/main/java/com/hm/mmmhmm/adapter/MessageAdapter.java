@@ -44,14 +44,14 @@ public class MessageAdapter extends RecyclerView.Adapter<MessageAdapter.ViewHold
         Message message = messages.get(position);
         if (message.getSender().equals(SessionManager.INSTANCE.getFirebaseID())) {
             holder.layout.setGravity(GravityCompat.END);
-            holder.tvMessage.setBackground(ContextCompat.getDrawable(context, R.drawable.left_chat_bubble));
+            holder.tvMessage.setBackground(ContextCompat.getDrawable(context, R.drawable.bg_other_msg));
             if (message.getSeen()) {
                 holder.tvSeen.setVisibility(View.VISIBLE);
                 holder.space.setVisibility(View.VISIBLE);
             }
         } else {
             holder.layout.setGravity(GravityCompat.START);
-            holder.tvMessage.setBackground(ContextCompat.getDrawable(context, R.drawable.right_chatbubble_9));
+            holder.tvMessage.setBackground(ContextCompat.getDrawable(context, R.drawable.bg_my_msg));
         }
         holder.tvMessage.setText(message.getMessage());
         holder.tvTime.setText(GetTimeAgo.getTimeAgo(message.getTime(), context));

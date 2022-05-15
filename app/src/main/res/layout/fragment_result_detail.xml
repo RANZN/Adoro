@@ -15,7 +15,8 @@
         <include layout="@layout/custom_toolbar" />
         <androidx.core.widget.NestedScrollView
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
+            android:layout_height="match_parent"
+            android:fillViewport="true">
 
 
     <LinearLayout
@@ -26,15 +27,14 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="20dp"
-            android:layout_marginHorizontal="10dp"
+            android:layout_marginHorizontal="20dp"
             android:orientation="horizontal">
 
             <de.hdodenhof.circleimageview.CircleImageView
                 android:id="@+id/iv_brand_pic"
-                android:layout_width="50dp"
-                android:layout_height="50dp"
+                android:layout_width="@dimen/_60sdp"
+                android:layout_height="@dimen/_60sdp"
                 android:scaleType="centerCrop"
-                app:civ_border_width="1dp"
                 app:civ_border_color="@color/colorAccent"
                 android:src="@drawable/ic_account_24" />
 
@@ -47,19 +47,44 @@
 
                 <LinearLayout
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content">
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical">
 
                     <TextView
                         android:id="@+id/tv_brand_name"
-                        android:layout_width="0dp"
+                        android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_alignParentLeft="true"
                         android:text="Brand Name"
+                        android:fontFamily="@font/poppins_regular"
                         android:layout_marginTop="5dp"
                         android:layout_weight="1"
                         android:textColor="@color/text_black"
                         android:textSize="18sp"
                         android:textStyle="bold" />
+
+                    <TextView
+                        android:id="@+id/tv_start_date"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentLeft="true"
+                        android:text="Started 2021"
+                        android:fontFamily="@font/poppins_regular"
+                        android:layout_weight="1"
+                        android:textColor="@color/text_black"
+                        android:textSize="14sp" />
+
+                    <TextView
+                        android:id="@+id/tv_total_memberes"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentLeft="true"
+                        android:text="0 Members"
+                        android:fontFamily="@font/poppins_regular"
+                        android:layout_weight="1"
+                        android:textColor="@color/text_black"
+                        android:textSize="14sp" />
+
 
                 </LinearLayout>
 
@@ -67,93 +92,41 @@
             </LinearLayout>
 
         </LinearLayout>
-        <androidx.cardview.widget.CardView
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:layout_marginHorizontal="20dp"
+            android:layout_marginTop="10dp"
+            android:background="@drawable/bg_gradient" />
+
+        <View
+            android:layout_width="@dimen/_70sdp"
+            android:layout_height="1dp"
+            android:layout_marginTop="20dp"
+            android:layout_gravity="center_horizontal"
+            android:background="@color/gray"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Winners"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginTop="20dp"
+            android:textColor="@color/text_black"
+            android:textSize="18sp"
+            android:textFontWeight="500"
+            android:fontFamily="@font/poppins_regular" />
+
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/recycler_winners"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="10dp"
-            android:layout_marginHorizontal="10dp"
-            app:contentPadding="15dp"
-            android:elevation="1dp"
-            app:cardUseCompatPadding="true"
-            app:cardCornerRadius="5dp">
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:orientation="vertical">
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="horizontal">
+            android:layout_marginTop="20dp"
+            android:nestedScrollingEnabled="false"
+            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+            tools:listitem="@layout/item_winner_list" />
 
-                    <ImageView
-                        android:id="@+id/iv_campaign"
-                        android:layout_width="80dp"
-                        android:layout_height="80dp"
-                        android:scaleType="centerCrop"
-                        android:visibility="gone"
-                        android:src="@drawable/app_logo" />
-
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:minHeight="80dp"
-                        android:layout_marginStart="15dp"
-                        android:orientation="vertical">
-
-                        <TextView
-                            android:id="@+id/tv_type_title"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_alignParentLeft="true"
-                            android:text="Title"
-                            android:textColor="@color/text_black"
-                            android:textSize="18sp"
-                            android:textStyle="bold" />
-
-
-                        <TextView
-                            android:id="@+id/tv_description"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_marginTop="4dp"
-                            android:layout_marginBottom="10dp"
-                            android:text="Description"
-                            android:textColor="@color/text_gray"
-                            android:textSize="14sp"/>
-
-
-
-                    </LinearLayout>
-
-                </LinearLayout>
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_alignParentLeft="true"
-                    android:text="Winners"
-                    android:layout_marginTop="20dp"
-                    android:textColor="@color/text_black"
-                    android:textSize="18sp"
-                    android:textStyle="bold" />
-
-
-                <androidx.recyclerview.widget.RecyclerView
-                    android:id="@+id/recycler_winners"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="20dp"
-                    app:spanCount="2"
-                    android:nestedScrollingEnabled="false"
-                    app:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
-                    tools:listitem="@layout/item_winner_list" />
-
-            </LinearLayout>
-
-
-
-
-        </androidx.cardview.widget.CardView>
     </LinearLayout>
 
         </androidx.core.widget.NestedScrollView>

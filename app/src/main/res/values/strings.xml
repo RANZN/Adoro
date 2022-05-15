@@ -121,4 +121,12 @@
     <string name="you_have_earned">You have earned</string>
     <string name="withdrawl_amount">Withdrawl Amount</string>
     <string name="enter_the_withdrawl_amount">Enter the withdrawl amount</string>
+    <string name="browse_community">Browse Community</string>
+    <string name="create_community">Create Community</string>
+    <string name="results">Results</string>
+    <string name="posts">Posts</string>
+    <string name="fans">Fans</string>
+    <string name="choose_your_meme">Choose your meme</string>
+    <string name="add">Add</string>
+    <string name="upload">Upload</string>
 </resources>

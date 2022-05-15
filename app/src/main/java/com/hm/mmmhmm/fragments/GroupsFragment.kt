@@ -46,55 +46,30 @@ class GroupsFragment : Fragment() {
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
         setupToolBar()
+        tv_community_type.text= resources.getText(R.string.create_community)
+        tv_my_groups.setBackgroundResource( R.drawable.bg_buttun_gradient )
+        tv_browse_groups.setBackgroundResource( R.drawable.bg_unselect )
         tv_my_groups.setTextColor(resources.getColor(R.color.white))
         tv_browse_groups.setTextColor(resources.getColor(R.color.black))
         var generalRequest: ProfileRequest = ProfileRequest(SessionManager.getUserId() ?: "",SessionManager.getUserId() ?: "");
         getUserData(generalRequest)
-        tv_my_groups.setBackgroundColor(
-            ContextCompat.getColor(
-                requireActivity(),
-                R.color.colorAccent
-            )
-        )
-        tv_browse_groups.setBackgroundColor(
-            ContextCompat.getColor(
-                requireActivity(),
-                R.color.transparent
-            )
-        )
+
         tv_my_groups.setOnClickListener {
-            tv_my_groups.setBackgroundColor(
-                ContextCompat.getColor(
-                    requireActivity(),
-                    R.color.colorAccent
-                )
-            )
-            tv_browse_groups.setBackgroundColor(
-                ContextCompat.getColor(
-                    requireActivity(),
-                    R.color.transparent
-                )
-            )
+
+            tv_my_groups.setBackgroundResource( R.drawable.bg_buttun_gradient )
+            tv_browse_groups.setBackgroundResource( R.drawable.bg_unselect )
             tv_my_groups.setTextColor(resources.getColor(R.color.white))
             tv_browse_groups.setTextColor(resources.getColor(R.color.black))
+            tv_community_type.text= resources.getText(R.string.create_community)
             var generalRequest: ProfileRequest = ProfileRequest(SessionManager.getUserId() ?: "",SessionManager.getUserId() ?: "");
             getUserData(generalRequest)
         }
         tv_browse_groups.setOnClickListener {
-            tv_browse_groups.setBackgroundColor(
-                ContextCompat.getColor(
-                    requireActivity(),
-                    R.color.colorAccent
-                )
-            )
+            tv_my_groups.setBackgroundResource( R.drawable.bg_unselect )
+            tv_browse_groups.setBackgroundResource( R.drawable.bg_buttun_gradient )
             tv_my_groups.setTextColor(resources.getColor(R.color.black))
             tv_browse_groups.setTextColor(resources.getColor(R.color.white))
-            tv_my_groups.setBackgroundColor(
-                ContextCompat.getColor(
-                    requireActivity(),
-                    R.color.transparent
-                )
-            )
+            tv_community_type.text= resources.getText(R.string.browse_community)
             getGroups()
         }
         rl_create_group.setOnClickListener {

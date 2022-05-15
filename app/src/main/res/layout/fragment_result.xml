@@ -14,6 +14,30 @@
 
         <include layout="@layout/custom_toolbar" />
 
+
+
+
+
+
+
+        <TextView
+            android:id="@+id/tv_community_type"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/poppins_regular"
+            android:text="@string/results"
+            android:textColor="@color/black"
+            android:textFontWeight="500"
+            android:textStyle="bold"
+            android:layout_marginHorizontal="20dp"
+            android:textSize="20sp" />
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:layout_margin="20dp"
+            android:background="@drawable/bg_gradient" />
+
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/recycler_results"
             android:layout_width="match_parent"

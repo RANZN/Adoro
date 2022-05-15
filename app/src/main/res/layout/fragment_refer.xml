@@ -95,14 +95,16 @@
                         android:layout_alignParentStart="true"
                         android:src="@drawable/iv_link"
                         app:tint="@color/black" />
+
                     <TextView
                         android:id="@+id/tv_refer_code"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_toEndOf="@id/iv_share_refer_code"
-                        android:layout_toStartOf="@id/iv_copy_refer_code"
-                        android:text=""
                         android:layout_marginHorizontal="10dp"
+                        android:layout_toStartOf="@id/iv_copy_refer_code"
+                        android:layout_toEndOf="@id/iv_share_refer_code"
+                        android:singleLine="true"
+                        android:text="kdfs,jnf,jv hgf, fgk,jsdhfg j,dgf,sdgf mdfg"
                         android:textColor="@color/black" />
 
                     <ImageView

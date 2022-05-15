@@ -75,13 +75,13 @@ class ServicesFragment : Fragment() {
     }
 
     private fun getCampaignListAPI() {
-        pb_campaigns.visibility = View.VISIBLE
+        pb_campaigns_.visibility = View.VISIBLE
         val apiInterface = ApiClient.getRetrofitService(requireContext())
         CoroutineScope(Dispatchers.IO).launch {
             try {
                 val response = apiInterface.getCampaignList()
                 withContext(Dispatchers.Main) {
-                    pb_campaigns.visibility = View.GONE
+                    pb_campaigns_.visibility = View.GONE
 
                     try {
                         //  toast("" + response.body()?.message)
@@ -122,7 +122,7 @@ class ServicesFragment : Fragment() {
             holder.tv_detail.text= campaignList?.get(position)?.shortDescription
             holder.tv_time_left.text= "₹"+campaignList?.get(position)?.timeLeft.toString()+" left"
             holder.iv_profile_pic_profile.load(
-                campaignList?.get(position)?.brandLogo.toString(),
+                campaignList?.get(position)?.brandLogo?:"",
                 R.color.text_gray,
                 R.color.text_gray,
                 true
