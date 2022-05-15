@@ -57,7 +57,7 @@
                     android:layout_height="50dp"
                     android:padding="15dp"
                     android:src="@drawable/option_menu"
-                    android:visibility="visible" />
+                    android:visibility="gone" />
             </LinearLayout>
 
 
@@ -87,9 +87,17 @@
                     android:id="@+id/iv_like"
                     android:layout_width="50dp"
                     android:layout_height="50dp"
-                    android:padding="15dp"
+                    android:padding="13dp"
                     android:src="@drawable/favorite_icon"
-                    app:tint="@color/text_gray" />
+                    app:tint="@color/black" />
+                <ImageView
+                    android:id="@+id/iv_liked"
+                    android:layout_width="50dp"
+                    android:layout_height="50dp"
+                    android:padding="13dp"
+                    android:visibility="gone"
+                    android:src="@drawable/iv_liked"
+                    app:tint="@color/red" />
 
                 <TextView
                     android:id="@+id/tv_like_count"
@@ -108,7 +116,7 @@
                     <ImageView
                         android:layout_width="50dp"
                         android:layout_height="50dp"
-                        android:padding="15dp"
+                        android:padding="13dp"
                         android:src="@drawable/iv_comments" />
 
                     <TextView
@@ -116,6 +124,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="0"
+                        android:visibility="gone"
                         android:textColor="@color/black" />
                 </LinearLayout>
             </LinearLayout>
@@ -135,7 +144,7 @@
                     android:id="@+id/iv_share"
                     android:layout_width="50dp"
                     android:layout_height="50dp"
-                    android:padding="15dp"
+                    android:padding="13dp"
                     android:src="@drawable/share_icon" />
 
                 <TextView
@@ -143,6 +152,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="0"
+                    android:visibility="gone"
                     android:textColor="@color/black" />
             </LinearLayout>
 

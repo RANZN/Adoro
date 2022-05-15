@@ -118,6 +118,10 @@ class CommentsFragment : Fragment() {
                                 ContextCompat.getColor(requireActivity(), R.color.red),
                                 android.graphics.PorterDuff.Mode.MULTIPLY
                             )
+                                iv_liked.visibility=View.VISIBLE
+                                iv_like.visibility=View.GONE
+
+
                             var generalRequest: GeneralRequest = GeneralRequest(requireArguments().getString("postId") ?: "");
                             getSpecificPostDetail(generalRequest)
                         } else {
@@ -182,10 +186,12 @@ class CommentsFragment : Fragment() {
                             var data= response.body()?.OK?.items?.get(0)
                             for (Like in (data?.like as List<Like>)) {
                                 if(Like.id==SessionManager.getUserId()){
-                                    iv_like.setColorFilter(
-                                        ContextCompat.getColor(requireActivity(), R.color.red),
-                                        android.graphics.PorterDuff.Mode.MULTIPLY
-                                    )
+                                    iv_liked.visibility=View.VISIBLE
+                                    iv_like.visibility=View.GONE
+
+                                }else{
+                                    iv_liked.visibility=View.GONE
+                                    iv_like.visibility=View.VISIBLE
                                 }
                             }
                             tv_like_status.text= "and "+(data?.like as List<Like>).size.toString()+" others "+ getResources().getString(R.string.also_liked_the_post)

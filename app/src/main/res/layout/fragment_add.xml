@@ -4,60 +4,62 @@
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
-
-    <LinearLayout
+    <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:orientation="vertical">
-
-        <include layout="@layout/custom_toolbar"/>
-
-        <TextView
-            android:id="@+id/selected_meme_txt"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center_horizontal"
-            android:fontFamily="@font/poppins_regular"
-            android:text="Selected Meme"
-            android:textColor="@color/black"
-            android:textSize="20sp" />
-
-        <RelativeLayout
+        android:layout_height="match_parent">
+        <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="350dp"
-            android:gravity="center_horizontal"
-            android:background="@drawable/bg_drawable_dash"
-            android:layout_margin="@dimen/_20sdp"
+            android:layout_height="match_parent"
             android:orientation="vertical">
 
-            <LinearLayout
-                android:id="@+id/ll_choose_image"
+            <include layout="@layout/custom_toolbar"/>
+
+            <TextView
+                android:id="@+id/selected_meme_txt"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_centerInParent="true"
-                android:orientation="vertical"
-                android:visibility="visible">
+                android:layout_gravity="center_horizontal"
+                android:fontFamily="@font/poppins_regular"
+                android:text="Selected Meme"
+                android:textColor="@color/black"
+                android:textSize="20sp" />
 
-                <ImageView
-                    android:id="@+id/iv_cover_pic_profile"
-                    android:layout_width="100dp"
-                    android:layout_height="100dp"
-                    android:layout_gravity="center_horizontal"
-                    android:src="@drawable/iv_upload" />
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="350dp"
+                android:gravity="center_horizontal"
+                android:background="@drawable/bg_drawable_dash"
+                android:layout_margin="@dimen/_20sdp"
+                android:orientation="vertical">
 
-                <Button
-                    android:id="@+id/btn_choose_design"
+                <LinearLayout
+                    android:id="@+id/ll_choose_image"
                     android:layout_width="wrap_content"
-                    android:layout_height="42dp"
-                    android:layout_marginTop="20dp"
-                    android:background="@drawable/bg_buttun_gradient"
-                    android:fontFamily="@font/poppins_regular"
-                    android:paddingHorizontal="25dp"
-                    android:paddingVertical="4dp"
-                    android:text="@string/choose_your_meme"
-                    android:textAllCaps="false"
-                    android:textColor="@color/buttonTextColor" />
-            </LinearLayout>
+                    android:layout_height="wrap_content"
+                    android:layout_centerInParent="true"
+                    android:orientation="vertical"
+                    android:visibility="visible">
+
+                    <ImageView
+                        android:id="@+id/iv_cover_pic_profile"
+                        android:layout_width="100dp"
+                        android:layout_height="100dp"
+                        android:layout_gravity="center_horizontal"
+                        android:src="@drawable/iv_upload" />
+
+                    <Button
+                        android:id="@+id/btn_choose_design"
+                        android:layout_width="wrap_content"
+                        android:layout_height="42dp"
+                        android:layout_marginTop="20dp"
+                        android:background="@drawable/bg_buttun_gradient"
+                        android:fontFamily="@font/poppins_regular"
+                        android:paddingHorizontal="25dp"
+                        android:paddingVertical="4dp"
+                        android:text="@string/choose_your_meme"
+                        android:textAllCaps="false"
+                        android:textColor="@color/buttonTextColor" />
+                </LinearLayout>
 
 
 
@@ -75,29 +77,29 @@
                         android:layout_height="match_parent"
                         android:layout_margin="15dp"
                         android:orientation="vertical">
-                    <RelativeLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:orientation="horizontal">
-
-                        <TextView
-                            android:id="@+id/tv_file_name"
-                            android:layout_width="wrap_content"
+                        <RelativeLayout
+                            android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:layout_alignParentStart="true"
-                            android:fontFamily="@font/poppins_regular"
-                            android:text="test"
-                            android:textColor="@color/black"
-                            android:textSize="16sp" />
+                            android:orientation="horizontal">
 
-                        <ImageView
-                            android:id="@+id/iv_cancel_selected_image"
-                            android:layout_width="24dp"
-                            android:layout_height="24dp"
-                            android:layout_marginStart="20dp"
-                            android:layout_alignParentEnd="true"
-                            android:src="@drawable/iv_remove" />
-                    </RelativeLayout>
+                            <TextView
+                                android:id="@+id/tv_file_name"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_alignParentStart="true"
+                                android:fontFamily="@font/poppins_regular"
+                                android:text="test"
+                                android:textColor="@color/black"
+                                android:textSize="16sp" />
+
+                            <ImageView
+                                android:id="@+id/iv_cancel_selected_image"
+                                android:layout_width="24dp"
+                                android:layout_height="24dp"
+                                android:layout_marginStart="20dp"
+                                android:layout_alignParentEnd="true"
+                                android:src="@drawable/iv_remove" />
+                        </RelativeLayout>
 
                         <androidx.cardview.widget.CardView
                             android:layout_width="match_parent"
@@ -118,42 +120,67 @@
                 </androidx.cardview.widget.CardView>
 
 
-        </RelativeLayout>
+            </RelativeLayout>
 
-        <LinearLayout
-            android:id="@+id/ll_after_image_selection"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:visibility="gone"
-            android:layout_marginHorizontal="@dimen/_20sdp"
-            android:orientation="horizontal">
-            <Button
-                android:id="@+id/btn_change_selected_image"
-                android:layout_width="0dp"
-                android:layout_height="42dp"
-                android:background="@drawable/bg_buttun_gradient2"
-                android:paddingVertical="4dp"
-                android:layout_weight="1"
-                android:textAllCaps="false"
-                android:text="@string/add"
-                android:fontFamily="@font/poppins_regular"
-                android:textColor="@color/black" />
+            <androidx.cardview.widget.CardView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="20dp"
+                app:cardCornerRadius="15dp">
+                <EditText
+                    android:id="@+id/et_description_upload"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:minHeight="@dimen/_90sdp"
+                    android:gravity="start"
+                    android:padding="10dp"
+                    android:textSize="16sp"
+                    android:background="@null"
+                    android:textColor="@color/black"
+                    android:hint="@string/description"
+                    android:maxLines="4"
+                    />
+            </androidx.cardview.widget.CardView>
 
-            <Button
-                android:id="@+id/btn_upload_design"
-                android:layout_width="0dp"
-                android:layout_weight="1"
-                android:layout_height="42dp"
-                android:layout_marginStart="@dimen/_20sdp"
-                android:paddingVertical="4dp"
-                android:background="@drawable/bg_buttun_gradient"
-                android:text="@string/upload"
-                android:textAllCaps="false"
-                android:fontFamily="@font/poppins_regular"
-                android:textColor="@color/buttonTextColor"/>
+
+            <LinearLayout
+                android:id="@+id/ll_after_image_selection"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:visibility="gone"
+                android:layout_marginBottom="20dp"
+                android:layout_marginHorizontal="@dimen/_20sdp"
+                android:orientation="horizontal">
+                <Button
+                    android:id="@+id/btn_change_selected_image"
+                    android:layout_width="0dp"
+                    android:layout_height="42dp"
+                    android:background="@drawable/bg_buttun_gradient2"
+                    android:paddingVertical="4dp"
+                    android:layout_weight="1"
+                    android:textAllCaps="false"
+                    android:text="@string/add"
+                    android:fontFamily="@font/poppins_regular"
+                    android:textColor="@color/black" />
+
+                <Button
+                    android:id="@+id/btn_upload_design"
+                    android:layout_width="0dp"
+                    android:layout_weight="1"
+                    android:layout_height="42dp"
+                    android:layout_marginStart="@dimen/_20sdp"
+                    android:paddingVertical="4dp"
+                    android:background="@drawable/bg_buttun_gradient"
+                    android:text="@string/upload"
+                    android:textAllCaps="false"
+                    android:fontFamily="@font/poppins_regular"
+                    android:textColor="@color/buttonTextColor"/>
+            </LinearLayout>
+
         </LinearLayout>
+    </ScrollView>
 
-    </LinearLayout>
+
 
     <ProgressBar
         android:visibility="gone"

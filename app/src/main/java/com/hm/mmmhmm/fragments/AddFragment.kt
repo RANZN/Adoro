@@ -54,7 +54,7 @@ class AddFragment : Fragment() {
             pickedBanner = bitmap
 
 
-            iv_selected_image.setImageBitmap(pickedBanner)
+            iv_selected_image.setImageBitmap(bitmap)
 
             if (!uriFilePath.isNullOrBlank()&& !uriFilePath.isNullOrEmpty()) {
                 rl_selected_image.visibility = View.VISIBLE
@@ -122,7 +122,7 @@ class AddFragment : Fragment() {
             var generalRequest: PublishPostRequest =
                 PublishPostRequest(SessionManager.getUsername() ?: "",
                     getEncoded64ImageStringFromBitmap(pickedBanner),
-                    "",
+                    et_description_upload.text.toString(),
                     listOf<Any>(),
                     listOf<Any>(),
                     0,

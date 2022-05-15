@@ -119,10 +119,12 @@ class FeedListAdapter(var ctx: FragmentActivity, private var feedList: List<Item
 
         for (Like in feedList?.get(position)?.like as List<Like>) {
            if(Like.id==SessionManager.getUserId()){
-               holder.iv_like.setColorFilter(
-                   ContextCompat.getColor(ctx, R.color.red),
-                   android.graphics.PorterDuff.Mode.MULTIPLY
-               )
+               holder.iv_liked.visibility=View.VISIBLE
+               holder.iv_like.visibility=View.GONE
+
+           }else{
+               holder.iv_liked.visibility=View.GONE
+               holder.iv_like.visibility=View.VISIBLE
            }
         }
         holder.iv_like.setOnClickListener {
@@ -137,6 +139,7 @@ class FeedListAdapter(var ctx: FragmentActivity, private var feedList: List<Item
             postUpdateLike(
                 postLikeRequest,
                 holder.iv_like,
+                holder.iv_liked,
                 holder.tv_like_count,
                 (feedList?.get(position)?.like as List<PostLikeData>).size
             )
@@ -170,6 +173,7 @@ class FeedListAdapter(var ctx: FragmentActivity, private var feedList: List<Item
         val iv_share: ImageView
         val iv_feed: ImageView
         val iv_like: ImageView
+        val iv_liked: ImageView
         val tv_username: TextView
         val tv_like_count: TextView
         val tv_share_count: TextView
@@ -187,6 +191,7 @@ class FeedListAdapter(var ctx: FragmentActivity, private var feedList: List<Item
             recycler_mutual_like_user = v.findViewById(R.id.recycler_mutual_like_user)
             iv_feed = v.findViewById(R.id.iv_feed)
             iv_like = v.findViewById(R.id.iv_like)
+            iv_liked = v.findViewById(R.id.iv_liked)
             tv_like_status = v.findViewById(R.id.tv_like_status)
             tv_username = v.findViewById(R.id.tv_username)
             tv_like_count = v.findViewById(R.id.tv_like_count)
@@ -201,6 +206,7 @@ class FeedListAdapter(var ctx: FragmentActivity, private var feedList: List<Item
     private fun postUpdateLike(
         postLikeRequest: PostLikeRequest,
         iv_like: ImageView,
+        iv_liked: ImageView,
         tv_like_count: TextView,
         likeCount: Int
     ) {
@@ -216,10 +222,8 @@ class FeedListAdapter(var ctx: FragmentActivity, private var feedList: List<Item
                         //  toast("" + response.body()?.message)
                         if (response != null) {
                             tv_like_count.text = (likeCount + 1).toString()
-                            iv_like.setColorFilter(
-                                ContextCompat.getColor(ctx, R.color.red),
-                                android.graphics.PorterDuff.Mode.MULTIPLY
-                            )
+                            iv_liked.visibility=View.VISIBLE
+                            iv_like.visibility=View.GONE
                         } else {
                             Log.d("resp", "complet else: ")
                         }
