@@ -126,7 +126,8 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_margin="20dp"
-                app:cardCornerRadius="15dp">
+                app:cardCornerRadius="15dp"
+                app:cardElevation="1dp">
                 <EditText
                     android:id="@+id/et_description_upload"
                     android:layout_width="match_parent"

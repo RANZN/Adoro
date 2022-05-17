@@ -41,7 +41,7 @@
                 android:layout_height="30dp"
                 android:layout_alignParentEnd="true"
                 android:layout_marginStart="20dp"
-                android:src="@drawable/iv_create_group" />
+                android:src="@drawable/add_post" />
         </RelativeLayout>
 
         <View

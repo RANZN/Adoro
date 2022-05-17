@@ -97,12 +97,15 @@
                         android:layout_height="30dp"
                         android:layout_alignParentTop="true"
                         android:layout_alignParentEnd="true"
-                        android:layout_margin="@dimen/_10sdp"
+                        android:layout_marginStart="@dimen/_10sdp"
+                        android:layout_marginTop="@dimen/_10sdp"
+                        android:layout_marginEnd="@dimen/_10sdp"
+                        android:layout_marginBottom="@dimen/_10sdp"
+                        android:background="@drawable/caera_icon2"
                         android:clickable="true"
                         android:focusable="true"
                         android:padding="@dimen/_5sdp"
                         android:src="@drawable/ic_edit_cover"
-                        android:background="@drawable/caera_icon2"
                         android:visibility="visible" />
                 </RelativeLayout>
 

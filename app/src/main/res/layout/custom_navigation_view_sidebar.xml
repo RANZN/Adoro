@@ -102,8 +102,8 @@
 
                 <ImageView
                     android:id="@+id/iv_notification_icon"
-                    android:layout_width="18dp"
-                    android:layout_height="18dp"
+                    android:layout_width="@dimen/_20sdp"
+                    android:layout_height="@dimen/_20sdp"
                     android:layout_centerVertical="true"
                     android:src="@drawable/iv_bell" />
 
@@ -176,8 +176,8 @@
 
                 <ImageView
                     android:id="@+id/iv_adoro_coins"
-                    android:layout_width="18dp"
-                    android:layout_height="18dp"
+                    android:layout_width="@dimen/_20sdp"
+                    android:layout_height="@dimen/_20sdp"
                     android:layout_centerVertical="true"
                     android:scaleType="fitXY"
                     android:src="@drawable/iv_dollar" />
@@ -213,8 +213,8 @@
 
                 <ImageView
                     android:id="@+id/iv_blog_icon"
-                    android:layout_width="18dp"
-                    android:layout_height="18dp"
+                    android:layout_width="@dimen/_20sdp"
+                    android:layout_height="@dimen/_20sdp"
                     android:layout_centerVertical="true"
                     android:scaleType="fitXY"
                     android:src="@drawable/iv_refer"
@@ -252,8 +252,8 @@
 
                 <ImageView
                     android:id="@+id/iv_subs_icon"
-                    android:layout_width="18dp"
-                    android:layout_height="18dp"
+                    android:layout_width="@dimen/_20sdp"
+                    android:layout_height="@dimen/_20sdp"
                     android:layout_centerVertical="true"
                     android:scaleType="fitXY"
                     android:src="@drawable/iv_result"
@@ -328,8 +328,8 @@
 
                 <ImageView
                     android:id="@+id/iv_settings_icon"
-                    android:layout_width="18dp"
-                    android:layout_height="18dp"
+                    android:layout_width="@dimen/_20sdp"
+                    android:layout_height="@dimen/_20sdp"
                     android:layout_centerVertical="true"
                     android:scaleType="fitXY"
                     android:src="@drawable/iv_settings" />
@@ -365,8 +365,8 @@
 
                 <ImageView
                     android:id="@+id/iv_support_icon"
-                    android:layout_width="18dp"
-                    android:layout_height="18dp"
+                    android:layout_width="@dimen/_20sdp"
+                    android:layout_height="@dimen/_20sdp"
                     android:layout_centerVertical="true"
                     android:scaleType="fitXY"
                     android:src="@drawable/iv_support" />
@@ -493,11 +493,11 @@
 
                 <ImageView
                     android:id="@+id/iv_logout_icon"
-                    android:layout_width="18dp"
-                    android:layout_height="18dp"
+                    android:layout_width="@dimen/_20sdp"
+                    android:layout_height="@dimen/_20sdp"
                     android:layout_centerVertical="true"
                     android:scaleType="fitXY"
-                    android:src="@drawable/iv_logout1"/>
+                    android:src="@drawable/iv_logout1" />
 
                 <TextView
                     android:id="@+id/tv_logout_text"

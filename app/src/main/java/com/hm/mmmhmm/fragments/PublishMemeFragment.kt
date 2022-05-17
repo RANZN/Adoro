@@ -147,21 +147,23 @@ class PublishMemeFragment : Fragment() {
 
     private fun validateInput() {
         val description = et_description.text.toString()
-        if (description.isNullOrEmpty()) {
-            toast(R.string.description, 1)
-        } else if (ConnectivityObserver.isOnline(activity as Context)) {
+//        if (description.isNullOrEmpty()) {
+//            toast(R.string.description, 1)
+//        } else
+            if (ConnectivityObserver.isOnline(activity as Context)) {
             var memeDetailReq: MemeDetail = MemeDetail(
                 SessionManager.getUserId(),
                 getEncoded64ImageStringFromBitmap(pickedBanner),
-                description,
-                SessionManager.getUserId())
+                SessionManager.getUserPic(),
+                SessionManager.getUsername()
+            )
             var requestPublishPost: RequestPublishCampaign = RequestPublishCampaign(
                 requireArguments().getString("campaignId"),
                 memeDetailReq)
           publishMeme(requestPublishPost)
 
         }
-    }
+   }
 
 
 

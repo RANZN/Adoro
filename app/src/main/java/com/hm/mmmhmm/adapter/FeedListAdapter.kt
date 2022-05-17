@@ -16,6 +16,7 @@ import com.hm.mmmhmm.R
 import com.hm.mmmhmm.activity.MainActivity
 import com.hm.mmmhmm.fragments.CommentsFragment
 import com.hm.mmmhmm.fragments.PostDetailFragment
+import com.hm.mmmhmm.fragments.ProfileFragment
 import com.hm.mmmhmm.helper.SessionManager
 import com.hm.mmmhmm.helper.load
 import com.hm.mmmhmm.models.*
@@ -99,19 +100,35 @@ class FeedListAdapter(var ctx: FragmentActivity, private var feedList: List<Item
 
         }
         holder.tv_username.setOnClickListener {
-//            val profileFragment = ProfileFragment()
-//            val args = Bundle()
-//            args.putString("path", "search")
-//            args.putString("userId", suggestionList?.get(position)?._id)
-//            profileFragment.arguments = args
-//            holder.itemView.setOnClickListener {
-//                (activity as MainActivity).supportFragmentManager.beginTransaction()
-//                    .replace(R.id.frame_layout_main, profileFragment)
-//                    .addToBackStack(null).commit()
-//
-//            }
+            val profileFragment = ProfileFragment()
+            val args = Bundle()
+            args.putString("path", "search")
+            args.putString("userId", feedList?.get(position)?.id)
+            profileFragment.arguments = args
+            holder.itemView.setOnClickListener {
+                ctx.supportFragmentManager.beginTransaction()
+                    .replace(R.id.frame_layout_main, profileFragment)
+                    .addToBackStack(null).commit()
+
+            }
 
         }
+
+        holder.iv_user_feed.setOnClickListener {
+            val profileFragment = ProfileFragment()
+            val args = Bundle()
+            args.putString("path", "search")
+            args.putString("userId", feedList?.get(position)?.id)
+            profileFragment.arguments = args
+            holder.itemView.setOnClickListener {
+                ctx.supportFragmentManager.beginTransaction()
+                    .replace(R.id.frame_layout_main, profileFragment)
+                    .addToBackStack(null).commit()
+
+            }
+
+        }
+
         holder.tv_like_count.text =
             (feedList?.get(position)?.like as List<Like>).size.toString()
 
@@ -182,6 +199,7 @@ class FeedListAdapter(var ctx: FragmentActivity, private var feedList: List<Item
         val tv_like_status: TextView
         val iv_menu_feed: ImageView
         val ll_comments: LinearLayout
+        val ll_user_detil: LinearLayout
         val recycler_mutual_like_user: RecyclerView
 
         //
@@ -194,6 +212,7 @@ class FeedListAdapter(var ctx: FragmentActivity, private var feedList: List<Item
             iv_liked = v.findViewById(R.id.iv_liked)
             tv_like_status = v.findViewById(R.id.tv_like_status)
             tv_username = v.findViewById(R.id.tv_username)
+            ll_user_detil = v.findViewById(R.id.ll_user_detil)
             tv_like_count = v.findViewById(R.id.tv_like_count)
             tv_share_count = v.findViewById(R.id.tv_share_count)
             tv_comment_count = v.findViewById(R.id.tv_comment_count)
