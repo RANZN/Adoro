@@ -24,6 +24,8 @@ object SessionManager {
     private const val USER_DATA = "user_data"
     private const val USER_EMAIL = "user_email"
     private const val referCode = "refer_code"
+    private const val adoroCoins = "adoro_coins"
+    private const val totalFollowers = "total_followers"
     private const val USER_PHONE = "user_phone"
     private const val USER_IMAGE = "user_image"
     private const val LANGUAGE = "language"
@@ -176,23 +178,6 @@ object SessionManager {
     }
 
     fun getUsername(): String? {
-        return prefs.getString(
-            USERNAME,
-            USERNAME
-        )
-    }
-
-
-    fun setAdoroCoins(value: String) {
-        val prefsEditor: SharedPreferences.Editor = prefs.edit()
-        with(prefsEditor) {
-            putString(USERNAME, value)
-            commit()
-        }
-    }
-
-
-    fun getAdoroCoins(): String? {
         return prefs.getString(
             USERNAME,
             USERNAME
@@ -392,5 +377,20 @@ object SessionManager {
 
     fun getReferCode(): String {
         return prefs.getString(referCode, "")!!
+    }
+
+    fun setTotalFollowers(value: Int) {
+        prefs.edit().putInt(totalFollowers, value).commit()
+    }
+
+    fun getTotalFollowers(): Int {
+        return prefs.getInt(totalFollowers, 0)?:0
+    }
+    fun setAdoroCoins(value: Int) {
+        prefs.edit().putInt(adoroCoins, value).commit()
+    }
+
+    fun getAdoroCoins(): Int {
+        return prefs.getInt(adoroCoins, 0)?:0
     }
 }

@@ -1,5 +1,6 @@
 package com.hm.mmmhmm.adapter
 
+import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
@@ -10,6 +11,9 @@ import android.widget.Toast
 import androidx.fragment.app.FragmentActivity
 import androidx.recyclerview.widget.RecyclerView
 import com.hm.mmmhmm.R
+import com.hm.mmmhmm.fragments.HomeFragment
+import com.hm.mmmhmm.fragments.ProfileFragment
+import com.hm.mmmhmm.helper.SessionManager
 import com.hm.mmmhmm.helper.load
 import com.hm.mmmhmm.models.Comment
 import com.hm.mmmhmm.models.CommentData
@@ -37,6 +41,34 @@ class CommentsAdapter(var ctx: FragmentActivity, var listData: List<Comment>? = 
             R.color.text_gray,
             true
         )
+
+        holder.tv_comment_user_name.setOnClickListener(object : View.OnClickListener{
+            override fun onClick(v: View?) {
+                val profileFragment = ProfileFragment()
+                val args = Bundle()
+                args.putString("path", "search")
+                args.putString("userId", listData?.get(0)?.id ?: "")
+                profileFragment.arguments = args
+                ctx.supportFragmentManager.beginTransaction()
+                    .replace(R.id.frame_layout_main, profileFragment)
+                    .addToBackStack(null).commit()
+                (HomeFragment).lastFirstVisiblePosition = position
+                SessionManager.setFeedLastPosition(position)
+            }})
+
+        holder.civ_comment_user.setOnClickListener(object : View.OnClickListener{
+            override fun onClick(v: View?) {
+                val profileFragment = ProfileFragment()
+                val args = Bundle()
+                args.putString("path", "search")
+                args.putString("userId", listData?.get(0)?.id ?: "")
+                profileFragment.arguments = args
+                ctx.supportFragmentManager.beginTransaction()
+                    .replace(R.id.frame_layout_main, profileFragment)
+                    .addToBackStack(null).commit()
+                (HomeFragment).lastFirstVisiblePosition = position
+                SessionManager.setFeedLastPosition(position)
+            }})
 
     }
 

@@ -109,7 +109,7 @@ class WithdrawalRequestFragment : Fragment() {
                     ?.replace(R.id.frame_layout_main,oTPVerifyFragment)?.commit()
             }
         }
-        tv_total_coins.text= SessionManager.getAdoroCoins()+" A"
+        tv_total_coins.text= SessionManager.getAdoroCoins().toString()+" A"
 
         btn_verify.setOnClickListener {
             validateInput()

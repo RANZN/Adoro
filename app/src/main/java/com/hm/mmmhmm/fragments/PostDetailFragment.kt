@@ -22,7 +22,12 @@ import com.hm.mmmhmm.helper.toast
 import com.hm.mmmhmm.models.*
 import com.hm.mmmhmm.web_service.ApiClient
 import kotlinx.android.synthetic.main.custom_toolbar.*
+import kotlinx.android.synthetic.main.fragment_comments.*
 import kotlinx.android.synthetic.main.fragment_post_detail.*
+import kotlinx.android.synthetic.main.fragment_post_detail.iv_like
+import kotlinx.android.synthetic.main.fragment_post_detail.iv_liked
+import kotlinx.android.synthetic.main.fragment_post_detail.tv_comment_count
+import kotlinx.android.synthetic.main.fragment_post_detail.tv_like_count
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -93,8 +98,9 @@ class PostDetailFragment : Fragment() {
                 SessionManager.getUserName());
             var postLikeRequest: CampaignUpdateLikeRequest = CampaignUpdateLikeRequest(
                 requireArguments().getString("campaignId"),
-                likeData);
-            postUpdateLike(postLikeRequest,iv_like,tv_like_count,
+                likeData)
+            postUpdateLike(postLikeRequest, iv_like,
+                iv_liked,tv_like_count,
                 totalLike)
         }
 
@@ -161,7 +167,8 @@ private fun getCampaignDetail(requestCampaign: RequestCampaign) {
 
 }
 
-    private fun postUpdateLike(postLikeRequest: CampaignUpdateLikeRequest, iv_like: ImageView, tv_like_count: TextView, likeCount:Int) {
+    private fun postUpdateLike(postLikeRequest: CampaignUpdateLikeRequest, iv_like: ImageView,
+                               iv_liked: ImageView, tv_like_count: TextView, likeCount:Int) {
         // pb_group_detail.visibility = View.VISIBLE
         val apiInterface = ApiClient.getRetrofitService(requireActivity())
         CoroutineScope(Dispatchers.IO).launch {
@@ -174,7 +181,17 @@ private fun getCampaignDetail(requestCampaign: RequestCampaign) {
                         //  toast("" + response.body()?.message)
                         if (response!=null) {
                             tv_like_count.text =(likeCount+1).toString()
-                            iv_like.setColorFilter(ContextCompat.getColor(requireActivity(), R.color.red), android.graphics.PorterDuff.Mode.MULTIPLY);
+
+                            for (Like in (response.body()?.OK?.like as List<Like>)) {
+                                if(Like.id==SessionManager.getUserId()){
+                                    iv_liked.visibility=View.VISIBLE
+                                    iv_like.visibility=View.GONE
+
+                                }else{
+                                    iv_liked.visibility=View.GONE
+                                    iv_like.visibility=View.VISIBLE
+                                }
+                            }
                         } else {
                             Log.d("resp", "complet else: ")
                         }

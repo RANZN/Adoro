@@ -137,10 +137,10 @@
                 android:paddingHorizontal="25dp"
                 android:layout_marginTop="48dp"
                 android:layout_marginBottom="40dp"
-                android:background="@drawable/bg_buttun_gradient"
+                android:background="@drawable/bg_button_white"
                 android:text="@string/login"
                 android:textAllCaps="false"
-                android:textColor="@color/buttonTextColor"
+                android:textColor="@color/black"
                 android:textSize="18sp" />
 
         </LinearLayout>

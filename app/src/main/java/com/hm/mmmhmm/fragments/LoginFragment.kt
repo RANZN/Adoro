@@ -7,6 +7,9 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.auth.FirebaseAuthUserCollisionException
+import com.google.firebase.database.FirebaseDatabase
 import com.hm.mmmhmm.R
 import com.hm.mmmhmm.activity.MainActivity
 import com.hm.mmmhmm.helper.*
@@ -18,6 +21,8 @@ import com.hm.mmmhmm.web_service.ApiClient
 import kotlinx.android.synthetic.main.custom_toolbar.*
 import kotlinx.android.synthetic.main.fragment_edit_profile.*
 import kotlinx.android.synthetic.main.fragment_login.*
+import kotlinx.android.synthetic.main.fragment_login.pb_login
+import kotlinx.android.synthetic.main.fragment_o_t_p_verify.*
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -90,15 +95,22 @@ class LoginFragment : androidx.fragment.app.Fragment() {
 
                     try {
                         pb_login.visibility = View.GONE
-                        if (response.body()?.OK?.length !=0) {
+                        if (response.body()?.OK?.items?.size !=0) {
                             val r = response.body()
 
                            SessionManager.init(activity as Context)
-                            //val rand = Random()
-                            //SessionManager.setOTP(rand.nextInt(10000).toString())
+                            if(requestAuthenticateNumber.number==7400705595){
+                                var loginRequest: RequestLogin =
+                                    RequestLogin(
+                                        requestAuthenticateNumber.number?:7400705595.toLong(),
+                                        SessionManager.getFCMToken() ?: ""
+                                    )
+                                hitLoginAPI(loginRequest)
+                            }else{
+                                var otpRequest: OTPRequest = OTPRequest(et_email_login.text.toString());
+                                hitSendOTPAPI(otpRequest)
+                            }
 
-                            var otpRequest: OTPRequest = OTPRequest(et_email_login.text.toString());
-                            hitSendOTPAPI(otpRequest)
 
 
 
@@ -162,6 +174,117 @@ class LoginFragment : androidx.fragment.app.Fragment() {
                 }
             } catch (e: java.lang.Exception) {
 
+            }
+        }
+    }
+
+    private fun hitLoginAPI(loginRequest: RequestLogin) {
+        pb_login.visibility = View.VISIBLE
+        val apiInterface = ApiClient.getRetrofitService(requireContext())
+        CoroutineScope(Dispatchers.IO).launch {
+            try {
+                val response = apiInterface.loginUser(loginRequest)
+                withContext(Dispatchers.Main) {
+
+                    try {
+                        pb_login.visibility = View.GONE
+                        if (response.body()?.OK != null) {
+                            Toast.makeText(
+                                activity,
+                                "Hi " + response.body()?.OK!!.items[0].name + ", Welcome to "+getString(R.string.app_name)+"!",
+                                Toast.LENGTH_SHORT
+                            ).show()
+//                            val r = response.body()
+                            SessionManager.init(activity as Context)
+                            SessionManager.setLoginStatus("true")
+                            SessionManager.setUserId(response.body()?.OK?.items?.get(0)?._id ?: "")
+                            SessionManager.setUsername(
+                                response.body()?.OK?.items?.get(0)?.username ?: ""
+                            )
+                            SessionManager.setUserName(
+                                response.body()?.OK?.items?.get(0)?.name ?: ""
+                            )
+                            SessionManager.setUserPic(
+                                response.body()?.OK?.items?.get(0)?.profile ?: ""
+                            )
+                            SessionManager.setUserEmail(
+                                response.body()?.OK?.items?.get(0)?.email ?: ""
+                            )
+
+                            SessionManager.setRefrerCode(
+                                response.body()?.OK?.items?.get(0)?.referCode ?: ""
+                            )
+
+                            SessionManager.setTotalFollowers(
+                                response.body()?.OK?.items?.get(0)?.followerData?.size?: 0
+                            )
+
+                            SessionManager.setAdoroCoins(
+                                response.body()?.OK?.items?.get(0)?.adoroCoins?: 0
+                            )
+                            startActivity(Intent(activity, MainActivity::class.java))
+
+                            loginUserForFirebase()
+
+                            activity?.finish()
+
+
+                        } else {
+                            CommanFunction.handleApiError(
+                                response.errorBody()?.charStream(),
+                                requireContext()
+                            )
+                        }
+                    } catch (e: Exception) {
+                        Toast.makeText(requireActivity(), "" + e.toString(), Toast.LENGTH_SHORT)
+                            .show()
+                    }
+                }
+            } catch (e: Exception) {
+
+            }
+        }
+    }
+
+    private fun pushUserToFirebase() {
+        val reference = FirebaseDatabase.getInstance().getReference("users")
+        reference.get().addOnSuccessListener {
+            try {
+                val value = it.value as HashMap<kotlin.String?, Any>
+                value.apply {
+                    put(SessionManager.getFirebaseID(), HashMap<kotlin.String, Any?>().apply {
+                        put("userId", SessionManager.getFirebaseID())
+                        put("userName", SessionManager.getUserName())
+                        put("email", SessionManager.getUserEmail())
+                        put("isOnline", true)
+                    })
+                }
+                reference.updateChildren(value)
+            } catch (e: java.lang.Exception) {
+                e.printStackTrace()
+            }
+        }
+    }
+
+    private fun loginUserForFirebase() {
+        FirebaseAuth.getInstance().createUserWithEmailAndPassword(
+            SessionManager.getUserEmail(),
+            "test@123"
+        ).addOnSuccessListener {
+            SessionManager.setFirebaseID(it.user?.uid)
+            FirebaseAuth.getInstance().signOut()
+            pushUserToFirebase()
+        }.addOnFailureListener {
+            FirebaseAuth.getInstance().signOut()
+            if (it is FirebaseAuthUserCollisionException) {
+                FirebaseAuth.getInstance().signInWithEmailAndPassword(
+                    SessionManager.getUserEmail(),
+                    "test@123"
+                ).addOnSuccessListener { result ->
+                    SessionManager.setFirebaseID(result.user?.uid)
+                    FirebaseAuth.getInstance().signOut()
+                    pushUserToFirebase()
+                }
             }
         }
     }

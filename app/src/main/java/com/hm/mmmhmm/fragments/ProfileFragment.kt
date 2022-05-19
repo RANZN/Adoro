@@ -335,7 +335,7 @@ class ProfileFragment : Fragment() {
                         pb_prof.visibility = View.GONE
                         if (response.body()?.OK != null) {
                             val r = response.body()
-                            rv_gallery.adapter = GalleryAdapter(r?.OK?.items)
+                            rv_gallery.adapter = GalleryAdapter(requireActivity(),r?.OK?.items)
                         } else {
                             Toast.makeText(
                                 activity,

@@ -9,6 +9,7 @@ import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
 import android.widget.*
+import androidx.cardview.widget.CardView
 import androidx.core.content.ContextCompat
 import androidx.core.content.ContextCompat.startActivity
 import androidx.fragment.app.FragmentActivity
@@ -121,37 +122,48 @@ class FeedListAdapter(var ctx: FragmentActivity, private var feedList: List<Item
             popupMenu.show()
 
         }
-        holder.tv_username.setOnClickListener {
-            val profileFragment = ProfileFragment()
-            val args = Bundle()
-            args.putString("path", "search")
-            args.putString("userId", feedList?.get(position)?.id)
-            profileFragment.arguments = args
-            holder.itemView.setOnClickListener {
+        holder.tv_username.setOnClickListener(object : View.OnClickListener{
+            override fun onClick(v: View?) {
+                val profileFragment = ProfileFragment()
+                val args = Bundle()
+                args.putString("path", "search")
+                args.putString("userId", feedList?.get(position)?.id)
+                profileFragment.arguments = args
                 ctx.supportFragmentManager.beginTransaction()
                     .replace(R.id.frame_layout_main, profileFragment)
                     .addToBackStack(null).commit()
-
-            }
-            (HomeFragment).lastFirstVisiblePosition = position
-            SessionManager.setFeedLastPosition(position)
-        }
-
-        holder.iv_user_feed.setOnClickListener {
-            val profileFragment = ProfileFragment()
-            val args = Bundle()
-            args.putString("path", "search")
-            args.putString("userId", feedList?.get(position)?.id)
-            profileFragment.arguments = args
-            holder.itemView.setOnClickListener {
+                (HomeFragment).lastFirstVisiblePosition = position
+                SessionManager.setFeedLastPosition(position)
+            }})
+        holder.iv_user_feed.setOnClickListener(object : View.OnClickListener{
+            override fun onClick(v: View?) {
+                val profileFragment = ProfileFragment()
+                val args = Bundle()
+                args.putString("path", "search")
+                args.putString("userId", feedList?.get(position)?.id)
+                profileFragment.arguments = args
                 ctx.supportFragmentManager.beginTransaction()
                     .replace(R.id.frame_layout_main, profileFragment)
                     .addToBackStack(null).commit()
+                (HomeFragment).lastFirstVisiblePosition = position
+                SessionManager.setFeedLastPosition(position)
+            }})
+        holder.ll_feed_user_detail.setOnClickListener(object : View.OnClickListener{
+            override fun onClick(v: View?) {
+                val profileFragment = ProfileFragment()
+                val args = Bundle()
+                args.putString("path", "search")
+                args.putString("userId", feedList?.get(position)?.id)
+                profileFragment.arguments = args
+                ctx.supportFragmentManager.beginTransaction()
+                    .replace(R.id.frame_layout_main, profileFragment)
+                    .addToBackStack(null).commit()
+                (HomeFragment).lastFirstVisiblePosition = position
+                SessionManager.setFeedLastPosition(position)
+            }})
 
-            }
-            (HomeFragment).lastFirstVisiblePosition = position
-            SessionManager.setFeedLastPosition(position)
-        }
+
+
 
         holder.tv_like_count.text =
             (feedList?.get(position)?.like as List<Like>).size.toString()
@@ -225,12 +237,13 @@ class FeedListAdapter(var ctx: FragmentActivity, private var feedList: List<Item
         val tv_like_status: TextView
         val iv_menu_feed: ImageView
         val ll_comments: LinearLayout
-        val ll_user_detil: LinearLayout
+        val ll_feed_user_detail: LinearLayout
         val recycler_mutual_like_user: RecyclerView
 
         //
         init {
             iv_user_feed = v.findViewById(R.id.iv_user_feed)
+            ll_feed_user_detail = v.findViewById(R.id.ll_feed_user_detail)
             iv_share = v.findViewById(R.id.iv_share)
             recycler_mutual_like_user = v.findViewById(R.id.recycler_mutual_like_user)
             iv_feed = v.findViewById(R.id.iv_feed)
@@ -238,7 +251,6 @@ class FeedListAdapter(var ctx: FragmentActivity, private var feedList: List<Item
             iv_liked = v.findViewById(R.id.iv_liked)
             tv_like_status = v.findViewById(R.id.tv_like_status)
             tv_username = v.findViewById(R.id.tv_username)
-            ll_user_detil = v.findViewById(R.id.ll_user_detil)
             tv_like_count = v.findViewById(R.id.tv_like_count)
             tv_share_count = v.findViewById(R.id.tv_share_count)
             tv_comment_count = v.findViewById(R.id.tv_comment_count)

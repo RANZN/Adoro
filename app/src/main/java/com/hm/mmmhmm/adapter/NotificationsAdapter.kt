@@ -1,5 +1,6 @@
 package com.hm.mmmhmm.adapter
 
+import android.graphics.Color
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -24,7 +25,13 @@ class NotificationsAdapter(var ctx: FragmentActivity, private var listData: List
             holder.tv_username_notification.text= listData?.get(position)?.message
 //            holder.tv_detail.text= campaignList?.get(position)?.shortDescription
 //            holder.tv_detail.text= campaignList?.get(position)?.shortDescription
-//            holder.tv_time_left.text= "₹"+campaignList?.get(position)?.timeLeft.toString()+" left"
+            holder.tv_time.text= listData?.get(position)?._createdDate
+        if(position%2==0){
+            holder.tv_time.setTextColor(Color.parseColor("#DA6377"))
+
+        }else{
+            holder.tv_time.setTextColor(Color.parseColor("#1CB8B8"));
+        }
             holder.iv_user_notification.load(
                 listData?.get(position)?.image,
                 R.color.text_gray,
@@ -49,7 +56,7 @@ class NotificationsAdapter(var ctx: FragmentActivity, private var listData: List
     inner class MyViewHolder(v: View) : RecyclerView.ViewHolder(v) {
             val iv_user_notification: ImageView
             val tv_username_notification: TextView
-//            val tv_detail: TextView
+            val tv_time: TextView
 //            val tv_time_left: TextView
 //            val tv_price: TextView
 //            val btn_learn_more: Button
@@ -58,6 +65,7 @@ class NotificationsAdapter(var ctx: FragmentActivity, private var listData: List
             init {
                 iv_user_notification = v.findViewById(R.id.iv_user_notification)
                 tv_username_notification = v.findViewById(R.id.tv_username_notification)
+    tv_time = v.findViewById(R.id.tv_time)
 //                tv_detail = v.findViewById(R.id.tv_detail)
 //                tv_time_left = v.findViewById(R.id.tv_time_left)
 //                tv_price = v.findViewById(R.id.tv_price)

@@ -65,9 +65,8 @@ interface ApiInterface {
         @Body() req: GeneralRequest
     ): retrofit2.Response<BaseResponse>
 
-    @POST("_functions/showPost")
+    @GET("_functions/showPost")
     suspend fun getFeed(
-        @Body() req: ShowPostlRequest
     ): retrofit2.Response<CommentsData>
 
     @POST("_functions/getSpecificPostDetail")

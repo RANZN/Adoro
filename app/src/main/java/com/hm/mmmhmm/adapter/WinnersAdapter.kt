@@ -1,5 +1,6 @@
 package com.hm.mmmhmm.adapter
 
+import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -8,7 +9,10 @@ import android.widget.TextView
 import androidx.fragment.app.FragmentActivity
 import androidx.recyclerview.widget.RecyclerView
 import com.hm.mmmhmm.R
+import com.hm.mmmhmm.fragments.HomeFragment
+import com.hm.mmmhmm.fragments.ProfileFragment
 import com.hm.mmmhmm.fragments.ResultDetailFragment
+import com.hm.mmmhmm.helper.SessionManager
 import com.hm.mmmhmm.helper.load
 import com.hm.mmmhmm.models.Item
 import com.hm.mmmhmm.models.WinnerDetail
@@ -37,7 +41,17 @@ class WinnersAdapter(var ctx: FragmentActivity, private var winnersList: List<Wi
 //            activity?.supportFragmentManager?.beginTransaction()
 //                ?.replace(R.id.frame_layout_main, ResultDetailFragment())
 //                ?.addToBackStack(null)?.commit()
-
+        holder.itemView.setOnClickListener(object : View.OnClickListener{
+            override fun onClick(v: View?) {
+                val profileFragment = ProfileFragment()
+                val args = Bundle()
+                args.putString("path", "search")
+                args.putString("userId", winnersList?.get(position)?._id ?: "")
+                profileFragment.arguments = args
+                ctx.supportFragmentManager.beginTransaction()
+                    .replace(R.id.frame_layout_main, profileFragment)
+                    .addToBackStack(null).commit()
+            }})
 
 
        // }

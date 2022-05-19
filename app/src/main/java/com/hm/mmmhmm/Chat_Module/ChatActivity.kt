@@ -1,5 +1,6 @@
 package com.hm.mmmhmm.Chat_Module
 
+import android.content.Intent
 import android.os.Bundle
 import android.view.View
 import android.widget.Toast
@@ -7,7 +8,10 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.firebase.database.*
 import com.hm.mmmhmm.R
+import com.hm.mmmhmm.activity.MainActivity
 import com.hm.mmmhmm.adapter.MessageAdapter
+import com.hm.mmmhmm.fragments.HomeFragment
+import com.hm.mmmhmm.fragments.ProfileFragment
 import com.hm.mmmhmm.helper.SessionManager
 import kotlinx.android.synthetic.main.activity__chat.*
 
@@ -25,7 +29,13 @@ class ChatActivity : AppCompatActivity() {
     private fun init() {
         tv_header.text = intent.getStringExtra("user_name")
         val message = et_message.text
+        ll_user.setOnClickListener {
 
+            startActivity(Intent(this, MainActivity::class.java)
+                .putExtra("tag","chat")
+                .putExtra("userId",intent.getStringExtra("user_id"))
+            )
+        }
         send_message_button.setOnClickListener {
             if (message.isNullOrEmpty()) {
                 Toast.makeText(this, R.string.enter_your_message, Toast.LENGTH_SHORT).show()

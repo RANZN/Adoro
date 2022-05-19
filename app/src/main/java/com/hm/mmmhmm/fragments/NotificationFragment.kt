@@ -11,12 +11,15 @@ import com.hm.mmmhmm.activity.MainActivity
 import com.hm.mmmhmm.adapter.FeedListAdapter
 import com.hm.mmmhmm.adapter.NotificationsAdapter
 import com.hm.mmmhmm.helper.SessionManager
+import com.hm.mmmhmm.helper.load
 import com.hm.mmmhmm.models.GeneralRequest
 import com.hm.mmmhmm.web_service.ApiClient
+import kotlinx.android.synthetic.main.custom_navigation_view_sidebar.*
 //import com.hm.mmmhmm.adapter.SearchSuggestionAdapter
 import kotlinx.android.synthetic.main.custom_toolbar.*
 import kotlinx.android.synthetic.main.fragment_home.*
 import kotlinx.android.synthetic.main.fragment_notification.*
+import kotlinx.android.synthetic.main.fragment_notification.iv_user
 import kotlinx.android.synthetic.main.fragment_search.*
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -54,7 +57,12 @@ class NotificationFragment : Fragment() {
         super.onActivityCreated(savedInstanceState)
         setupToolBar()
         // pb_cms_page.visibility= View.VISIBLE
-
+        iv_user.load(
+            SessionManager.getUserPic(),
+            R.color.text_gray,
+            R.color.text_gray,
+            true
+        )
 
         var generalRequest: GeneralRequest = GeneralRequest(SessionManager.getUserId()?:"");
         getNotificationListAPI(generalRequest)

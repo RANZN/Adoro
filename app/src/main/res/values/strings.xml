@@ -43,7 +43,7 @@
     <string name="publish">Publish</string>
     <string name="upload_design">Upload Design</string>
     <string name="description">Description</string>
-    <string name="your_post_will_be_live_soon">Your post will be live soon</string>
+    <string name="your_post_will_be_live_soon">Your post haas been submitted</string>
     <string name="change">Change</string>
     <string name="learn_more">Learn more</string>
     <string name="update_profile_image">Update Profile Image</string>
@@ -72,7 +72,7 @@
     <string name="what_group_is_about">What Community is about</string>
     <string name="notification">Notification</string>
     <string name="profile">Profile</string>
-    <string name="adoro_coins">Adoro Coins</string>
+    <string name="adoro_coins">Cash Coins</string>
     <string name="refer">Refer</string>
     <string name="result">Result</string>
     <string name="settings">Settings</string>

@@ -61,7 +61,9 @@ class OTPVerifyFragment : Fragment() {
             ll_login.visibility = View.GONE
             tv_resend_otp.setTextColor(resources.getColor(R.color.black))
             iv_logo_otp.background = resources.getDrawable(R.drawable.logo_signup)
-
+            btn_verify.background = resources.getDrawable(R.drawable.bg_buttun_gradient)
+            btn_verify.setTextColor(resources.getColor(R.color.white))
+            view_line.setBackgroundColor(Color.parseColor("#ffffff"))
 
         }
         if ( requireArguments().getString("path") == "login") {
@@ -71,6 +73,9 @@ class OTPVerifyFragment : Fragment() {
             ll_signup.visibility = View.GONE
             tv_resend_otp.setTextColor(resources.getColor(R.color.white))
             iv_logo_otp.background = resources.getDrawable(R.drawable.login_screen_logo)
+            view_line.setBackgroundColor(Color.parseColor("#000000"))
+            btn_verify.background = resources.getDrawable(R.drawable.bg_button_white)
+            btn_verify.setTextColor(resources.getColor(R.color.black))
 
         }
         tv_resend_otp.setOnClickListener(View.OnClickListener {
@@ -180,7 +185,6 @@ class OTPVerifyFragment : Fragment() {
 //                            val r = response.body()
                             SessionManager.init(activity as Context)
                             SessionManager.setLoginStatus("true")
-                            SessionManager.setUserId(response.body()?.OK!!.items[0]._id)
                             SessionManager.setUserId(response.body()?.OK?.items?.get(0)?._id ?: "")
                             SessionManager.setUsername(
                                 response.body()?.OK?.items?.get(0)?.username ?: ""
@@ -197,6 +201,14 @@ class OTPVerifyFragment : Fragment() {
 
                             SessionManager.setRefrerCode(
                                 response.body()?.OK?.items?.get(0)?.referCode ?: ""
+                            )
+
+                            SessionManager.setTotalFollowers(
+                                response.body()?.OK?.items?.get(0)?.followerData?.size?: 0
+                            )
+
+                            SessionManager.setAdoroCoins(
+                                response.body()?.OK?.items?.get(0)?.adoroCoins?: 0
                             )
                             startActivity(Intent(activity, MainActivity::class.java))
 

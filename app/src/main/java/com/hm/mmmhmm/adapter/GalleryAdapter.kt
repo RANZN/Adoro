@@ -1,15 +1,19 @@
 package com.hm.mmmhmm.adapter
 
+import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
+import androidx.fragment.app.FragmentActivity
 import androidx.recyclerview.widget.RecyclerView
 import com.hm.mmmhmm.R
+import com.hm.mmmhmm.fragments.CommentsFragment
+import com.hm.mmmhmm.fragments.HomeFragment
 import com.hm.mmmhmm.helper.load
 import com.hm.mmmhmm.models.Item
 
-class GalleryAdapter( private var postsList: List<Item>? = null) : RecyclerView.Adapter<GalleryAdapter.MyViewHolder>() {
+class GalleryAdapter(var ctx: FragmentActivity, private var postsList: List<Item>? = null) : RecyclerView.Adapter<GalleryAdapter.MyViewHolder>() {
 
         override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MyViewHolder {
             val view: View =
@@ -30,7 +34,14 @@ class GalleryAdapter( private var postsList: List<Item>? = null) : RecyclerView.
             )
             holder.itemView.setOnClickListener {
                 //todo
+                val commentsFragment = CommentsFragment()
+                val args = Bundle()
+                args.putString("postId", postsList?.get(position)?._id)
+                commentsFragment.arguments = args
+                ctx.supportFragmentManager.beginTransaction().replace(R.id.frame_layout_main, commentsFragment).addToBackStack(null)
+                    .commit()
 
+                (HomeFragment).lastFirstVisiblePosition = position
 
             }
 

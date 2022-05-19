@@ -14,7 +14,6 @@ import android.view.Window
 import android.view.WindowManager
 import android.widget.Button
 import android.widget.TextView
-import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.GravityCompat
 import androidx.fragment.app.FragmentManager
@@ -23,6 +22,7 @@ import com.hm.mmmhmm.R
 import com.hm.mmmhmm.fragments.*
 import com.hm.mmmhmm.helper.GlobleData
 import com.hm.mmmhmm.helper.SessionManager
+import com.hm.mmmhmm.helper.load
 import com.hm.mmmhmm.web_service.ApiClient
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.custom_navigation_view_sidebar.*
@@ -41,22 +41,49 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
         setContentView(R.layout.activity_main)
         // SessionManager.init(this)
         // GlobleData.ACCESS_TOKEN = SessionManager.getAccessToken().toString()
-//        iv_profile_pic_navigation.load(
-//            SessionManager.getUserData()?.profilePicture,
-//            R.color.text_gray,
-//            R.color.text_gray,
-//            true
-//        )
+        iv_user.load(
+            SessionManager.getUserPic(),
+            R.color.text_gray,
+            R.color.text_gray,
+            true
+        )
+
+        tv_user.text= SessionManager.getUserName()
+        tv_followers.text= SessionManager.getTotalFollowers().toString()+" Followers"
+        tv_total_coins.text= SessionManager.getTotalFollowers().toString()+" adoro"
 
 
-        //use below code to open specific post
-//        val commentsFragment = CommentsFragment()
-//        val args = Bundle()
-//        args.putString("postId", "")
-//        commentsFragment.arguments = args
-//        supportFragmentManager.beginTransaction().replace(R.id.frame_layout_main, commentsFragment).addToBackStack(null)
-//            .commit()
+        ll_user_details.setOnClickListener {
+            val profileFragment = ProfileFragment()
+            val args = Bundle()
+            args.putString("path", "home")
+            args.putString("userId", SessionManager.getUserId())
+            profileFragment.arguments = args
+            supportFragmentManager.beginTransaction()
+                .replace(R.id.frame_layout_main, profileFragment)
+                .commit()
+            view_tab_home.visibility = View.GONE
+            view_tab_group.visibility = View.GONE
+            view_tab_add.visibility = View.GONE
+            view_tab_services.visibility = View.GONE
+            view_tab_account.visibility = View.VISIBLE
+            drawer_layout.closeDrawer(GravityCompat.START)
 
+        }
+        val extras = intent.extras
+        if (extras != null&&extras.getString("tag")=="chat") {
+            val profileFragment = ProfileFragment()
+            val args = Bundle()
+            args.putString("path", "search")
+            args.putString("userId", extras.getString("userId") ?: "")
+            profileFragment.arguments = args
+            supportFragmentManager.beginTransaction()
+                .replace(R.id.frame_layout_main, profileFragment)
+                .addToBackStack(null).commit()
+        } else {
+            supportFragmentManager.beginTransaction().replace(R.id.frame_layout_main, HomeFragment())
+                .commit()
+        }
 
         supportFragmentManager.beginTransaction().replace(R.id.frame_layout_main, HomeFragment())
             .commit()

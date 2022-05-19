@@ -7,21 +7,20 @@ import android.os.Handler
 import android.os.Looper
 import android.text.Editable
 import android.util.Log
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.inputmethod.InputMethodManager
 import android.widget.ImageView
+import android.widget.ScrollView
 import android.widget.TextView
 import android.widget.Toast
 import androidx.core.content.ContextCompat
-import com.hm.mmmhmm.Chat_Module.Inbox
+import androidx.fragment.app.Fragment
 import com.hm.mmmhmm.R
 import com.hm.mmmhmm.activity.MainActivity
 import com.hm.mmmhmm.adapter.CommentsAdapter
-import com.hm.mmmhmm.adapter.FeedListAdapter
 import com.hm.mmmhmm.adapter.MutualLikerAdapter
-import com.hm.mmmhmm.adapter.NotificationsAdapter
 import com.hm.mmmhmm.helper.ConnectivityObserver
 import com.hm.mmmhmm.helper.SessionManager
 import com.hm.mmmhmm.helper.load
@@ -219,6 +218,22 @@ class CommentsFragment : Fragment() {
                                 R.color.text_gray,
                                 R.color.text_gray,
                                 false
+                            )
+                            try {
+                                val imm: InputMethodManager =
+                                    requireActivity().getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+                                imm.hideSoftInputFromWindow(
+                                    requireActivity().currentFocus!!.windowToken,
+                                    0
+                                )
+                            } catch (e: java.lang.Exception) {
+                                // TODO: handle exception
+                            }
+
+                            scroll_controller.fullScroll(View.FOCUS_DOWN)
+                            scroll_controller.postDelayed(
+                                Runnable { scroll_controller.fullScroll(ScrollView.FOCUS_DOWN) },
+                                2000
                             )
                         } else {
                             Log.d("resp", "complet else: ")

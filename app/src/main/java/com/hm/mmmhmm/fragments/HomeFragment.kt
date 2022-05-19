@@ -78,8 +78,9 @@ class HomeFragment : Fragment() {
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
         setupToolBar()
-        var generalRequest: GeneralRequest = GeneralRequest(SessionManager.getUserId()?:"");
-        getSessionForPosts(generalRequest)
+//        var generalRequest: GeneralRequest = GeneralRequest(SessionManager.getUserId()?:"");
+//        getSessionForPosts(generalRequest)
+        getFeedListAPI()
     }
     private fun getSessionForPosts(generalRequest: GeneralRequest) {
         pb_feeds.visibility = View.VISIBLE
@@ -95,7 +96,7 @@ class HomeFragment : Fragment() {
                             sessionId= r?.OK?.items?.get(0)?.sessionId
                             var showPostlRequest: ShowPostlRequest =
                                 ShowPostlRequest(r?.OK?.items?.get(0)?.sessionId ?:0);
-                            getFeedListAPI(showPostlRequest)
+                            //getFeedListAPI(showPostlRequest)
                         } else {
                             Toast.makeText(
                                 activity,
@@ -114,12 +115,12 @@ class HomeFragment : Fragment() {
         }
     }
 
-    private fun getFeedListAPI(generalRequest: ShowPostlRequest) {
+    private fun getFeedListAPI() {
         pb_feeds.visibility = View.VISIBLE
         val apiInterface = ApiClient.getRetrofitService(requireContext())
         CoroutineScope(Dispatchers.IO).launch {
             try {
-                val response = apiInterface.getFeed(generalRequest)
+                val response = apiInterface.getFeed()
                 withContext(Dispatchers.Main) {
                     pb_feeds.visibility = View.GONE
                     try {
@@ -133,7 +134,7 @@ class HomeFragment : Fragment() {
                             (recycler_feed_list.getLayoutManager() as LinearLayoutManager).scrollToPositionWithOffset(SessionManager.getFeedLastPosition(),0)
 //                            (recycler_feed_list.getLayoutManager() as LinearLayoutManager).scrollToPosition(3)
 //                            (recycler_feed_list.getLayoutManager() as LinearLayoutManager).scrollToPositionWithOffset(3,0)
-//                           // feedListAdapter.notifyDataSetChanged()
+                           feedListAdapter.notifyDataSetChanged()
                             Log.d("lastFirstVisiblePosition", lastFirstVisiblePosition.toString())
                         } else {
                             Log.d("resp", "complet else: ")

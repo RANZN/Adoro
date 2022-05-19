@@ -24,8 +24,11 @@ data class ItemLoginResponse(
      val name: String,
      val number: Long,
     val username: String,
+    val adoroCoins: Int,
     val profile: String,
     val referCode: String,
+    val followerData: List<Any>?,
+    val followingData: List<FollowingData>?,
 )
 
 data class QueryLoginResponse(
