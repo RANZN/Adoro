@@ -215,7 +215,7 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
             val cmsPageFragment = CMSPageFragment()
             val args = Bundle()
             args.putString("title", "Support")
-            args.putString("url", "https://www.marqueberry.com/adoro-support-page0")
+            args.putString("url", "https://www.marqueberry.com/adoro-support-page")
             cmsPageFragment.arguments = args
 
             supportFragmentManager.beginTransaction()

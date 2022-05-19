@@ -2,6 +2,7 @@ package com.hm.mmmhmm.adapter
 
 import android.content.Intent
 import android.os.Bundle
+import android.text.Html
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.MenuItem
@@ -15,6 +16,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.hm.mmmhmm.R
 import com.hm.mmmhmm.activity.MainActivity
 import com.hm.mmmhmm.fragments.CommentsFragment
+import com.hm.mmmhmm.fragments.HomeFragment
 import com.hm.mmmhmm.fragments.PostDetailFragment
 import com.hm.mmmhmm.fragments.ProfileFragment
 import com.hm.mmmhmm.helper.SessionManager
@@ -46,7 +48,27 @@ class FeedListAdapter(var ctx: FragmentActivity, private var feedList: List<Item
         //holder.tv_apply_count.text= feedList?.get(position)?.shortDescription
         // holder.tv_time_left.text= "₹"+feedList?.get(position)?.timeLeft.toString()+" left"
 //           holder.tv_apply_count.text= feedList?.get(position)?.comment?.size()
-        holder.tv_feed_description.text = feedList?.get(position)?.description
+        var text = feedList?.get(position)?.description
+        holder.tv_feed_description.text = text
+
+        if (feedList?.get(position)?.description?.length?:0>80) {
+            var text=text?.substring(0,80)+"...";
+            holder.tv_feed_description.setText(Html.fromHtml(text+"<font color='red'> <u>View More</u></font>"));
+
+
+            holder.tv_feed_description.setOnClickListener{
+                val commentsFragment = CommentsFragment()
+                val args = Bundle()
+                args.putString("postId", feedList?.get(position)?._id)
+                commentsFragment.arguments = args
+                ctx.supportFragmentManager.beginTransaction().replace(R.id.frame_layout_main, commentsFragment).addToBackStack(null)
+                    .commit()
+
+                (HomeFragment).lastFirstVisiblePosition = position
+            }
+        }
+
+
         holder.iv_user_feed.load(
             feedList?.get(position)?.profile,
             R.color.text_gray,
@@ -111,7 +133,8 @@ class FeedListAdapter(var ctx: FragmentActivity, private var feedList: List<Item
                     .addToBackStack(null).commit()
 
             }
-
+            (HomeFragment).lastFirstVisiblePosition = position
+            SessionManager.setFeedLastPosition(position)
         }
 
         holder.iv_user_feed.setOnClickListener {
@@ -126,7 +149,8 @@ class FeedListAdapter(var ctx: FragmentActivity, private var feedList: List<Item
                     .addToBackStack(null).commit()
 
             }
-
+            (HomeFragment).lastFirstVisiblePosition = position
+            SessionManager.setFeedLastPosition(position)
         }
 
         holder.tv_like_count.text =
@@ -168,6 +192,8 @@ class FeedListAdapter(var ctx: FragmentActivity, private var feedList: List<Item
             commentsFragment.arguments = args
             ctx.supportFragmentManager.beginTransaction().replace(R.id.frame_layout_main, commentsFragment).addToBackStack(null)
                 .commit()
+            SessionManager.setFeedLastPosition(position)
+            (HomeFragment).lastFirstVisiblePosition = position
         }
 
         holder.tv_like_status.text= "and "+(feedList?.get(position)?.like as List<Like>).size.toString()+" others "+ ctx.getResources().getString(R.string.also_liked_the_post)

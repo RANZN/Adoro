@@ -7,9 +7,9 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.*
+import android.widget.Toast
 import androidx.fragment.app.Fragment
-import com.hm.mmmhmm.Chat_Module.Inbox
+import androidx.recyclerview.widget.LinearLayoutManager
 import com.hm.mmmhmm.Chat_Module.InboxActivity
 import com.hm.mmmhmm.R
 import com.hm.mmmhmm.activity.MainActivity
@@ -17,15 +17,11 @@ import com.hm.mmmhmm.adapter.FeedListAdapter
 import com.hm.mmmhmm.helper.SessionManager
 import com.hm.mmmhmm.helper.load
 import com.hm.mmmhmm.models.GeneralRequest
-import com.hm.mmmhmm.models.Item
 import com.hm.mmmhmm.models.ItemComment
 import com.hm.mmmhmm.models.ShowPostlRequest
 import com.hm.mmmhmm.web_service.ApiClient
 import kotlinx.android.synthetic.main.custom_toolbar.*
 import kotlinx.android.synthetic.main.fragment_home.*
-import kotlinx.android.synthetic.main.fragment_profile.*
-import kotlinx.android.synthetic.main.fragment_services.*
-import kotlinx.android.synthetic.main.item_job_list.*
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -36,6 +32,11 @@ class HomeFragment : Fragment() {
 
     private var feedList: List<ItemComment>? = null
     private  var sessionId: Long?=null
+    lateinit  var feedListAdapter: FeedListAdapter
+
+    companion object {
+         var lastFirstVisiblePosition : Int=0
+    }
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
@@ -44,9 +45,10 @@ class HomeFragment : Fragment() {
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
-        // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_home, container, false)
+    ): View {
+        var root: View = inflater.inflate(R.layout.fragment_home, container, false)
+
+        return root
     }
     private fun setupToolBar() {
         iv_toolbar_icon.setBackgroundResource(R.drawable.hamburger_icon)
@@ -124,8 +126,15 @@ class HomeFragment : Fragment() {
                         if (response!=null) {
                             feedList = response.body()?.OK?.items
                             getContest()
-                            recycler_feed_list.adapter= FeedListAdapter(requireActivity(),feedList, sessionId)
-
+                            feedListAdapter= FeedListAdapter(requireActivity(),feedList, sessionId)
+                            recycler_feed_list.adapter= feedListAdapter
+                            (recycler_feed_list.getLayoutManager() as LinearLayoutManager).scrollToPosition(lastFirstVisiblePosition)
+                            (recycler_feed_list.getLayoutManager() as LinearLayoutManager).scrollToPosition(SessionManager.getFeedLastPosition())
+                            (recycler_feed_list.getLayoutManager() as LinearLayoutManager).scrollToPositionWithOffset(SessionManager.getFeedLastPosition(),0)
+//                            (recycler_feed_list.getLayoutManager() as LinearLayoutManager).scrollToPosition(3)
+//                            (recycler_feed_list.getLayoutManager() as LinearLayoutManager).scrollToPositionWithOffset(3,0)
+//                           // feedListAdapter.notifyDataSetChanged()
+                            Log.d("lastFirstVisiblePosition", lastFirstVisiblePosition.toString())
                         } else {
                             Log.d("resp", "complet else: ")
                         }
@@ -182,7 +191,18 @@ class HomeFragment : Fragment() {
 
     }
 
+//    override fun onPause() {
+//        lastFirstVisiblePosition =
+//            (recycler_feed_list.getLayoutManager() as LinearLayoutManager).findFirstCompletelyVisibleItemPosition()
+//
+//        super.onPause()
+//    }
 
+//    override fun onResume() {
+//        (recycler_feed_list.getLayoutManager() as LinearLayoutManager).scrollToPosition(lastFirstVisiblePosition)
+//
+//        super.onResume()
+//    }
 
 
 

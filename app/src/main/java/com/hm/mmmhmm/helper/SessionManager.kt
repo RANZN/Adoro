@@ -19,6 +19,7 @@ object SessionManager {
     private const val OTP = "otp"
     private const val USER_NAME = "user_name"
     private const val USERNAME = "username"
+    private const val lastFirstVisiblePosition = "lastFirstVisiblePosition"
     private const val ADORO_COINS = "adoro_coins"
     private const val USER_DATA = "user_data"
     private const val USER_EMAIL = "user_email"
@@ -195,6 +196,22 @@ object SessionManager {
         return prefs.getString(
             USERNAME,
             USERNAME
+        )
+    }
+
+    fun setFeedLastPosition(value: Int) {
+        val prefsEditor: SharedPreferences.Editor = prefs.edit()
+        with(prefsEditor) {
+            putInt(lastFirstVisiblePosition, value)
+            commit()
+        }
+    }
+
+
+    fun getFeedLastPosition(): Int {
+        return prefs.getInt(
+            lastFirstVisiblePosition,
+            0
         )
     }
 
