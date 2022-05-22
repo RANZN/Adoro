@@ -207,27 +207,28 @@ class EditProfileFragment : Fragment() {
     }
 
     private fun setupToolBar() {
-        iv_toolbar_icon.setBackgroundResource(R.drawable.hamburger_icon)
+        iv_toolbar_icon.setBackgroundResource(R.drawable.ic_back_arrow)
         iv_toolbar_action_inbox.setBackgroundResource(R.drawable.chat)
         iv_toolbar_action_search.setBackgroundResource(R.drawable.iv_search)
+        iv_toolbar_action_search.visibility=View.GONE
         iv_toolbar_icon.setColorFilter(resources.getColor(R.color.black))
         iv_toolbar_action_inbox.setColorFilter(resources.getColor(R.color.black))
         iv_toolbar_action_search.setColorFilter(resources.getColor(R.color.black))
 //        tv_toolbar_title.setTextColor(resources.getColor(R.color.black))
 //        tv_toolbar_title.text = resources.getString(R.string.edit_profile)
         iv_toolbar_icon.setOnClickListener(View.OnClickListener {
-            (activity as MainActivity).manageDrawer()
+            (activity as MainActivity).onBackPressed()
         })
 
         iv_toolbar_action_inbox.setOnClickListener(View.OnClickListener {
             startActivity(Intent(activity, InboxActivity::class.java))
         })
 
-        iv_toolbar_action_search.setOnClickListener(View.OnClickListener {
-            (activity as MainActivity).supportFragmentManager.beginTransaction()
-                .replace(R.id.frame_layout_main, SearchFragment())
-                .addToBackStack(null).commit()
-        })
+//        iv_toolbar_action_search.setOnClickListener(View.OnClickListener {
+//            (activity as MainActivity).supportFragmentManager.beginTransaction()
+//                .replace(R.id.frame_layout_main, SearchFragment())
+//                .addToBackStack(null).commit()
+//        })
 
 
     }

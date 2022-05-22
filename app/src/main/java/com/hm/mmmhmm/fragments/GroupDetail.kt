@@ -19,6 +19,7 @@ import com.hm.mmmhmm.models.ShowAnnouncementRequest
 import com.hm.mmmhmm.web_service.ApiClient
 import kotlinx.android.synthetic.main.custom_toolbar.*
 import kotlinx.android.synthetic.main.fragment_group_detail.*
+import kotlinx.android.synthetic.main.fragment_groups.*
 import kotlinx.android.synthetic.main.fragment_home.*
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -27,6 +28,7 @@ import kotlinx.coroutines.withContext
 
 class GroupDetail : Fragment() {
 
+    var itemType:Int=0
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -41,33 +43,50 @@ class GroupDetail : Fragment() {
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
+        tv_announcement.setBackgroundResource( R.drawable.bg_buttun_gradient )
+        tv_discussion.setBackgroundResource( R.drawable.bg_unselect )
+        tv_post.setBackgroundResource( R.drawable.bg_unselect )
+        tv_announcement.setTextColor(resources.getColor(R.color.white))
+        tv_discussion.setTextColor(resources.getColor(R.color.black))
+        tv_post.setTextColor(resources.getColor(R.color.black))
+        itemType=0
         setupToolBar()
         var showAnnouncementRequest: ShowAnnouncementRequest = ShowAnnouncementRequest(requireArguments().getString("groupId")?:"");
         getAnnouncementAPI(showAnnouncementRequest)
-        tv_announcement.setBackgroundColor(ContextCompat.getColor(requireActivity(),R.color.colorAccent))
-        tv_discussion.setBackgroundColor(ContextCompat.getColor(requireActivity(),R.color.transparent))
-        tv_post.setBackgroundColor(ContextCompat.getColor(requireActivity(),R.color.transparent))
+
+
         tv_announcement.setOnClickListener {
-            tv_announcement.setBackgroundColor(ContextCompat.getColor(requireActivity(),R.color.colorAccent))
-            tv_post.setBackgroundColor(ContextCompat.getColor(requireActivity(),R.color.transparent))
-            tv_discussion.setBackgroundColor(ContextCompat.getColor(requireActivity(),R.color.transparent))
+            tv_announcement.setBackgroundResource( R.drawable.bg_buttun_gradient )
+            tv_discussion.setBackgroundResource( R.drawable.bg_unselect )
+            tv_post.setBackgroundResource( R.drawable.bg_unselect )
+            tv_announcement.setTextColor(resources.getColor(R.color.white))
+            tv_discussion.setTextColor(resources.getColor(R.color.black))
+            tv_post.setTextColor(resources.getColor(R.color.black))
+            itemType=0
             var showAnnouncementRequest: ShowAnnouncementRequest = ShowAnnouncementRequest(requireArguments().getString("groupId")?:"");
             getAnnouncementAPI(showAnnouncementRequest)
 //            recycler_group_detail.adapter= GroupAnnouncementAdapter(requireActivity())
         }
         tv_post.setOnClickListener {
-            tv_post.setBackgroundColor(ContextCompat.getColor(requireActivity(),R.color.colorAccent))
-            tv_announcement.setBackgroundColor(ContextCompat.getColor(requireActivity(),R.color.transparent))
-            tv_discussion.setBackgroundColor(ContextCompat.getColor(requireActivity(),R.color.transparent))
+            tv_announcement.setBackgroundResource( R.drawable.bg_unselect )
+            tv_discussion.setBackgroundResource( R.drawable.bg_unselect )
+            tv_post.setBackgroundResource( R.drawable.bg_buttun_gradient )
+            tv_announcement.setTextColor(resources.getColor(R.color.black))
+            tv_discussion.setTextColor(resources.getColor(R.color.black))
+            tv_post.setTextColor(resources.getColor(R.color.white))
+            itemType=1
 //            recycler_group_detail.adapter= FeedListAdapter()
             var showAnnouncementRequest: ShowAnnouncementRequest = ShowAnnouncementRequest(requireArguments().getString("groupId")?:"");
             getPostsAPI(showAnnouncementRequest)
         }
         tv_discussion.setOnClickListener {
-            tv_discussion.setBackgroundColor(ContextCompat.getColor(requireActivity(),R.color.colorAccent))
-            tv_announcement.setBackgroundColor(ContextCompat.getColor(requireActivity(),R.color.transparent))
-            tv_post.setBackgroundColor(ContextCompat.getColor(requireActivity(),R.color.transparent))
-
+            tv_announcement.setBackgroundResource( R.drawable.bg_unselect )
+            tv_discussion.setBackgroundResource( R.drawable.bg_buttun_gradient )
+            tv_post.setBackgroundResource( R.drawable.bg_unselect )
+            tv_announcement.setTextColor(resources.getColor(R.color.black))
+            tv_discussion.setTextColor(resources.getColor(R.color.white))
+            tv_post.setTextColor(resources.getColor(R.color.black))
+            itemType=2
             var showAnnouncementRequest: ShowAnnouncementRequest = ShowAnnouncementRequest(requireArguments().getString("groupId")?:"");
             getGroupDiscussionAPI(showAnnouncementRequest)
         }
@@ -78,11 +97,42 @@ class GroupDetail : Fragment() {
 
     private fun setupToolBar() {
         iv_toolbar_icon.setBackgroundResource(R.drawable.ic_back_arrow)
-        iv_toolbar_icon.setColorFilter(resources.getColor(R.color.black));
+        iv_toolbar_action_members.setBackgroundResource(R.drawable.ic_group)
+        iv_toolbar_action_edit.setBackgroundResource(R.drawable.ic_edit_group)
+        iv_toolbar_action_members.setColorFilter(resources.getColor(R.color.black));
+        iv_toolbar_action_members.visibility=View.VISIBLE
+
+        iv_toolbar_action_edit.setColorFilter(resources.getColor(R.color.black));
+        iv_toolbar_action_edit.visibility=View.VISIBLE
         tv_toolbar_title.setTextColor(resources.getColor(R.color.black))
-        tv_toolbar_title.text = resources.getString(R.string.app_name)
+
+        iv_toolbar_action_inbox.setBackgroundResource(R.drawable.chat)
+        iv_toolbar_action_search.setBackgroundResource(R.drawable.iv_search)
+        iv_toolbar_action_inbox.setColorFilter(resources.getColor(R.color.black));
+        iv_toolbar_action_search.setColorFilter(resources.getColor(R.color.black));
+        iv_toolbar_action_members.setColorFilter(resources.getColor(R.color.black));
+        iv_toolbar_action_edit.setColorFilter(resources.getColor(R.color.black));
+        tv_toolbar_title.setTextColor(resources.getColor(R.color.black))
         iv_toolbar_icon.setOnClickListener(View.OnClickListener {
             (activity as MainActivity).onBackPressed()
+        })
+
+        iv_toolbar_action_members.setOnClickListener {
+            val groupMembers = GroupMembers()
+            val args = Bundle()
+           // args.putString("postId", postsList?.get(position)?._id)
+            groupMembers.arguments = args
+            requireActivity().supportFragmentManager.beginTransaction().replace(R.id.frame_layout_main, groupMembers).addToBackStack(null)
+                .commit()
+        }
+        iv_toolbar_action_edit.setOnClickListener(View.OnClickListener {
+            val editGroup = EditGroup()
+            val args = android.os.Bundle()
+            args.putString("groupId", requireArguments().getString("groupId")?:"")
+            editGroup.arguments = args
+            activity?.supportFragmentManager?.beginTransaction()
+                ?.replace(R.id.frame_layout_main, editGroup)
+                ?.addToBackStack(null)?.commit()
         })
 
 

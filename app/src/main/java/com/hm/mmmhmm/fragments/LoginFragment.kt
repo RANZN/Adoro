@@ -97,7 +97,6 @@ class LoginFragment : androidx.fragment.app.Fragment() {
                         pb_login.visibility = View.GONE
                         if (response.body()?.OK?.items?.size !=0) {
                             val r = response.body()
-
                            SessionManager.init(activity as Context)
                             if(requestAuthenticateNumber.number==7400705595){
                                 var loginRequest: RequestLogin =

@@ -17,7 +17,7 @@ class GroupRequestsAdapter(var ctx: FragmentActivity) : RecyclerView.Adapter<Gro
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MyViewHolder {
         val view: View =
-            LayoutInflater.from(parent.context).inflate(R.layout.item_requests, parent, false)
+            LayoutInflater.from(parent.context).inflate(R.layout.item_group_members, parent, false)
         return MyViewHolder(view)
     }
 
@@ -45,18 +45,20 @@ class GroupRequestsAdapter(var ctx: FragmentActivity) : RecyclerView.Adapter<Gro
     }
 
     inner class MyViewHolder(v: View) : RecyclerView.ViewHolder(v) {
-            val iv_user_request: ImageView
-            val tv_username_request: TextView
+            val iv_user_group_member: ImageView
+            val tv_username_group_member: TextView
 //            val tv_detail: TextView
 //            val tv_time_left: TextView
 //            val tv_price: TextView
-            val btn_accept_request: Button
+            val btn_accept_request: TextView
+            val tv_remove: TextView
 //            val ll_item_list: LinearLayout
 //
             init {
-    iv_user_request = v.findViewById(R.id.iv_user_request)
-    tv_username_request = v.findViewById(R.id.tv_username_request)
+    iv_user_group_member = v.findViewById(R.id.iv_user_group_member)
+    tv_username_group_member = v.findViewById(R.id.tv_username_group_member)
                 btn_accept_request = v.findViewById(R.id.btn_accept_request)
+    tv_remove = v.findViewById(R.id.tv_remove)
 //                tv_time_left = v.findViewById(R.id.tv_time_left)
 //                tv_price = v.findViewById(R.id.tv_price)
 //                btn_learn_more = v.findViewById(R.id.btn_learn_more)

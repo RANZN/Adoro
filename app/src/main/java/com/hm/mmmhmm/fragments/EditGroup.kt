@@ -114,9 +114,6 @@ class EditGroup : Fragment() {
         btn_create_group.setOnClickListener {
             validateInput()
         }
-        iv_back.setOnClickListener {
-            (activity as MainActivity).onBackPressed()
-        }
         btn_update_group_pic.setOnClickListener {
             EditProfileFragment.isBanner = false
             if (checkPermission()) {
@@ -134,7 +131,6 @@ class EditGroup : Fragment() {
             }
 
         }
-        recycler_group_members.adapter= GroupRequestsAdapter(requireActivity())
 
     }
 

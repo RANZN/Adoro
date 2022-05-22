@@ -4,14 +4,15 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ImageView
 import android.widget.LinearLayout
+import android.widget.TextView
 import androidx.core.content.ContentProviderCompat.requireContext
 import androidx.fragment.app.FragmentActivity
 import androidx.recyclerview.widget.RecyclerView
 import com.hm.mmmhmm.R
-import com.hm.mmmhmm.models.GroupDiscussionPostUpdateLikeRequest
-import com.hm.mmmhmm.models.LikeData
-import com.hm.mmmhmm.models.ShowAnnouncementRequest
+import com.hm.mmmhmm.helper.SessionManager
+import com.hm.mmmhmm.models.*
 import com.hm.mmmhmm.web_service.ApiClient
 import kotlinx.android.synthetic.main.fragment_group_detail.*
 import kotlinx.coroutines.CoroutineScope
@@ -38,15 +39,23 @@ class GroupDiscussionAdapter(var ctx: FragmentActivity) : RecyclerView.Adapter<G
 //                R.color.text_gray,
 //                true
 //            )
-            holder.ll_like_discussion.setOnClickListener {
+        holder.iv_like.setOnClickListener {
+            var likeData: LikeData = LikeData(
+                SessionManager.getUserId(),
+                "",
+                SessionManager.getUserPic(),
+                SessionManager.getUserName()
+            );
+            var groupDiscussionPostUpdateLikeRequest: GroupDiscussionPostUpdateLikeRequest = GroupDiscussionPostUpdateLikeRequest(
+                "",likeData);
+            groupDiscussionPostUpdateLike(groupDiscussionPostUpdateLikeRequest,  holder.iv_like,
+                holder.iv_liked,
+                holder.tv_like_count,
+                /*(feedList?.get(position)?.like as List<PostLikeData>).size*/0
+            )
 
-                var likeData: LikeData = LikeData("","","","");
-                var groupDiscussionPostUpdateLikeRequest: GroupDiscussionPostUpdateLikeRequest = GroupDiscussionPostUpdateLikeRequest(
-                    "",likeData);
-                groupDiscussionPostUpdateLike(groupDiscussionPostUpdateLikeRequest)
+        }
 
-
-            }
 
     }
 
@@ -65,8 +74,10 @@ class GroupDiscussionAdapter(var ctx: FragmentActivity) : RecyclerView.Adapter<G
 //            val tv_time_left: TextView
 //            val tv_price: TextView
 //            val btn_learn_more: Button
-            val ll_like_discussion: LinearLayout
-//
+val iv_like: ImageView
+        val iv_liked: ImageView
+        val tv_like_count: TextView
+
             init {
 //                iv_profile_pic_profile = v.findViewById(R.id.iv_profile_pic_profile)
 //                tv_brand_name = v.findViewById(R.id.tv_brand_name)
@@ -74,11 +85,17 @@ class GroupDiscussionAdapter(var ctx: FragmentActivity) : RecyclerView.Adapter<G
 //                tv_time_left = v.findViewById(R.id.tv_time_left)
 //                tv_price = v.findViewById(R.id.tv_price)
 //                btn_learn_more = v.findViewById(R.id.btn_learn_more)
-    ll_like_discussion = v.findViewById(R.id.ll_like_discussion)
+    iv_like = v.findViewById(R.id.iv_like)
+    iv_liked = v.findViewById(R.id.iv_liked)
+                tv_like_count = v.findViewById(R.id.tv_like_count)
             }
     }
 
-     private fun groupDiscussionPostUpdateLike(groupDiscussionPostUpdateLikeRequest: GroupDiscussionPostUpdateLikeRequest) {
+     private fun groupDiscussionPostUpdateLike(groupDiscussionPostUpdateLikeRequest: GroupDiscussionPostUpdateLikeRequest,
+                                               iv_like: ImageView,
+                                               iv_liked: ImageView,
+                                               tv_like_count: TextView,
+                                               likeCount: Int) {
         // pb_group_detail.visibility = View.VISIBLE
          val apiInterface = ApiClient.getRetrofitService(ctx)
          CoroutineScope(Dispatchers.IO).launch {
@@ -91,7 +108,13 @@ class GroupDiscussionAdapter(var ctx: FragmentActivity) : RecyclerView.Adapter<G
                          //  toast("" + response.body()?.message)
                          if (response!=null) {
 //                            feedList = response.body()?.OK?.items
-
+                             if (response != null) {
+                                 tv_like_count.text = (likeCount + 1).toString()
+                                 iv_liked.visibility=View.VISIBLE
+                                 iv_like.visibility=View.GONE
+                             } else {
+                                 Log.d("resp", "complet else: ")
+                             }
 
                          } else {
                              Log.d("resp", "complet else: ")

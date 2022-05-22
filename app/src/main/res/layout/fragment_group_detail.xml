@@ -13,22 +13,27 @@
         android:orientation="vertical">
 
         <include layout="@layout/custom_toolbar" />
-
         <TextView
             android:id="@+id/tv_group_name"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:padding="20dp"
-            android:text="@string/group_name"
-            android:textSize="16sp"
-            android:textColor="@color/black"/>
+            android:fontFamily="@font/poppins_regular"
+            android:text="Group Name"
+            android:textColor="@color/black"
+            android:layout_marginHorizontal="20dp"
+            android:textFontWeight="500"
+            android:textSize="20sp" />
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:layout_marginHorizontal="20dp"
+            android:layout_marginVertical="20dp"
+            android:background="@drawable/bg_gradient" />
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="55dp"
-            android:layout_marginHorizontal="20dp"
-            android:background="@drawable/bg_edittext"
+            android:layout_height="46dp"
+            android:layout_marginHorizontal="10dp"
             android:gravity="center_vertical"
             android:padding="1dp">
 
@@ -37,34 +42,30 @@
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
+                android:paddingHorizontal="@dimen/_10sdp"
+                android:background="@drawable/bg_buttun_gradient"
                 android:gravity="center"
-                android:text="@string/announcement" />
+                android:text="@string/announcement"
+                android:textColor="@color/white" />
 
-            <View
-                android:layout_width="1dp"
-                android:layout_height="30dp"
-                android:background="@color/black" />
 
             <TextView
                 android:id="@+id/tv_post"
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
+                android:layout_marginHorizontal="7dp"
                 android:layout_weight="1"
+                android:background="@drawable/bg_unselect"
                 android:gravity="center"
                 android:text="@string/post" />
-            <View
-                android:layout_width="1dp"
-                android:layout_height="30dp"
-                android:background="@color/black" />
-
             <TextView
                 android:id="@+id/tv_discussion"
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
+                android:background="@drawable/bg_unselect"
                 android:gravity="center"
                 android:text="@string/discussion" />
-
 
         </LinearLayout>
 

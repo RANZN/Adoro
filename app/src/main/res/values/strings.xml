@@ -46,7 +46,7 @@
     <string name="your_post_will_be_live_soon">Your post haas been submitted</string>
     <string name="change">Change</string>
     <string name="learn_more">Learn more</string>
-    <string name="update_profile_image">Update Profile Image</string>
+    <string name="update_profile_image">Update Profile</string>
     <string name="street_address">Street Address</string>
     <string name="landmark">Landmark</string>
     <string name="area_name">Area Name</string>
@@ -58,7 +58,7 @@
     <string name="account_number">Account Number</string>
     <string name="ifsc_code">IFSC Code</string>
     <string name="update_profile">Update Profile</string>
-    <string name="basic_information">Basic Information</string>
+    <string name="basic_information">Personal Information</string>
     <string name="also_liked_the_post">also liked the post</string>
     <string name="my_groups">My Community</string>
     <string name="browse_groups">Browse Community</string>
@@ -129,4 +129,8 @@
     <string name="choose_your_meme">Choose your meme</string>
     <string name="add">Add</string>
     <string name="upload">Upload</string>
+    <string name="new_profile">New Profile</string>
+    <string name="existing">Existing</string>
+    <string name="requested">Requested</string>
+    <string name="members">Members</string>
 </resources>

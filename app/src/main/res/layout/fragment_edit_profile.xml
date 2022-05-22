@@ -29,7 +29,8 @@
                 <androidx.appcompat.widget.LinearLayoutCompat
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:orientation="horizontal">
+                    android:orientation="horizontal"
+                    android:visibility="gone">
 
                     <ImageView
                         android:id="@+id/iv_back"
@@ -46,13 +47,7 @@
                         android:orientation="vertical">
 
 
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_marginHorizontal="20dp"
-                            android:text="@string/basic_information"
-                            android:textColor="@color/black"
-                            android:textSize="18sp" />
+
                     </androidx.appcompat.widget.LinearLayoutCompat>
 
                     <TextView
@@ -75,7 +70,8 @@
                     android:layout_width="match_parent"
                     android:layout_height="140dp"
                     android:layout_marginHorizontal="20dp"
-                    android:layout_marginTop="20dp">
+                    android:layout_marginTop="20dp"
+                    android:visibility="gone">
 
                     <ImageView
                         android:id="@+id/iv_cover_pic_profile"
@@ -103,184 +99,272 @@
                     android:layout_height="wrap_content"
                     android:layout_marginHorizontal="20dp"
                     android:layout_marginTop="20dp"
-                    android:gravity="center"
+                    android:gravity="center_vertical"
                     android:orientation="horizontal">
 
                     <de.hdodenhof.circleimageview.CircleImageView
                         android:id="@+id/iv_profile_pic_profile"
-                        android:layout_width="90dp"
-                        android:layout_height="90dp"
+                        android:layout_width="80dp"
+                        android:layout_height="80dp"
                         android:layout_gravity="center_horizontal"
+                        android:background="@drawable/bg_circle_gradient"
+                        android:padding="5dp"
                         android:scaleType="centerCrop"
                         android:src="@drawable/ic_account_24" />
 
                     <Button
                         android:id="@+id/btn_update_profile_pic"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginStart="20dp"
-                        android:background="@drawable/bg_button_red"
+                        android:layout_width="wrap_content"
+                        android:layout_height="44dp"
+                        android:layout_marginStart="@dimen/_40sdp"
+                        android:textAllCaps="false"
+                        android:background="@drawable/bg_buttun_gradient"
                         android:paddingHorizontal="40dp"
                         android:text="@string/update_profile_image"
                         android:textColor="@color/buttonTextColor"
                         android:textSize="14sp" />
                 </LinearLayout>
 
-                <EditText
-                    android:id="@+id/et_full_name"
-                    android:layout_width="match_parent"
-                    android:layout_height="50dp"
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
                     android:layout_marginHorizontal="20dp"
-                    android:layout_marginTop="16dp"
-                    android:background="@drawable/bg_edittext"
-                    android:hint="@string/full_name"
-                    android:inputType="textPersonName"
-                    android:paddingHorizontal="10dp"
-                    android:paddingLeft="5dp"
-                    android:singleLine="true"
-                    android:textColor="@color/text_black"
-                    android:textColorHint="@color/text_gray"
-                    android:textSize="16sp" />
+                    android:layout_marginTop="@dimen/_20sdp"
+                    android:text="@string/basic_information"
+                    android:fontFamily="@font/poppins_regular"
+                    android:textColor="@color/black"
+                    android:textSize="18sp" />
 
-                <EditText
-                    android:id="@+id/et_username"
+                <androidx.cardview.widget.CardView
                     android:layout_width="match_parent"
-                    android:layout_height="50dp"
+                    android:layout_height="wrap_content"
                     android:layout_marginHorizontal="20dp"
-                    android:layout_marginTop="16dp"
-                    android:background="@drawable/bg_edittext"
-                    android:hint="@string/username"
-                    android:inputType="text"
-                    android:paddingHorizontal="10dp"
-                    android:paddingLeft="5dp"
-                    android:singleLine="true"
-                    android:textColor="@color/text_black"
-                    android:textColorHint="@color/text_gray"
-                    android:textSize="16sp" />
+                    android:layout_marginTop="@dimen/_20sdp"
+                    app:cardCornerRadius="@dimen/_25sdp">
 
-                <EditText
-                    android:id="@+id/et_phone"
-                    android:layout_width="match_parent"
-                    android:layout_height="50dp"
-                    android:layout_marginHorizontal="20dp"
-                    android:layout_marginTop="16dp"
-                    android:background="@drawable/bg_edittext"
-                    android:hint="@string/phone_number"
-                    android:inputType="number"
-                    android:paddingHorizontal="10dp"
-                    android:paddingLeft="5dp"
-                    android:singleLine="true"
-                    android:textColor="@color/text_black"
-                    android:textColorHint="@color/text_gray"
-                    android:textSize="16sp" />
 
-                <EditText
-                    android:id="@+id/et_bio"
-                    android:layout_width="match_parent"
-                    android:layout_height="50dp"
-                    android:layout_marginHorizontal="20dp"
-                    android:layout_marginTop="16dp"
-                    android:background="@drawable/bg_edittext"
-                    android:hint="@string/bio"
-                    android:inputType="text"
-                    android:maxLines="3"
-                    android:paddingHorizontal="10dp"
-                    android:paddingLeft="5dp"
-                    android:singleLine="true"
-                    android:textColor="@color/text_black"
-                    android:textColorHint="@color/text_gray"
-                    android:textSize="16sp" />
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:orientation="vertical"
+                        android:layout_marginVertical="@dimen/_10sdp">
 
-                <EditText
-                    android:id="@+id/et_email"
-                    android:layout_width="match_parent"
-                    android:layout_height="50dp"
-                    android:layout_marginHorizontal="20dp"
-                    android:layout_marginTop="16dp"
-                    android:background="@drawable/bg_edittext"
-                    android:hint="@string/email_address"
-                    android:inputType="textEmailAddress"
-                    android:paddingHorizontal="10dp"
-                    android:paddingLeft="5dp"
-                    android:singleLine="true"
-                    android:textColor="@color/text_black"
-                    android:textColorHint="@color/text_gray"
-                    android:textSize="16sp" />
 
-                <EditText
-                    android:id="@+id/et_street_address"
-                    android:layout_width="match_parent"
-                    android:layout_height="50dp"
-                    android:layout_marginHorizontal="20dp"
-                    android:layout_marginTop="16dp"
-                    android:background="@drawable/bg_edittext"
-                    android:hint="@string/street_address"
-                    android:paddingHorizontal="10dp"
-                    android:paddingLeft="5dp"
-                    android:singleLine="true"
-                    android:textColor="@color/text_black"
-                    android:textColorHint="@color/text_gray"
-                    android:textSize="16sp" />
+                        <EditText
+                            android:id="@+id/et_full_name"
+                            android:layout_width="match_parent"
+                            android:layout_height="50dp"
+                            android:layout_marginHorizontal="20dp"
+                            android:layout_marginTop="16dp"
+                            android:hint="@string/full_name"
+                            android:inputType="textPersonName"
+                            android:paddingHorizontal="10dp"
+                            android:paddingLeft="5dp"
+                            android:singleLine="true"
+                            android:textColor="@color/text_black"
+                            android:textColorHint="@color/text_gray"
+                            android:textSize="16sp" />
 
-                <EditText
-                    android:id="@+id/et_landmark"
-                    android:layout_width="match_parent"
-                    android:layout_height="50dp"
-                    android:layout_marginHorizontal="20dp"
-                    android:layout_marginTop="16dp"
-                    android:background="@drawable/bg_edittext"
-                    android:hint="@string/landmark"
-                    android:paddingHorizontal="10dp"
-                    android:paddingLeft="5dp"
-                    android:singleLine="true"
-                    android:textColor="@color/text_black"
-                    android:textColorHint="@color/text_gray"
-                    android:textSize="16sp" />
+                        <EditText
+                            android:id="@+id/et_username"
+                            android:layout_width="match_parent"
+                            android:layout_height="50dp"
+                            android:layout_marginHorizontal="20dp"
+                            android:layout_marginTop="16dp"
+                            android:hint="@string/username"
+                            android:inputType="text"
+                            android:paddingHorizontal="10dp"
+                            android:paddingLeft="5dp"
+                            android:singleLine="true"
+                            android:textColor="@color/text_black"
+                            android:textColorHint="@color/text_gray"
+                            android:textSize="16sp" />
 
-                <EditText
-                    android:id="@+id/et_area_name"
-                    android:layout_width="match_parent"
-                    android:layout_height="50dp"
-                    android:layout_marginHorizontal="20dp"
-                    android:layout_marginTop="16dp"
-                    android:background="@drawable/bg_edittext"
-                    android:hint="@string/area_name"
-                    android:paddingHorizontal="10dp"
-                    android:paddingLeft="5dp"
-                    android:singleLine="true"
-                    android:textColor="@color/text_black"
-                    android:textColorHint="@color/text_gray"
-                    android:textSize="16sp" />
+                        <EditText
+                            android:id="@+id/et_email"
+                            android:layout_width="match_parent"
+                            android:layout_height="50dp"
+                            android:layout_marginHorizontal="20dp"
+                            android:layout_marginTop="16dp"
+                            android:hint="@string/email_address"
+                            android:inputType="textEmailAddress"
+                            android:paddingHorizontal="10dp"
+                            android:paddingLeft="5dp"
+                            android:singleLine="true"
+                            android:textColor="@color/text_black"
+                            android:textColorHint="@color/text_gray"
+                            android:textSize="16sp" />
 
-                <EditText
-                    android:id="@+id/et_city"
-                    android:layout_width="match_parent"
-                    android:layout_height="50dp"
-                    android:layout_marginHorizontal="20dp"
-                    android:layout_marginTop="16dp"
-                    android:background="@drawable/bg_edittext"
-                    android:hint="@string/city"
-                    android:paddingHorizontal="10dp"
-                    android:paddingLeft="5dp"
-                    android:singleLine="true"
-                    android:textColor="@color/text_black"
-                    android:textColorHint="@color/text_gray"
-                    android:textSize="16sp" />
+                        <EditText
+                            android:id="@+id/et_phone"
+                            android:layout_width="match_parent"
+                            android:layout_height="50dp"
+                            android:layout_marginHorizontal="20dp"
+                            android:layout_marginVertical="16dp"
+                            android:hint="@string/phone_number"
+                            android:inputType="number"
+                            android:paddingHorizontal="10dp"
+                            android:paddingLeft="5dp"
+                            android:singleLine="true"
+                            android:textColor="@color/text_black"
+                            android:textColorHint="@color/text_gray"
+                            android:textSize="16sp" />
 
-                <EditText
-                    android:id="@+id/et_state_name"
+                    </LinearLayout>
+                </androidx.cardview.widget.CardView>
+
+                <androidx.cardview.widget.CardView
                     android:layout_width="match_parent"
-                    android:layout_height="50dp"
+                    android:layout_height="wrap_content"
                     android:layout_marginHorizontal="20dp"
-                    android:layout_marginTop="16dp"
-                    android:background="@drawable/bg_edittext"
-                    android:hint="@string/state_name"
-                    android:paddingHorizontal="10dp"
-                    android:paddingLeft="5dp"
-                    android:singleLine="true"
-                    android:textColor="@color/text_black"
-                    android:textColorHint="@color/text_gray"
-                    android:textSize="16sp" />
+                    android:layout_marginTop="@dimen/_20sdp"
+                    app:cardCornerRadius="@dimen/_25sdp">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:orientation="vertical"
+                        android:layout_marginVertical="@dimen/_10sdp">
+
+                        <EditText
+                            android:id="@+id/et_bio"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginHorizontal="20dp"
+                            android:layout_marginVertical="16dp"
+                            android:background="@null"
+                            android:hint="@string/bio"
+                            android:inputType="text"
+                            android:maxLines="3"
+                            android:gravity="start"
+                            android:minHeight="@dimen/_80sdp"
+                            android:paddingHorizontal="10dp"
+                            android:paddingLeft="5dp"
+                            android:singleLine="true"
+                            android:textColor="@color/text_black"
+                            android:textColorHint="@color/text_gray"
+                            android:textSize="16sp" />
+                    </LinearLayout>
+
+                </androidx.cardview.widget.CardView>
+
+
+                <androidx.cardview.widget.CardView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginHorizontal="20dp"
+                    android:layout_marginTop="@dimen/_20sdp"
+                    app:cardCornerRadius="@dimen/_25sdp">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:orientation="vertical"
+                        android:layout_marginVertical="@dimen/_10sdp">
+
+
+                        <EditText
+                            android:id="@+id/et_street_address"
+                            android:layout_width="match_parent"
+                            android:layout_height="50dp"
+                            android:layout_marginHorizontal="20dp"
+                            android:layout_marginTop="16dp"
+                            android:hint="@string/street_address"
+                            android:paddingHorizontal="10dp"
+                            android:paddingLeft="5dp"
+                            android:singleLine="true"
+                            android:textColor="@color/text_black"
+                            android:textColorHint="@color/text_gray"
+                            android:textSize="16sp" />
+
+                        <EditText
+                            android:id="@+id/et_landmark"
+                            android:layout_width="match_parent"
+                            android:layout_height="50dp"
+                            android:layout_marginHorizontal="20dp"
+                            android:layout_marginTop="16dp"
+                            android:hint="@string/landmark"
+                            android:paddingHorizontal="10dp"
+                            android:paddingLeft="5dp"
+                            android:singleLine="true"
+                            android:textColor="@color/text_black"
+                            android:textColorHint="@color/text_gray"
+                            android:textSize="16sp" />
+
+                        <EditText
+                            android:id="@+id/et_area_name"
+                            android:layout_width="match_parent"
+                            android:layout_height="50dp"
+                            android:layout_marginHorizontal="20dp"
+                            android:layout_marginTop="16dp"
+                            android:hint="@string/area_name"
+                            android:paddingHorizontal="10dp"
+                            android:paddingLeft="5dp"
+                            android:singleLine="true"
+                            android:textColor="@color/text_black"
+                            android:textColorHint="@color/text_gray"
+                            android:textSize="16sp" />
+
+                        <EditText
+                            android:id="@+id/et_city"
+                            android:layout_width="match_parent"
+                            android:layout_height="50dp"
+                            android:layout_marginHorizontal="20dp"
+                            android:layout_marginTop="16dp"
+                            android:hint="@string/city"
+                            android:paddingHorizontal="10dp"
+                            android:paddingLeft="5dp"
+                            android:singleLine="true"
+                            android:textColor="@color/text_black"
+                            android:textColorHint="@color/text_gray"
+                            android:textSize="16sp" />
+
+                        <EditText
+                            android:id="@+id/et_state_name"
+                            android:layout_width="match_parent"
+                            android:layout_height="50dp"
+                            android:layout_marginHorizontal="20dp"
+                            android:layout_marginTop="16dp"
+                            android:hint="@string/state_name"
+                            android:paddingHorizontal="10dp"
+                            android:paddingLeft="5dp"
+                            android:singleLine="true"
+                            android:textColor="@color/text_black"
+                            android:textColorHint="@color/text_gray"
+                            android:textSize="16sp" />
+
+
+
+                        <EditText
+                            android:id="@+id/et_zip_code"
+                            android:layout_width="match_parent"
+                            android:layout_height="50dp"
+                            android:layout_marginHorizontal="20dp"
+                            android:layout_marginTop="16dp"
+                            android:hint="@string/zip_code"
+                            android:paddingHorizontal="10dp"
+                            android:paddingLeft="5dp"
+                            android:singleLine="true"
+                            android:textColor="@color/text_black"
+                            android:textColorHint="@color/text_gray"
+                            android:textSize="16sp" />
+
+                        <RelativeLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginHorizontal="20dp"
+                            android:layout_marginVertical="16dp">
+
+                            <Spinner
+                                android:id="@+id/spinner_edit_profile"
+                                android:layout_width="match_parent"
+                                android:layout_height="@dimen/edit_text_height" />
+                        </RelativeLayout>
+                    </LinearLayout>
+
+                </androidx.cardview.widget.CardView>
+
+
                 <!--        <EditText-->
                 <!--            android:id="@+id/et_country"-->
                 <!--            android:layout_width="match_parent"-->
@@ -295,33 +379,7 @@
                 <!--            android:textColor="@color/text_black"-->
                 <!--            android:textColorHint="@color/text_gray"-->
                 <!--            android:textSize="16sp" />-->
-                <RelativeLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginHorizontal="20dp"
-                    android:layout_marginTop="16dp"
-                    android:background="@drawable/bg_edittext">
 
-                    <Spinner
-                        android:id="@+id/spinner_edit_profile"
-                        android:layout_width="match_parent"
-                        android:layout_height="@dimen/edit_text_height" />
-                </RelativeLayout>
-
-                <EditText
-                    android:id="@+id/et_zip_code"
-                    android:layout_width="match_parent"
-                    android:layout_height="50dp"
-                    android:layout_marginHorizontal="20dp"
-                    android:layout_marginTop="16dp"
-                    android:background="@drawable/bg_edittext"
-                    android:hint="@string/zip_code"
-                    android:paddingHorizontal="10dp"
-                    android:paddingLeft="5dp"
-                    android:singleLine="true"
-                    android:textColor="@color/text_black"
-                    android:textColorHint="@color/text_gray"
-                    android:textSize="16sp" />
 
                 <TextView
                     android:layout_width="wrap_content"
@@ -329,9 +387,26 @@
                     android:layout_centerVertical="true"
                     android:layout_marginHorizontal="20dp"
                     android:layout_marginTop="40dp"
+                    android:fontFamily="@font/poppins_regular"
                     android:text="@string/bank_information"
                     android:textColor="@color/black"
                     android:textSize="18sp" />
+
+
+            <androidx.cardview.widget.CardView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="20dp"
+                android:layout_marginTop="@dimen/_20sdp"
+                app:cardCornerRadius="@dimen/_25sdp">
+
+
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical"
+                android:layout_marginVertical="@dimen/_10sdp">
 
                 <EditText
                     android:id="@+id/et_bank_name"
@@ -339,7 +414,6 @@
                     android:layout_height="50dp"
                     android:layout_marginHorizontal="20dp"
                     android:layout_marginTop="16dp"
-                    android:background="@drawable/bg_edittext"
                     android:hint="@string/bank_name"
                     android:paddingHorizontal="10dp"
                     android:paddingLeft="5dp"
@@ -355,7 +429,6 @@
                     android:layout_height="50dp"
                     android:layout_marginHorizontal="20dp"
                     android:layout_marginTop="16dp"
-                    android:background="@drawable/bg_edittext"
                     android:hint="Beneficiary Name"
                     android:paddingHorizontal="10dp"
                     android:paddingLeft="5dp"
@@ -370,7 +443,6 @@
                     android:layout_height="50dp"
                     android:layout_marginHorizontal="20dp"
                     android:layout_marginTop="16dp"
-                    android:background="@drawable/bg_edittext"
                     android:hint="@string/account_number"
                     android:paddingHorizontal="10dp"
                     android:paddingLeft="5dp"
@@ -384,8 +456,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="50dp"
                     android:layout_marginHorizontal="20dp"
-                    android:layout_marginTop="16dp"
-                    android:background="@drawable/bg_edittext"
+                    android:layout_marginVertical="16dp"
                     android:hint="@string/ifsc_code"
                     android:paddingHorizontal="10dp"
                     android:paddingLeft="5dp"
@@ -393,17 +464,24 @@
                     android:textColor="@color/text_black"
                     android:textColorHint="@color/text_gray"
                     android:textSize="16sp" />
+            </LinearLayout>
+
+            </androidx.cardview.widget.CardView>
+
+
 
 
                 <Button
                     android:id="@+id/btn_update_profile"
-                    android:layout_width="match_parent"
-                    android:layout_height="48dp"
+                    android:layout_width="wrap_content"
+                    android:layout_height="44dp"
                     android:layout_alignParentBottom="true"
                     android:layout_marginHorizontal="16dp"
                     android:layout_marginTop="48dp"
+                    android:layout_gravity="center_horizontal"
                     android:layout_marginBottom="40dp"
-                    android:background="@drawable/bg_button_red"
+                    android:paddingHorizontal="@dimen/_40sdp"
+                    android:background="@drawable/bg_buttun_gradient"
                     android:text="@string/update_profile"
                     android:textColor="@color/buttonTextColor"
                     android:textSize="18sp" />
