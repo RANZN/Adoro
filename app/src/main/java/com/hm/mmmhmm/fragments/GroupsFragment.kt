@@ -134,6 +134,7 @@ class GroupsFragment : Fragment() {
                 val groupDetailFragment = GroupDetail()
                 val args = android.os.Bundle()
                 args.putString("groupId", groupsList?.get(position)?._id)
+                args.putSerializable("members", groupsList?.get(position)?.memberData)
                 groupDetailFragment.arguments = args
                 activity?.supportFragmentManager?.beginTransaction()
                     ?.replace(R.id.frame_layout_main, groupDetailFragment)

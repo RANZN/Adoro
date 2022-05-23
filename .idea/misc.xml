@@ -102,6 +102,7 @@
         <entry key="..\:/Projects/AdoroApp/app/src/main/res/drawable-v24/bg_buttun_gradient2.xml" value="0.1235" />
         <entry key="..\:/Projects/AdoroApp/app/src/main/res/drawable-v24/bg_other_msg.xml" value="0.1235" />
         <entry key="..\:/Projects/AdoroApp/app/src/main/res/drawable-v24/bg_unselect.xml" value="0.1235" />
+        <entry key="..\:/Projects/AdoroApp/app/src/main/res/drawable/add_post.xml" value="0.13" />
         <entry key="..\:/Projects/AdoroApp/app/src/main/res/drawable/bg_button_accept.xml" value="0.13" />
         <entry key="..\:/Projects/AdoroApp/app/src/main/res/drawable/bg_button_cancel.xml" value="0.13" />
         <entry key="..\:/Projects/AdoroApp/app/src/main/res/drawable/bg_button_white.xml" value="0.121" />
@@ -181,13 +182,14 @@
         <entry key="..\:/Projects/AdoroApp/app/src/main/res/layout/fragment_verify_withdrawal.xml" value="0.20416666666666666" />
         <entry key="..\:/Projects/AdoroApp/app/src/main/res/layout/fragment_walk_through.xml" value="0.18" />
         <entry key="..\:/Projects/AdoroApp/app/src/main/res/layout/fragment_withdrawal_request.xml" value="0.20416666666666666" />
-        <entry key="..\:/Projects/AdoroApp/app/src/main/res/layout/item_announcement.xml" value="0.1675929884566054" />
+        <entry key="..\:/Projects/AdoroApp/app/src/main/res/layout/item_announcement.xml" value="0.22" />
         <entry key="..\:/Projects/AdoroApp/app/src/main/res/layout/item_comments.xml" value="0.17592592592592593" />
         <entry key="..\:/Projects/AdoroApp/app/src/main/res/layout/item_feed.xml" value="0.22" />
         <entry key="..\:/Projects/AdoroApp/app/src/main/res/layout/item_gallery.xml" value="0.2" />
         <entry key="..\:/Projects/AdoroApp/app/src/main/res/layout/item_group_discussion.xml" value="0.2" />
         <entry key="..\:/Projects/AdoroApp/app/src/main/res/layout/item_group_list.xml" value="0.22" />
         <entry key="..\:/Projects/AdoroApp/app/src/main/res/layout/item_group_members.xml" value="0.2" />
+        <entry key="..\:/Projects/AdoroApp/app/src/main/res/layout/item_group_requests.xml" value="0.1675929884566054" />
         <entry key="..\:/Projects/AdoroApp/app/src/main/res/layout/item_job_list.xml" value="0.2" />
         <entry key="..\:/Projects/AdoroApp/app/src/main/res/layout/item_mutual_liker.xml" value="0.17592592592592593" />
         <entry key="..\:/Projects/AdoroApp/app/src/main/res/layout/item_notification.xml" value="0.21" />

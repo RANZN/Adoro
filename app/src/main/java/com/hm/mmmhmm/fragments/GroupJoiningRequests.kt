@@ -56,7 +56,7 @@ class GroupJoiningRequests : Fragment() {
             iv_back.setOnClickListener {
                 (activity as MainActivity).onBackPressed()
             }
-            recycler_group_request.adapter= GroupRequestsAdapter(requireActivity())
+//            recycler_group_request.adapter= GroupRequestsAdapter(requireActivity())
 
 
 

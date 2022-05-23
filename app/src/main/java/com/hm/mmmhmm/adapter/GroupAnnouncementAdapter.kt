@@ -4,14 +4,18 @@ import android.content.Context
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ImageView
+import android.widget.TextView
 import androidx.fragment.app.FragmentActivity
 import androidx.recyclerview.widget.RecyclerView
 import com.hm.mmmhmm.R
 import com.hm.mmmhmm.activity.MainActivity
 import com.hm.mmmhmm.fragments.FragmentGroupCreation
 import com.hm.mmmhmm.fragments.GroupDetail
+import com.hm.mmmhmm.helper.load
+import com.hm.mmmhmm.models.Item
 
-class GroupAnnouncementAdapter( var ctx:FragmentActivity) : RecyclerView.Adapter<GroupAnnouncementAdapter.MyViewHolder>() {
+class GroupAnnouncementAdapter( var ctx:FragmentActivity,private var listData: List<Item>? = null) : RecyclerView.Adapter<GroupAnnouncementAdapter.MyViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MyViewHolder {
         val view: View =
@@ -20,34 +24,33 @@ class GroupAnnouncementAdapter( var ctx:FragmentActivity) : RecyclerView.Adapter
     }
 
     override fun onBindViewHolder(holder: MyViewHolder, position: Int) {
-//            holder.tv_brand_name.text= campaignList?.get(position)?.brandName
-//            holder.tv_detail.text= campaignList?.get(position)?.shortDescription
-//            holder.tv_detail.text= campaignList?.get(position)?.shortDescription
-//            holder.tv_time_left.text= "₹"+campaignList?.get(position)?.timeLeft.toString()+" left"
-//            holder.iv_profile_pic_profile.load(
-//                campaignList?.get(position)?.brandLogo.toString(),
-//                R.color.text_gray,
-//                R.color.text_gray,
-//                true
-//            )
+            holder.tv_group_announcement.text= listData?.get(position)?.username
+            holder.tv_location.text= ""
+            holder.tv_description.text= listData?.get(position)?.message
+            holder.iv_group_pic.load(
+                listData?.get(position)?.profile.toString(),
+                R.color.text_gray,
+                R.color.text_gray,
+                true
+            )
         holder.itemView.setOnClickListener {
             ctx.supportFragmentManager.beginTransaction()
                 .replace(R.id.frame_layout_main, FragmentGroupCreation())
                 .addToBackStack(null).commit()
-//            holder.btn_learn_more.setOnClickListener {
+            holder.tv_learn_more.setOnClickListener {
 //                val postDetailFragment = PostDetailFragment()
 //                val args = Bundle()
 //                args.putString("campaignId", campaignList?.get(position)?._id)
 //                postDetailFragment.arguments = args
 //                (activity as MainActivity).supportFragmentManager.beginTransaction().replace(R.id.frame_layout_main, postDetailFragment)
 //                    .commit()
-//
-//            }
+
+            }
     }
     }
 
     override fun getItemCount(): Int {
-        return 20
+        return listData?.size?:0
     }
 
     override fun getItemId(position: Int): Long {
@@ -55,22 +58,20 @@ class GroupAnnouncementAdapter( var ctx:FragmentActivity) : RecyclerView.Adapter
     }
 
     inner class MyViewHolder(v: View) : RecyclerView.ViewHolder(v) {
-//            val iv_profile_pic_profile: ImageView
-//            val tv_brand_name: TextView
-//            val tv_detail: TextView
-//            val tv_time_left: TextView
-//            val tv_price: TextView
-//            val btn_learn_more: Button
-//            val ll_item_list: LinearLayout
-//
-//            init {
-//                iv_profile_pic_profile = v.findViewById(R.id.iv_profile_pic_profile)
-//                tv_brand_name = v.findViewById(R.id.tv_brand_name)
-//                tv_detail = v.findViewById(R.id.tv_detail)
-//                tv_time_left = v.findViewById(R.id.tv_time_left)
-//                tv_price = v.findViewById(R.id.tv_price)
-//                btn_learn_more = v.findViewById(R.id.btn_learn_more)
-//                ll_item_list = v.findViewById(R.id.ll_item_list)
-//            }
+            val iv_group_pic: ImageView
+            val tv_group_announcement: TextView
+            val tv_location: TextView
+            val tv_description: TextView
+            val tv_learn_more: TextView
+            val iv_menu_feed: ImageView
+
+            init {
+                iv_group_pic = v.findViewById(R.id.iv_group_pic)
+                tv_group_announcement = v.findViewById(R.id.tv_group_announcement)
+                tv_location = v.findViewById(R.id.tv_location)
+                tv_description = v.findViewById(R.id.tv_description)
+                tv_learn_more = v.findViewById(R.id.tv_learn_more)
+                iv_menu_feed = v.findViewById(R.id.iv_menu_feed)
+            }
     }
 }

@@ -15,6 +15,8 @@ import com.hm.mmmhmm.adapter.GroupAnnouncementAdapter
 import com.hm.mmmhmm.adapter.GroupDiscussionAdapter
 import com.hm.mmmhmm.helper.SessionManager
 import com.hm.mmmhmm.models.GeneralRequest
+import com.hm.mmmhmm.models.GetSpecificGroupDataRequest
+import com.hm.mmmhmm.models.MemberData
 import com.hm.mmmhmm.models.ShowAnnouncementRequest
 import com.hm.mmmhmm.web_service.ApiClient
 import kotlinx.android.synthetic.main.custom_toolbar.*
@@ -29,7 +31,6 @@ import kotlinx.coroutines.withContext
 class GroupDetail : Fragment() {
 
     var itemType:Int=0
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
     }
@@ -51,9 +52,9 @@ class GroupDetail : Fragment() {
         tv_post.setTextColor(resources.getColor(R.color.black))
         itemType=0
         setupToolBar()
-        var showAnnouncementRequest: ShowAnnouncementRequest = ShowAnnouncementRequest(requireArguments().getString("groupId")?:"");
-        getAnnouncementAPI(showAnnouncementRequest)
 
+        var getSpecificGroupDataRequest: GetSpecificGroupDataRequest = GetSpecificGroupDataRequest(requireArguments().getString("groupId")?:"");
+        getSpecificGroupData(getSpecificGroupDataRequest)
 
         tv_announcement.setOnClickListener {
             tv_announcement.setBackgroundResource( R.drawable.bg_buttun_gradient )
@@ -96,6 +97,7 @@ class GroupDetail : Fragment() {
     }
 
     private fun setupToolBar() {
+        iv_toolbar_action_add.setBackgroundResource(R.drawable.add_post)
         iv_toolbar_icon.setBackgroundResource(R.drawable.ic_back_arrow)
         iv_toolbar_action_members.setBackgroundResource(R.drawable.ic_group)
         iv_toolbar_action_edit.setBackgroundResource(R.drawable.ic_edit_group)
@@ -104,6 +106,10 @@ class GroupDetail : Fragment() {
 
         iv_toolbar_action_edit.setColorFilter(resources.getColor(R.color.black));
         iv_toolbar_action_edit.visibility=View.VISIBLE
+
+        iv_toolbar_action_add.setColorFilter(resources.getColor(R.color.black));
+        iv_toolbar_action_add.visibility=View.VISIBLE
+
         tv_toolbar_title.setTextColor(resources.getColor(R.color.black))
 
         iv_toolbar_action_inbox.setBackgroundResource(R.drawable.chat)
@@ -120,7 +126,7 @@ class GroupDetail : Fragment() {
         iv_toolbar_action_members.setOnClickListener {
             val groupMembers = GroupMembers()
             val args = Bundle()
-           // args.putString("postId", postsList?.get(position)?._id)
+            args.putString("groupId", requireArguments().getString("groupId")?:"")
             groupMembers.arguments = args
             requireActivity().supportFragmentManager.beginTransaction().replace(R.id.frame_layout_main, groupMembers).addToBackStack(null)
                 .commit()
@@ -137,6 +143,36 @@ class GroupDetail : Fragment() {
 
 
     }
+    private fun getSpecificGroupData(getSpecificGroupDataRequest: GetSpecificGroupDataRequest) {
+        pb_group_detail.visibility = View.VISIBLE
+        val apiInterface = ApiClient.getRetrofitService(requireContext())
+        CoroutineScope(Dispatchers.IO).launch {
+            try {
+                val response = apiInterface.getSpecificGroupData(getSpecificGroupDataRequest)
+                withContext(Dispatchers.Main) {
+                    pb_group_detail.visibility = View.GONE
+
+                    try {
+                        //  toast("" + response.body()?.message)
+                        if (response!=null) {
+
+                            var showAnnouncementRequest: ShowAnnouncementRequest = ShowAnnouncementRequest(requireArguments().getString("groupId")?:"");
+                            getAnnouncementAPI(showAnnouncementRequest)
+                        } else {
+                            Log.d("resp", "complet else: ")
+                        }
+
+                    } catch (e: Exception) {
+                        Log.d("resp", "cathch: " + e.toString())
+                    }
+                }
+
+            } catch (e: Exception) {
+                Log.d("weweewefw", e.toString())
+            }
+        }
+
+    }
 
     private fun getAnnouncementAPI(showAnnouncementRequest: ShowAnnouncementRequest) {
         pb_group_detail.visibility = View.VISIBLE
@@ -151,7 +187,7 @@ class GroupDetail : Fragment() {
                         //  toast("" + response.body()?.message)
                         if (response!=null) {
 //                            feedList = response.body()?.OK?.items
-                            recycler_group_detail.adapter= GroupAnnouncementAdapter(requireActivity())
+                            recycler_group_detail.adapter= GroupAnnouncementAdapter(requireActivity(), response.body()?.OK?.items)
 
 
                         } else {

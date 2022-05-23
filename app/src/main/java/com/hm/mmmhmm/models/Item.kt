@@ -1,6 +1,6 @@
 package com.hm.mmmhmm.models
 
-data class Item(
+data class Item (
     val _createdDate: String?,
     val _id: String?,
     val items: List<Item>?,
@@ -47,10 +47,18 @@ data class Item(
     val category: String?,
     val groupName: String?,
     val groupProfile: String?,
-    val memberData: List<Any>?,
+    var memberData: ArrayList<MemberData>?,
+    var requestedMemberData: ArrayList<MemberData>?,
     val privacy: String?,
     var requriementType: String?,
     var message: String?,
     var sessionId: Long?,
     var winnerDetails: List<WinnerDetail>?
 )
+data class MemberData(
+    var name: String?,
+    var profile: String?,
+    var userID: String?,
+    var username: String?
+)
+

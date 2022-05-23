@@ -166,6 +166,12 @@ interface ApiInterface {
         @Body() req: ShowAnnouncementRequest
     ): retrofit2.Response<BaseResponse>
 
+
+    @POST("_functions/getSpecificGroupData")
+    suspend fun getSpecificGroupData(
+        @Body() req: GetSpecificGroupDataRequest
+    ): retrofit2.Response<BaseResponse>
+
     @POST("_functions/showGroupPost")
     suspend fun showGroupPost(
         @Body() req: ShowAnnouncementRequest
@@ -239,6 +245,13 @@ interface ApiInterface {
     suspend fun sendWithdrawalRequest(
         @Body() req: RequestWithdrawalMoney
     ): retrofit2.Response<BaseResponse>
+
+
+    @POST("_functions/shiftRequestToExisting")
+    suspend fun acceptMemberJoinGroupRequest(
+        @Body() req: AcceptGroupRequest
+    ): retrofit2.Response<BaseResponse>
+
 
     @POST("_functions/showMyTemplate")
     suspend fun showMyTemplate(
