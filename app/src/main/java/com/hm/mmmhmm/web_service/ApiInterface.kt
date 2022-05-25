@@ -74,6 +74,11 @@ interface ApiInterface {
         @Body() req: GeneralRequest
     ): retrofit2.Response<CommentsData>
 
+    @POST("_functions/getSpecificPostDetailGroup")
+    suspend fun getSpecificPostDetailGroup(
+        @Body() req: GeneralRequest
+    ): retrofit2.Response<CommentsData>
+
     @POST("_functions/showNotification")
     suspend fun showNotification(
         @Body() req: GeneralRequest
@@ -253,6 +258,19 @@ interface ApiInterface {
     ): retrofit2.Response<BaseResponse>
 
 
+
+    @POST("_functions/deleteMemberData")
+    suspend fun deleteMemberData(
+        @Body() req: DeleteMemberRequest
+    ): retrofit2.Response<BaseResponse>
+
+
+    @POST("_functions/deleteRequestedMemberData")
+    suspend fun deleteRequestedMemberData(
+        @Body() req: DeleteMemberRequest
+    ): retrofit2.Response<BaseResponse>
+
+
     @POST("_functions/showMyTemplate")
     suspend fun showMyTemplate(
         @Body() req: RequestShowMyTemplate
@@ -266,6 +284,11 @@ interface ApiInterface {
 
     @POST("_functions/updateComment")
     suspend fun updateComment(
+        @Body() req: PostCommentRequest
+    ): retrofit2.Response<BaseResponse>
+
+    @POST("_functions/grouDiscussionPostUpdateComment")
+    suspend fun grouDiscussionPostUpdateComment(
         @Body() req: PostCommentRequest
     ): retrofit2.Response<BaseResponse>
 

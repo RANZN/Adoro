@@ -24,6 +24,7 @@ import com.hm.mmmhmm.activity.MainActivity
 import com.hm.mmmhmm.adapter.GroupRequestsAdapter
 import com.hm.mmmhmm.helper.CommanFunction
 import com.hm.mmmhmm.helper.ConnectivityObserver
+import com.hm.mmmhmm.helper.SessionManager
 import com.hm.mmmhmm.helper.toast
 import com.hm.mmmhmm.models.CreateGroupRequest
 import com.hm.mmmhmm.models.Item
@@ -184,7 +185,7 @@ class EditGroup : Fragment() {
         } else if (ConnectivityObserver.isOnline(activity as Context)) {
             val memberData : Array<Int> = emptyArray()
             var createGroupRequest: CreateGroupRequest = CreateGroupRequest(category
-                ,groupAbout,groupName,"",memberData,visibilityType)
+                ,groupAbout,groupName,getEncoded64ImageStringFromBitmap(pickedProfile),memberData,visibilityType, SessionManager.getUserId())
             createGroupAPI(createGroupRequest)
 
         }

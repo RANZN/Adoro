@@ -78,6 +78,7 @@
                             android:layout_width="50dp"
                             android:layout_height="50dp"
                             android:padding="15dp"
+                            android:visibility="gone"
                             android:src="@drawable/option_menu" />
                     </LinearLayout>
 
@@ -103,9 +104,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="10dp"
                 android:layout_marginStart="65dp"
-                android:text="HCL Company is soon launching there meme creation portal, where users and register themself and creatr awesome looking meme.
-
-Check out now."
+                android:text=""
                 android:textColor="@color/text_gray"
                 android:textSize="14sp"/>
 

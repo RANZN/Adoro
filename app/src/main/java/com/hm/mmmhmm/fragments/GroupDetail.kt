@@ -13,6 +13,7 @@ import com.hm.mmmhmm.activity.MainActivity
 import com.hm.mmmhmm.adapter.FeedListAdapter
 import com.hm.mmmhmm.adapter.GroupAnnouncementAdapter
 import com.hm.mmmhmm.adapter.GroupDiscussionAdapter
+import com.hm.mmmhmm.adapter.GroupFeedListAdapter
 import com.hm.mmmhmm.helper.SessionManager
 import com.hm.mmmhmm.models.GeneralRequest
 import com.hm.mmmhmm.models.GetSpecificGroupDataRequest
@@ -101,11 +102,8 @@ class GroupDetail : Fragment() {
         iv_toolbar_icon.setBackgroundResource(R.drawable.ic_back_arrow)
         iv_toolbar_action_members.setBackgroundResource(R.drawable.ic_group)
         iv_toolbar_action_edit.setBackgroundResource(R.drawable.ic_edit_group)
-        iv_toolbar_action_members.setColorFilter(resources.getColor(R.color.black));
-        iv_toolbar_action_members.visibility=View.VISIBLE
 
-        iv_toolbar_action_edit.setColorFilter(resources.getColor(R.color.black));
-        iv_toolbar_action_edit.visibility=View.VISIBLE
+
 
         iv_toolbar_action_add.setColorFilter(resources.getColor(R.color.black));
         iv_toolbar_action_add.visibility=View.VISIBLE
@@ -155,7 +153,12 @@ class GroupDetail : Fragment() {
                     try {
                         //  toast("" + response.body()?.message)
                         if (response!=null) {
-
+                            if(response.body()?.OK?.items?.get(0)?.ownerId==SessionManager.getUserId()){
+                                iv_toolbar_action_members.setColorFilter(resources.getColor(R.color.black));
+                                iv_toolbar_action_members.visibility=View.VISIBLE
+                                iv_toolbar_action_edit.setColorFilter(resources.getColor(R.color.black));
+                                iv_toolbar_action_edit.visibility=View.VISIBLE
+                            }
                             var showAnnouncementRequest: ShowAnnouncementRequest = ShowAnnouncementRequest(requireArguments().getString("groupId")?:"");
                             getAnnouncementAPI(showAnnouncementRequest)
                         } else {
@@ -219,7 +222,7 @@ class GroupDetail : Fragment() {
                         //  toast("" + response.body()?.message)
                         if (response!=null) {
 //                            feedList = response.body()?.OK?.items
-                            recycler_group_detail.adapter= FeedListAdapter(requireActivity())
+                            recycler_group_detail.adapter= GroupFeedListAdapter(requireActivity(), response.body()?.OK?.items)
 
 
                         } else {
@@ -251,7 +254,7 @@ class GroupDetail : Fragment() {
                         //  toast("" + response.body()?.message)
                         if (response!=null) {
 //                            feedList = response.body()?.OK?.items
-                            recycler_group_detail.adapter= GroupDiscussionAdapter(requireActivity())
+                            recycler_group_detail.adapter= GroupDiscussionAdapter(requireActivity(),response.body()?.OK?.items)
 
 
                         } else {

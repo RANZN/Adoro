@@ -166,7 +166,8 @@ class FragmentGroupCreation : Fragment() {
         } else if (ConnectivityObserver.isOnline(activity as Context)) {
             val memberData : Array<Int> = emptyArray()
             var createGroupRequest: CreateGroupRequest = CreateGroupRequest(category
-                ,groupAbout,groupName,"",memberData,visibilityType)
+                ,groupAbout,groupName, getEncoded64ImageStringFromBitmap(pickedProfile),memberData,visibilityType,SessionManager.getUserId(),
+                emptyList() )
             createGroupAPI(createGroupRequest)
 
         }
@@ -188,8 +189,7 @@ class FragmentGroupCreation : Fragment() {
                             //showDialog()
                             Toast.makeText(activity,"Group created successfully!", Toast.LENGTH_LONG).show()
 
-                            startActivity(Intent(activity, MainActivity::class.java))
-                                activity?.finish()
+                                activity?.onBackPressed()
 
 
                         } else {

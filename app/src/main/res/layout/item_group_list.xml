@@ -91,6 +91,7 @@
                     android:paddingVertical="4dp"
                     android:background="@drawable/bg_buttun_gradient"
                     android:text="@string/enter"
+                    android:visibility="gone"
                     android:textColor="@color/buttonTextColor"
                     android:textSize="10sp" />
 
