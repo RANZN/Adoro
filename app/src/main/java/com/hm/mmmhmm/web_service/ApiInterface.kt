@@ -79,6 +79,11 @@ interface ApiInterface {
         @Body() req: GeneralRequest
     ): retrofit2.Response<CommentsData>
 
+    @POST("_functions/getSpecificDiscussionDetailGroup")
+    suspend fun getSpecificDiscussionDetailGroup(
+        @Body() req: GeneralRequest
+    ): retrofit2.Response<CommentsData>
+
     @POST("_functions/showNotification")
     suspend fun showNotification(
         @Body() req: GeneralRequest

@@ -29,6 +29,19 @@ import com.hm.mmmhmm.models.*
 import com.hm.mmmhmm.web_service.ApiClient
 import kotlinx.android.synthetic.main.custom_toolbar.*
 import kotlinx.android.synthetic.main.fragment_comments.*
+import kotlinx.android.synthetic.main.fragment_comments.et_comment
+import kotlinx.android.synthetic.main.fragment_comments.iv_feed
+import kotlinx.android.synthetic.main.fragment_comments.iv_like
+import kotlinx.android.synthetic.main.fragment_comments.iv_liked
+import kotlinx.android.synthetic.main.fragment_comments.iv_share
+import kotlinx.android.synthetic.main.fragment_comments.pb_comments
+import kotlinx.android.synthetic.main.fragment_comments.recycler_comments
+import kotlinx.android.synthetic.main.fragment_comments.recycler_mutual_like_user
+import kotlinx.android.synthetic.main.fragment_comments.send_message_button
+import kotlinx.android.synthetic.main.fragment_comments.tv_feed_description
+import kotlinx.android.synthetic.main.fragment_comments.tv_like_count
+import kotlinx.android.synthetic.main.fragment_comments.tv_like_status
+import kotlinx.android.synthetic.main.fragment_group_post_comments.*
 import kotlinx.android.synthetic.main.fragment_home.*
 import kotlinx.android.synthetic.main.fragment_profile.*
 import kotlinx.android.synthetic.main.fragment_publish_meme.*
@@ -53,7 +66,7 @@ class GroupCommentsFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_post_comments, container, false)
+        return inflater.inflate(R.layout.fragment_group_post_comments, container, false)
     }
 
     override fun onResume() {
@@ -231,15 +244,19 @@ class GroupCommentsFragment : Fragment() {
                                     requireActivity().currentFocus!!.windowToken,
                                     0
                                 )
+
+
+                                scroll_controller_group.fullScroll(View.FOCUS_DOWN)
+                                scroll_controller_group.postDelayed(
+                                    Runnable { scroll_controller_group.fullScroll(ScrollView.FOCUS_DOWN) },
+                                    2000
+                                )
                             } catch (e: java.lang.Exception) {
                                 // TODO: handle exception
                             }
 
-                            scroll_controller.fullScroll(View.FOCUS_DOWN)
-                            scroll_controller.postDelayed(
-                                Runnable { scroll_controller.fullScroll(ScrollView.FOCUS_DOWN) },
-                                2000
-                            )
+
+
                         } else {
                             Log.d("resp", "complet else: ")
                         }

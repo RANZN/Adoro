@@ -1,5 +1,6 @@
 package com.hm.mmmhmm.adapter
 
+import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
@@ -11,6 +12,9 @@ import androidx.core.content.ContentProviderCompat.requireContext
 import androidx.fragment.app.FragmentActivity
 import androidx.recyclerview.widget.RecyclerView
 import com.hm.mmmhmm.R
+import com.hm.mmmhmm.fragments.GroupCommentsFragment
+import com.hm.mmmhmm.fragments.GroupDiscussionCommentsFragment
+import com.hm.mmmhmm.fragments.HomeFragment
 import com.hm.mmmhmm.helper.SessionManager
 import com.hm.mmmhmm.helper.load
 import com.hm.mmmhmm.models.*
@@ -33,7 +37,6 @@ class GroupDiscussionAdapter(var ctx: FragmentActivity,  private var listData: L
             holder.tv_username.text= listData?.get(position)?.username
             holder.tv_title.text= listData?.get(position)?.contentTitle
             holder.tv_description.text= listData?.get(position)?.content
-//            holder.tv_time_left.text= "₹"+campaignList?.get(position)?.timeLeft.toString()+" left"
             holder.iv_user_pic.load(
                 listData?.get(position)?.profile.toString(),
                 R.color.text_gray,
@@ -48,13 +51,24 @@ class GroupDiscussionAdapter(var ctx: FragmentActivity,  private var listData: L
                 SessionManager.getUserName()
             );
             var groupDiscussionPostUpdateLikeRequest: GroupDiscussionPostUpdateLikeRequest = GroupDiscussionPostUpdateLikeRequest(
-                "",likeData);
+                listData?.get(position)?._id,likeData);
             groupDiscussionPostUpdateLike(groupDiscussionPostUpdateLikeRequest,  holder.iv_like,
                 holder.iv_liked,
                 holder.tv_like_count,
-                /*(feedList?.get(position)?.like as List<PostLikeData>).size*/0
+                (listData?.get(position)?.like?: emptyList()).size
             )
 
+        }
+
+        holder.ll_comments.setOnClickListener{
+            val commentsFragment = GroupDiscussionCommentsFragment()
+            val args = Bundle()
+            args.putString("postId", listData?.get(position)?._id)
+            commentsFragment.arguments = args
+            ctx.supportFragmentManager.beginTransaction().replace(R.id.frame_layout_main, commentsFragment).addToBackStack(null)
+                .commit()
+            SessionManager.setFeedLastPosition(position)
+            (HomeFragment).lastFirstVisiblePosition = position
         }
 
 
@@ -73,7 +87,7 @@ class GroupDiscussionAdapter(var ctx: FragmentActivity,  private var listData: L
             val tv_username: TextView
             val tv_title: TextView
             val tv_description: TextView
-//            val tv_price: TextView
+            val ll_comments: LinearLayout
 //            val btn_learn_more: Button
 val iv_like: ImageView
         val iv_liked: ImageView
@@ -84,7 +98,7 @@ val iv_like: ImageView
                 tv_username = v.findViewById(R.id.tv_username)
                 tv_title = v.findViewById(R.id.tv_title)
                 tv_description = v.findViewById(R.id.tv_description)
-//                tv_price = v.findViewById(R.id.tv_price)
+                ll_comments = v.findViewById(R.id.ll_comments)
 //                btn_learn_more = v.findViewById(R.id.btn_learn_more)
     iv_like = v.findViewById(R.id.iv_like)
     iv_liked = v.findViewById(R.id.iv_liked)

@@ -29,6 +29,19 @@ import com.hm.mmmhmm.models.*
 import com.hm.mmmhmm.web_service.ApiClient
 import kotlinx.android.synthetic.main.custom_toolbar.*
 import kotlinx.android.synthetic.main.fragment_comments.*
+import kotlinx.android.synthetic.main.fragment_comments.et_comment
+import kotlinx.android.synthetic.main.fragment_comments.iv_feed
+import kotlinx.android.synthetic.main.fragment_comments.iv_like
+import kotlinx.android.synthetic.main.fragment_comments.iv_liked
+import kotlinx.android.synthetic.main.fragment_comments.iv_share
+import kotlinx.android.synthetic.main.fragment_comments.pb_comments
+import kotlinx.android.synthetic.main.fragment_comments.recycler_comments
+import kotlinx.android.synthetic.main.fragment_comments.recycler_mutual_like_user
+import kotlinx.android.synthetic.main.fragment_comments.scroll_controller
+import kotlinx.android.synthetic.main.fragment_comments.send_message_button
+import kotlinx.android.synthetic.main.fragment_comments.tv_like_count
+import kotlinx.android.synthetic.main.fragment_comments.tv_like_status
+import kotlinx.android.synthetic.main.fragment_group_discussion_comments.*
 import kotlinx.android.synthetic.main.fragment_home.*
 import kotlinx.android.synthetic.main.fragment_profile.*
 import kotlinx.android.synthetic.main.fragment_publish_meme.*
@@ -45,15 +58,13 @@ class GroupDiscussionCommentsFragment : Fragment() {
     private var likes: List<PostLikeData> ? = null
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
     }
-
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_post_comments, container, false)
+        return inflater.inflate(R.layout.fragment_group_discussion_comments, container, false)
     }
 
     override fun onResume() {
@@ -182,7 +193,7 @@ class GroupDiscussionCommentsFragment : Fragment() {
         val apiInterface = ApiClient.getRetrofitService(requireContext())
         CoroutineScope(Dispatchers.IO).launch {
             try {
-                val response = apiInterface.getSpecificPostDetailGroup(generalRequest)
+                val response = apiInterface.getSpecificDiscussionDetailGroup(generalRequest)
                 withContext(Dispatchers.Main) {
                     pb_comments.visibility = View.GONE
                     onResume()
@@ -211,6 +222,8 @@ class GroupDiscussionCommentsFragment : Fragment() {
                             adapter.notifyDataSetChanged()
                             likes = (data.like as List<PostLikeData>)
                           //  tv_username.text = data?.username
+                            tv_title.text= data.contentTitle
+                            tv_description.text= data.content
                             tv_feed_description.text = data.description
 //                            iv_user_feed.load(
 //                                data?.profile,
