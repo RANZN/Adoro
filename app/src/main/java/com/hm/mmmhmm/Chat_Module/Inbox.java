@@ -242,6 +242,7 @@ public class Inbox extends AppCompatActivity {
             holder.onItemClick(users.get(position));
             holder.setTime(users.get(position).getTime());
             holder.setMessage(users.get(position).getLastMessage(), false);
+
         }
 
         @Override
