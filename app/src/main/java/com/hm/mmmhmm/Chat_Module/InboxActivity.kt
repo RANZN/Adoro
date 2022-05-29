@@ -6,17 +6,10 @@ import android.text.TextWatcher
 import android.util.Log
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
-import com.google.firebase.database.DataSnapshot
-import com.google.firebase.database.DatabaseError
-import com.google.firebase.database.FirebaseDatabase
-import com.google.firebase.database.ValueEventListener
+import com.google.firebase.database.*
 import com.hm.mmmhmm.R
 import com.hm.mmmhmm.helper.SessionManager
-import com.hm.mmmhmm.models.SearchRequest
 import kotlinx.android.synthetic.main.activity_inbox.*
-import kotlinx.android.synthetic.main.activity_inbox.et_search
-import kotlinx.android.synthetic.main.activity_inbox.iv_search
-import kotlinx.android.synthetic.main.fragment_search.*
 
 class InboxActivity : AppCompatActivity() {
     var users: ArrayList<User?> = ArrayList()
@@ -24,7 +17,14 @@ class InboxActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_inbox)
+    }
+
+    override fun onResume() {
+        super.onResume()
         init()
+//        for (user in users) {
+//            hasUnread(user)
+//        }
     }
 
     private fun init() {
@@ -36,15 +36,24 @@ class InboxActivity : AppCompatActivity() {
         chat_list.adapter = mAdapter
 
         iv_search.setOnClickListener {
-           //todo
+            val filtered = ArrayList<User?>()
+            users.forEach {
+                if (it?.userName?.contains(et_search.text.toString().trim(), true) == true) {
+                    filtered.add(it)
+                }
+            }
+            Log.i("Sanjeev", "init: $filtered")
+            mAdapter?.updateUsers(filtered)
         }
         et_search.addTextChangedListener(object : TextWatcher {
             override fun afterTextChanged(s: Editable?) {
             }
+
             override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
             }
+
             override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
-            //todo
+
             }
         })
         FirebaseDatabase.getInstance().getReference("chats")
@@ -111,7 +120,52 @@ class InboxActivity : AppCompatActivity() {
                 data?.time = GetTimeAgo.getTimeAgo(value["time"].toString().toLong(), null)
                 users.add(data)
                 mAdapter?.notifyDataSetChanged()
+            }.addOnCompleteListener {
+                for (user in users) {
+                    hasUnread(user)
+                }
             }
+    }
+
+    private fun hasUnread(data: User?) {
+        FirebaseDatabase.getInstance().getReference("chats").orderByChild("time")
+            .addChildEventListener(object : ChildEventListener {
+                override fun onChildAdded(snapshot: DataSnapshot, previousChildName: String?) {
+                    val message = snapshot.getValue(Message::class.java)
+                    Log.i("Sanjeev", "onChildAdded: $message")
+//                    if (!checked) {
+                    if (message?.sender == data?.userId && message?.receiver == SessionManager.getFirebaseID() && message?.seen == false) {
+                        Log.i("Sanjeev", "onChildAdded: $message")
+                        mAdapter?.updateChild(message.sender)
+                    }
+//                        mList.add(message)
+//                        (chat_message_list.layoutManager as LinearLayoutManager).scrollToPosition(
+//                            mList.size - 1
+//                        )
+//                        mAdapter.notifyDataSetChanged()
+//                    } else {
+//                        mAdapter?.updateChild(message?.sender)
+//                    }
+//                        checked=true
+//                    }
+                }
+
+                override fun onChildChanged(snapshot: DataSnapshot, previousChildName: String?) {
+                    // TODO("Not yet implemented")
+                }
+
+                override fun onChildRemoved(snapshot: DataSnapshot) {
+                    // TODO("Not yet implemented")
+                }
+
+                override fun onChildMoved(snapshot: DataSnapshot, previousChildName: String?) {
+                    // TODO("Not yet implemented")
+                }
+
+                override fun onCancelled(error: DatabaseError) {
+                    // TODO("Not yet implemented")
+                }
+            })
     }
 
     private fun containsUser(user: User?): Boolean {

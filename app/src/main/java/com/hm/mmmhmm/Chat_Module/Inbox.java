@@ -2,6 +2,7 @@ package com.hm.mmmhmm.Chat_Module;
 
 import android.annotation.SuppressLint;
 import android.content.Intent;
+import android.graphics.Typeface;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -29,6 +30,7 @@ import com.hm.mmmhmm.helper.SessionManager;
 import com.squareup.picasso.Picasso;
 
 import java.util.List;
+import java.util.Objects;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 
@@ -242,7 +244,26 @@ public class Inbox extends AppCompatActivity {
             holder.onItemClick(users.get(position));
             holder.setTime(users.get(position).getTime());
             holder.setMessage(users.get(position).getLastMessage(), false);
+            holder.makeBold(users.get(position).getHasUnread());
+        }
 
+        public void updateChild(String data) {
+            if (data == null) {
+                return;
+            }
+            for (int i = 0; i < users.size(); i++) {
+                User user = users.get(i);
+                if (Objects.equals(user.getUserId(), data)) {
+                    user.setHasUnread(true);
+                    notifyDataSetChanged();
+                    break;
+                }
+            }
+        }
+
+        public void updateUsers(List<User> list) {
+            users=list;
+            notifyDataSetChanged();
         }
 
         @Override
@@ -264,6 +285,22 @@ public class Inbox extends AppCompatActivity {
         public void setMessage(String message, boolean isSeen) {
             TextView textView = mView.findViewById(R.id.last_message);
             textView.setText(message+": ");
+        }
+
+        public void makeBold(Boolean hasUnread) {
+                TextView textView = mView.findViewById(R.id.last_message);
+                TextView tv_time = mView.findViewById(R.id.last_time);
+                TextView userNameView = mView.findViewById(R.id.chat_user_name);
+            if (hasUnread) {
+                textView.setTypeface(Typeface.DEFAULT_BOLD);
+                tv_time.setTypeface(Typeface.DEFAULT_BOLD);
+                userNameView.setTypeface(Typeface.DEFAULT_BOLD);
+            }
+            else {
+                textView.setTypeface(Typeface.defaultFromStyle(Typeface.NORMAL));
+                tv_time.setTypeface(Typeface.defaultFromStyle(Typeface.NORMAL));
+                userNameView.setTypeface(Typeface.defaultFromStyle(Typeface.NORMAL));
+            }
         }
 
         //--SETTING BOLD FOR NOT SEEN MESSAGES---
@@ -308,6 +345,7 @@ public class Inbox extends AppCompatActivity {
             mView.findViewById(R.id.user_ll).setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
+                    user.setHasUnread(false);
                     Intent intent = new Intent(mView.getContext(), ChatActivity.class);
                     intent.putExtra("user_name", user.getUserName());
                     intent.putExtra("user_id", user.getUserId());

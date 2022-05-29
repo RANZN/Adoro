@@ -13,6 +13,9 @@ import android.widget.Button
 import android.widget.TextView
 import android.widget.Toast
 import androidx.fragment.app.Fragment
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.auth.FirebaseAuthUserCollisionException
+import com.google.firebase.database.FirebaseDatabase
 import com.hm.mmmhmm.R
 import com.hm.mmmhmm.activity.MainActivity
 import com.hm.mmmhmm.helper.CommanFunction
@@ -30,6 +33,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import java.lang.Exception
+import java.util.HashMap
 
 
 class SignupFragment : Fragment() {
@@ -162,6 +166,8 @@ class SignupFragment : Fragment() {
 
                             showDialog()
 
+                            loginUserForFirebase()
+
                         } else {
                             CommanFunction.handleApiError(
                                 response.errorBody()?.charStream(),
@@ -174,6 +180,49 @@ class SignupFragment : Fragment() {
                 }
             } catch (e: Exception) {
 
+            }
+        }
+    }
+
+    private fun pushUserToFirebase() {
+        val reference = FirebaseDatabase.getInstance().getReference("users")
+        reference.get().addOnSuccessListener {
+            try {
+                val value = it.value as HashMap<String?, Any>
+                value.apply {
+                    put(SessionManager.getFirebaseID(), HashMap<String, Any?>().apply {
+                        put("userId", SessionManager.getFirebaseID())
+                        put("userName", SessionManager.getUserName())
+                        put("email", SessionManager.getUserEmail())
+                        put("isOnline", true)
+                    })
+                }
+                reference.updateChildren(value)
+            } catch (e: java.lang.Exception) {
+                e.printStackTrace()
+            }
+        }
+    }
+
+    private fun loginUserForFirebase() {
+        FirebaseAuth.getInstance().createUserWithEmailAndPassword(
+            SessionManager.getUserEmail(),
+            "test@123"
+        ).addOnSuccessListener {
+            SessionManager.setFirebaseID(it.user?.uid)
+            FirebaseAuth.getInstance().signOut()
+            pushUserToFirebase()
+        }.addOnFailureListener {
+            FirebaseAuth.getInstance().signOut()
+            if (it is FirebaseAuthUserCollisionException) {
+                FirebaseAuth.getInstance().signInWithEmailAndPassword(
+                    SessionManager.getUserEmail(),
+                    "test@123"
+                ).addOnSuccessListener { result ->
+                    SessionManager.setFirebaseID(result.user?.uid)
+                    FirebaseAuth.getInstance().signOut()
+                    pushUserToFirebase()
+                }
             }
         }
     }

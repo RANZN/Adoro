@@ -14,4 +14,6 @@ class User {
 
     var time: String = ""
 
+    var hasUnread:Boolean=false
+
 }
