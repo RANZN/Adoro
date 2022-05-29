@@ -65,6 +65,20 @@ interface ApiInterface {
         @Body() req: GeneralRequest
     ): retrofit2.Response<BaseResponse>
 
+
+    @POST("_functions/updateDescription")
+    suspend fun updateDescription(
+        @Body() req: UpdateGroupRequest
+    ): retrofit2.Response<BaseResponse>
+
+
+    @POST("_functions/deletePost")
+    suspend fun deletePost(
+        @Body() req: UpdateGroupRequest
+    ): retrofit2.Response<BaseResponse>
+
+
+
     @GET("_functions/showPost")
     suspend fun getFeed(
     ): retrofit2.Response<CommentsData>

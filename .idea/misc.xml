@@ -114,6 +114,7 @@
         <entry key="..\:/Projects/AdoroApp/app/src/main/res/drawable/bg_circular.xml" value="0.119" />
         <entry key="..\:/Projects/AdoroApp/app/src/main/res/drawable/bg_cover.xml" value="0.126" />
         <entry key="..\:/Projects/AdoroApp/app/src/main/res/drawable/bg_drawable_dash.xml" value="0.1235" />
+        <entry key="..\:/Projects/AdoroApp/app/src/main/res/drawable/bg_edittext.xml" value="0.13" />
         <entry key="..\:/Projects/AdoroApp/app/src/main/res/drawable/bg_gradient.xml" value="0.1225" />
         <entry key="..\:/Projects/AdoroApp/app/src/main/res/drawable/bg_gradient_splash.xml" value="0.1225" />
         <entry key="..\:/Projects/AdoroApp/app/src/main/res/drawable/bg_image_gradient_bottom.xml" value="0.1235" />
@@ -155,6 +156,7 @@
         <entry key="..\:/Projects/AdoroApp/app/src/main/res/layout/fragment_adoro_coins.xml" value="0.18425925925925926" />
         <entry key="..\:/Projects/AdoroApp/app/src/main/res/layout/fragment_comments.xml" value="0.2" />
         <entry key="..\:/Projects/AdoroApp/app/src/main/res/layout/fragment_edit_group.xml" value="0.2" />
+        <entry key="..\:/Projects/AdoroApp/app/src/main/res/layout/fragment_edit_post.xml" value="0.1675929884566054" />
         <entry key="..\:/Projects/AdoroApp/app/src/main/res/layout/fragment_edit_profile.xml" value="0.18" />
         <entry key="..\:/Projects/AdoroApp/app/src/main/res/layout/fragment_group_creation.xml" value="0.2" />
         <entry key="..\:/Projects/AdoroApp/app/src/main/res/layout/fragment_group_detail.xml" value="0.18" />

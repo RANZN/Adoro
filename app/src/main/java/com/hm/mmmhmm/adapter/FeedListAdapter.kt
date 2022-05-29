@@ -1,5 +1,6 @@
 package com.hm.mmmhmm.adapter
 
+import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.text.Html
@@ -16,15 +17,14 @@ import androidx.fragment.app.FragmentActivity
 import androidx.recyclerview.widget.RecyclerView
 import com.hm.mmmhmm.R
 import com.hm.mmmhmm.activity.MainActivity
-import com.hm.mmmhmm.fragments.CommentsFragment
-import com.hm.mmmhmm.fragments.HomeFragment
-import com.hm.mmmhmm.fragments.PostDetailFragment
-import com.hm.mmmhmm.fragments.ProfileFragment
+import com.hm.mmmhmm.fragments.*
+import com.hm.mmmhmm.helper.ConnectivityObserver
 import com.hm.mmmhmm.helper.SessionManager
 import com.hm.mmmhmm.helper.load
 import com.hm.mmmhmm.models.*
 import com.hm.mmmhmm.web_service.ApiClient
 import com.hm.mmmhmm.web_service.ApiClient.BASE_URL
+import kotlinx.android.synthetic.main.fragment_comments.*
 import kotlinx.android.synthetic.main.fragment_home.*
 import kotlinx.android.synthetic.main.fragment_refer.*
 import kotlinx.coroutines.CoroutineScope
@@ -34,7 +34,7 @@ import kotlinx.coroutines.withContext
 import java.lang.reflect.Field
 
 
-class FeedListAdapter(var ctx: FragmentActivity, private var feedList: List<ItemComment>? = null,private var sessionId:Long?=null) :
+class FeedListAdapter(var ctx: FragmentActivity, private var feedList: List<ItemComment>? = null,private var sessionId:Long?=null, var pb_feeds: ProgressBar) :
     RecyclerView.Adapter<FeedListAdapter.MyViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MyViewHolder {
@@ -91,29 +91,38 @@ class FeedListAdapter(var ctx: FragmentActivity, private var feedList: List<Item
             val intent= Intent()
             intent.action= Intent.ACTION_SEND
             intent.putExtra(Intent.EXTRA_TEXT,
-                BASE_URL+"?"+"&postId="+ feedList?.get(position)?.id)
+                BASE_URL+"?"+"&postId="+ feedList?.get(position)?._id)
             intent.type="text/plain"
             ctx.startActivity(Intent.createChooser(intent,"Share To:"))
+        }
+        if(feedList?.get(position)?.id==SessionManager.getUserId()){
+            holder.iv_menu_feed.visibility=View.VISIBLE
         }
         holder.iv_menu_feed.setOnClickListener {
             val popupMenu = PopupMenu(ctx, holder.iv_menu_feed)
             popupMenu.inflate(R.menu.menu)
+            popupMenu.getMenu().findItem(R.id.report).setVisible(false)
             popupMenu.setOnMenuItemClickListener(object : PopupMenu.OnMenuItemClickListener {
                 override fun onMenuItemClick(item: MenuItem?): Boolean {
                     when (item?.itemId) {
                         R.id.delete -> {
-                            // here are the logic to delete an item from the list
-//                        val tempLang = languageList[position]
-//                        languageList.remove(tempLang)
-//                        rvAdapter.notifyDataSetChanged()
+                            if (ConnectivityObserver.isOnline(ctx)) {
+                                var generalRequest: UpdateGroupRequest =
+                                    UpdateGroupRequest(feedList?.get(position)?._id?:"");
+                                deletePost(generalRequest)
+
+                            }
                             return true
                         }
-                        // in the same way you can implement others
-//                        R.id.edit -> {
-//                            // define
-//                            Toast.makeText(ctx , "Item 2 clicked" , Toast.LENGTH_SHORT).show()
-//                            return true
-//                        }
+                        R.id.edit -> {
+                             val editPostFragment = EditPost()
+                             val args = Bundle()
+                             args.putString("postId", feedList?.get(position)?._id?:"")
+                             editPostFragment.arguments = args
+                             ctx.supportFragmentManager.beginTransaction().replace(R.id.frame_layout_main, editPostFragment).addToBackStack(null)
+                                 .commit()
+                            return true
+                        }
 
                     }
                     return false
@@ -296,6 +305,37 @@ class FeedListAdapter(var ctx: FragmentActivity, private var feedList: List<Item
         }
 
     }
+
+    private fun deletePost(generalRequest: UpdateGroupRequest) {
+        pb_feeds.visibility = View.VISIBLE
+        val apiInterface = ApiClient.getRetrofitService(ctx)
+        CoroutineScope(Dispatchers.IO).launch {
+            try {
+                val response = apiInterface.deletePost(generalRequest)
+                withContext(Dispatchers.Main) {
+                    pb_feeds.visibility = View.GONE
+                    try {
+                        //  toast("" + response.body()?.message)
+                        if (response != null&& response.body()?.OK?.status =="Success") {
+                            ctx.supportFragmentManager.beginTransaction()
+                                .replace(R.id.frame_layout_main, HomeFragment())
+                                .commit()
+                        } else {
+                            Log.d("resp", "complet else: ")
+                        }
+
+                    } catch (e: Exception) {
+                        Log.d("resp", "cathch: " + e.toString())
+                    }
+                }
+
+            } catch (e: Exception) {
+                Log.d("weweewefw", e.toString())
+            }
+        }
+
+    }
+
 
 
 }

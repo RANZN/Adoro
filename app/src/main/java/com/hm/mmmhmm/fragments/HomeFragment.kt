@@ -127,7 +127,7 @@ class HomeFragment : Fragment() {
                         if (response!=null) {
                             feedList = response.body()?.OK?.items
                             getContest()
-                            feedListAdapter= FeedListAdapter(requireActivity(),feedList, sessionId)
+                            feedListAdapter= FeedListAdapter(requireActivity(),feedList, sessionId, pb_feeds)
                             recycler_feed_list.adapter= feedListAdapter
                             (recycler_feed_list.getLayoutManager() as LinearLayoutManager).scrollToPosition(lastFirstVisiblePosition)
                             (recycler_feed_list.getLayoutManager() as LinearLayoutManager).scrollToPosition(SessionManager.getFeedLastPosition())
