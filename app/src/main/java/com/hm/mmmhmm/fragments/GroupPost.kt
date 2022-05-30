@@ -8,13 +8,13 @@ import android.graphics.BitmapFactory
 import android.os.Bundle
 import android.util.Base64
 import android.util.Log
+import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
-import androidx.fragment.app.Fragment
 import com.canhub.cropper.CropImageContract
 import com.canhub.cropper.CropImageView
 import com.canhub.cropper.options
@@ -22,20 +22,29 @@ import com.hm.mmmhmm.Chat_Module.InboxActivity
 import com.hm.mmmhmm.R
 import com.hm.mmmhmm.activity.MainActivity
 import com.hm.mmmhmm.helper.SessionManager
+import com.hm.mmmhmm.models.PostGroupRequest
 import com.hm.mmmhmm.models.PublishPostRequest
 import com.hm.mmmhmm.web_service.ApiClient
 import kotlinx.android.synthetic.main.custom_toolbar.*
 import kotlinx.android.synthetic.main.fragment_add.*
-import kotlinx.android.synthetic.main.fragment_edit_profile.*
-import kotlinx.android.synthetic.main.fragment_login.*
-import kotlinx.android.synthetic.main.fragment_profile.*
+import kotlinx.android.synthetic.main.fragment_add.btn_change_selected_image
+import kotlinx.android.synthetic.main.fragment_add.btn_choose_design
+import kotlinx.android.synthetic.main.fragment_add.btn_upload_design
+import kotlinx.android.synthetic.main.fragment_add.iv_selected_image
+import kotlinx.android.synthetic.main.fragment_add.ll_after_image_selection
+import kotlinx.android.synthetic.main.fragment_add.ll_choose_image
+import kotlinx.android.synthetic.main.fragment_add.pb_publish_post
+import kotlinx.android.synthetic.main.fragment_add.rl_selected_image
+import kotlinx.android.synthetic.main.fragment_add.tv_file_name
+import kotlinx.android.synthetic.main.fragment_group_post.*
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import java.io.ByteArrayOutputStream
 
-class AddFragment : Fragment() {
+class GroupPost : Fragment() {
+
 
     private var pickedBanner: Bitmap? = null
 
@@ -81,6 +90,15 @@ class AddFragment : Fragment() {
 
     }
 
+    override fun onCreateView(
+        inflater: LayoutInflater, container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View? {
+        // Inflate the layout for this fragment
+        return inflater.inflate(R.layout.fragment_group_post, container, false)
+    }
+
+
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
         setupToolBar()
@@ -116,26 +134,55 @@ class AddFragment : Fragment() {
                 )
             }
         })
-
+//"postType":"ANNOUNCEMENT/GROUPFEED/DISCUSSION"
 
         btn_upload_design.setOnClickListener {
-            var generalRequest: PublishPostRequest =
-                PublishPostRequest(SessionManager.getUsername() ?: "",
-                    getEncoded64ImageStringFromBitmap(pickedBanner),
-                    et_description_upload.text.toString(),
-                    listOf<Any>(),
-                    listOf<Any>(),
-                    0,
-                    SessionManager.getUserId()?:"",
-                    SessionManager.getUserPic()?:""
-                )
-            publishPost(generalRequest)
+            var type: String="announcement"
+            if (type=="announcement"){
+                //{"message":"This is my new message for a new upaomcing project", "profile":"base 64 data",
+                    // "buttonLink":"https://www.linkme.com",
+                    // "groupId":"74f161c1-9ec5-4e92-bea0-f3d21749d207",
+                        // "postType":"ANNOUNCEMENT/GROUPFEED/DISCUSSION"}
+                var postGroupRequest: PostGroupRequest =
+                    PostGroupRequest(
+                        listOf<Any>(),
+                        "",
+                        requireArguments().getString("groupId")?:"",
+                        listOf<Any>(),
+                        "ANNOUNCEMENT",
+                        getEncoded64ImageStringFromBitmap(pickedBanner),
+                        "",
+                        "",
+                        "",
+                        "",
+                        et_description_group_post.text.toString(),
+                    )
+                publishPost(postGroupRequest)
+
+            }else  if (type=="announcement"){
+                //{"message":"This is my new message for a new upaomcing project", "profile":"base 64 data",
+                    // "buttonLink":"https://www.linkme.com",
+                    // "groupId":"74f161c1-9ec5-4e92-bea0-f3d21749d207", "postType":"ANNOUNCEMENT/GROUPFEED/DISCUSSION"}
+                var postGroupRequest: PostGroupRequest =
+                    PostGroupRequest(
+                        listOf<Any>(),
+                        et_description_group_post.text.toString(),
+                        requireArguments().getString("groupId")?:"",
+                        listOf<Any>(),
+                        "ANNOUNCEMENT",
+                        SessionManager.getUserPic(),
+                        SessionManager.getUsername(),
+                        et_description_group_post.text.toString(),
+                        getEncoded64ImageStringFromBitmap(pickedBanner),
+                        "",
+                        et_description_group_post.text.toString(),
+                    )
+                publishPost(postGroupRequest)
+
+            }
+
         }
 
-       /* iv_cancel_selected_image.setOnClickListener {
-            //todo
-            pickedBanner=null
-        }*/
     }
 
     private fun getEncoded64ImageStringFromBitmap(bitmap: Bitmap?): String {
@@ -147,28 +194,28 @@ class AddFragment : Fragment() {
     }
 
 
-    private fun publishPost(generalRequest: PublishPostRequest) {
+    private fun publishPost(generalRequest: PostGroupRequest) {
         pb_publish_post.visibility = View.VISIBLE
         val apiInterface = ApiClient.getRetrofitService(requireContext())
         CoroutineScope(Dispatchers.IO).launch {
             try {
-                val response = apiInterface.publishPostAPI(generalRequest)
+                val response = apiInterface.groupPost(generalRequest)
                 withContext(Dispatchers.Main) {
                     try {
                         pb_publish_post.visibility = View.GONE
-
-                        startActivity(Intent(activity, MainActivity::class.java))
-                        activity?.finish()
-//                        if (response.body()?.OK != null) {
-//                            val r = response.body()
-////
-//                        } else {
-//                            Toast.makeText(
-//                                activity,
-//                                R.string.Something_went_wrong,
-//                                Toast.LENGTH_SHORT
-//                            ).show()
-//                        }
+                        if (response.body()?.OK != null) {
+                            val r = response.body()
+                            if (r?.OK?.status=="success"){
+                                (activity as MainActivity).onBackPressed()
+                            }
+//
+                        } else {
+                            Toast.makeText(
+                                activity,
+                                R.string.Something_went_wrong,
+                                Toast.LENGTH_SHORT
+                            ).show()
+                        }
                     } catch (e: Exception) {
                         Toast.makeText(requireActivity(), "" + e.toString(), Toast.LENGTH_SHORT)
                             .show()
@@ -224,13 +271,8 @@ class AddFragment : Fragment() {
 
 
     }
-    override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View? {
-        // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_add, container, false)
+
+    companion object {
+
     }
-
-
 }

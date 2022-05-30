@@ -78,6 +78,11 @@ interface ApiInterface {
     ): retrofit2.Response<BaseResponse>
 
 
+    @POST("_functions/groupPost")
+    suspend fun groupPost(
+        @Body() req: PostGroupRequest
+    ): retrofit2.Response<BaseResponse>
+
 
     @GET("_functions/showPost")
     suspend fun getFeed(
