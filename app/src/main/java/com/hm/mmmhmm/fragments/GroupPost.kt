@@ -50,6 +50,7 @@ class GroupPost : Fragment() {
 
     private val TAG = "Add Fragment"
     var file: String? = null
+    var postType:Int=0
     private val cropImage = registerForActivityResult(CropImageContract()) { result ->
         if (result.isSuccessful) {
             // use the returned uri
@@ -101,6 +102,7 @@ class GroupPost : Fragment() {
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
+        postType= requireArguments().getInt("postType")?:0
         setupToolBar()
         ll_choose_image.setOnClickListener(View.OnClickListener {
             EditProfileFragment.isBanner = false
@@ -137,8 +139,7 @@ class GroupPost : Fragment() {
 //"postType":"ANNOUNCEMENT/GROUPFEED/DISCUSSION"
 
         btn_upload_design.setOnClickListener {
-            var type: String="announcement"
-            if (type=="announcement"){
+            if (postType==0){
                 //{"message":"This is my new message for a new upaomcing project", "profile":"base 64 data",
                     // "buttonLink":"https://www.linkme.com",
                     // "groupId":"74f161c1-9ec5-4e92-bea0-f3d21749d207",
@@ -150,19 +151,17 @@ class GroupPost : Fragment() {
                         requireArguments().getString("groupId")?:"",
                         listOf<Any>(),
                         "ANNOUNCEMENT",
-                        getEncoded64ImageStringFromBitmap(pickedBanner),
                         "",
+                        SessionManager.getUsername(),
                         "",
-                        "",
+                        SessionManager.getUserPic(),
                         "",
                         et_description_group_post.text.toString(),
                     )
                 publishPost(postGroupRequest)
 
-            }else  if (type=="announcement"){
-                //{"message":"This is my new message for a new upaomcing project", "profile":"base 64 data",
-                    // "buttonLink":"https://www.linkme.com",
-                    // "groupId":"74f161c1-9ec5-4e92-bea0-f3d21749d207", "postType":"ANNOUNCEMENT/GROUPFEED/DISCUSSION"}
+            }
+            else  if (postType==1){
                 var postGroupRequest: PostGroupRequest =
                     PostGroupRequest(
                         listOf<Any>(),
@@ -170,6 +169,23 @@ class GroupPost : Fragment() {
                         requireArguments().getString("groupId")?:"",
                         listOf<Any>(),
                         "ANNOUNCEMENT",
+                        SessionManager.getUserPic(),
+                        SessionManager.getUsername(),
+                        et_description_group_post.text.toString(),
+                        getEncoded64ImageStringFromBitmap(pickedBanner),
+                        "",
+                        et_description_group_post.text.toString(),
+                    )
+                publishPost(postGroupRequest)
+
+            } else  if (postType==2){
+               var postGroupRequest: PostGroupRequest =
+                    PostGroupRequest(
+                        listOf<Any>(),
+                        et_description_group_post_content.text.toString(),
+                        requireArguments().getString("groupId")?:"",
+                        listOf<Any>(),
+                        "DISCUSSION",
                         SessionManager.getUserPic(),
                         SessionManager.getUsername(),
                         et_description_group_post.text.toString(),
@@ -247,26 +263,22 @@ class GroupPost : Fragment() {
     }
 
     private fun setupToolBar() {
-        iv_toolbar_icon.setBackgroundResource(R.drawable.hamburger_icon)
-        iv_toolbar_action_inbox.setBackgroundResource(R.drawable.chat)
-        iv_toolbar_action_search.setBackgroundResource(R.drawable.iv_search)
-        iv_toolbar_icon.setColorFilter(resources.getColor(R.color.black));
-        iv_toolbar_action_inbox.setColorFilter(resources.getColor(R.color.black));
-        iv_toolbar_action_search.setColorFilter(resources.getColor(R.color.black));
-//        tv_toolbar_title.setTextColor(resources.getColor(R.color.black))
-//        tv_toolbar_title.text = resources.getString(R.string.app_name)
+        iv_toolbar_icon.setBackgroundResource(R.drawable.ic_back_arrow)
+        iv_toolbar_icon.setColorFilter(resources.getColor(R.color.black))
+        tv_toolbar_title.visibility=View.VISIBLE
+        if(requireArguments().getInt("postType")==0){
+            tv_toolbar_title.text = resources.getString(R.string.announcement)
+            rl_meme.visibility=View.GONE
+        }else if(requireArguments().getInt("postType")==1){
+            tv_toolbar_title.text = resources.getString(R.string.post)
+        }else if(requireArguments().getInt("postType")==2){
+            tv_toolbar_title.text = resources.getString(R.string.discussion)
+            rl_meme.visibility=View.GONE
+            et_description_group_post_content_card.visibility=View.VISIBLE
+        }
+        tv_toolbar_title.setTextColor(resources.getColor(R.color.black))
         iv_toolbar_icon.setOnClickListener(View.OnClickListener {
-            (activity as MainActivity).manageDrawer()
-        })
-
-        iv_toolbar_action_inbox.setOnClickListener(View.OnClickListener {
-            startActivity(Intent(activity, InboxActivity::class.java))
-        })
-
-        iv_toolbar_action_search.setOnClickListener(View.OnClickListener {
-            (activity as MainActivity).supportFragmentManager.beginTransaction()
-                .replace(R.id.frame_layout_main, SearchFragment())
-                .addToBackStack(null).commit()
+            (activity as MainActivity).onBackPressed()
         })
 
 

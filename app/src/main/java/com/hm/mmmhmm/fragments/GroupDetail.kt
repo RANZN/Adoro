@@ -139,6 +139,17 @@ class GroupDetail : Fragment() {
                 ?.addToBackStack(null)?.commit()
         })
 
+        iv_toolbar_action_add.setOnClickListener(View.OnClickListener {
+            val editGroup = GroupPost()
+            val args = android.os.Bundle()
+            args.putString("groupId", requireArguments().getString("groupId")?:"")
+            args.putInt("postType", itemType)
+            editGroup.arguments = args
+            activity?.supportFragmentManager?.beginTransaction()
+                ?.replace(R.id.frame_layout_main, editGroup)
+                ?.addToBackStack(null)?.commit()
+        })
+
 
     }
     private fun getSpecificGroupData(getSpecificGroupDataRequest: GetSpecificGroupDataRequest) {
