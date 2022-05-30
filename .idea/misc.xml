@@ -210,7 +210,16 @@
         <entry key="..\:/Projects/AdoroApp/app/src/main/res/menu/popup_menu.xml" value="0.2" />
         <entry key="..\:/Projects/adoro_new_ui/adoro_social/app/src/main/res/layout/custom_toolbar.xml" value="0.20416666666666666" />
         <entry key="..\:/Projects/adoro_new_ui/adoro_social/app/src/main/res/layout/fragment_add.xml" value="0.20416666666666666" />
+        <entry key="..\:/Projects/adoro_new_ui/adoro_social/app/src/main/res/layout/fragment_adoro_coins.xml" value="0.1787037037037037" />
+        <entry key="..\:/Projects/adoro_new_ui/adoro_social/app/src/main/res/layout/fragment_edit_group.xml" value="0.1787037037037037" />
+        <entry key="..\:/Projects/adoro_new_ui/adoro_social/app/src/main/res/layout/fragment_edit_profile.xml" value="0.1787037037037037" />
+        <entry key="..\:/Projects/adoro_new_ui/adoro_social/app/src/main/res/layout/fragment_group_detail.xml" value="0.1787037037037037" />
         <entry key="..\:/Projects/adoro_new_ui/adoro_social/app/src/main/res/layout/fragment_group_post.xml" value="0.20416666666666666" />
+        <entry key="..\:/Projects/adoro_new_ui/adoro_social/app/src/main/res/layout/fragment_post_detail.xml" value="0.20416666666666666" />
+        <entry key="..\:/Projects/adoro_new_ui/adoro_social/app/src/main/res/layout/fragment_withdrawal_request.xml" value="0.1787037037037037" />
+        <entry key="..\:/Projects/adoro_new_ui/adoro_social/app/src/main/res/layout/item_feed.xml" value="0.20416666666666666" />
+        <entry key="..\:/Projects/adoro_new_ui/adoro_social/app/src/main/res/layout/item_group_discussion.xml" value="0.20416666666666666" />
+        <entry key="..\:/Projects/adoro_new_ui/adoro_social/app/src/main/res/layout/item_job_list.xml" value="0.20416666666666666" />
       </map>
     </option>
   </component>

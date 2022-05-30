@@ -85,6 +85,7 @@ class GroupFeedListAdapter(var ctx: FragmentActivity, private var feedList: List
             intent.type="text/plain"
             ctx.startActivity(Intent.createChooser(intent,"Share To:"))
         }
+        holder.iv_menu_feed.visibility=View.GONE
         holder.iv_menu_feed.setOnClickListener {
             val popupMenu = PopupMenu(ctx, holder.iv_menu_feed)
             popupMenu.inflate(R.menu.menu)

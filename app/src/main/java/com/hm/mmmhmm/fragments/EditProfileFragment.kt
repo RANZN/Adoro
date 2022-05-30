@@ -56,6 +56,7 @@ class EditProfileFragment : Fragment() {
 
     private var pickedProfile: Bitmap? = null
     private var pickedBanner: Bitmap? = null
+    private var selectedGender: String = "male"
 
     private val cropImage = registerForActivityResult(CropImageContract()) { result ->
         if (result.isSuccessful) {
@@ -124,20 +125,22 @@ class EditProfileFragment : Fragment() {
             val updateProfileRequest: UpdateProfileRequest = UpdateProfileRequest(
                 SessionManager.getUserId() ?: "",
                 et_account_number.text.toString(),
-                0,
+                SessionManager.getAdoroCoins(),
                 0,
                 et_bank_name.text.toString(),
                 completeAddress,
                 "",
                 et_email.text.toString(),
-                "Male",
+                selectedGender,
                 et_ifsc_code.text.toString(),
                 et_full_name.text.toString(),
-                9997854380,
+                et_phone.text.toString().toLong(),
                 "",
                 et_username.text.toString(),
                 getEncoded64ImageStringFromBitmap(pickedProfile),
-                getEncoded64ImageStringFromBitmap(pickedBanner)
+                getEncoded64ImageStringFromBitmap(pickedBanner),
+                et_bio.text.toString(),
+                SessionManager.getAccountHolder(),
             )
             updateProfileAPI(updateProfileRequest)
         })
@@ -250,6 +253,7 @@ class EditProfileFragment : Fragment() {
 
                 (parent.getChildAt(0) as TextView).setTextColor(resources.getColor(R.color.text_gray))
                 val item = parent.getItemAtPosition(position)
+                selectedGender= item.toString()
                 Log.d("possssss", item.toString() + "<<<<" + position)
                 //                    updateView(position)
             }
@@ -269,7 +273,7 @@ class EditProfileFragment : Fragment() {
 
                     try {
                         //  toast("" + response.body()?.message)
-                        if (response.isSuccessful) {
+                        if (response.body()?.OK?.status=="success") {
 
                         } else {
                             Log.d("resp", "complet else: ")
@@ -339,8 +343,8 @@ class EditProfileFragment : Fragment() {
                             ).show()
                         }
                     } catch (e: java.lang.Exception) {
-                        Toast.makeText(requireActivity(), "" + e.toString(), Toast.LENGTH_SHORT)
-                            .show()
+//                        Toast.makeText(requireActivity(), "" + e.toString(), Toast.LENGTH_SHORT)
+//                            .show()
                     }
                 }
             } catch (e: java.lang.Exception) {

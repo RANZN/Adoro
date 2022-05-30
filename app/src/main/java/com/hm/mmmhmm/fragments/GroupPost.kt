@@ -157,6 +157,71 @@ class GroupPost : Fragment() {
                         SessionManager.getUserPic(),
                         "",
                         et_description_group_post.text.toString(),
+                        ""
+                    )
+                publishPost(postGroupRequest)
+
+            }
+            else  if (postType==1){
+                var postGroupRequest: PostGroupRequest =
+                    PostGroupRequest(
+                        listOf<Any>(),
+                        et_description_group_post.text.toString(),
+                        requireArguments().getString("groupId")?:"",
+                        listOf<Any>(),
+                        "GROUPFEED",
+                        SessionManager.getUserPic(),
+                        SessionManager.getUsername(),
+                        et_description_group_post.text.toString(),
+                        getEncoded64ImageStringFromBitmap(pickedBanner),
+                        "",
+                        et_description_group_post.text.toString(),
+                        ""
+                    )
+                publishPost(postGroupRequest)
+
+            } else  if (postType==2){
+               var postGroupRequest: PostGroupRequest =
+                    PostGroupRequest(
+                        listOf<Any>(),
+                        et_description_group_post.text.toString(),
+                        requireArguments().getString("groupId")?:"",
+                        listOf<Any>(),
+                        "DISCUSSION",
+                        SessionManager.getUserPic(),
+                        SessionManager.getUsername(),
+                        et_description_group_post.text.toString(),
+                        getEncoded64ImageStringFromBitmap(pickedBanner),
+                        "",
+                        et_description_group_post.text.toString(),
+                        et_description_group_post_content.text.toString()
+                    )
+                publishPost(postGroupRequest)
+
+            }
+
+        }
+
+        btn_post.setOnClickListener {
+            if (postType==0){
+                //{"message":"This is my new message for a new upaomcing project", "profile":"base 64 data",
+                // "buttonLink":"https://www.linkme.com",
+                // "groupId":"74f161c1-9ec5-4e92-bea0-f3d21749d207",
+                // "postType":"ANNOUNCEMENT/GROUPFEED/DISCUSSION"}
+                var postGroupRequest: PostGroupRequest =
+                    PostGroupRequest(
+                        listOf<Any>(),
+                        "",
+                        requireArguments().getString("groupId")?:"",
+                        listOf<Any>(),
+                        "ANNOUNCEMENT",
+                        "",
+                        SessionManager.getUsername(),
+                        "",
+                        SessionManager.getUserPic(),
+                        "",
+                        et_description_group_post.text.toString(),
+                        ""
                     )
                 publishPost(postGroupRequest)
 
@@ -175,14 +240,15 @@ class GroupPost : Fragment() {
                         getEncoded64ImageStringFromBitmap(pickedBanner),
                         "",
                         et_description_group_post.text.toString(),
+                        ""
                     )
                 publishPost(postGroupRequest)
 
             } else  if (postType==2){
-               var postGroupRequest: PostGroupRequest =
+                var postGroupRequest: PostGroupRequest =
                     PostGroupRequest(
                         listOf<Any>(),
-                        et_description_group_post_content.text.toString(),
+                       et_description_group_post.text.toString(),
                         requireArguments().getString("groupId")?:"",
                         listOf<Any>(),
                         "DISCUSSION",
@@ -192,6 +258,7 @@ class GroupPost : Fragment() {
                         getEncoded64ImageStringFromBitmap(pickedBanner),
                         "",
                         et_description_group_post.text.toString(),
+                        et_description_group_post_content.text.toString(),
                     )
                 publishPost(postGroupRequest)
 
@@ -269,11 +336,15 @@ class GroupPost : Fragment() {
         if(requireArguments().getInt("postType")==0){
             tv_toolbar_title.text = resources.getString(R.string.announcement)
             rl_meme.visibility=View.GONE
+            btn_post.visibility=View.VISIBLE
         }else if(requireArguments().getInt("postType")==1){
             tv_toolbar_title.text = resources.getString(R.string.post)
+            btn_post.visibility=View.VISIBLE
+            btn_post.visibility=View.GONE
         }else if(requireArguments().getInt("postType")==2){
             tv_toolbar_title.text = resources.getString(R.string.discussion)
             rl_meme.visibility=View.GONE
+            btn_post.visibility=View.VISIBLE
             et_description_group_post_content_card.visibility=View.VISIBLE
         }
         tv_toolbar_title.setTextColor(resources.getColor(R.color.black))

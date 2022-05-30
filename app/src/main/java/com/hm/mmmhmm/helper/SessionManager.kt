@@ -30,6 +30,7 @@ object SessionManager {
     private const val USER_IMAGE = "user_image"
     private const val LANGUAGE = "language"
     private const val ACCOUNT_NUMBER = "account_number"
+    private const val ACCOUNT_HOLDER = "account_holder"
     private const val IFSC_CODE = "ifsc_code"
     private const val BANK_NAME = "bank_name"
     private const val PAN_CARD = "pan_card"
@@ -215,6 +216,21 @@ object SessionManager {
         )
     }
 
+    fun setAccountHolder(value: String) {
+        val prefsEditor: SharedPreferences.Editor = prefs.edit()
+        with(prefsEditor) {
+            putString(ACCOUNT_HOLDER, value)
+            commit()
+        }
+    }
+
+    fun getAccountHolder(): String? {
+        return prefs.getString(
+            ACCOUNT_HOLDER,
+            ""
+        )
+    }
+
     fun setIFSC(value: String) {
         val prefsEditor: SharedPreferences.Editor = prefs.edit()
         with(prefsEditor) {
@@ -392,5 +408,13 @@ object SessionManager {
 
     fun getAdoroCoins(): Int {
         return prefs.getInt(adoroCoins, 0)?:0
+    }
+
+    fun setUserPhone(value: String) {
+        prefs.edit().putString(USER_PHONE, value).commit()
+    }
+
+    fun getUserPhone(): String {
+        return prefs.getString(USER_PHONE, "")?:""
     }
 }

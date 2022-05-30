@@ -35,6 +35,7 @@ data class Item (
     val ifseCode: String?,
     val myGroupInfo: List<Object>?,
     val accountNumber: String?,
+    val accountHolder: String?,
     val adoroCoins: Int?,
     val adoroShield: Int?,
     val bankName: String?,

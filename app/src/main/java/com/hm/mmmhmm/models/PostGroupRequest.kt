@@ -1,7 +1,6 @@
 package com.hm.mmmhmm.models
 
 class PostGroupRequest internal constructor(
-
     var comment: List<Any>?,
     var content: String?,
     var groupId: String?,
@@ -13,4 +12,5 @@ class PostGroupRequest internal constructor(
     var image: String?,
     var buttonLink: String?,
     var message: String?,
+    var contentTitle: String?,
 )

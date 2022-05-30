@@ -76,16 +76,20 @@ class WithdrawalRequestFragment : Fragment() {
     private fun validateInput() {
         val withdrawMoney = et_withdraw_money.text.toString()
         if (withdrawMoney.isNullOrEmpty()) {
-            toast(R.string.enter_phone_number,1)
+            toast(R.string.enter_the_withdrawl_amount,1)
+        }else if (withdrawMoney.toDouble()<100) {
+            Toast.makeText(requireActivity(), "Withdraw minimum limit Rs. 100.", Toast.LENGTH_SHORT).show()
+        }else if (withdrawMoney.toInt()>SessionManager.getAdoroCoins()) {
+            Toast.makeText(requireActivity(), "You've insufficient coins!", Toast.LENGTH_SHORT).show()
         } else if (ConnectivityObserver.isOnline(activity as Context)) {
 
             var requestRegisterNumber: RequestWithdrawalMoney = RequestWithdrawalMoney(
-               "1234567890" ,
+                SessionManager.getAccountNumber()?:"" ,
                 withdrawMoney.toInt() ,
-               "Kotak Mahindra Bank" ,
-               "HDD011D" ,
+                SessionManager.getBank()?:"" ,
+                SessionManager.getIFSC()?:"",
                 SessionManager.getUserName()?:"" ,
-               "HDD011D" ,
+                SessionManager.getPanNumber()?:"" ,
                "Pending" ,
                 SessionManager.getUserId()?:"",
                SessionManager.getUsername()?:"" ,
