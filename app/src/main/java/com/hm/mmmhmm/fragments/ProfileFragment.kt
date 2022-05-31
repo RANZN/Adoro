@@ -285,6 +285,17 @@ class ProfileFragment : Fragment() {
                                 iv_toolbar_icon.setOnClickListener(View.OnClickListener {
                                     (activity as MainActivity).manageDrawer()
                                 })
+
+                                SessionManager.setAdoroCoins( r.OK.items?.get(0)?.adoroCoins ?: 0)
+                                SessionManager.setUserEmail( r.OK.items?.get(0)?.email ?: "")
+                                SessionManager.setUserPic( r.OK.items?.get(0)?.profile ?: "")
+                                SessionManager.setUserPhone( r.OK.items?.get(0)?.number.toString())
+                                SessionManager.setUsername( r.OK.items?.get(0)?.username ?: "")
+                                SessionManager.setUserName( r.OK.items?.get(0)?.name ?: "")
+                                SessionManager.setAccountNumber( r.OK.items?.get(0)?.accountNumber ?: "")
+                                SessionManager.setIFSC( r.OK.items?.get(0)?.ifseCode ?: "")
+                                SessionManager.setBank( r.OK.items?.get(0)?.bankName ?: "")
+                                SessionManager.setAccountHolder( r.OK.items?.get(0)?.accountHolder ?: "")
                             } else if (r?.relation == "newVisitor") {
                                 ll_follow_user.visibility = View.VISIBLE
                                 btn_follow.text = "Follow"

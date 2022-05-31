@@ -78,6 +78,11 @@ interface ApiInterface {
     ): retrofit2.Response<BaseResponse>
 
 
+    @POST("_functions/groupPost")
+    suspend fun groupPost(
+        @Body() req: PostGroupRequest
+    ): retrofit2.Response<BaseResponse>
+
 
     @GET("_functions/showPost")
     suspend fun getFeed(
@@ -130,7 +135,7 @@ interface ApiInterface {
     @POST("_functions/updateProfile")
     suspend fun updateProfile(
         @Body() req: UpdateProfileRequest
-    ): retrofit2.Response<ResponseBody>
+    ): retrofit2.Response<BaseResponse>
 
     @POST("_functions/authenticate")
     suspend fun registerNumber(
@@ -142,6 +147,10 @@ interface ApiInterface {
         @Body() req: CreateGroupRequest
     ): retrofit2.Response<BaseResponse>
 
+    @POST("_functions/updateGroup")
+    suspend fun updateGroup(
+        @Body() req: EditGroupRequest
+    ): retrofit2.Response<BaseResponse>
 
     @POST("_functions/signup")
     suspend fun registerUser(
