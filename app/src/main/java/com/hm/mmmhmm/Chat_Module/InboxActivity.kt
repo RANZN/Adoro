@@ -14,14 +14,16 @@ import kotlinx.android.synthetic.main.activity_inbox.*
 class InboxActivity : AppCompatActivity() {
     var users: ArrayList<User?> = ArrayList()
     private var mAdapter: Inbox.UserAdapter? = null
+    val list = ArrayList<String?>()
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_inbox)
+        init()
     }
 
     override fun onResume() {
         super.onResume()
-        init()
+
 //        for (user in users) {
 //            hasUnread(user)
 //        }
@@ -59,7 +61,7 @@ class InboxActivity : AppCompatActivity() {
         FirebaseDatabase.getInstance().getReference("chats")
             .addValueEventListener(object : ValueEventListener {
                 override fun onDataChange(snapshot: DataSnapshot) {
-                    val list = ArrayList<String?>()
+
                     snapshot.children.forEach {
                         val message = it.getValue(Message::class.java)
                         if (message?.sender == SessionManager.getFirebaseID()) {
@@ -95,7 +97,6 @@ class InboxActivity : AppCompatActivity() {
                             e.printStackTrace()
                         }
 
-                        Log.i("TAG", "onDataChange: $user")
                         if (userIds.contains(user?.userId)) {
                             if (!containsUser(user)) {
                                 lastMessage(user)
