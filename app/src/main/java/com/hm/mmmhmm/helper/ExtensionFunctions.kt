@@ -41,14 +41,13 @@ fun ImageView.load(
     isCircleCrop: Boolean = false
 ) {
     if (this.context.applicationContext != null) {
-        val glide = Glide.with(this.context.applicationContext).load(url).thumbnail(0.1F)
+        val glide =    Glide.with(this.context.applicationContext).load(url).thumbnail(0.1F)
         if (placeholder != -1)
             glide.apply(RequestOptions().placeholder(placeholder).error(placeholder))
         if (isCircleCrop)
             glide.apply(RequestOptions.circleCropTransform())
         glide.into(this)
     }
-
 }
 
 fun ImageView.load(

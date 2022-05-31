@@ -42,6 +42,7 @@ class ProfileFragment : Fragment() {
     var username: String? = null
     var name: String? = null
     var userId: String? = null
+    var profileImage:String?=null
 
     var currentEmail = ""
 
@@ -132,6 +133,7 @@ class ProfileFragment : Fragment() {
                             ).apply {
                                 putExtra("user_id", id)
                                 putExtra("user_name", username)
+                                putExtra("profile", profileImage)
                             }
                         )
                     }
@@ -170,17 +172,31 @@ class ProfileFragment : Fragment() {
         reference.get().addOnSuccessListener {
             try {
                 val value = it.value as HashMap<String?, Any>
-                value.apply {
-                    put(user, HashMap<String, Any?>().apply {
-                        put("userId", user)
-                        put("userName", username)
-                        put("email", currentEmail)
-                        put("isOnline", false)
-                    })
-                }
                 if (!value.containsKey(user)) {
-                    reference.updateChildren(value)
+                    value.apply {
+                        put(user, HashMap<String, Any?>().apply {
+                            put("userId", user)
+                            put("userName", username)
+                            put("email", currentEmail)
+                            put("isOnline", false)
+                            put("id", SessionManager.getUserId())
+                            put("profile", profileImage)
+                        })
+                    }
+                } else {
+                    value.apply {
+                        put(user, HashMap<String, Any?>().apply {
+                            put("userId", user)
+                            put("userName", username)
+                            put("email", currentEmail)
+                            put("id", SessionManager.getUserId())
+                            put("profile", profileImage)
+                        })
+                    }
                 }
+//                if (!value.containsKey(user)) {
+                    reference.updateChildren(value)
+//                }
             } catch (e: java.lang.Exception) {
                 e.printStackTrace()
             }
@@ -265,6 +281,7 @@ class ProfileFragment : Fragment() {
                             username = r?.OK?.items?.get(0)?.username ?: ""
                             name = r?.OK?.items?.get(0)?.name ?: ""
                             currentEmail = r?.OK?.items?.get(0)?.email ?: ""
+                            profileImage = r?.OK?.items?.get(0)?.profile?:""
                             if (r?.relation == "follower") {
                                 ll_follow_user.visibility = View.VISIBLE
                                 btn_follow.text = "Follow Back"

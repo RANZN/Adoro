@@ -195,6 +195,8 @@ class SignupFragment : Fragment() {
                         put("userName", SessionManager.getUserName())
                         put("email", SessionManager.getUserEmail())
                         put("isOnline", true)
+                        put("id", SessionManager.getUserId())
+                        put("profile", SessionManager.getUserPic())
                     })
                 }
                 reference.updateChildren(value)

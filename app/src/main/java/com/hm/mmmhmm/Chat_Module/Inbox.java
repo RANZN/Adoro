@@ -244,6 +244,7 @@ public class Inbox extends AppCompatActivity {
             holder.onItemClick(users.get(position));
             holder.setTime(users.get(position).getTime());
             holder.setMessage(users.get(position).getLastMessage(), false);
+            holder.setUserImage(users.get(position).getProfile());
             holder.makeBold(users.get(position).getHasUnread());
         }
 
@@ -326,8 +327,11 @@ public class Inbox extends AppCompatActivity {
 
             CircleImageView userImageView = mView.findViewById(R.id.chat_user_image);
             //--SETTING IMAGE FROM USERTHUMB TO USERIMAGEVIEW--- IF ERRORS OCCUR , ADD USER_IMG----
-            Picasso.get().load(userThumb).placeholder(R.mipmap.ic_launcher).into(userImageView);
-
+            try {
+                Picasso.get().load(userThumb).placeholder(R.drawable.ic_account_24).into(userImageView);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
         }
 
 
@@ -350,6 +354,7 @@ public class Inbox extends AppCompatActivity {
                     intent.putExtra("user_name", user.getUserName());
                     intent.putExtra("user_id", user.getUserId());
                     intent.putExtra("isOnline", user.isOnline());
+                    intent.putExtra("profile", user.getProfile());
                     mView.getContext().startActivity(intent);
                 }
             });
