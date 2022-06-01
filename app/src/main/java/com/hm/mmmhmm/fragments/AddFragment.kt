@@ -157,18 +157,18 @@ class AddFragment : Fragment() {
                     try {
                         pb_publish_post.visibility = View.GONE
 
-                        startActivity(Intent(activity, MainActivity::class.java))
-                        activity?.finish()
-//                        if (response.body()?.OK != null) {
-//                            val r = response.body()
-////
-//                        } else {
-//                            Toast.makeText(
-//                                activity,
-//                                R.string.Something_went_wrong,
-//                                Toast.LENGTH_SHORT
-//                            ).show()
-//                        }
+
+                        if (response.body()?.OK != null) {
+                            val r = response.body()
+                            startActivity(Intent(activity, MainActivity::class.java))
+                            activity?.finish()
+                        } else {
+                            Toast.makeText(
+                                activity,
+                                R.string.Something_went_wrong,
+                                Toast.LENGTH_SHORT
+                            ).show()
+                        }
                     } catch (e: Exception) {
                         Toast.makeText(requireActivity(), "" + e.toString(), Toast.LENGTH_SHORT)
                             .show()

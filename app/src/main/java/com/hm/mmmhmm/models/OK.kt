@@ -21,8 +21,18 @@ data class OK(
     val trancations: List<Trancation>?,
     val id: String?,
     val serialNumber: Int?,
-    var relation: String?
+    var relation: String?,
+    var adoroCoins: Int?,
+    var adoroShield: Int?,
+    var email: String?,
+    var followerData: List<Any>?,
+    var followingData: List<Any>?,
+    var name: String?,
+    var number: Int?,
+    var numberOfRefered: Int?,
+    var token: String?,
 )
+
 
 
 

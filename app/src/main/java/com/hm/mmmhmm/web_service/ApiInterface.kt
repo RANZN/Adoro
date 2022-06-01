@@ -339,14 +339,14 @@ interface ApiInterface {
     @POST("_functions/publishPost")
     suspend fun publishPostAPI(
         @Body() req: PublishPostRequest
-    ): retrofit2.Response<ResponseBody>
+    ): retrofit2.Response<BaseResponse>
 
 
 
     @POST("_functions/submitMemeToCampaign")
     suspend fun submitMemeToCampaign(
         @Body() req: RequestPublishCampaign
-    ): retrofit2.Response<ResponseBody>
+    ): retrofit2.Response<BaseResponse>
 
 
 //    @Multipart

@@ -318,7 +318,7 @@ class EditProfileFragment : Fragment() {
                             et_full_name.text = Editable.Factory.getInstance().newEditable(r?.OK?.items?.get(0)?.name)
                             et_username.text = Editable.Factory.getInstance().newEditable(r?.OK?.items?.get(0)?.username)
                             et_bio.text = Editable.Factory.getInstance().newEditable(r?.OK?.items?.get(0)?.bio)
-                            et_email.text = Editable.Factory.getInstance().newEditable(r?.OK?.items?.get(0)?.email)
+                            et_email.text = Editable.Factory.getInstance().newEditable(r?.OK?.items?.get(0)?.email?:"")
                             et_street_address.text = Editable.Factory.getInstance().newEditable(r?.OK?.items?.get(0)?.completeAddress?.streetAddress)
                             et_landmark.text = Editable.Factory.getInstance().newEditable(r?.OK?.items?.get(0)?.completeAddress?.landmark)
                             et_area_name.text = Editable.Factory.getInstance().newEditable(r?.OK?.items?.get(0)?.completeAddress?.areaName)
@@ -329,6 +329,9 @@ class EditProfileFragment : Fragment() {
                             et_beneficiary_name.text = Editable.Factory.getInstance().newEditable(r?.OK?.items?.get(0)?.bankName)
                             et_account_number.text = Editable.Factory.getInstance().newEditable(r?.OK?.items?.get(0)?.accountNumber)
                             et_ifsc_code.text = Editable.Factory.getInstance().newEditable(r?.OK?.items?.get(0)?.ifseCode)
+
+                            et_phone.text= Editable.Factory.getInstance().newEditable(r?.OK?.items?.get(0)?.number.toString())
+
 
                             //tv_toolbar_title.text = r?.OK?.items?.get(0)?.username
                             userId = r?.OK?.items?.get(0)?._id ?: "";
