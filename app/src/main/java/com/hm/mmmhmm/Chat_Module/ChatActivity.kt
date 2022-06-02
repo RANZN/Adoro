@@ -24,12 +24,13 @@ class ChatActivity : AppCompatActivity() {
         registerToToggleOnlineOffline()
         registerSeenListener(intent.getStringExtra("user_id"))
 
-        ll_user.setOnClickListener {
-            startActivity(Intent(this, MainActivity::class.java).apply {
-                flags = Intent.FLAG_ACTIVITY_CLEAR_TOP
-                putExtra("fromChat", true)
-            })
-        }
+//        ll_user.setOnClickListener {
+//            startActivity(Intent(this, MainActivity::class.java).apply {
+//                flags = Intent.FLAG_ACTIVITY_CLEAR_TOP
+//                putExtra("fromChat", true)
+//                putExtra("userId", true)
+//            })
+//        }
     }
 
     private fun init() {
@@ -47,7 +48,7 @@ class ChatActivity : AppCompatActivity() {
             startActivity(
                 Intent(this, MainActivity::class.java)
                     .putExtra("tag", "chat")
-                    .putExtra("userId", intent.getStringExtra("user_id"))
+                    .putExtra("userId", intent.getStringExtra("id"))
             )
         }
         send_message_button.setOnClickListener {

@@ -79,7 +79,7 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
             val profileFragment = ProfileFragment()
             val args = Bundle()
             args.putString("path", "search")
-            args.putString("userId", extras.getString("userId") ?: "")
+            args.putString("userId", extras.getString("id") ?: "")
             profileFragment.arguments = args
             supportFragmentManager.beginTransaction()
                 .replace(R.id.frame_layout_main, profileFragment)
@@ -143,6 +143,7 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
 
     }
 
+/*
     override fun onNewIntent(intent: Intent?) {
         super.onNewIntent(intent)
         setIntent(intent)
@@ -151,8 +152,8 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
             if (intent.getBooleanExtra("fromChat", false)) {
                 val profileFragment = ProfileFragment()
                 val args = Bundle()
-                args.putString("path", "home")
-                args.putString("userId", SessionManager.getUserId())
+                args.putString("path", "search")
+                args.putString("userId", intent.getStringExtra("userId") ?: "")
                 profileFragment.arguments = args
                 supportFragmentManager.beginTransaction()
                     .replace(R.id.frame_layout_main, profileFragment)
@@ -166,6 +167,7 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
             }
         }
     }
+*/
 
     private fun updateFcmToken() {
         SessionManager.init(this)
@@ -473,7 +475,7 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
                 val profileFragment = ProfileFragment()
                 val args = Bundle()
                 args.putString("path", "home")
-                args.putString("userId", "")
+                args.putString("userId", SessionManager.getUserId())
                 profileFragment.arguments = args
                 supportFragmentManager.beginTransaction()
                     .replace(R.id.frame_layout_main, profileFragment)

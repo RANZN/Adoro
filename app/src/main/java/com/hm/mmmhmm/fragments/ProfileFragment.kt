@@ -344,18 +344,17 @@ class ProfileFragment : Fragment() {
                                     (activity as MainActivity).onBackPressed()
                                 })
                             }
-                            /*else if(r?.OK?.relation=="mutual"){
-                                ll_follow_user.visibility = View.VISIBLE
-                                btn_follow.text= "Unfollow"
-                            }*/
-                            //follower(follow back button to show),following(unfollow button to show), ownProfile(no button), newVisitor(follow button to show)
-//                            SessionManager.setUserId(r?.OK?.items?.get(0)?._id ?: "")
-//                            SessionManager.setUsername(r?.OK?.items?.get(0)?.username ?: "")
-//                            SessionManager.setUserName(r?.OK?.items?.get(0)?.name ?: "")
-//                            SessionManager.setUserPic(r?.OK?.items?.get(0)?.profile ?: "")
-                            var showPostlRequest: GeneralRequest =
-                                GeneralRequest(SessionManager.getUserId() ?: "")
-                            getPosts(showPostlRequest)
+
+                            if (requireArguments().getString("path") == "search") {
+                                var showPostlRequest: GeneralRequest =
+                                    GeneralRequest(requireArguments().getString("userId")?:"")
+                                getPosts(showPostlRequest)
+                            } else {
+                                var showPostlRequest: GeneralRequest =
+                                    GeneralRequest(SessionManager.getUserId() ?: "")
+                                getPosts(showPostlRequest)
+                            }
+
                         } else {
                             Toast.makeText(
                                 activity,
