@@ -27,10 +27,12 @@ import com.hm.mmmhmm.web_service.ApiClient
 import kotlinx.android.synthetic.main.custom_toolbar.*
 import kotlinx.android.synthetic.main.custom_toolbar.tv_toolbar_title
 import kotlinx.android.synthetic.main.fragment_edit_profile.*
+import kotlinx.android.synthetic.main.fragment_home.*
 import kotlinx.android.synthetic.main.fragment_profile.*
 import kotlinx.android.synthetic.main.fragment_profile.iv_camera
 import kotlinx.android.synthetic.main.fragment_profile.iv_cover_pic_profile
 import kotlinx.android.synthetic.main.fragment_profile.iv_profile_pic_profile
+import kotlinx.android.synthetic.main.fragment_profile.pullToRefresh
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -171,6 +173,20 @@ class ProfileFragment : Fragment() {
             getUserData(generalRequest)
         }
 
+        pullToRefresh.setOnRefreshListener {
+            if (requireArguments().getString("path") == "search") {
+                iv_camera.visibility = View.GONE
+                var generalRequest: ProfileRequest =
+                    requireArguments().getString("userId")
+                        ?.let { ProfileRequest(it, SessionManager.getUserId() ?: "") }!!
+                getUserData(generalRequest)
+            } else {
+                var generalRequest: ProfileRequest =
+                    ProfileRequest(SessionManager.getUserId() ?: "", SessionManager.getUserId() ?: "")
+                getUserData(generalRequest)
+            }
+            pullToRefresh.isRefreshing = false
+        }
     }
 
     private fun pushUserToFirebase(user: String?) {
@@ -274,9 +290,9 @@ class ProfileFragment : Fragment() {
                             )
                             tv_name.text = r?.OK?.items?.get(0)?.name
                             tv_bio.text = r?.OK?.items?.get(0)?.bio
-                            tv_total_fans.text =
+                            total_fans.text =
                                 (r?.OK?.items?.get(0)?.followerData?.size ?: 0).toString()
-                            tv_total_coins.text =
+                            total_coins.text =
                                 (r?.OK?.items?.get(0)?.adoroCoins ?: 0).toString()
                             total_coins.text =
                                 (r?.OK?.items?.get(0)?.adoroCoins ?: 0).toString()
@@ -370,7 +386,7 @@ class ProfileFragment : Fragment() {
                         pb_prof.visibility = View.GONE
                         if (response.body()?.OK != null) {
                             val r = response.body()
-                            tv_total_posts.text= (r?.OK?.items?.size?:0).toString()+"Posts"
+                            total_posts.text= (r?.OK?.items?.size?:0).toString()
 
                             rv_gallery.adapter = GalleryAdapter(requireActivity(),r?.OK?.items)
                         } else {

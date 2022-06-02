@@ -91,12 +91,16 @@ class FeedListAdapter(var ctx: FragmentActivity, private var feedList: List<Item
             val intent= Intent()
             intent.action= Intent.ACTION_SEND
             intent.putExtra(Intent.EXTRA_TEXT,
-                BASE_URL+"?"+"&postId="+ feedList?.get(position)?._id)
+                BASE_URL+"post/"+feedList?.get(position)?._id+"?"+"&postId="+ feedList?.get(position)?._id)
             intent.type="text/plain"
             ctx.startActivity(Intent.createChooser(intent,"Share To:"))
         }
         if(feedList?.get(position)?.id==SessionManager.getUserId()){
             holder.iv_menu_feed.visibility=View.VISIBLE
+        }
+        else{
+            holder.iv_menu_feed.visibility=View.GONE
+
         }
         holder.iv_menu_feed.setOnClickListener {
             val popupMenu = PopupMenu(ctx, holder.iv_menu_feed)

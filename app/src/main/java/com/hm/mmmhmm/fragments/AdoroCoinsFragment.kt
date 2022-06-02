@@ -21,6 +21,7 @@ import com.hm.mmmhmm.activity.MainActivity
 import com.hm.mmmhmm.adapter.AdoroCoinsAdapter
 import com.hm.mmmhmm.adapter.FeedListAdapter
 import com.hm.mmmhmm.helper.SessionManager
+import com.hm.mmmhmm.helper.load
 import com.hm.mmmhmm.models.GeneralRequest
 import com.hm.mmmhmm.models.RequestAuthenticateNumber
 import com.hm.mmmhmm.web_service.ApiClient
@@ -28,6 +29,7 @@ import kotlinx.android.synthetic.main.custom_toolbar.*
 import kotlinx.android.synthetic.main.fragment_adoro_coins.*
 import kotlinx.android.synthetic.main.fragment_home.*
 import kotlinx.android.synthetic.main.fragment_login.*
+import kotlinx.android.synthetic.main.fragment_profile.*
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -78,6 +80,13 @@ class AdoroCoinsFragment : Fragment() {
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
         setupToolBar()
+
+        iv_user.load(
+            SessionManager.getUserPic(),
+            R.color.text_gray,
+            R.color.text_gray,
+            true
+        )
         btn_withdrawal_coins.setOnClickListener{
             (activity as MainActivity).supportFragmentManager.beginTransaction().replace(R.id.frame_layout_main, WithdrawalRequestFragment())
                 .addToBackStack(null).commit()
