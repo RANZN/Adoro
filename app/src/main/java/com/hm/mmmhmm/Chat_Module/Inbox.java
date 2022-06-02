@@ -160,7 +160,6 @@ public class Inbox extends AppCompatActivity {
 
                         final String userName = dataSnapshot.child("name").getValue().toString();
                         final String image = dataSnapshot.child("thumb_image").getValue().toString();
-                        final String id = dataSnapshot.child("id").getValue().toString();
 
 
                         if (dataSnapshot.hasChild("online")) {
@@ -180,7 +179,6 @@ public class Inbox extends AppCompatActivity {
                                 chatIntent.putExtra("firebase_user_id", list_user_id);
                                 chatIntent.putExtra("User_Name", userName);
                                 chatIntent.putExtra("thumb_image", image);
-                                chatIntent.putExtra("id", id);
                                 startActivity(chatIntent);
                             }
                         });
@@ -357,7 +355,6 @@ public class Inbox extends AppCompatActivity {
                     intent.putExtra("user_id", user.getUserId());
                     intent.putExtra("isOnline", user.isOnline());
                     intent.putExtra("profile", user.getProfile());
-                    intent.putExtra("id", user.getId());
                     mView.getContext().startActivity(intent);
                 }
             });
