@@ -148,8 +148,8 @@ class EditPost : Fragment() {
                     pb_edit_post.visibility = View.GONE
                     onResume()
                     try {
-                        //  toast("" + response.body()?.message)
-                        if (response != null&& response.body()?.OK?.status =="Success") {
+                        (activity as MainActivity).onBackPressed()
+                        if (response != null&& response.body()?.OK?.status=="Success") {
                             (activity as MainActivity).onBackPressed()
                         } else {
                             Log.d("resp", "complet else: ")

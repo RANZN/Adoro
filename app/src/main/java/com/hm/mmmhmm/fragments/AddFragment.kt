@@ -158,10 +158,11 @@ class AddFragment : Fragment() {
                         pb_publish_post.visibility = View.GONE
 
 
-                        if (response.body()?.OK != null) {
+                        if (response.body()?.OK != null&&response.body()?.OK?.status=="success") {
                             val r = response.body()
-                            startActivity(Intent(activity, MainActivity::class.java))
-                            activity?.finish()
+                            requireActivity().supportFragmentManager.beginTransaction()
+                                .replace(R.id.frame_layout_main, HomeFragment())
+                                .commit()
                         } else {
                             Toast.makeText(
                                 activity,

@@ -245,7 +245,6 @@ class GroupCommentsFragment : Fragment() {
                                     0
                                 )
 
-
                                 scroll_controller_group.fullScroll(View.FOCUS_DOWN)
                                 scroll_controller_group.postDelayed(
                                     Runnable { scroll_controller_group.fullScroll(ScrollView.FOCUS_DOWN) },

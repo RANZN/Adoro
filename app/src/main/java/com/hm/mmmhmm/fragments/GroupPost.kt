@@ -288,8 +288,9 @@ class GroupPost : Fragment() {
                         pb_publish_post.visibility = View.GONE
                         if (response.body()?.OK != null) {
                             val r = response.body()
+                            (activity as MainActivity).onBackPressed()
                             if (r?.OK?.status=="success"){
-                                (activity as MainActivity).onBackPressed()
+
                             }
 //
                         } else {

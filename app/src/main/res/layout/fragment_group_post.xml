@@ -66,7 +66,7 @@
                 android:layout_marginTop="@dimen/_20sdp"
                 android:visibility="gone"
                 android:background="@drawable/bg_buttun_gradient"
-                android:text="@string/upload"
+                android:text="@string/submit"
                 android:textAllCaps="false"
                 android:fontFamily="@font/poppins_regular"
                 android:textColor="@color/buttonTextColor"/>

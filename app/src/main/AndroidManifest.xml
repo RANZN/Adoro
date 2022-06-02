@@ -59,7 +59,8 @@
 
             <intent-filter>
                 <data android:scheme="https" />
-                <data android:host="www.marqueberry.com" />
+                <data android:host="www.marqueberry.com"
+                    android:pathPrefix="/post"/>
                 <data android:path="/" />
 
                 <action android:name="android.intent.action.VIEW" />
