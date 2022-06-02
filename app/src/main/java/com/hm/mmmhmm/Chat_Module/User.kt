@@ -14,14 +14,4 @@ class User {
 
     var time: String = ""
 
-    var hasUnread:Boolean=false
-
-    var id:String=""
-
-    var profile:String=""
-    override fun toString(): String {
-        return "User(userId=$userId, userName=$userName, profile='$profile')"
-    }
-
-
 }

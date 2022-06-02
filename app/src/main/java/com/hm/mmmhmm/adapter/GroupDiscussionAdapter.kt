@@ -1,6 +1,5 @@
 package com.hm.mmmhmm.adapter
 
-import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
@@ -12,11 +11,7 @@ import androidx.core.content.ContentProviderCompat.requireContext
 import androidx.fragment.app.FragmentActivity
 import androidx.recyclerview.widget.RecyclerView
 import com.hm.mmmhmm.R
-import com.hm.mmmhmm.fragments.GroupCommentsFragment
-import com.hm.mmmhmm.fragments.GroupDiscussionCommentsFragment
-import com.hm.mmmhmm.fragments.HomeFragment
 import com.hm.mmmhmm.helper.SessionManager
-import com.hm.mmmhmm.helper.load
 import com.hm.mmmhmm.models.*
 import com.hm.mmmhmm.web_service.ApiClient
 import kotlinx.android.synthetic.main.fragment_group_detail.*
@@ -25,7 +20,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
-class GroupDiscussionAdapter(var ctx: FragmentActivity,  private var listData: List<Item>? = null) : RecyclerView.Adapter<GroupDiscussionAdapter.MyViewHolder>() {
+class GroupDiscussionAdapter(var ctx: FragmentActivity) : RecyclerView.Adapter<GroupDiscussionAdapter.MyViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MyViewHolder {
         val view: View =
@@ -34,15 +29,16 @@ class GroupDiscussionAdapter(var ctx: FragmentActivity,  private var listData: L
     }
 
     override fun onBindViewHolder(holder: MyViewHolder, position: Int) {
-            holder.tv_username.text= listData?.get(position)?.username
-            holder.tv_title.text= listData?.get(position)?.contentTitle
-            holder.tv_description.text= listData?.get(position)?.content
-            holder.iv_user_pic.load(
-                listData?.get(position)?.profile.toString(),
-                R.color.text_gray,
-                R.color.text_gray,
-                true
-            )
+//            holder.tv_brand_name.text= campaignList?.get(position)?.brandName
+//            holder.tv_detail.text= campaignList?.get(position)?.shortDescription
+//            holder.tv_detail.text= campaignList?.get(position)?.shortDescription
+//            holder.tv_time_left.text= "₹"+campaignList?.get(position)?.timeLeft.toString()+" left"
+//            holder.iv_profile_pic_profile.load(
+//                campaignList?.get(position)?.brandLogo.toString(),
+//                R.color.text_gray,
+//                R.color.text_gray,
+//                true
+//            )
         holder.iv_like.setOnClickListener {
             var likeData: LikeData = LikeData(
                 SessionManager.getUserId(),
@@ -51,31 +47,20 @@ class GroupDiscussionAdapter(var ctx: FragmentActivity,  private var listData: L
                 SessionManager.getUserName()
             );
             var groupDiscussionPostUpdateLikeRequest: GroupDiscussionPostUpdateLikeRequest = GroupDiscussionPostUpdateLikeRequest(
-                listData?.get(position)?._id,likeData);
+                "",likeData);
             groupDiscussionPostUpdateLike(groupDiscussionPostUpdateLikeRequest,  holder.iv_like,
                 holder.iv_liked,
                 holder.tv_like_count,
-                (listData?.get(position)?.like?: emptyList()).size
+                /*(feedList?.get(position)?.like as List<PostLikeData>).size*/0
             )
 
-        }
-
-        holder.ll_comments.setOnClickListener{
-            val commentsFragment = GroupDiscussionCommentsFragment()
-            val args = Bundle()
-            args.putString("postId", listData?.get(position)?._id)
-            commentsFragment.arguments = args
-            ctx.supportFragmentManager.beginTransaction().replace(R.id.frame_layout_main, commentsFragment).addToBackStack(null)
-                .commit()
-            SessionManager.setFeedLastPosition(position)
-            (HomeFragment).lastFirstVisiblePosition = position
         }
 
 
     }
 
     override fun getItemCount(): Int {
-        return listData?.size ?: 0
+        return 20
     }
 
     override fun getItemId(position: Int): Long {
@@ -83,22 +68,22 @@ class GroupDiscussionAdapter(var ctx: FragmentActivity,  private var listData: L
     }
 
     inner class MyViewHolder(v: View) : RecyclerView.ViewHolder(v) {
-            val iv_user_pic: ImageView
-            val tv_username: TextView
-            val tv_title: TextView
-            val tv_description: TextView
-            val ll_comments: LinearLayout
+//            val iv_profile_pic_profile: ImageView
+//            val tv_brand_name: TextView
+//            val tv_detail: TextView
+//            val tv_time_left: TextView
+//            val tv_price: TextView
 //            val btn_learn_more: Button
 val iv_like: ImageView
         val iv_liked: ImageView
         val tv_like_count: TextView
 
             init {
-                iv_user_pic = v.findViewById(R.id.iv_user_pic)
-                tv_username = v.findViewById(R.id.tv_username)
-                tv_title = v.findViewById(R.id.tv_title)
-                tv_description = v.findViewById(R.id.tv_description)
-                ll_comments = v.findViewById(R.id.ll_comments)
+//                iv_profile_pic_profile = v.findViewById(R.id.iv_profile_pic_profile)
+//                tv_brand_name = v.findViewById(R.id.tv_brand_name)
+//                tv_detail = v.findViewById(R.id.tv_detail)
+//                tv_time_left = v.findViewById(R.id.tv_time_left)
+//                tv_price = v.findViewById(R.id.tv_price)
 //                btn_learn_more = v.findViewById(R.id.btn_learn_more)
     iv_like = v.findViewById(R.id.iv_like)
     iv_liked = v.findViewById(R.id.iv_liked)

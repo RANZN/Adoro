@@ -16,8 +16,6 @@ data class ItemComment(
     var _id: String?,
     var _owner: String?,
     var _updatedDate: String?,
-    var contentTitle: String?,
-    var content: String?,
     var comment: List<Comment>?,
     var description: String?,
     var id: String?,

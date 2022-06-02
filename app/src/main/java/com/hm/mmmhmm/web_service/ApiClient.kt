@@ -17,7 +17,6 @@ import java.util.concurrent.TimeUnit
 object ApiClient {
     //const val BASE_URL = "https://webhoodindia.wixsite.com/"
     const val BASE_URL = "https://www.marqueberry.com/"
-    const val ADORO_URL = "https://www.adoro.social/"
 
     val gson = GsonBuilder()
         .setLenient()

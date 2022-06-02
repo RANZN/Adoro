@@ -6,8 +6,7 @@
     android:layout_height="wrap_content"
     app:cardCornerRadius="5dp"
     app:contentPadding="15dp"
-    app:cardElevation="2dp"
-    android:layout_marginTop="@dimen/_5sdp"
+
     xmlns:tools="http://schemas.android.com/tools"
     android:orientation="vertical">
 
@@ -79,7 +78,6 @@
                             android:layout_width="50dp"
                             android:layout_height="50dp"
                             android:padding="15dp"
-                            android:visibility="gone"
                             android:src="@drawable/option_menu" />
                     </LinearLayout>
 
@@ -91,7 +89,7 @@
                 android:id="@+id/tv_title"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/_10sdp"
+                android:layout_marginTop="20dp"
                 android:fontFamily="@font/poppins_regular"
                 android:layout_marginStart="65dp"
                 android:text="Do you find a painting changes ?"
@@ -103,9 +101,11 @@
                 android:id="@+id/tv_description"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginVertical="10dp"
+                android:layout_marginTop="10dp"
                 android:layout_marginStart="65dp"
-                android:text=""
+                android:text="HCL Company is soon launching there meme creation portal, where users and register themself and creatr awesome looking meme.
+
+Check out now."
                 android:textColor="@color/text_gray"
                 android:textSize="14sp"/>
 
@@ -120,13 +120,13 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="horizontal">
+            android:orientation="horizontal"
+            android:paddingHorizontal="10dp">
 
             <LinearLayout
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:layout_marginStart="50dp"
                 android:gravity="center_vertical|start"
                 android:orientation="horizontal">
 
@@ -183,6 +183,7 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
+                android:paddingEnd="10dp"
                 android:gravity="center_vertical|end"
                 android:orientation="horizontal">
 
@@ -227,6 +228,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="10dp"
+                android:text="@string/also_liked_the_post"
                 android:textColor="@color/black"
                 android:textSize="11sp" />
         </LinearLayout>

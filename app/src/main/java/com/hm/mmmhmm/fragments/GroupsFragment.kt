@@ -16,7 +16,6 @@ import com.hm.mmmhmm.helper.load
 import com.hm.mmmhmm.models.*
 import com.hm.mmmhmm.web_service.ApiClient
 import kotlinx.android.synthetic.main.custom_toolbar.*
-import kotlinx.android.synthetic.main.fragment_comments.*
 import kotlinx.android.synthetic.main.fragment_group_creation.*
 import kotlinx.android.synthetic.main.fragment_groups.*
 import kotlinx.android.synthetic.main.fragment_profile.*
@@ -30,7 +29,6 @@ import kotlinx.coroutines.withContext
 
 class GroupsFragment : Fragment() {
 
-    var viewType:Int=0
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -57,14 +55,21 @@ class GroupsFragment : Fragment() {
         getUserData(generalRequest)
 
         tv_my_groups.setOnClickListener {
-            viewType=0
 
+            tv_my_groups.setBackgroundResource( R.drawable.bg_buttun_gradient )
+            tv_browse_groups.setBackgroundResource( R.drawable.bg_unselect )
+            tv_my_groups.setTextColor(resources.getColor(R.color.white))
+            tv_browse_groups.setTextColor(resources.getColor(R.color.black))
+            tv_community_type.text= resources.getText(R.string.create_community)
             var generalRequest: ProfileRequest = ProfileRequest(SessionManager.getUserId() ?: "",SessionManager.getUserId() ?: "");
             getUserData(generalRequest)
         }
         tv_browse_groups.setOnClickListener {
-            viewType=1
-
+            tv_my_groups.setBackgroundResource( R.drawable.bg_unselect )
+            tv_browse_groups.setBackgroundResource( R.drawable.bg_buttun_gradient )
+            tv_my_groups.setTextColor(resources.getColor(R.color.black))
+            tv_browse_groups.setTextColor(resources.getColor(R.color.white))
+            tv_community_type.text= resources.getText(R.string.browse_community)
             getGroups()
         }
         rl_create_group.setOnClickListener {
@@ -103,7 +108,7 @@ class GroupsFragment : Fragment() {
 
     }
 
-    inner class GroupsAdapter(private var groupsList: List<Item>? = null, var viewType: Int) :
+    inner class GroupsAdapter(private var groupsList: List<Item>? = null) :
         RecyclerView.Adapter<GroupsAdapter.MyViewHolder>() {
 
         override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MyViewHolder {
@@ -118,7 +123,7 @@ class GroupsFragment : Fragment() {
             holder.tv_group_privacy.text = groupsList?.get(position)?.category
             holder.tv_detail.text = groupsList?.get(position)?.shortDescription
             holder.tv_total_memberes.text =
-                (groupsList?.get(position)?.memberData?.size?:0).toString() + " Members"
+                groupsList?.get(position)?.memberData?.size.toString() + " Members"
             holder.iv_group_pic.load(
                 groupsList?.get(position)?.groupProfile.toString(),
                 R.color.text_gray,
@@ -129,7 +134,6 @@ class GroupsFragment : Fragment() {
                 val groupDetailFragment = GroupDetail()
                 val args = android.os.Bundle()
                 args.putString("groupId", groupsList?.get(position)?._id)
-                args.putString("groupName", groupsList?.get(position)?.groupName)
                 args.putSerializable("members", groupsList?.get(position)?.memberData)
                 groupDetailFragment.arguments = args
                 activity?.supportFragmentManager?.beginTransaction()
@@ -173,12 +177,6 @@ class GroupsFragment : Fragment() {
                 popupMenu.show()
 
             }
-                if(viewType==0){
-                    holder.btn_enter.visibility=View.GONE
-                }else{
-                    holder.btn_enter.visibility=View.VISIBLE
-                }
-
             holder.btn_enter.setOnClickListener {
                 var groupDetail: com.hm.mmmhmm.models.GroupDetail = com.hm.mmmhmm.models.GroupDetail(
                     groupsList?.get(position)?._id,
@@ -241,12 +239,7 @@ class GroupsFragment : Fragment() {
                         pb_groups.visibility = View.GONE
                         if (response.body()?.OK != null) {
                             val r = response.body()
-                            tv_my_groups.setBackgroundResource( R.drawable.bg_unselect )
-                            tv_browse_groups.setBackgroundResource( R.drawable.bg_buttun_gradient )
-                            tv_my_groups.setTextColor(resources.getColor(R.color.black))
-                            tv_browse_groups.setTextColor(resources.getColor(R.color.white))
-                            tv_community_type.text= resources.getText(R.string.browse_community)
-                            recycler_groups.adapter = GroupsAdapter(r?.OK?.items,viewType)
+                            recycler_groups.adapter = GroupsAdapter(r?.OK?.items)
                         } else {
                             Toast.makeText(
                                 activity,
@@ -309,13 +302,8 @@ class GroupsFragment : Fragment() {
                     try {
                         pb_groups.visibility = View.GONE
                         if (response.body()?.OK !=null) {
-                            tv_my_groups.setBackgroundResource( R.drawable.bg_buttun_gradient )
-                            tv_browse_groups.setBackgroundResource( R.drawable.bg_unselect )
-                            tv_my_groups.setTextColor(resources.getColor(R.color.white))
-                            tv_browse_groups.setTextColor(resources.getColor(R.color.black))
-                            tv_community_type.text= resources.getText(R.string.create_community)
                             val r = response.body()
-                            recycler_groups.adapter = GroupsAdapter(r?.OK?.items?.get(0)?.items,viewType)
+                            recycler_groups.adapter = GroupsAdapter(r?.OK?.items?.get(0)?.items)
                         } else {
                             Toast.makeText(activity,R.string.Something_went_wrong, Toast.LENGTH_SHORT).show()
                         }

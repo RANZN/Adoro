@@ -9,10 +9,10 @@ data class OK(
     val referCode: String?,
     val _id: String?,
     val _updatedDate: String?,
-    val comment: List<Comment>?,
+    val comment: List<Any>?,
     val description: String?,
     val image: String?,
-    val like: List<Like>?,
+    val like: List<Any>?,
     val profile: String?,
     val username: String?,
     val amount: String?,
@@ -21,18 +21,8 @@ data class OK(
     val trancations: List<Trancation>?,
     val id: String?,
     val serialNumber: Int?,
-    var relation: String?,
-    var adoroCoins: Int?,
-    var adoroShield: Int?,
-    var email: String?,
-    var followerData: List<Any>?,
-    var followingData: List<Any>?,
-    var name: String?,
-    var number: Int?,
-    var numberOfRefered: Int?,
-    var token: String?,
+    var relation: String?
 )
-
 
 
 

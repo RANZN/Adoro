@@ -5,6 +5,7 @@ import okhttp3.MultipartBody
 import okhttp3.RequestBody
 import okhttp3.Response
 import okhttp3.ResponseBody
+import org.json.JSONObject
 import retrofit2.http.*
 import retrofit2.http.Query
 
@@ -54,6 +55,12 @@ interface ApiInterface {
     suspend fun getCampaignList(): retrofit2.Response<BaseResponse>
 
 
+    @POST("_functions/checkIPAddress")
+    suspend fun checkIp(
+        @Body() req: JSONObject
+    ): IpStatusModel
+
+
     @GET("_functions/getResults")
     suspend fun getResults(): retrofit2.Response<BaseResponse>
 
@@ -65,41 +72,14 @@ interface ApiInterface {
         @Body() req: GeneralRequest
     ): retrofit2.Response<BaseResponse>
 
-
-    @POST("_functions/updateDescription")
-    suspend fun updateDescription(
-        @Body() req: UpdateGroupRequest
-    ): retrofit2.Response<BaseResponse>
-
-
-    @POST("_functions/deletePost")
-    suspend fun deletePost(
-        @Body() req: UpdateGroupRequest
-    ): retrofit2.Response<BaseResponse>
-
-
-    @POST("_functions/groupPost")
-    suspend fun groupPost(
-        @Body() req: PostGroupRequest
-    ): retrofit2.Response<BaseResponse>
-
-
     @GET("_functions/showPost")
     suspend fun getFeed(
     ): retrofit2.Response<CommentsData>
+    @GET()
+    suspend fun getIp(@Url url:String="https://api.ipify.org/?format=json"):GetIpAddressClass
 
     @POST("_functions/getSpecificPostDetail")
     suspend fun getSpecificPostDetail(
-        @Body() req: GeneralRequest
-    ): retrofit2.Response<CommentsData>
-
-    @POST("_functions/getSpecificPostDetailGroup")
-    suspend fun getSpecificPostDetailGroup(
-        @Body() req: GeneralRequest
-    ): retrofit2.Response<CommentsData>
-
-    @POST("_functions/getSpecificDiscussionDetailGroup")
-    suspend fun getSpecificDiscussionDetailGroup(
         @Body() req: GeneralRequest
     ): retrofit2.Response<CommentsData>
 
@@ -135,7 +115,7 @@ interface ApiInterface {
     @POST("_functions/updateProfile")
     suspend fun updateProfile(
         @Body() req: UpdateProfileRequest
-    ): retrofit2.Response<BaseResponse>
+    ): retrofit2.Response<ResponseBody>
 
     @POST("_functions/authenticate")
     suspend fun registerNumber(
@@ -147,13 +127,15 @@ interface ApiInterface {
         @Body() req: CreateGroupRequest
     ): retrofit2.Response<BaseResponse>
 
-    @POST("_functions/updateGroup")
-    suspend fun updateGroup(
-        @Body() req: EditGroupRequest
-    ): retrofit2.Response<BaseResponse>
 
     @POST("_functions/signup")
     suspend fun registerUser(
+        @Body() req: RequestRegister
+    ): retrofit2.Response<RegisterModel>
+
+
+    @POST("_functions/referalSignup")
+    suspend fun registerReferalUser(
         @Body() req: RequestRegister
     ): retrofit2.Response<RegisterModel>
 
@@ -286,19 +268,6 @@ interface ApiInterface {
     ): retrofit2.Response<BaseResponse>
 
 
-
-    @POST("_functions/deleteMemberData")
-    suspend fun deleteMemberData(
-        @Body() req: DeleteMemberRequest
-    ): retrofit2.Response<BaseResponse>
-
-
-    @POST("_functions/deleteRequestedMemberData")
-    suspend fun deleteRequestedMemberData(
-        @Body() req: DeleteMemberRequest
-    ): retrofit2.Response<BaseResponse>
-
-
     @POST("_functions/showMyTemplate")
     suspend fun showMyTemplate(
         @Body() req: RequestShowMyTemplate
@@ -312,11 +281,6 @@ interface ApiInterface {
 
     @POST("_functions/updateComment")
     suspend fun updateComment(
-        @Body() req: PostCommentRequest
-    ): retrofit2.Response<BaseResponse>
-
-    @POST("_functions/grouDiscussionPostUpdateComment")
-    suspend fun grouDiscussionPostUpdateComment(
         @Body() req: PostCommentRequest
     ): retrofit2.Response<BaseResponse>
 
@@ -339,14 +303,21 @@ interface ApiInterface {
     @POST("_functions/publishPost")
     suspend fun publishPostAPI(
         @Body() req: PublishPostRequest
-    ): retrofit2.Response<BaseResponse>
+    ): retrofit2.Response<ResponseBody>
+
+    @POST("_functions/postTemplate")
+    suspend fun publishTemplatePostAPI(
+        @Body() req: PublishMemePostTempelate
+    ): retrofit2.Response<ResponseBody>
+
+
 
 
 
     @POST("_functions/submitMemeToCampaign")
     suspend fun submitMemeToCampaign(
         @Body() req: RequestPublishCampaign
-    ): retrofit2.Response<BaseResponse>
+    ): retrofit2.Response<ResponseBody>
 
 
 //    @Multipart

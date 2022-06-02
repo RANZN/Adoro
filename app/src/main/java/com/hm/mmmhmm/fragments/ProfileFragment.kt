@@ -5,7 +5,6 @@ package com.hm.mmmhmm.fragments
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
-import android.text.Editable
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -25,14 +24,7 @@ import com.hm.mmmhmm.helper.load
 import com.hm.mmmhmm.models.*
 import com.hm.mmmhmm.web_service.ApiClient
 import kotlinx.android.synthetic.main.custom_toolbar.*
-import kotlinx.android.synthetic.main.custom_toolbar.tv_toolbar_title
-import kotlinx.android.synthetic.main.fragment_edit_profile.*
-import kotlinx.android.synthetic.main.fragment_home.*
 import kotlinx.android.synthetic.main.fragment_profile.*
-import kotlinx.android.synthetic.main.fragment_profile.iv_camera
-import kotlinx.android.synthetic.main.fragment_profile.iv_cover_pic_profile
-import kotlinx.android.synthetic.main.fragment_profile.iv_profile_pic_profile
-import kotlinx.android.synthetic.main.fragment_profile.pullToRefresh
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -50,7 +42,6 @@ class ProfileFragment : Fragment() {
     var username: String? = null
     var name: String? = null
     var userId: String? = null
-    var profileImage:String?=null
 
     var currentEmail = ""
 
@@ -141,7 +132,6 @@ class ProfileFragment : Fragment() {
                             ).apply {
                                 putExtra("user_id", id)
                                 putExtra("user_name", username)
-                                putExtra("profile", profileImage)
                             }
                         )
                     }
@@ -173,20 +163,6 @@ class ProfileFragment : Fragment() {
             getUserData(generalRequest)
         }
 
-        pullToRefresh.setOnRefreshListener {
-            if (requireArguments().getString("path") == "search") {
-                iv_camera.visibility = View.GONE
-                var generalRequest: ProfileRequest =
-                    requireArguments().getString("userId")
-                        ?.let { ProfileRequest(it, SessionManager.getUserId() ?: "") }!!
-                getUserData(generalRequest)
-            } else {
-                var generalRequest: ProfileRequest =
-                    ProfileRequest(SessionManager.getUserId() ?: "", SessionManager.getUserId() ?: "")
-                getUserData(generalRequest)
-            }
-            pullToRefresh.isRefreshing = false
-        }
     }
 
     private fun pushUserToFirebase(user: String?) {
@@ -194,31 +170,17 @@ class ProfileFragment : Fragment() {
         reference.get().addOnSuccessListener {
             try {
                 val value = it.value as HashMap<String?, Any>
-                if (!value.containsKey(user)) {
-                    value.apply {
-                        put(user, HashMap<String, Any?>().apply {
-                            put("userId", user)
-                            put("userName", username)
-                            put("email", currentEmail)
-                            put("isOnline", false)
-                            put("id", SessionManager.getUserId())
-                            put("profile", profileImage)
-                        })
-                    }
-                } else {
-                    value.apply {
-                        put(user, HashMap<String, Any?>().apply {
-                            put("userId", user)
-                            put("userName", username)
-                            put("email", currentEmail)
-                            put("id", SessionManager.getUserId())
-                            put("profile", profileImage)
-                        })
-                    }
+                value.apply {
+                    put(user, HashMap<String, Any?>().apply {
+                        put("userId", user)
+                        put("userName", username)
+                        put("email", currentEmail)
+                        put("isOnline", false)
+                    })
                 }
-//                if (!value.containsKey(user)) {
+                if (!value.containsKey(user)) {
                     reference.updateChildren(value)
-//                }
+                }
             } catch (e: java.lang.Exception) {
                 e.printStackTrace()
             }
@@ -261,7 +223,6 @@ class ProfileFragment : Fragment() {
     }
 
 
-
     private fun getUserData(generalRequest: ProfileRequest) {
         pb_prof.visibility = View.VISIBLE
         val apiInterface = ApiClient.getRetrofitService(requireContext())
@@ -290,9 +251,10 @@ class ProfileFragment : Fragment() {
                             )
                             tv_name.text = r?.OK?.items?.get(0)?.name
                             tv_bio.text = r?.OK?.items?.get(0)?.bio
-                            total_fans.text =
+                            //tv_total_posts.text= r?.OK?.items?.get(0)?.bio+"Posts"
+                            tv_total_fans.text =
                                 (r?.OK?.items?.get(0)?.followerData?.size ?: 0).toString()
-                            total_coins.text =
+                            tv_total_coins.text =
                                 (r?.OK?.items?.get(0)?.adoroCoins ?: 0).toString()
                             total_coins.text =
                                 (r?.OK?.items?.get(0)?.adoroCoins ?: 0).toString()
@@ -303,8 +265,6 @@ class ProfileFragment : Fragment() {
                             username = r?.OK?.items?.get(0)?.username ?: ""
                             name = r?.OK?.items?.get(0)?.name ?: ""
                             currentEmail = r?.OK?.items?.get(0)?.email ?: ""
-                            profileImage = r?.OK?.items?.get(0)?.profile?:""
-
                             if (r?.relation == "follower") {
                                 ll_follow_user.visibility = View.VISIBLE
                                 btn_follow.text = "Follow Back"
@@ -325,17 +285,6 @@ class ProfileFragment : Fragment() {
                                 iv_toolbar_icon.setOnClickListener(View.OnClickListener {
                                     (activity as MainActivity).manageDrawer()
                                 })
-
-                                SessionManager.setAdoroCoins( r.OK?.items?.get(0)?.adoroCoins ?: 0)
-                                SessionManager.setUserEmail( r.OK?.items?.get(0)?.email ?: "")
-                                SessionManager.setUserPic( r.OK?.items?.get(0)?.profile ?: "")
-                                SessionManager.setUserPhone( r.OK?.items?.get(0)?.number.toString())
-                                SessionManager.setUsername( r.OK?.items?.get(0)?.username ?: "")
-                                SessionManager.setUserName( r.OK?.items?.get(0)?.name ?: "")
-                                SessionManager.setAccountNumber( r.OK?.items?.get(0)?.accountNumber ?: "")
-                                SessionManager.setIFSC( r.OK?.items?.get(0)?.ifseCode ?: "")
-                                SessionManager.setBank( r.OK?.items?.get(0)?.bankName ?: "")
-                                SessionManager.setAccountHolder( r.OK?.items?.get(0)?.accountHolder ?: "")
                             } else if (r?.relation == "newVisitor") {
                                 ll_follow_user.visibility = View.VISIBLE
                                 btn_follow.text = "Follow"
@@ -344,17 +293,18 @@ class ProfileFragment : Fragment() {
                                     (activity as MainActivity).onBackPressed()
                                 })
                             }
-
-                            if (requireArguments().getString("path") == "search") {
-                                var showPostlRequest: GeneralRequest =
-                                    GeneralRequest(requireArguments().getString("userId")?:"")
-                                getPosts(showPostlRequest)
-                            } else {
-                                var showPostlRequest: GeneralRequest =
-                                    GeneralRequest(SessionManager.getUserId() ?: "")
-                                getPosts(showPostlRequest)
-                            }
-
+                            /*else if(r?.OK?.relation=="mutual"){
+                                ll_follow_user.visibility = View.VISIBLE
+                                btn_follow.text= "Unfollow"
+                            }*/
+                            //follower(follow back button to show),following(unfollow button to show), ownProfile(no button), newVisitor(follow button to show)
+//                            SessionManager.setUserId(r?.OK?.items?.get(0)?._id ?: "")
+//                            SessionManager.setUsername(r?.OK?.items?.get(0)?.username ?: "")
+//                            SessionManager.setUserName(r?.OK?.items?.get(0)?.name ?: "")
+//                            SessionManager.setUserPic(r?.OK?.items?.get(0)?.profile ?: "")
+                            var showPostlRequest: GeneralRequest =
+                                GeneralRequest(SessionManager.getUserId() ?: "")
+                            getPosts(showPostlRequest)
                         } else {
                             Toast.makeText(
                                 activity,
@@ -363,8 +313,8 @@ class ProfileFragment : Fragment() {
                             ).show()
                         }
                     } catch (e: java.lang.Exception) {
-//                        Toast.makeText(requireActivity(), "" + e.toString(), Toast.LENGTH_SHORT)
-//                            .show()
+                        Toast.makeText(requireActivity(), "" + e.toString(), Toast.LENGTH_SHORT)
+                            .show()
                     }
                 }
             } catch (e: java.lang.Exception) {
@@ -385,8 +335,6 @@ class ProfileFragment : Fragment() {
                         pb_prof.visibility = View.GONE
                         if (response.body()?.OK != null) {
                             val r = response.body()
-                            total_posts.text= (r?.OK?.items?.size?:0).toString()
-
                             rv_gallery.adapter = GalleryAdapter(requireActivity(),r?.OK?.items)
                         } else {
                             Toast.makeText(

@@ -22,7 +22,6 @@ import com.hm.mmmhmm.Chat_Module.InboxActivity
 import com.hm.mmmhmm.R
 import com.hm.mmmhmm.activity.MainActivity
 import com.hm.mmmhmm.helper.SessionManager
-import com.hm.mmmhmm.models.PublishMemePostTempelate
 import com.hm.mmmhmm.models.PublishPostRequest
 import com.hm.mmmhmm.web_service.ApiClient
 import kotlinx.android.synthetic.main.custom_toolbar.*
@@ -34,7 +33,7 @@ import kotlinx.coroutines.withContext
 import java.io.ByteArrayOutputStream
 
 
-class UploadMeme : Fragment() {
+class AddTempletFragment : Fragment() {
 
     private var pickedBanner: Bitmap? = null
 
@@ -118,12 +117,16 @@ class UploadMeme : Fragment() {
 
 
         btn_upload_design.setOnClickListener {
-            var generalRequest: PublishMemePostTempelate =
-                PublishMemePostTempelate(
-
-                    getEncoded64ImageStringFromBitmap(pickedBanner),
+            var generalRequest: PublishPostRequest =
+                PublishPostRequest(
                     SessionManager.getUsername() ?: "",
-                    SessionManager.getUserId()?:""
+                    getEncoded64ImageStringFromBitmap(pickedBanner),
+                    et_description_upload.text.toString(),
+                    listOf<Any>(),
+                    listOf<Any>(),
+                    0,
+                    SessionManager.getUserId()?:"",
+                    SessionManager.getUserPic()?:""
                 )
             publishPost(generalRequest)
         }
@@ -143,12 +146,12 @@ class UploadMeme : Fragment() {
     }
 
 
-    private fun publishPost(generalRequest: PublishMemePostTempelate) {
+    private fun publishPost(generalRequest: PublishPostRequest) {
         pb_publish_post.visibility = View.VISIBLE
         val apiInterface = ApiClient.getRetrofitService(requireContext())
         CoroutineScope(Dispatchers.IO).launch {
             try {
-                val response = apiInterface.publishTemplatePostAPI(generalRequest)
+                val response = apiInterface.publishPostAPI(generalRequest)
                 withContext(Dispatchers.Main) {
                     try {
                         pb_publish_post.visibility = View.GONE
@@ -200,8 +203,9 @@ class UploadMeme : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_upload_meme, container, false)
+        return inflater.inflate(R.layout.fragment_add_templet, container, false)
     }
+
     private fun setupToolBar() {
         iv_toolbar_icon.setBackgroundResource(R.drawable.hamburger_icon)
         iv_toolbar_action_inbox.setBackgroundResource(R.drawable.chat)
@@ -227,5 +231,6 @@ class UploadMeme : Fragment() {
 
 
     }
+
 
 }

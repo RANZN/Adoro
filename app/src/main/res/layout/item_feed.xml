@@ -50,10 +50,6 @@
                         android:text="@string/username"
                         android:textColor="@color/text_black"
                         android:textSize="18sp" />
-                    <View
-                        android:layout_width="0dp"
-                        android:layout_height="1dp"
-                        android:layout_weight="1"/>
 
                     <ImageView
                         android:id="@+id/iv_menu_feed"
@@ -61,7 +57,7 @@
                         android:layout_height="50dp"
                         android:padding="15dp"
                         android:src="@drawable/option_menu"
-                        android:visibility="visible" />
+                        android:visibility="gone" />
                 </LinearLayout>
 
 
@@ -88,13 +84,18 @@
                 android:gravity="center_vertical|start"
                 android:orientation="horizontal">
 
-                <ImageView
+                <CheckBox
                     android:id="@+id/iv_like"
-                    android:layout_width="50dp"
-                    android:layout_height="50dp"
-                    android:padding="13dp"
-                    android:src="@drawable/favorite_icon"
-                    app:tint="@color/black" />
+                    android:layout_width="30dp"
+                    android:layout_height="30dp"
+                    android:button="@null"
+                    android:checked="false"
+                    android:layout_marginStart="20dp"
+                    android:layout_gravity="bottom"
+                    android:gravity="bottom"
+                    android:layout_marginTop="10dp"
+                    android:background="@drawable/like_icon"
+                    android:duplicateParentState="true" />
                 <ImageView
                     android:id="@+id/iv_liked"
                     android:layout_width="50dp"

@@ -38,10 +38,6 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        // remove title
-        /*       requestWindowFeature(Window.FEATURE_NO_TITLE);
-               getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
-                   WindowManager.LayoutParams.FLAG_FULLSCREEN);*/
         setContentView(R.layout.activity_main)
         // SessionManager.init(this)
         // GlobleData.ACCESS_TOKEN = SessionManager.getAccessToken().toString()
@@ -52,9 +48,9 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
             true
         )
 
-        tv_user.text = SessionManager.getUserName()
-        tv_followers.text = SessionManager.getTotalFollowers().toString() + " Followers"
-        tv_total_coins.text = SessionManager.getTotalFollowers().toString() + " adoro"
+        tv_user.text= SessionManager.getUserName()
+        tv_followers.text= SessionManager.getTotalFollowers().toString()+" Followers"
+        tv_total_coins.text= SessionManager.getTotalFollowers().toString()+" adoro"
 
 
         ll_user_details.setOnClickListener {
@@ -75,7 +71,7 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
 
         }
         val extras = intent.extras
-        if (extras != null && extras.getString("tag") == "chat") {
+        if (extras != null&&extras.getString("tag")=="chat") {
             val profileFragment = ProfileFragment()
             val args = Bundle()
             args.putString("path", "search")
@@ -85,8 +81,7 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
                 .replace(R.id.frame_layout_main, profileFragment)
                 .addToBackStack(null).commit()
         } else {
-            supportFragmentManager.beginTransaction()
-                .replace(R.id.frame_layout_main, HomeFragment())
+            supportFragmentManager.beginTransaction().replace(R.id.frame_layout_main, HomeFragment())
                 .commit()
         }
 
@@ -141,30 +136,6 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
             }
         }
 
-    }
-
-    override fun onNewIntent(intent: Intent?) {
-        super.onNewIntent(intent)
-        setIntent(intent)
-
-        if (intent?.hasExtra("fromChat") == true) {
-            if (intent.getBooleanExtra("fromChat", false)) {
-                val profileFragment = ProfileFragment()
-                val args = Bundle()
-                args.putString("path", "home")
-                args.putString("userId", SessionManager.getUserId())
-                profileFragment.arguments = args
-                supportFragmentManager.beginTransaction()
-                    .replace(R.id.frame_layout_main, profileFragment)
-                    .commit()
-                view_tab_home.visibility = View.GONE
-                view_tab_group.visibility = View.GONE
-                view_tab_add.visibility = View.GONE
-                view_tab_services.visibility = View.GONE
-                view_tab_account.visibility = View.VISIBLE
-                drawer_layout.closeDrawer(GravityCompat.START)
-            }
-        }
     }
 
     private fun updateFcmToken() {
@@ -486,6 +457,12 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
                 drawer_layout.closeDrawer(GravityCompat.START)
             }
         }
+    }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+     //   Toast.makeText(this, "File uploaded successfully!", Toast.LENGTH_SHORT).show()
+
     }
 
     override fun onRequestPermissionsResult(

@@ -34,9 +34,18 @@ class GroupAnnouncementAdapter( var ctx:FragmentActivity,private var listData: L
                 true
             )
         holder.itemView.setOnClickListener {
-//            ctx.supportFragmentManager.beginTransaction()
-//                .replace(R.id.frame_layout_main, FragmentGroupCreation())
-//                .addToBackStack(null).commit()
+            ctx.supportFragmentManager.beginTransaction()
+                .replace(R.id.frame_layout_main, FragmentGroupCreation())
+                .addToBackStack(null).commit()
+            holder.tv_learn_more.setOnClickListener {
+//                val postDetailFragment = PostDetailFragment()
+//                val args = Bundle()
+//                args.putString("campaignId", campaignList?.get(position)?._id)
+//                postDetailFragment.arguments = args
+//                (activity as MainActivity).supportFragmentManager.beginTransaction().replace(R.id.frame_layout_main, postDetailFragment)
+//                    .commit()
+
+            }
     }
     }
 

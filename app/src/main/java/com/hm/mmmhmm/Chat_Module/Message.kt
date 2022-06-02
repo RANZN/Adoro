@@ -7,9 +7,4 @@ class Message {
     var time: Long = 0L
     var type: String = ""
     var seen: Boolean = false
-    override fun toString(): String {
-        return "Message(message='$message', receiver='$receiver', sender='$sender', time=$time, type='$type', seen=$seen)"
-    }
-
-
 }

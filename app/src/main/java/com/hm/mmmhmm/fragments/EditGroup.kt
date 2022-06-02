@@ -7,7 +7,6 @@ import android.content.pm.PackageManager
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.os.Bundle
-import android.text.Editable
 import android.util.Base64
 import android.util.Log
 import androidx.fragment.app.Fragment
@@ -25,20 +24,18 @@ import com.hm.mmmhmm.activity.MainActivity
 import com.hm.mmmhmm.adapter.GroupRequestsAdapter
 import com.hm.mmmhmm.helper.CommanFunction
 import com.hm.mmmhmm.helper.ConnectivityObserver
-import com.hm.mmmhmm.helper.SessionManager
 import com.hm.mmmhmm.helper.toast
-import com.hm.mmmhmm.models.*
+import com.hm.mmmhmm.models.CreateGroupRequest
+import com.hm.mmmhmm.models.Item
 import com.hm.mmmhmm.web_service.ApiClient
 import kotlinx.android.synthetic.main.custom_toolbar.*
 import kotlinx.android.synthetic.main.custom_toolbar.tv_toolbar_title
 import kotlinx.android.synthetic.main.fragment_edit_group.*
-import kotlinx.android.synthetic.main.fragment_edit_group.tv_group_name
 import kotlinx.android.synthetic.main.fragment_edit_profile.*
 import kotlinx.android.synthetic.main.fragment_group_creation.*
 import kotlinx.android.synthetic.main.fragment_group_creation.btn_create_group
 import kotlinx.android.synthetic.main.fragment_group_creation.et_group_about
 import kotlinx.android.synthetic.main.fragment_group_creation.et_group_name
-import kotlinx.android.synthetic.main.fragment_group_detail.*
 import kotlinx.android.synthetic.main.fragment_group_joining_requests.*
 import kotlinx.android.synthetic.main.fragment_group_joining_requests.iv_back
 import kotlinx.coroutines.CoroutineScope
@@ -55,7 +52,6 @@ class EditGroup : Fragment() {
     var visibilityType =types[0]
     var t:View?=null
     var category:String?=null
-    var profileGroup:String?=null
     private val TAG = "edit group"
 
     private var pickedProfile: Bitmap? = null
@@ -114,10 +110,7 @@ class EditGroup : Fragment() {
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
         setupToolBar()
-        var getSpecificGroupDataRequest: GetSpecificGroupDataRequest =
-            GetSpecificGroupDataRequest(requireArguments().getString("groupId") ?: "");
-        getSpecificGroupData(getSpecificGroupDataRequest)
-
+        getCategoryListForGroup()
         btn_create_group.setOnClickListener {
             validateInput()
         }
@@ -187,74 +180,31 @@ class EditGroup : Fragment() {
         if (groupName.isNullOrEmpty()) {
             toast(R.string.group_name, 1)
         } else if (groupAbout.isNullOrEmpty()) {
-            toast(R.string.what_group_is_about, 1)
+            toast(R.string.email_address, 1)
         } else if (ConnectivityObserver.isOnline(activity as Context)) {
             val memberData : Array<Int> = emptyArray()
-            var groupPhoto:String=getEncoded64ImageStringFromBitmap(pickedProfile)
-            if (groupPhoto==null&& groupPhoto==""||groupPhoto.length<10){
-                groupPhoto =profileGroup?:""
-            }else{
-                var groupPhoto:String=getEncoded64ImageStringFromBitmap(pickedProfile)
-            }
-            var createGroupRequest: EditGroupRequest = EditGroupRequest(
-                requireArguments().getString("groupId") ?: "",
-                category
-                ,groupAbout,
-                groupName,
-                groupPhoto,
-                visibilityType)
-            editGroupAPI(createGroupRequest)
+            var createGroupRequest: CreateGroupRequest = CreateGroupRequest(category
+                ,groupAbout,groupName,"",memberData,visibilityType)
+            createGroupAPI(createGroupRequest)
 
         }
     }
 
-    private fun getSpecificGroupData(getSpecificGroupDataRequest: GetSpecificGroupDataRequest) {
-        pb_update_group.visibility = View.VISIBLE
+    private fun createGroupAPI( createGroupRequest: CreateGroupRequest) {
+        pb_create_group.visibility = View.VISIBLE
         val apiInterface = ApiClient.getRetrofitService(requireContext())
         CoroutineScope(Dispatchers.IO).launch {
             try {
-                val response = apiInterface.getSpecificGroupData(getSpecificGroupDataRequest)
-                withContext(Dispatchers.Main) {
-                    pb_update_group.visibility = View.GONE
-
-                    try {
-                        //  toast("" + response.body()?.message)
-                        if (response != null) {
-                          et_group_name.text= Editable.Factory.getInstance().newEditable(response.body()?.OK?.items?.get(0)?.groupName?:"")
-                            et_group_about.text= Editable.Factory.getInstance().newEditable(response.body()?.OK?.items?.get(0)?.description?:"")
-                            profileGroup=response.body()?.OK?.items?.get(0)?.profile?:""
-                            getCategoryListForGroup()
-                        } else {
-                            Log.d("resp", "complet else: ")
-                        }
-
-                    } catch (e: Exception) {
-                        Log.d("resp", "cathch: " + e.toString())
-                    }
-                }
-
-            } catch (e: Exception) {
-                Log.d("weweewefw", e.toString())
-            }
-        }
-
-    }
-
-    private fun editGroupAPI( createGroupRequest: EditGroupRequest) {
-        pb_update_group.visibility = View.VISIBLE
-        val apiInterface = ApiClient.getRetrofitService(requireContext())
-        CoroutineScope(Dispatchers.IO).launch {
-            try {
-                val response = apiInterface.updateGroup(createGroupRequest)
+                val response = apiInterface.createGroup(createGroupRequest)
                 withContext(Dispatchers.Main) {
 
                     try {
-                        pb_update_group.visibility = View.GONE
+                        pb_create_group.visibility = View.GONE
                         if (response.body()?.OK != null) {
                             val r = response.body()
 
                             //showDialog()
-                            Toast.makeText(activity,"Group updated successfully!", Toast.LENGTH_LONG).show()
+                            Toast.makeText(activity,"Group created successfully!", Toast.LENGTH_LONG).show()
 
                             startActivity(Intent(activity, MainActivity::class.java))
                             activity?.finish()

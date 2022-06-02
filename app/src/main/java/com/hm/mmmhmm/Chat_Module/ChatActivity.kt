@@ -10,8 +10,9 @@ import com.google.firebase.database.*
 import com.hm.mmmhmm.R
 import com.hm.mmmhmm.activity.MainActivity
 import com.hm.mmmhmm.adapter.MessageAdapter
+import com.hm.mmmhmm.fragments.HomeFragment
+import com.hm.mmmhmm.fragments.ProfileFragment
 import com.hm.mmmhmm.helper.SessionManager
-import com.squareup.picasso.Picasso
 import kotlinx.android.synthetic.main.activity__chat.*
 
 class ChatActivity : AppCompatActivity() {
@@ -23,31 +24,16 @@ class ChatActivity : AppCompatActivity() {
         setupChatList(SessionManager.getFirebaseID(), intent.getStringExtra("user_id"))
         registerToToggleOnlineOffline()
         registerSeenListener(intent.getStringExtra("user_id"))
-
-        ll_user.setOnClickListener {
-            startActivity(Intent(this, MainActivity::class.java).apply {
-                flags = Intent.FLAG_ACTIVITY_CLEAR_TOP
-                putExtra("fromChat", true)
-            })
-        }
     }
 
     private fun init() {
         tv_header.text = intent.getStringExtra("user_name")
-        //--SETTING IMAGE FROM USERTHUMB TO USERIMAGEVIEW--- IF ERRORS OCCUR , ADD USER_IMG----
-        try {
-            Picasso.get().load(intent.getStringExtra("profile")).placeholder(R.mipmap.ic_launcher)
-                .into(iv_friend)
-        } catch (e:Exception) {
-            e.printStackTrace()
-        }
         val message = et_message.text
         ll_user.setOnClickListener {
 
-            startActivity(
-                Intent(this, MainActivity::class.java)
-                    .putExtra("tag", "chat")
-                    .putExtra("userId", intent.getStringExtra("user_id"))
+            startActivity(Intent(this, MainActivity::class.java)
+                .putExtra("tag","chat")
+                .putExtra("userId",intent.getStringExtra("user_id"))
             )
         }
         send_message_button.setOnClickListener {
@@ -65,7 +51,7 @@ class ChatActivity : AppCompatActivity() {
             onBackPressed()
         }
     }
-
+    
     private fun registerToToggleOnlineOffline() {
         FirebaseDatabase.getInstance().getReference("users")
             .child(intent.getStringExtra("user_id") ?: "")
@@ -173,9 +159,9 @@ class ChatActivity : AppCompatActivity() {
                     // TODO("Not yet implemented")
                 }
 
-                override fun onCancelled(error: DatabaseError) {
-                    // TODO("Not yet implemented")
-                }
-            })
+            override fun onCancelled(error: DatabaseError) {
+                // TODO("Not yet implemented")
+            }
+        })
     }
 }

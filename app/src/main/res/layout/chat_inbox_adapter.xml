@@ -5,9 +5,9 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:background="@color/white"
-    android:elevation="0dp"
+    android:elevation="2dp"
     android:orientation="vertical"
-    app:cardElevation="0dp">
+    app:cardElevation="8dp">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -34,8 +34,8 @@
                     android:layout_width="50dp"
                     android:layout_height="50dp"
                     android:layout_centerHorizontal="true"
-                    android:src="@drawable/ic_account_24"
                     android:layout_gravity="center_horizontal"
+                    android:src="@drawable/ic_account_24"
                     app:civ_border_color="@color/white"
                     app:civ_border_width="1dp" />
             </RelativeLayout>
@@ -65,9 +65,9 @@
                         android:id="@+id/last_message"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:textStyle="bold"
                         android:fontFamily="@font/opensans_light"
-                        android:textColor="@color/black"
+
+                        android:textColor="#333333"
                         android:textSize="15dp" />
 
                     <androidx.appcompat.widget.AppCompatTextView
@@ -91,7 +91,6 @@
         android:layout_width="match_parent"
         android:layout_height="1dp"
         android:layout_gravity="bottom"
-        android:visibility="gone"
         android:background="@color/black" />
 
 </LinearLayout>

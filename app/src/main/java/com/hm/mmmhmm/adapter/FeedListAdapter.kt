@@ -1,6 +1,5 @@
 package com.hm.mmmhmm.adapter
 
-import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.text.Html
@@ -9,32 +8,26 @@ import android.view.LayoutInflater
 import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
+import android.view.animation.AnimationUtils
 import android.widget.*
-import androidx.cardview.widget.CardView
-import androidx.core.content.ContextCompat
-import androidx.core.content.ContextCompat.startActivity
 import androidx.fragment.app.FragmentActivity
 import androidx.recyclerview.widget.RecyclerView
 import com.hm.mmmhmm.R
-import com.hm.mmmhmm.activity.MainActivity
-import com.hm.mmmhmm.fragments.*
-import com.hm.mmmhmm.helper.ConnectivityObserver
+import com.hm.mmmhmm.fragments.CommentsFragment
+import com.hm.mmmhmm.fragments.HomeFragment
+import com.hm.mmmhmm.fragments.ProfileFragment
 import com.hm.mmmhmm.helper.SessionManager
 import com.hm.mmmhmm.helper.load
 import com.hm.mmmhmm.models.*
 import com.hm.mmmhmm.web_service.ApiClient
 import com.hm.mmmhmm.web_service.ApiClient.BASE_URL
-import kotlinx.android.synthetic.main.fragment_comments.*
-import kotlinx.android.synthetic.main.fragment_home.*
-import kotlinx.android.synthetic.main.fragment_refer.*
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
-import java.lang.reflect.Field
 
 
-class FeedListAdapter(var ctx: FragmentActivity, private var feedList: List<ItemComment>? = null,private var sessionId:Long?=null, var pb_feeds: ProgressBar) :
+class FeedListAdapter(var ctx: FragmentActivity, private var feedList: List<ItemComment>? = null,private var sessionId:Long?=null) :
     RecyclerView.Adapter<FeedListAdapter.MyViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MyViewHolder {
@@ -91,42 +84,29 @@ class FeedListAdapter(var ctx: FragmentActivity, private var feedList: List<Item
             val intent= Intent()
             intent.action= Intent.ACTION_SEND
             intent.putExtra(Intent.EXTRA_TEXT,
-                BASE_URL+"post/"+feedList?.get(position)?._id+"?"+"&postId="+ feedList?.get(position)?._id)
+                BASE_URL+"?"+"&postId="+ feedList?.get(position)?.id)
             intent.type="text/plain"
             ctx.startActivity(Intent.createChooser(intent,"Share To:"))
-        }
-        if(feedList?.get(position)?.id==SessionManager.getUserId()){
-            holder.iv_menu_feed.visibility=View.VISIBLE
-        }
-        else{
-            holder.iv_menu_feed.visibility=View.GONE
-
         }
         holder.iv_menu_feed.setOnClickListener {
             val popupMenu = PopupMenu(ctx, holder.iv_menu_feed)
             popupMenu.inflate(R.menu.menu)
-            popupMenu.getMenu().findItem(R.id.report).setVisible(false)
             popupMenu.setOnMenuItemClickListener(object : PopupMenu.OnMenuItemClickListener {
                 override fun onMenuItemClick(item: MenuItem?): Boolean {
                     when (item?.itemId) {
                         R.id.delete -> {
-                            if (ConnectivityObserver.isOnline(ctx)) {
-                                var generalRequest: UpdateGroupRequest =
-                                    UpdateGroupRequest(feedList?.get(position)?._id?:"");
-                                deletePost(generalRequest)
-
-                            }
+                            // here are the logic to delete an item from the list
+//                        val tempLang = languageList[position]
+//                        languageList.remove(tempLang)
+//                        rvAdapter.notifyDataSetChanged()
                             return true
                         }
-                        R.id.edit -> {
-                             val editPostFragment = EditPost()
-                             val args = Bundle()
-                             args.putString("postId", feedList?.get(position)?._id?:"")
-                             editPostFragment.arguments = args
-                             ctx.supportFragmentManager.beginTransaction().replace(R.id.frame_layout_main, editPostFragment).addToBackStack(null)
-                                 .commit()
-                            return true
-                        }
+                        // in the same way you can implement others
+//                        R.id.edit -> {
+//                            // define
+//                            Toast.makeText(ctx , "Item 2 clicked" , Toast.LENGTH_SHORT).show()
+//                            return true
+//                        }
 
                     }
                     return false
@@ -194,7 +174,10 @@ class FeedListAdapter(var ctx: FragmentActivity, private var feedList: List<Item
            }
         }
         holder.iv_like.setOnClickListener {
+            val animation1 = AnimationUtils.loadAnimation(ctx.applicationContext, R.anim.scale)
+            holder.iv_like.startAnimation(animation1)
             var likeData: PostLikeData = PostLikeData(
+
                 SessionManager.getUserId(),
                 SessionManager.getUserPic(),
                 SessionManager.getUserName()
@@ -215,7 +198,7 @@ class FeedListAdapter(var ctx: FragmentActivity, private var feedList: List<Item
             val args = Bundle()
             args.putString("postId", feedList?.get(position)?._id)
             commentsFragment.arguments = args
-            ctx.supportFragmentManager.beginTransaction().replace(R.id.frame_layout_main, commentsFragment).addToBackStack(null)
+            ctx.supportFragmentManager.beginTransaction().add(R.id.frame_layout_main, commentsFragment).addToBackStack("comment")
                 .commit()
             SessionManager.setFeedLastPosition(position)
             (HomeFragment).lastFirstVisiblePosition = position
@@ -240,7 +223,7 @@ class FeedListAdapter(var ctx: FragmentActivity, private var feedList: List<Item
         val iv_user_feed: ImageView
         val iv_share: ImageView
         val iv_feed: ImageView
-        val iv_like: ImageView
+        val iv_like: CheckBox
         val iv_liked: ImageView
         val tv_username: TextView
         val tv_like_count: TextView
@@ -275,7 +258,7 @@ class FeedListAdapter(var ctx: FragmentActivity, private var feedList: List<Item
 
     private fun postUpdateLike(
         postLikeRequest: PostLikeRequest,
-        iv_like: ImageView,
+        iv_like: CheckBox,
         iv_liked: ImageView,
         tv_like_count: TextView,
         likeCount: Int
@@ -292,8 +275,8 @@ class FeedListAdapter(var ctx: FragmentActivity, private var feedList: List<Item
                         //  toast("" + response.body()?.message)
                         if (response != null) {
                             tv_like_count.text = (likeCount + 1).toString()
-                            iv_liked.visibility=View.VISIBLE
-                            iv_like.visibility=View.GONE
+                            iv_liked.visibility=View.GONE
+                            iv_like.visibility=View.VISIBLE
                         } else {
                             Log.d("resp", "complet else: ")
                         }
@@ -309,37 +292,6 @@ class FeedListAdapter(var ctx: FragmentActivity, private var feedList: List<Item
         }
 
     }
-
-    private fun deletePost(generalRequest: UpdateGroupRequest) {
-        pb_feeds.visibility = View.VISIBLE
-        val apiInterface = ApiClient.getRetrofitService(ctx)
-        CoroutineScope(Dispatchers.IO).launch {
-            try {
-                val response = apiInterface.deletePost(generalRequest)
-                withContext(Dispatchers.Main) {
-                    pb_feeds.visibility = View.GONE
-                    try {
-                        //  toast("" + response.body()?.message)
-                        if (response != null&& response.body()?.OK?.status =="Success") {
-                            ctx.supportFragmentManager.beginTransaction()
-                                .replace(R.id.frame_layout_main, HomeFragment())
-                                .commit()
-                        } else {
-                            Log.d("resp", "complet else: ")
-                        }
-
-                    } catch (e: Exception) {
-                        Log.d("resp", "cathch: " + e.toString())
-                    }
-                }
-
-            } catch (e: Exception) {
-                Log.d("weweewefw", e.toString())
-            }
-        }
-
-    }
-
 
 
 }

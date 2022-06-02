@@ -13,7 +13,6 @@ import com.hm.mmmhmm.activity.MainActivity
 import com.hm.mmmhmm.adapter.FeedListAdapter
 import com.hm.mmmhmm.adapter.GroupAnnouncementAdapter
 import com.hm.mmmhmm.adapter.GroupDiscussionAdapter
-import com.hm.mmmhmm.adapter.GroupFeedListAdapter
 import com.hm.mmmhmm.helper.SessionManager
 import com.hm.mmmhmm.models.GeneralRequest
 import com.hm.mmmhmm.models.GetSpecificGroupDataRequest
@@ -31,7 +30,7 @@ import kotlinx.coroutines.withContext
 
 class GroupDetail : Fragment() {
 
-    var itemType: Int = 0
+    var itemType:Int=0
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
     }
@@ -45,40 +44,51 @@ class GroupDetail : Fragment() {
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
-        tv_announcement.setBackgroundResource(R.drawable.bg_buttun_gradient)
-        tv_discussion.setBackgroundResource(R.drawable.bg_unselect)
-        tv_post.setBackgroundResource(R.drawable.bg_unselect)
+        tv_announcement.setBackgroundResource( R.drawable.bg_buttun_gradient )
+        tv_discussion.setBackgroundResource( R.drawable.bg_unselect )
+        tv_post.setBackgroundResource( R.drawable.bg_unselect )
         tv_announcement.setTextColor(resources.getColor(R.color.white))
         tv_discussion.setTextColor(resources.getColor(R.color.black))
         tv_post.setTextColor(resources.getColor(R.color.black))
-        itemType = 0
+        itemType=0
         setupToolBar()
-        tv_group_name.text = requireArguments().getString("groupName") ?: ""
-        var getSpecificGroupDataRequest: GetSpecificGroupDataRequest =
-            GetSpecificGroupDataRequest(requireArguments().getString("groupId") ?: "");
+
+        var getSpecificGroupDataRequest: GetSpecificGroupDataRequest = GetSpecificGroupDataRequest(requireArguments().getString("groupId")?:"");
         getSpecificGroupData(getSpecificGroupDataRequest)
 
         tv_announcement.setOnClickListener {
-
-            itemType = 0
-            var showAnnouncementRequest: ShowAnnouncementRequest =
-                ShowAnnouncementRequest(requireArguments().getString("groupId") ?: "");
+            tv_announcement.setBackgroundResource( R.drawable.bg_buttun_gradient )
+            tv_discussion.setBackgroundResource( R.drawable.bg_unselect )
+            tv_post.setBackgroundResource( R.drawable.bg_unselect )
+            tv_announcement.setTextColor(resources.getColor(R.color.white))
+            tv_discussion.setTextColor(resources.getColor(R.color.black))
+            tv_post.setTextColor(resources.getColor(R.color.black))
+            itemType=0
+            var showAnnouncementRequest: ShowAnnouncementRequest = ShowAnnouncementRequest(requireArguments().getString("groupId")?:"");
             getAnnouncementAPI(showAnnouncementRequest)
 //            recycler_group_detail.adapter= GroupAnnouncementAdapter(requireActivity())
         }
         tv_post.setOnClickListener {
-
-            itemType = 1
+            tv_announcement.setBackgroundResource( R.drawable.bg_unselect )
+            tv_discussion.setBackgroundResource( R.drawable.bg_unselect )
+            tv_post.setBackgroundResource( R.drawable.bg_buttun_gradient )
+            tv_announcement.setTextColor(resources.getColor(R.color.black))
+            tv_discussion.setTextColor(resources.getColor(R.color.black))
+            tv_post.setTextColor(resources.getColor(R.color.white))
+            itemType=1
 //            recycler_group_detail.adapter= FeedListAdapter()
-            var showAnnouncementRequest: ShowAnnouncementRequest =
-                ShowAnnouncementRequest(requireArguments().getString("groupId") ?: "");
+            var showAnnouncementRequest: ShowAnnouncementRequest = ShowAnnouncementRequest(requireArguments().getString("groupId")?:"");
             getPostsAPI(showAnnouncementRequest)
         }
         tv_discussion.setOnClickListener {
-
-            itemType = 2
-            var showAnnouncementRequest: ShowAnnouncementRequest =
-                ShowAnnouncementRequest(requireArguments().getString("groupId") ?: "");
+            tv_announcement.setBackgroundResource( R.drawable.bg_unselect )
+            tv_discussion.setBackgroundResource( R.drawable.bg_buttun_gradient )
+            tv_post.setBackgroundResource( R.drawable.bg_unselect )
+            tv_announcement.setTextColor(resources.getColor(R.color.black))
+            tv_discussion.setTextColor(resources.getColor(R.color.white))
+            tv_post.setTextColor(resources.getColor(R.color.black))
+            itemType=2
+            var showAnnouncementRequest: ShowAnnouncementRequest = ShowAnnouncementRequest(requireArguments().getString("groupId")?:"");
             getGroupDiscussionAPI(showAnnouncementRequest)
         }
 //  (activity as MainActivity).supportFragmentManager.beginTransaction().replace(R.id.frame_layout_main, postDetailFragment)
@@ -91,11 +101,14 @@ class GroupDetail : Fragment() {
         iv_toolbar_icon.setBackgroundResource(R.drawable.ic_back_arrow)
         iv_toolbar_action_members.setBackgroundResource(R.drawable.ic_group)
         iv_toolbar_action_edit.setBackgroundResource(R.drawable.ic_edit_group)
+        iv_toolbar_action_members.setColorFilter(resources.getColor(R.color.black));
+        iv_toolbar_action_members.visibility=View.VISIBLE
 
-
+        iv_toolbar_action_edit.setColorFilter(resources.getColor(R.color.black));
+        iv_toolbar_action_edit.visibility=View.VISIBLE
 
         iv_toolbar_action_add.setColorFilter(resources.getColor(R.color.black));
-        iv_toolbar_action_add.visibility = View.VISIBLE
+        iv_toolbar_action_add.visibility=View.VISIBLE
 
         tv_toolbar_title.setTextColor(resources.getColor(R.color.black))
 
@@ -113,27 +126,15 @@ class GroupDetail : Fragment() {
         iv_toolbar_action_members.setOnClickListener {
             val groupMembers = GroupMembers()
             val args = Bundle()
-            args.putString("groupId", requireArguments().getString("groupId") ?: "")
+            args.putString("groupId", requireArguments().getString("groupId")?:"")
             groupMembers.arguments = args
-            requireActivity().supportFragmentManager.beginTransaction()
-                .replace(R.id.frame_layout_main, groupMembers).addToBackStack(null)
+            requireActivity().supportFragmentManager.beginTransaction().replace(R.id.frame_layout_main, groupMembers).addToBackStack(null)
                 .commit()
         }
         iv_toolbar_action_edit.setOnClickListener(View.OnClickListener {
             val editGroup = EditGroup()
             val args = android.os.Bundle()
-            args.putString("groupId", requireArguments().getString("groupId") ?: "")
-            editGroup.arguments = args
-            activity?.supportFragmentManager?.beginTransaction()
-                ?.replace(R.id.frame_layout_main, editGroup)
-                ?.addToBackStack(null)?.commit()
-        })
-
-        iv_toolbar_action_add.setOnClickListener(View.OnClickListener {
-            val editGroup = GroupPost()
-            val args = android.os.Bundle()
-            args.putString("groupId", requireArguments().getString("groupId") ?: "")
-            args.putInt("postType", itemType)
+            args.putString("groupId", requireArguments().getString("groupId")?:"")
             editGroup.arguments = args
             activity?.supportFragmentManager?.beginTransaction()
                 ?.replace(R.id.frame_layout_main, editGroup)
@@ -142,7 +143,6 @@ class GroupDetail : Fragment() {
 
 
     }
-
     private fun getSpecificGroupData(getSpecificGroupDataRequest: GetSpecificGroupDataRequest) {
         pb_group_detail.visibility = View.VISIBLE
         val apiInterface = ApiClient.getRetrofitService(requireContext())
@@ -154,19 +154,9 @@ class GroupDetail : Fragment() {
 
                     try {
                         //  toast("" + response.body()?.message)
-                        if (response != null) {
-                            if (response.body()?.OK?.items?.get(0)?.ownerId == SessionManager.getUserId()) {
+                        if (response!=null) {
 
-                                tv_group_name.text = response.body()?.OK?.items?.get(0)?.groupName
-                                iv_toolbar_action_members.setColorFilter(resources.getColor(R.color.black));
-                                iv_toolbar_action_members.visibility = View.VISIBLE
-                                iv_toolbar_action_edit.setColorFilter(resources.getColor(R.color.black));
-                                iv_toolbar_action_edit.visibility = View.VISIBLE
-                            }
-                            var showAnnouncementRequest: ShowAnnouncementRequest =
-                                ShowAnnouncementRequest(
-                                    requireArguments().getString("groupId") ?: ""
-                                );
+                            var showAnnouncementRequest: ShowAnnouncementRequest = ShowAnnouncementRequest(requireArguments().getString("groupId")?:"");
                             getAnnouncementAPI(showAnnouncementRequest)
                         } else {
                             Log.d("resp", "complet else: ")
@@ -195,18 +185,9 @@ class GroupDetail : Fragment() {
 
                     try {
                         //  toast("" + response.body()?.message)
-                        if (response != null) {
+                        if (response!=null) {
 //                            feedList = response.body()?.OK?.items
-                            tv_announcement.setBackgroundResource(R.drawable.bg_buttun_gradient)
-                            tv_discussion.setBackgroundResource(R.drawable.bg_unselect)
-                            tv_post.setBackgroundResource(R.drawable.bg_unselect)
-                            tv_announcement.setTextColor(resources.getColor(R.color.white))
-                            tv_discussion.setTextColor(resources.getColor(R.color.black))
-                            tv_post.setTextColor(resources.getColor(R.color.black))
-                            recycler_group_detail.adapter = GroupAnnouncementAdapter(
-                                requireActivity(),
-                                response.body()?.OK?.items
-                            )
+                            recycler_group_detail.adapter= GroupAnnouncementAdapter(requireActivity(), response.body()?.OK?.items)
 
 
                         } else {
@@ -236,17 +217,9 @@ class GroupDetail : Fragment() {
 
                     try {
                         //  toast("" + response.body()?.message)
-                        if (response != null) {
+                        if (response!=null) {
 //                            feedList = response.body()?.OK?.items
-
-                            tv_announcement.setBackgroundResource(R.drawable.bg_unselect)
-                            tv_discussion.setBackgroundResource(R.drawable.bg_unselect)
-                            tv_post.setBackgroundResource(R.drawable.bg_buttun_gradient)
-                            tv_announcement.setTextColor(resources.getColor(R.color.black))
-                            tv_discussion.setTextColor(resources.getColor(R.color.black))
-                            tv_post.setTextColor(resources.getColor(R.color.white))
-                            recycler_group_detail.adapter =
-                                GroupFeedListAdapter(requireActivity(), response.body()?.OK?.items)
+                            recycler_group_detail.adapter= FeedListAdapter(requireActivity())
 
 
                         } else {
@@ -273,22 +246,16 @@ class GroupDetail : Fragment() {
                 val response = apiInterface.showGroupDiscussion(showAnnouncementRequest)
                 withContext(Dispatchers.Main) {
                     pb_group_detail.visibility = View.GONE
-                    tv_announcement.setBackgroundResource(R.drawable.bg_unselect)
-                    tv_discussion.setBackgroundResource(R.drawable.bg_buttun_gradient)
-                    tv_post.setBackgroundResource(R.drawable.bg_unselect)
-                    tv_announcement.setTextColor(resources.getColor(R.color.black))
-                    tv_discussion.setTextColor(resources.getColor(R.color.white))
-                    tv_post.setTextColor(resources.getColor(R.color.black))
+
                     try {
                         //  toast("" + response.body()?.message)
-                        if (response != null) {
+                        if (response!=null) {
 //                            feedList = response.body()?.OK?.items
-                            recycler_group_detail.adapter = GroupDiscussionAdapter(
-                                requireActivity(),
-                                response.body()?.OK?.items
-                            )
+                            recycler_group_detail.adapter= GroupDiscussionAdapter(requireActivity())
+
+
                         } else {
-                            Log.d("resp", "complete else: ")
+                            Log.d("resp", "complet else: ")
                         }
 
                     } catch (e: Exception) {

@@ -8,11 +8,13 @@ import android.os.Looper
 import android.text.Editable
 import android.util.Log
 import android.view.LayoutInflater
-import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
 import android.view.inputmethod.InputMethodManager
-import android.widget.*
+import android.widget.ImageView
+import android.widget.ScrollView
+import android.widget.TextView
+import android.widget.Toast
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import com.hm.mmmhmm.R
@@ -27,8 +29,6 @@ import com.hm.mmmhmm.models.*
 import com.hm.mmmhmm.web_service.ApiClient
 import kotlinx.android.synthetic.main.custom_toolbar.*
 import kotlinx.android.synthetic.main.fragment_comments.*
-import kotlinx.android.synthetic.main.fragment_comments.iv_feed
-import kotlinx.android.synthetic.main.fragment_edit_post.*
 import kotlinx.android.synthetic.main.fragment_home.*
 import kotlinx.android.synthetic.main.fragment_profile.*
 import kotlinx.android.synthetic.main.fragment_publish_meme.*
@@ -166,9 +166,7 @@ class CommentsFragment : Fragment() {
     }
     private fun setupToolBar() {
         iv_toolbar_icon.setBackgroundResource(R.drawable.ic_back_arrow)
-
-        iv_toolbar_icon.setColorFilter(resources.getColor(R.color.black))
-
+        iv_toolbar_icon.setColorFilter(resources.getColor(R.color.black));
         iv_toolbar_icon.setOnClickListener(View.OnClickListener {
             (activity as MainActivity).onBackPressed()
         })
@@ -187,52 +185,6 @@ class CommentsFragment : Fragment() {
                         //  toast("" + response.body()?.message)
                         if (response!=null) {
                             var data= response.body()?.OK?.items?.get(0)
-
-
-                            if(data?.id==SessionManager.getUserId()){
-                                iv_toolbar_action_inbox.getLayoutParams().height = 50
-
-                                iv_toolbar_action_inbox.setBackgroundResource(R.drawable.option_menu)
-                                iv_toolbar_action_inbox.setColorFilter(resources.getColor(R.color.black))
-                                iv_toolbar_action_inbox.setOnClickListener(View.OnClickListener {
-
-                                    val popupMenu =
-                                        PopupMenu(requireActivity(), iv_toolbar_action_edit)
-                                    popupMenu.inflate(R.menu.menu)
-                                    popupMenu.getMenu().findItem(R.id.report).setVisible(false);
-
-                                    popupMenu.setOnMenuItemClickListener(object :
-                                        PopupMenu.OnMenuItemClickListener {
-                                        override fun onMenuItemClick(item: MenuItem?): Boolean {
-                                            when (item?.itemId) {
-                                                R.id.delete -> {
-                                                     if (ConnectivityObserver.isOnline(activity as Context)) {
-                                                        var generalRequest: UpdateGroupRequest =
-                                                            UpdateGroupRequest(requireArguments().getString("postId") ?: "");
-                                                        deletePost(generalRequest)
-
-                                                    }
-                                                    return true
-                                                }
-                                                R.id.edit -> {
-                                                    val editPostFragment = EditPost()
-                                                    val args = Bundle()
-                                                    args.putString("postId", requireArguments().getString("postId")?:"")
-                                                    editPostFragment.arguments = args
-                                                    requireActivity().supportFragmentManager.beginTransaction().replace(R.id.frame_layout_main, editPostFragment).addToBackStack(null)
-                                                        .commit()
-                                                    return true
-                                                }
-
-                                            }
-                                            return false
-                                        }
-                                    })
-                                    popupMenu.show()
-
-                                })
-                            }
-
                             for (Like in (data?.like as List<Like>)) {
                                 if(Like.id==SessionManager.getUserId()){
                                     iv_liked.visibility=View.VISIBLE
@@ -339,34 +291,6 @@ class CommentsFragment : Fragment() {
 
     }
 
-    private fun deletePost(generalRequest: UpdateGroupRequest) {
-        pb_comments.visibility = View.VISIBLE
-        val apiInterface = ApiClient.getRetrofitService(requireContext())
-        CoroutineScope(Dispatchers.IO).launch {
-            try {
-                val response = apiInterface.deletePost(generalRequest)
-                withContext(Dispatchers.Main) {
-                    pb_comments.visibility = View.GONE
-                    onResume()
-                    try {
-                        //  toast("" + response.body()?.message)
-                        if (response != null&& response.body()?.OK?.status =="Success") {
-                            startActivity(Intent(activity, MainActivity::class.java))
-                            activity?.finish()
-                        } else {
-                            Log.d("resp", "complet else: ")
-                        }
 
-                    } catch (e: Exception) {
-                        Log.d("resp", "cathch: " + e.toString())
-                    }
-                }
-
-            } catch (e: Exception) {
-                Log.d("weweewefw", e.toString())
-            }
-        }
-
-    }
 
 }

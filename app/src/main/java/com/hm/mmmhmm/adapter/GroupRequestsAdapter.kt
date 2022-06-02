@@ -12,10 +12,12 @@ import androidx.fragment.app.FragmentActivity
 import androidx.recyclerview.widget.RecyclerView
 import com.hm.mmmhmm.R
 import com.hm.mmmhmm.fragments.GroupMembers
-import com.hm.mmmhmm.helper.SessionManager
 import com.hm.mmmhmm.helper.load
 import com.hm.mmmhmm.helper.toast
-import com.hm.mmmhmm.models.*
+import com.hm.mmmhmm.models.AcceptGroupRequest
+import com.hm.mmmhmm.models.GetSpecificGroupDataRequest
+import com.hm.mmmhmm.models.Item
+import com.hm.mmmhmm.models.MemberData
 import com.hm.mmmhmm.web_service.ApiClient
 import kotlinx.android.synthetic.main.fragment_group_members.*
 import kotlinx.coroutines.CoroutineScope
@@ -52,12 +54,11 @@ class GroupRequestsAdapter(var ctx: GroupMembers, val memberData: ArrayList<Memb
 
           var acceptGroupRequest: AcceptGroupRequest=AcceptGroupRequest(groupId, memberData)
             acceptMemberJoinGroupRequest(acceptGroupRequest)
+
         }
 
         holder.tv_remove.setOnClickListener {
-            val deleteMemberRequest: DeleteMemberRequest =
-                DeleteMemberRequest(groupId, SessionManager.getUserId() ?: "")
-            deleteFromMember(deleteMemberRequest)
+
 
         }
 
@@ -127,37 +128,5 @@ class GroupRequestsAdapter(var ctx: GroupMembers, val memberData: ArrayList<Memb
         }
 
     }
-
-    fun deleteFromMember(deleteMemberRequest: DeleteMemberRequest) {
-        //pb_members.visibility = View.VISIBLE
-        val apiInterface = ApiClient.getRetrofitService(ctx.requireActivity())
-        CoroutineScope(Dispatchers.IO).launch {
-            try {
-                val response = apiInterface.deleteRequestedMemberData(deleteMemberRequest)
-                withContext(Dispatchers.Main) {
-                    //  pb_members.visibility = View.GONE
-
-                    try {
-                        if (response != null && response.body()?.OK?.status == "Success") {
-                            var getSpecificGroupDataRequest: GetSpecificGroupDataRequest =
-                                GetSpecificGroupDataRequest(groupId)
-                            ctx.getSpecificGroupData(getSpecificGroupDataRequest)
-
-                        } else {
-                            Log.d("resp", "complet else: ")
-                        }
-
-                    } catch (e: Exception) {
-                        Log.d("resp", "cathch: " + e.toString())
-                    }
-                }
-
-            } catch (e: Exception) {
-                Log.d("weweewefw", e.toString())
-            }
-        }
-
-    }
-
 
 }

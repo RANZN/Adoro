@@ -81,10 +81,6 @@ class HomeFragment : Fragment() {
 //        var generalRequest: GeneralRequest = GeneralRequest(SessionManager.getUserId()?:"");
 //        getSessionForPosts(generalRequest)
         getFeedListAPI()
-        pullToRefresh.setOnRefreshListener {
-            getFeedListAPI()
-            pullToRefresh.isRefreshing = false
-        }
     }
     private fun getSessionForPosts(generalRequest: GeneralRequest) {
         pb_feeds.visibility = View.VISIBLE
@@ -131,7 +127,7 @@ class HomeFragment : Fragment() {
                         if (response!=null) {
                             feedList = response.body()?.OK?.items
                             getContest()
-                            feedListAdapter= FeedListAdapter(requireActivity(),feedList, sessionId, pb_feeds)
+                            feedListAdapter= FeedListAdapter(requireActivity(),feedList, sessionId)
                             recycler_feed_list.adapter= feedListAdapter
                             (recycler_feed_list.getLayoutManager() as LinearLayoutManager).scrollToPosition(lastFirstVisiblePosition)
                             (recycler_feed_list.getLayoutManager() as LinearLayoutManager).scrollToPosition(SessionManager.getFeedLastPosition())
