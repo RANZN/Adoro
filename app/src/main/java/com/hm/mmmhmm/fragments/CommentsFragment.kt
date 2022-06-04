@@ -84,8 +84,9 @@ class CommentsFragment : Fragment() {
             var likeData: PostLikeData = PostLikeData(
                 SessionManager.getUserId(),
                 SessionManager.getUserPic(),
+                SessionManager.getUserPic(),
                 SessionManager.getUserName()
-            );
+            )
             var postLikeRequest: PostLikeRequest = PostLikeRequest(
                 requireArguments().getString("postId") ?: "", likeData
             );

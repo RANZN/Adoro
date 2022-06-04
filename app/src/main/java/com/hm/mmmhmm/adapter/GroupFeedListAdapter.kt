@@ -8,6 +8,7 @@ import android.view.LayoutInflater
 import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
+import android.view.animation.AnimationUtils
 import android.widget.*
 import androidx.fragment.app.FragmentActivity
 import androidx.recyclerview.widget.RecyclerView
@@ -172,6 +173,9 @@ class GroupFeedListAdapter(var ctx: FragmentActivity, private var feedList: List
            }
         }
         holder.iv_like.setOnClickListener {
+
+            val animation1 = AnimationUtils.loadAnimation(ctx.applicationContext, R.anim.scale)
+            holder.iv_like.startAnimation(animation1)
             var likeData: LikeData = LikeData(
                 SessionManager.getUserId(),
                 SessionManager.getUserPic(),
@@ -219,7 +223,7 @@ class GroupFeedListAdapter(var ctx: FragmentActivity, private var feedList: List
         val iv_user_feed: ImageView
         val iv_share: ImageView
         val iv_feed: ImageView
-        val iv_like: ImageView
+        val iv_like: CheckBox
         val iv_liked: ImageView
         val tv_username: TextView
         val tv_like_count: TextView
@@ -254,7 +258,7 @@ class GroupFeedListAdapter(var ctx: FragmentActivity, private var feedList: List
 
     private fun postUpdateLike(
         postLikeRequest: GroupDiscussionPostUpdateLikeRequest,
-        iv_like: ImageView,
+        iv_like: CheckBox,
         iv_liked: ImageView,
         tv_like_count: TextView,
         likeCount: Int

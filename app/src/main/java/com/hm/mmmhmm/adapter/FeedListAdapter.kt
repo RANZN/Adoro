@@ -177,14 +177,14 @@ class FeedListAdapter(var ctx: FragmentActivity, private var feedList: List<Item
             val animation1 = AnimationUtils.loadAnimation(ctx.applicationContext, R.anim.scale)
             holder.iv_like.startAnimation(animation1)
             var likeData: PostLikeData = PostLikeData(
-
                 SessionManager.getUserId(),
                 SessionManager.getUserPic(),
+                SessionManager.getUserPic(),
                 SessionManager.getUserName()
-            );
+            )
             var postLikeRequest: PostLikeRequest = PostLikeRequest(
                 feedList?.get(position)?._id, likeData
-            );
+            )
             postUpdateLike(
                 postLikeRequest,
                 holder.iv_like,

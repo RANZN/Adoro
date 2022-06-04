@@ -133,6 +133,7 @@
                             android:layout_height="wrap_content"
                             android:layout_weight="1"
                             android:paddingEnd="10dp"
+                            android:visibility="gone"
                             android:gravity="center_vertical|end"
                             android:orientation="horizontal">
 

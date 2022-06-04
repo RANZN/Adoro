@@ -78,6 +78,7 @@
                             android:layout_width="50dp"
                             android:layout_height="50dp"
                             android:padding="15dp"
+                            android:visibility="gone"
                             android:src="@drawable/option_menu" />
                     </LinearLayout>
 
