@@ -65,7 +65,7 @@ class GroupDiscussionAdapter(var ctx: FragmentActivity,  private var listData: L
             val args = Bundle()
             args.putString("postId", listData?.get(position)?._id)
             commentsFragment.arguments = args
-            ctx.supportFragmentManager.beginTransaction().replace(R.id.frame_layout_main, commentsFragment).addToBackStack(null)
+            ctx.supportFragmentManager.beginTransaction().add(R.id.frame_layout_main, commentsFragment).addToBackStack("GroupDiscussionCommentsFragment")
                 .commit()
             SessionManager.setFeedLastPosition(position)
             (HomeFragment).lastFirstVisiblePosition = position

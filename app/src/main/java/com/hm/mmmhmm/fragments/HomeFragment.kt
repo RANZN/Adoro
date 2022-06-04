@@ -162,6 +162,9 @@ class HomeFragment : Fragment() {
                     pb_feeds.visibility = View.GONE
                     try {
                         if (response!=null) {
+                            response.body()?.OK?.featuredImage.isNullOrEmpty()
+                            iv_contest.visibility =View.GONE
+
                             iv_contest.load(
                                 response.body()?.OK?.featuredImage?:"https://static.wixstatic.com/media/6efda8_6ec75aa2cdc7452fa80e02b7d43520d8~mv2.png/v1/fill/w_207,h_75,al_c,q_85,usm_0.66_1.00_0.01,enc_auto/Webhood%20official%20logo%20banner.png",
                                 R.color.text_gray,

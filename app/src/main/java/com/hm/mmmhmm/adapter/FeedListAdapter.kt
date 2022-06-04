@@ -198,7 +198,7 @@ class FeedListAdapter(var ctx: FragmentActivity, private var feedList: List<Item
             val args = Bundle()
             args.putString("postId", feedList?.get(position)?._id)
             commentsFragment.arguments = args
-            ctx.supportFragmentManager.beginTransaction().add(R.id.frame_layout_main, commentsFragment).addToBackStack("comment")
+            ctx.supportFragmentManager.beginTransaction().add(R.id.frame_layout_main, commentsFragment).addToBackStack("CommentFragment")
                 .commit()
             SessionManager.setFeedLastPosition(position)
             (HomeFragment).lastFirstVisiblePosition = position

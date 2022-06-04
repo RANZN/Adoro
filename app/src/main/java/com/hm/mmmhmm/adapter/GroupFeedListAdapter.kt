@@ -53,7 +53,7 @@ class GroupFeedListAdapter(var ctx: FragmentActivity, private var feedList: List
                 val args = Bundle()
                 args.putString("postId", feedList?.get(position)?._id)
                 commentsFragment.arguments = args
-                ctx.supportFragmentManager.beginTransaction().replace(R.id.frame_layout_main, commentsFragment).addToBackStack(null)
+                ctx.supportFragmentManager.beginTransaction().add(R.id.frame_layout_main, commentsFragment).addToBackStack("GroupCommentsFragment")
                     .commit()
 
                 (HomeFragment).lastFirstVisiblePosition = position
@@ -198,7 +198,7 @@ class GroupFeedListAdapter(var ctx: FragmentActivity, private var feedList: List
             val args = Bundle()
             args.putString("postId", feedList?.get(position)?._id)
             commentsFragment.arguments = args
-            ctx.supportFragmentManager.beginTransaction().replace(R.id.frame_layout_main, commentsFragment).addToBackStack(null)
+            ctx.supportFragmentManager.beginTransaction().add(R.id.frame_layout_main, commentsFragment).addToBackStack("GroupCommentsFragment")
                 .commit()
             SessionManager.setFeedLastPosition(position)
             (HomeFragment).lastFirstVisiblePosition = position

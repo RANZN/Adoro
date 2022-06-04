@@ -279,11 +279,16 @@ class CommentsFragment : Fragment() {
                                 // TODO: handle exception
                             }
 
-                            scroll_controller.fullScroll(View.FOCUS_DOWN)
-                            scroll_controller.postDelayed(
-                                Runnable { scroll_controller.fullScroll(ScrollView.FOCUS_DOWN) },
-                                2000
-                            )
+                            if(scroll_controller!=null){
+                                scroll_controller.fullScroll(View.FOCUS_DOWN)
+                                scroll_controller.postDelayed(
+                                    Runnable { scroll_controller.fullScroll(ScrollView.FOCUS_DOWN) },
+                                    2000
+                                )
+                            }else{
+                                //todo
+                            }
+
                         } else {
                             Log.d("resp", "complet else: ")
                         }

@@ -8,12 +8,14 @@ import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
 import android.net.Uri
 import android.os.Bundle
+import android.os.Handler
 import android.util.Log
 import android.view.View
 import android.view.Window
 import android.view.WindowManager
 import android.widget.Button
 import android.widget.TextView
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.GravityCompat
 import androidx.fragment.app.FragmentManager
@@ -34,6 +36,8 @@ import kotlinx.coroutines.launch
 class MainActivity : AppCompatActivity(), View.OnClickListener {
     private val TAG = "main activity"
     private var isOpen: Boolean = false
+    var homePressed = true
+    var doubleBackToExitPressedOnce:kotlin.Boolean = false
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -508,5 +512,25 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
         FirebaseDatabase.getInstance().getReference("users")
             .child(SessionManager.getFirebaseID() ?: "")
             .updateChildren(HashMap<String, Any?>().apply { put("isOnline", false) })
+    }
+
+    override fun onBackPressed() {
+        val backStackEntryCount = supportFragmentManager.backStackEntryCount
+        //backStackEntryCount==0 -> no fragments more.. so close the activity with warning
+        if (backStackEntryCount == 0) {
+            if (homePressed) {
+                if (doubleBackToExitPressedOnce) {
+                    super.onBackPressed()
+                    return
+                }
+                this.doubleBackToExitPressedOnce = true
+                Toast.makeText(this, "Please click back again to exit", Toast.LENGTH_SHORT).show()
+                Handler().postDelayed(Runnable { doubleBackToExitPressedOnce = false }, 2000)
+            } else {
+                homePressed = true
+            }
+        } else {
+            super.onBackPressed()
+        }
     }
 }
