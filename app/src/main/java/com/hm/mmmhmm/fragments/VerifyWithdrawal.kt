@@ -127,66 +127,6 @@ stopFragment()
 
     }
 
-    private fun hitLoginAPI(loginRequest: RequestLogin) {
-        pb_login.visibility = View.VISIBLE
-        val apiInterface = ApiClient.getRetrofitService(requireContext())
-        CoroutineScope(Dispatchers.IO).launch {
-            try {
-                val response = apiInterface.loginUser(loginRequest)
-                withContext(Dispatchers.Main) {
-
-                    try {
-                        pb_login.visibility = View.GONE
-                        if (response.body()?.OK != null) {
-                            Toast.makeText(
-                                activity,
-                                "Hi " + response.body()?.OK!!.items[0].name + ", Welcome to "+getString(R.string.app_name)+"!",
-                                Toast.LENGTH_SHORT
-                            ).show()
-//                            val r = response.body()
-                            SessionManager.init(activity as Context)
-                            SessionManager.setLoginStatus("true")
-                            SessionManager.setUserId(response.body()?.OK!!.items[0]._id)
-                            SessionManager.setUserId(response.body()?.OK?.items?.get(0)?._id ?: "")
-                            SessionManager.setUsername(
-                                response.body()?.OK?.items?.get(0)?.username ?: ""
-                            )
-                            SessionManager.setUserName(
-                                response.body()?.OK?.items?.get(0)?.name ?: ""
-                            )
-                            SessionManager.setUserPic(
-                                response.body()?.OK?.items?.get(0)?.profile ?: ""
-                            )
-                            SessionManager.setUserEmail(
-                                response.body()?.OK?.items?.get(0)?.email ?: ""
-                            )
-
-                            SessionManager.setRefrerCode(
-                                response.body()?.OK?.items?.get(0)?.referCode ?: ""
-                            )
-                            startActivity(Intent(activity, MainActivity::class.java))
-
-                            loginUserForFirebase()
-
-                            activity?.finish()
-
-
-                        } else {
-                            CommanFunction.handleApiError(
-                                response.errorBody()?.charStream(),
-                                requireContext()
-                            )
-                        }
-                    } catch (e: Exception) {
-                        Toast.makeText(requireActivity(), "" + e.toString(), Toast.LENGTH_SHORT)
-                            .show()
-                    }
-                }
-            } catch (e: Exception) {
-
-            }
-        }
-    }
 
     private fun pushUserToFirebase() {
         val reference = FirebaseDatabase.getInstance().getReference("users")

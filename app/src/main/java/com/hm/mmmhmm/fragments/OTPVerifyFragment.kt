@@ -198,6 +198,9 @@ class OTPVerifyFragment : Fragment() {
                             SessionManager.setUserEmail(
                                 response.body()?.OK?.items?.get(0)?.email ?: ""
                             )
+                            SessionManager.setUserPhone(
+                                response.body()?.OK?.items?.get(0)?.number.toString()
+                            )
 
                             SessionManager.setRefrerCode(
                                 response.body()?.OK?.items?.get(0)?.referCode ?: ""

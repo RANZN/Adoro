@@ -3,11 +3,13 @@
   <component name="DesignSurface">
     <option name="filePathToZoomLevelMap">
       <map>
+        <entry key="..\:/Projects/adoro_social/app/src/main/res/layout/activity__chat.xml" value="0.15052083333333333" />
         <entry key="..\:/Projects/adoro_social/app/src/main/res/layout/custom_navigation_view_sidebar.xml" value="0.1" />
         <entry key="..\:/Projects/adoro_social/app/src/main/res/layout/custom_toolbar.xml" value="0.1" />
         <entry key="..\:/Projects/adoro_social/app/src/main/res/layout/fragment_add.xml" value="0.1" />
         <entry key="..\:/Projects/adoro_social/app/src/main/res/layout/fragment_comments.xml" value="0.18888888888888888" />
         <entry key="..\:/Projects/adoro_social/app/src/main/res/layout/fragment_edit_post.xml" value="0.1" />
+        <entry key="..\:/Projects/adoro_social/app/src/main/res/layout/fragment_edit_profile.xml" value="0.1" />
         <entry key="..\:/Projects/adoro_social/app/src/main/res/layout/fragment_group_discussion_comments.xml" value="0.1" />
         <entry key="..\:/Projects/adoro_social/app/src/main/res/layout/fragment_group_post_comments.xml" value="0.20416666666666666" />
         <entry key="..\:/Projects/adoro_social/app/src/main/res/layout/fragment_home.xml" value="0.18888888888888888" />

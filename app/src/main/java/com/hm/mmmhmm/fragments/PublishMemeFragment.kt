@@ -290,9 +290,11 @@ class PublishMemeFragment : Fragment() {
         // body.text = title
         val yesBtn = dialog.findViewById(R.id.btn_ok) as Button
         yesBtn.setOnClickListener {
-                                    startActivity(Intent(activity, MainActivity::class.java))
-                        activity?.finish()
             dialog.dismiss()
+            (activity as MainActivity).onBackPressed()
+//            requireActivity().supportFragmentManager.beginTransaction()
+//                .replace(R.id.frame_layout_main, HomeFragment()).commit()
+
         }
         dialog.show()
 

@@ -121,6 +121,8 @@ class ProfileFragment : Fragment() {
                     ).apply {
                         putExtra("user_id", id)
                         putExtra("user_name", username)
+                        putExtra("profile", profileImage)
+                        putExtra("id", userId)
                     }
                 )
             }.addOnFailureListener {
@@ -142,6 +144,7 @@ class ProfileFragment : Fragment() {
                                 putExtra("user_id", id)
                                 putExtra("user_name", username)
                                 putExtra("profile", profileImage)
+                                putExtra("id", userId)
                             }
                         )
                     }

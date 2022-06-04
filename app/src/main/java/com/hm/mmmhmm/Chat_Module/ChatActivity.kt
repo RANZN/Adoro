@@ -13,7 +13,10 @@ import com.hm.mmmhmm.adapter.MessageAdapter
 import com.hm.mmmhmm.fragments.HomeFragment
 import com.hm.mmmhmm.fragments.ProfileFragment
 import com.hm.mmmhmm.helper.SessionManager
+import com.hm.mmmhmm.helper.load
+import com.squareup.picasso.Picasso
 import kotlinx.android.synthetic.main.activity__chat.*
+import kotlinx.android.synthetic.main.fragment_profile.*
 
 class ChatActivity : AppCompatActivity() {
     private var mList: ArrayList<Message?> = ArrayList()
@@ -31,10 +34,23 @@ class ChatActivity : AppCompatActivity() {
         val message = et_message.text
         ll_user.setOnClickListener {
 
-            startActivity(Intent(this, MainActivity::class.java)
-                .putExtra("tag","chat")
-                .putExtra("userId",intent.getStringExtra("user_id"))
+            startActivity(Intent(this, MainActivity::class.java).apply {
+                flags = Intent.FLAG_ACTIVITY_CLEAR_TOP
+                putExtra("tag", "chat")
+                putExtra("userId", intent.getStringExtra("id"))
+            }
             )
+        }
+
+        try {
+            iv_friend.load(
+                intent.getStringExtra("profile"),
+                R.color.text_gray,
+                R.color.text_gray,
+                true
+            )
+        } catch (e: Exception) {
+            e.printStackTrace()
         }
         send_message_button.setOnClickListener {
             if (message.isNullOrEmpty()) {

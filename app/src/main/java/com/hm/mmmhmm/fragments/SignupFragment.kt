@@ -157,9 +157,12 @@ class SignupFragment : Fragment() {
 //                        Toast.makeText(activity," "+response.body()?.message, Toast.LENGTH_SHORT).show()
                             val r = response.body()
                             SessionManager.init(activity as Context)
+                            SessionManager.setUserId(response.body()?.OK?._id?:"")
+                            SessionManager.setUserPic(response.body()?.OK?.profile?:"")
                             SessionManager.setLoginStatus("true")
                             SessionManager.setUserName(et_name.text.toString())
                             SessionManager.setUserEmail(et_email.text.toString())
+                            SessionManager.setFcmToken(response.body()?.OK?.token?:"")
                             SessionManager.setUsername(et_username.text.toString())
                             SessionManager.setUserPhone(requireArguments().getString("number").toString())
 

@@ -14,4 +14,7 @@ class User {
 
     var time: String = ""
 
+    var id:String=""
+     var profile:String=""
+
 }

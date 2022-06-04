@@ -164,7 +164,7 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
             if (intent.getStringExtra("tag") == "chat") {
                 val profileFragment = ProfileFragment()
                 val args = Bundle()
-                args.putString("path", "home")
+                args.putString("path", "search")
                 args.putString("userId", intent.getStringExtra("userId") ?: "")
                 profileFragment.arguments = args
                 supportFragmentManager.beginTransaction()

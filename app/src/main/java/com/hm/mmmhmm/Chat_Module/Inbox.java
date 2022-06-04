@@ -1,7 +1,9 @@
 package com.hm.mmmhmm.Chat_Module;
 
 import android.annotation.SuppressLint;
+import android.content.Context;
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -15,6 +17,7 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.bumptech.glide.Glide;
 import com.firebase.ui.database.FirebaseRecyclerAdapter;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.ChildEventListener;
@@ -233,7 +236,7 @@ public class Inbox extends AppCompatActivity {
         @NonNull
         @Override
         public Chat_User_adapter onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-            return new Chat_User_adapter(LayoutInflater.from(parent.getContext()).inflate(R.layout.chat_inbox_adapter, parent, false));
+            return new Chat_User_adapter(LayoutInflater.from(parent.getContext()).inflate(R.layout.chat_inbox_adapter, parent, false),parent.getContext());
         }
 
         @Override
@@ -243,6 +246,10 @@ public class Inbox extends AppCompatActivity {
             holder.setTime(users.get(position).getTime());
             holder.setMessage(users.get(position).getLastMessage(), false);
 
+        }
+        public void updateUsers(List<User> list) {
+            users=list;
+            notifyDataSetChanged();
         }
 
         @Override
@@ -254,10 +261,12 @@ public class Inbox extends AppCompatActivity {
     public static class Chat_User_adapter extends RecyclerView.ViewHolder {
 
         View mView;
+        Context mContext;
 
-        public Chat_User_adapter(View itemView) {
+        public Chat_User_adapter(View itemView,Context context ) {
             super(itemView);
             mView = itemView;
+            mContext = context;
         }
 
         @SuppressLint("ResourceAsColor")
@@ -288,9 +297,16 @@ public class Inbox extends AppCompatActivity {
         public void setUserImage(String userThumb) {
 
             CircleImageView userImageView = mView.findViewById(R.id.chat_user_image);
-            //--SETTING IMAGE FROM USERTHUMB TO USERIMAGEVIEW--- IF ERRORS OCCUR , ADD USER_IMG----
-            Picasso.get().load(userThumb).placeholder(R.mipmap.ic_launcher).into(userImageView);
 
+            try {
+                Glide.with(mContext)
+                        .load(Uri.parse(userThumb))
+                        .circleCrop()
+                        .placeholder(R.mipmap.ic_launcher)
+                        .into(userImageView);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
         }
 
 
@@ -312,6 +328,8 @@ public class Inbox extends AppCompatActivity {
                     intent.putExtra("user_name", user.getUserName());
                     intent.putExtra("user_id", user.getUserId());
                     intent.putExtra("isOnline", user.isOnline());
+                    intent.putExtra("id", user.getId());
+                    intent.putExtra("profile", user.getProfile());
                     mView.getContext().startActivity(intent);
                 }
             });

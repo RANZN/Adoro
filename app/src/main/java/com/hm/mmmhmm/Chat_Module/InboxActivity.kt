@@ -36,7 +36,14 @@ class InboxActivity : AppCompatActivity() {
         chat_list.adapter = mAdapter
 
         iv_search.setOnClickListener {
-           //todo
+            val filtered = ArrayList<User?>()
+                            users.forEach {
+                                   if (it?.userName?.contains(et_search.text.toString().trim(), true) == true) {
+                                            filtered.add(it)
+                                        }
+                                }
+                           Log.i("Sanjeev", "init: $filtered")
+                           mAdapter?.updateUsers(filtered)
         }
         et_search.addTextChangedListener(object : TextWatcher {
             override fun afterTextChanged(s: Editable?) {
@@ -44,7 +51,14 @@ class InboxActivity : AppCompatActivity() {
             override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
             }
             override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
-            //todo
+                val filtered = ArrayList<User?>()
+                users.forEach {
+                    if (it?.userName?.contains(et_search.text.toString().trim(), true) == true) {
+                        filtered.add(it)
+                    }
+                }
+                Log.i("Sanjeev", "init: $filtered")
+                mAdapter?.updateUsers(filtered)
             }
         })
         FirebaseDatabase.getInstance().getReference("chats")

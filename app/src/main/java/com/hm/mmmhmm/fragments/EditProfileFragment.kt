@@ -273,6 +273,7 @@ class EditProfileFragment : Fragment() {
 
                     try {
                         //  toast("" + response.body()?.message)
+                        (activity as MainActivity).onBackPressed()
                         if (response.body()?.OK?.status=="success") {
 
                         } else {
@@ -315,22 +316,22 @@ class EditProfileFragment : Fragment() {
                                 R.color.text_gray,
                                 false
                             )
-                            et_full_name.text = Editable.Factory.getInstance().newEditable(r?.OK?.items?.get(0)?.name)
-                            et_username.text = Editable.Factory.getInstance().newEditable(r?.OK?.items?.get(0)?.username)
-                            et_bio.text = Editable.Factory.getInstance().newEditable(r?.OK?.items?.get(0)?.bio)
-                            et_email.text = Editable.Factory.getInstance().newEditable(r?.OK?.items?.get(0)?.email?:"")
-                            et_street_address.text = Editable.Factory.getInstance().newEditable(r?.OK?.items?.get(0)?.completeAddress?.streetAddress)
-                            et_landmark.text = Editable.Factory.getInstance().newEditable(r?.OK?.items?.get(0)?.completeAddress?.landmark)
-                            et_area_name.text = Editable.Factory.getInstance().newEditable(r?.OK?.items?.get(0)?.completeAddress?.areaName)
-                            et_city.text = Editable.Factory.getInstance().newEditable(r?.OK?.items?.get(0)?.completeAddress?.city)
-                            et_state_name.text = Editable.Factory.getInstance().newEditable(r?.OK?.items?.get(0)?.completeAddress?.state)
-                            et_zip_code.text = Editable.Factory.getInstance().newEditable(r?.OK?.items?.get(0)?.completeAddress?.zipCode.toString())
-                            et_bank_name.text = Editable.Factory.getInstance().newEditable(r?.OK?.items?.get(0)?.bankName)
-                            et_beneficiary_name.text = Editable.Factory.getInstance().newEditable(r?.OK?.items?.get(0)?.bankName)
-                            et_account_number.text = Editable.Factory.getInstance().newEditable(r?.OK?.items?.get(0)?.accountNumber)
-                            et_ifsc_code.text = Editable.Factory.getInstance().newEditable(r?.OK?.items?.get(0)?.ifseCode)
+                            et_full_name.setText(r?.OK?.items?.get(0)?.name)
+                            et_username.setText(r?.OK?.items?.get(0)?.username)
+                            et_bio.setText(r?.OK?.items?.get(0)?.bio)
+                            et_email.setText(r?.OK?.items?.get(0)?.email)
+                            et_phone.setText(r?.OK?.items?.get(0)?.number.toString())
+                            et_street_address.setText(r?.OK?.items?.get(0)?.completeAddress?.streetAddress)
+                            et_landmark.setText(r?.OK?.items?.get(0)?.completeAddress?.landmark)
+                            et_area_name.setText(r?.OK?.items?.get(0)?.completeAddress?.areaName)
+                            et_city.setText(r?.OK?.items?.get(0)?.completeAddress?.city)
+                            et_state_name.setText(r?.OK?.items?.get(0)?.completeAddress?.state)
+                            et_zip_code.setText(r?.OK?.items?.get(0)?.completeAddress?.zipCode?:0)
+                            et_bank_name.setText(r?.OK?.items?.get(0)?.bankName)
+                            et_beneficiary_name.setText(r?.OK?.items?.get(0)?.bankName)
+                            et_account_number.setText(r?.OK?.items?.get(0)?.accountNumber)
+                            et_ifsc_code.setText(r?.OK?.items?.get(0)?.ifseCode)
 
-                            et_phone.text= Editable.Factory.getInstance().newEditable(r?.OK?.items?.get(0)?.number.toString())
 
 
                             //tv_toolbar_title.text = r?.OK?.items?.get(0)?.username
@@ -346,6 +347,7 @@ class EditProfileFragment : Fragment() {
                             ).show()
                         }
                     } catch (e: java.lang.Exception) {
+                        e.printStackTrace()
 //                        Toast.makeText(requireActivity(), "" + e.toString(), Toast.LENGTH_SHORT)
 //                            .show()
                     }

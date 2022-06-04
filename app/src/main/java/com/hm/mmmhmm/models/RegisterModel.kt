@@ -9,6 +9,8 @@ data class OKSignupResponse(
     val _id: String,
     val _updatedDate: String,
     val email: String,
+    val profile: String,
+    val token: String,
     val name: String,
     val number: Long,
     val username: String,
