@@ -201,7 +201,7 @@ class ProfileFragment : Fragment() {
                             put("userName", username)
                             put("email", currentEmail)
                             put("isOnline", false)
-                            put("id", SessionManager.getUserId())
+                            put("id",  requireArguments().getString("userId"))
                             put("profile", profileImage)
                         })
                     }
@@ -211,7 +211,7 @@ class ProfileFragment : Fragment() {
                             put("userId", user)
                             put("userName", username)
                             put("email", currentEmail)
-                            put("id", SessionManager.getUserId())
+                            put("id",  requireArguments().getString("userId"))
                             put("profile", profileImage)
                         })
                     }

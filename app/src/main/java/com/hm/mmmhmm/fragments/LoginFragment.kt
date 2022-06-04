@@ -206,6 +206,9 @@ class LoginFragment : androidx.fragment.app.Fragment() {
                             SessionManager.setUserPic(
                                 response.body()?.OK?.items?.get(0)?.profile ?: ""
                             )
+                            SessionManager.setUserPhone(
+                                response.body()?.OK?.items?.get(0)?.number.toString()
+                            )
                             SessionManager.setUserEmail(
                                 response.body()?.OK?.items?.get(0)?.email ?: ""
                             )

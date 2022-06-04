@@ -156,6 +156,24 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
         }
     }
 
+    override fun onNewIntent(intent: Intent?) {
+        super.onNewIntent(intent)
+        setIntent(intent)
+
+        if (intent?.hasExtra("tag") == true) {
+            if (intent.getStringExtra("tag") == "chat") {
+                val profileFragment = ProfileFragment()
+                val args = Bundle()
+                args.putString("path", "home")
+                args.putString("userId", intent.getStringExtra("userId") ?: "")
+                profileFragment.arguments = args
+                supportFragmentManager.beginTransaction()
+                    .replace(R.id.frame_layout_main, profileFragment)
+                    .addToBackStack(profileFragment::class.java.simpleName).commit()
+            }
+        }
+    }
+
     private fun clickMethod() {
         rl_notification.setOnClickListener(View.OnClickListener {
             // resetView()

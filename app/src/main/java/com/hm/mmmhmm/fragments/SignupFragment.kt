@@ -158,7 +158,10 @@ class SignupFragment : Fragment() {
                             val r = response.body()
                             SessionManager.init(activity as Context)
                             SessionManager.setLoginStatus("true")
-                            SessionManager.setUserId(response.body()?.OK!!._id)
+                            SessionManager.setUserName(et_name.text.toString())
+                            SessionManager.setUserEmail(et_email.text.toString())
+                            SessionManager.setUsername(et_username.text.toString())
+                            SessionManager.setUserPhone(requireArguments().getString("number").toString())
 
                             SessionManager.setRefrerCode(
                                 response.body()?.OK?.referCode ?: ""
