@@ -1,6 +1,8 @@
 package com.hm.mmmhmm.Chat_Module
 
 import android.os.Bundle
+import android.text.Editable
+import android.text.TextWatcher
 import android.util.Log
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
@@ -10,7 +12,11 @@ import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.database.ValueEventListener
 import com.hm.mmmhmm.R
 import com.hm.mmmhmm.helper.SessionManager
+import com.hm.mmmhmm.models.SearchRequest
 import kotlinx.android.synthetic.main.activity_inbox.*
+import kotlinx.android.synthetic.main.activity_inbox.et_search
+import kotlinx.android.synthetic.main.activity_inbox.iv_search
+import kotlinx.android.synthetic.main.fragment_search.*
 
 class InboxActivity : AppCompatActivity() {
     var users: ArrayList<User?> = ArrayList()
@@ -28,6 +34,19 @@ class InboxActivity : AppCompatActivity() {
         }
         pb_inbox.visibility = View.VISIBLE
         chat_list.adapter = mAdapter
+
+        iv_search.setOnClickListener {
+           //todo
+        }
+        et_search.addTextChangedListener(object : TextWatcher {
+            override fun afterTextChanged(s: Editable?) {
+            }
+            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
+            }
+            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
+            //todo
+            }
+        })
         FirebaseDatabase.getInstance().getReference("chats")
             .addValueEventListener(object : ValueEventListener {
                 override fun onDataChange(snapshot: DataSnapshot) {

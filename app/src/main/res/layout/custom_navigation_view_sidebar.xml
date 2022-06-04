@@ -59,6 +59,7 @@
                     android:layout_height="wrap_content"
                     android:text="Cheon Yeo Woon"
                     android:textFontWeight="700"
+                    android:singleLine="true"
                     android:layout_marginTop="10dp"
                     android:textColor="@color/white"
                     android:textSize="20sp" />
@@ -68,6 +69,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="0   Followers"
+                    android:singleLine="true"
                     android:textColor="@color/white"
                     android:textSize="14sp" />
 
@@ -289,7 +291,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/edit_text_height"
                 android:layout_marginTop="5dp"
-                android:visibility="visible">
+                android:visibility="gone">
 
                 <ImageView
                     android:id="@+id/iv_template_icon"

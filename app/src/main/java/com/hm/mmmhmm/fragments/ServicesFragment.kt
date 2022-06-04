@@ -120,7 +120,7 @@ class ServicesFragment : Fragment() {
             holder.tv_brand_name.text= campaignList?.get(position)?.brandName
             holder.tv_detail.text= campaignList?.get(position)?.shortDescription
             holder.tv_detail.text= campaignList?.get(position)?.shortDescription
-            holder.tv_time_left.text= "₹"+campaignList?.get(position)?.timeLeft.toString()+" left"
+            holder.tv_time_left.text= campaignList?.get(position)?.timeLeft.toString()+" left"
             holder.iv_profile_pic_profile.load(
                 campaignList?.get(position)?.brandLogo?:"",
                 R.color.text_gray,

@@ -8,11 +8,13 @@ import android.os.Looper
 import android.text.Editable
 import android.util.Log
 import android.view.LayoutInflater
-import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
 import android.view.inputmethod.InputMethodManager
-import android.widget.*
+import android.widget.ImageView
+import android.widget.ScrollView
+import android.widget.TextView
+import android.widget.Toast
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import com.hm.mmmhmm.R
@@ -27,8 +29,19 @@ import com.hm.mmmhmm.models.*
 import com.hm.mmmhmm.web_service.ApiClient
 import kotlinx.android.synthetic.main.custom_toolbar.*
 import kotlinx.android.synthetic.main.fragment_comments.*
+import kotlinx.android.synthetic.main.fragment_comments.et_comment
 import kotlinx.android.synthetic.main.fragment_comments.iv_feed
-import kotlinx.android.synthetic.main.fragment_edit_post.*
+import kotlinx.android.synthetic.main.fragment_comments.iv_like
+import kotlinx.android.synthetic.main.fragment_comments.iv_liked
+import kotlinx.android.synthetic.main.fragment_comments.iv_share
+import kotlinx.android.synthetic.main.fragment_comments.pb_comments
+import kotlinx.android.synthetic.main.fragment_comments.recycler_comments
+import kotlinx.android.synthetic.main.fragment_comments.recycler_mutual_like_user
+import kotlinx.android.synthetic.main.fragment_comments.send_message_button
+import kotlinx.android.synthetic.main.fragment_comments.tv_feed_description
+import kotlinx.android.synthetic.main.fragment_comments.tv_like_count
+import kotlinx.android.synthetic.main.fragment_comments.tv_like_status
+import kotlinx.android.synthetic.main.fragment_group_post_comments.*
 import kotlinx.android.synthetic.main.fragment_home.*
 import kotlinx.android.synthetic.main.fragment_profile.*
 import kotlinx.android.synthetic.main.fragment_publish_meme.*
@@ -40,7 +53,7 @@ import java.text.SimpleDateFormat
 import java.util.*
 
 
-class CommentsFragment : Fragment() {
+class GroupCommentsFragment : Fragment() {
     private var feedList: List<ItemComment>? = null
     private var likes: List<PostLikeData> ? = null
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -53,7 +66,7 @@ class CommentsFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_comments, container, false)
+        return inflater.inflate(R.layout.fragment_group_post_comments, container, false)
     }
 
     override fun onResume() {
@@ -81,25 +94,30 @@ class CommentsFragment : Fragment() {
         }
 
         iv_like.setOnClickListener {
-            var likeData: PostLikeData = PostLikeData(
+
+            var likeData: LikeData = LikeData(
                 SessionManager.getUserId(),
+                SessionManager.getUserPic(),
                 SessionManager.getUserPic(),
                 SessionManager.getUserName()
             );
-            var postLikeRequest: PostLikeRequest = PostLikeRequest(
+            var postLikeRequest: GroupDiscussionPostUpdateLikeRequest = GroupDiscussionPostUpdateLikeRequest(
                 requireArguments().getString("postId") ?: "", likeData
             );
             postUpdateLike(
                 postLikeRequest,
                 iv_like,
+                iv_liked,
                 tv_like_count,
                 likes?.size?:0
             )
         }
     }
+
     private fun postUpdateLike(
-        postLikeRequest: PostLikeRequest,
+        postLikeRequest: GroupDiscussionPostUpdateLikeRequest,
         iv_like: ImageView,
+        iv_liked: ImageView,
         tv_like_count: TextView,
         likeCount: Int
     ) {
@@ -107,7 +125,7 @@ class CommentsFragment : Fragment() {
         val apiInterface = ApiClient.getRetrofitService(requireActivity())
         CoroutineScope(Dispatchers.IO).launch {
             try {
-                val response = apiInterface.updateLike(postLikeRequest)
+                val response = apiInterface.groupDiscussionPostUpdateLike(postLikeRequest)
                 withContext(Dispatchers.Main) {
                     // pb_group_detail.visibility = View.GONE
 
@@ -119,8 +137,8 @@ class CommentsFragment : Fragment() {
                                 ContextCompat.getColor(requireActivity(), R.color.red),
                                 android.graphics.PorterDuff.Mode.MULTIPLY
                             )
-                            iv_liked.visibility=View.VISIBLE
-                            iv_like.visibility=View.GONE
+                                iv_liked.visibility=View.VISIBLE
+                                iv_like.visibility=View.GONE
 
 
                             var generalRequest: GeneralRequest = GeneralRequest(requireArguments().getString("postId") ?: "");
@@ -166,9 +184,7 @@ class CommentsFragment : Fragment() {
     }
     private fun setupToolBar() {
         iv_toolbar_icon.setBackgroundResource(R.drawable.ic_back_arrow)
-
-        iv_toolbar_icon.setColorFilter(resources.getColor(R.color.black))
-
+        iv_toolbar_icon.setColorFilter(resources.getColor(R.color.black));
         iv_toolbar_icon.setOnClickListener(View.OnClickListener {
             (activity as MainActivity).onBackPressed()
         })
@@ -179,7 +195,7 @@ class CommentsFragment : Fragment() {
         val apiInterface = ApiClient.getRetrofitService(requireContext())
         CoroutineScope(Dispatchers.IO).launch {
             try {
-                val response = apiInterface.getSpecificPostDetail(generalRequest)
+                val response = apiInterface.getSpecificPostDetailGroup(generalRequest)
                 withContext(Dispatchers.Main) {
                     pb_comments.visibility = View.GONE
                     onResume()
@@ -187,52 +203,6 @@ class CommentsFragment : Fragment() {
                         //  toast("" + response.body()?.message)
                         if (response!=null) {
                             var data= response.body()?.OK?.items?.get(0)
-
-
-                            if(data?.id==SessionManager.getUserId()){
-                                iv_toolbar_action_inbox.getLayoutParams().height = 50
-
-                                iv_toolbar_action_inbox.setBackgroundResource(R.drawable.option_menu)
-                                iv_toolbar_action_inbox.setColorFilter(resources.getColor(R.color.black))
-                                iv_toolbar_action_inbox.setOnClickListener(View.OnClickListener {
-
-                                    val popupMenu =
-                                        PopupMenu(requireActivity(), iv_toolbar_action_edit)
-                                    popupMenu.inflate(R.menu.menu)
-                                    popupMenu.getMenu().findItem(R.id.report).setVisible(false);
-
-                                    popupMenu.setOnMenuItemClickListener(object :
-                                        PopupMenu.OnMenuItemClickListener {
-                                        override fun onMenuItemClick(item: MenuItem?): Boolean {
-                                            when (item?.itemId) {
-                                                R.id.delete -> {
-                                                    if (ConnectivityObserver.isOnline(activity as Context)) {
-                                                        var generalRequest: UpdateGroupRequest =
-                                                            UpdateGroupRequest(requireArguments().getString("postId") ?: "");
-                                                        deletePost(generalRequest)
-
-                                                    }
-                                                    return true
-                                                }
-                                                R.id.edit -> {
-                                                    val editPostFragment = EditPost()
-                                                    val args = Bundle()
-                                                    args.putString("postId", requireArguments().getString("postId")?:"")
-                                                    editPostFragment.arguments = args
-                                                    requireActivity().supportFragmentManager.beginTransaction().replace(R.id.frame_layout_main, editPostFragment).addToBackStack(null)
-                                                        .commit()
-                                                    return true
-                                                }
-
-                                            }
-                                            return false
-                                        }
-                                    })
-                                    popupMenu.show()
-
-                                })
-                            }
-
                             for (Like in (data?.like as List<Like>)) {
                                 if(Like.id==SessionManager.getUserId()){
                                     iv_liked.visibility=View.VISIBLE
@@ -247,13 +217,13 @@ class CommentsFragment : Fragment() {
                             tv_like_status.visibility= if ((data.like as List<Like>).size>1) View.VISIBLE else  View.GONE
 
                             recycler_mutual_like_user.adapter= MutualLikerAdapter(requireActivity(),data.like as List<Like>)
-                            var adapter = CommentsAdapter(
-                                requireActivity(),
-                                data.comment)
+                             var adapter = CommentsAdapter(
+                            requireActivity(),
+                            data.comment)
                             recycler_comments.adapter= adapter
                             adapter.notifyDataSetChanged()
                             likes = (data.like as List<PostLikeData>)
-                            //  tv_username.text = data?.username
+                          //  tv_username.text = data?.username
                             tv_feed_description.text = data.description
 //                            iv_user_feed.load(
 //                                data?.profile,
@@ -274,15 +244,18 @@ class CommentsFragment : Fragment() {
                                     requireActivity().currentFocus!!.windowToken,
                                     0
                                 )
+
+                                scroll_controller_group.fullScroll(View.FOCUS_DOWN)
+                                scroll_controller_group.postDelayed(
+                                    Runnable { scroll_controller_group.fullScroll(ScrollView.FOCUS_DOWN) },
+                                    2000
+                                )
                             } catch (e: java.lang.Exception) {
                                 // TODO: handle exception
                             }
 
-                            scroll_controller.fullScroll(View.FOCUS_DOWN)
-                            scroll_controller.postDelayed(
-                                Runnable { scroll_controller.fullScroll(ScrollView.FOCUS_DOWN) },
-                                2000
-                            )
+
+
                         } else {
                             Log.d("resp", "complet else: ")
                         }
@@ -305,7 +278,7 @@ class CommentsFragment : Fragment() {
         val apiInterface = ApiClient.getRetrofitService(requireContext())
         CoroutineScope(Dispatchers.IO).launch {
             try {
-                val response = apiInterface.updateComment(generalRequest)
+                val response = apiInterface.grouDiscussionPostUpdateComment(generalRequest)
                 withContext(Dispatchers.Main) {
                     pb_comments.visibility = View.GONE
                     Handler(Looper.getMainLooper()).postDelayed(
@@ -339,34 +312,6 @@ class CommentsFragment : Fragment() {
 
     }
 
-    private fun deletePost(generalRequest: UpdateGroupRequest) {
-        pb_comments.visibility = View.VISIBLE
-        val apiInterface = ApiClient.getRetrofitService(requireContext())
-        CoroutineScope(Dispatchers.IO).launch {
-            try {
-                val response = apiInterface.deletePost(generalRequest)
-                withContext(Dispatchers.Main) {
-                    pb_comments.visibility = View.GONE
-                    onResume()
-                    try {
-                        //  toast("" + response.body()?.message)
-                        if (response != null&& response.body()?.OK?.status =="Success") {
-                            startActivity(Intent(activity, MainActivity::class.java))
-                            activity?.finish()
-                        } else {
-                            Log.d("resp", "complet else: ")
-                        }
 
-                    } catch (e: Exception) {
-                        Log.d("resp", "cathch: " + e.toString())
-                    }
-                }
-
-            } catch (e: Exception) {
-                Log.d("weweewefw", e.toString())
-            }
-        }
-
-    }
 
 }

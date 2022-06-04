@@ -44,8 +44,8 @@ class LoginFragment : androidx.fragment.app.Fragment() {
     private fun setupToolBar() {
 //        ivBack?.setBackgroundResource(R.drawable.ic_back_arrow)
 //        tb_root?.setBackgroundColor(resources.getColor(R.color.black))
-     //   tv_toolbar_title?.setText("Adoro")
-       // tv_toolbar_title?.setTextColor(resources.getColor(R.color.black))
+        //   tv_toolbar_title?.setText("Adoro")
+        // tv_toolbar_title?.setTextColor(resources.getColor(R.color.black))
     }
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
@@ -97,7 +97,7 @@ class LoginFragment : androidx.fragment.app.Fragment() {
                         pb_login.visibility = View.GONE
                         if (response.body()?.OK?.items?.size !=0) {
                             val r = response.body()
-                           SessionManager.init(activity as Context)
+                            SessionManager.init(activity as Context)
                             if(requestAuthenticateNumber.number==7400705595){
                                 var loginRequest: RequestLogin =
                                     RequestLogin(
@@ -142,7 +142,7 @@ class LoginFragment : androidx.fragment.app.Fragment() {
     }
 
     private fun hitSendOTPAPI( otpRequest: OTPRequest) {
-      //  pb_login.visibility = View.VISIBLE
+        //  pb_login.visibility = View.VISIBLE
         val apiInterface = ApiClient.getRetrofitService(requireContext())
         CoroutineScope(Dispatchers.IO).launch {
             try {
@@ -150,7 +150,7 @@ class LoginFragment : androidx.fragment.app.Fragment() {
                 withContext(Dispatchers.Main) {
 
                     try {
-                       // pb_login.visibility = View.GONE
+                        // pb_login.visibility = View.GONE
                         if (response.body()?.OK?.status =="Sucess") {
                             SessionManager.setOTP(response.body()?.OK?.otp?:"")
                             val r = response.body()
@@ -256,6 +256,8 @@ class LoginFragment : androidx.fragment.app.Fragment() {
                         put("userName", SessionManager.getUserName())
                         put("email", SessionManager.getUserEmail())
                         put("isOnline", true)
+                        put("id", SessionManager.getUserId())
+                        put("profile", SessionManager.getUserPic())
                     })
                 }
                 reference.updateChildren(value)

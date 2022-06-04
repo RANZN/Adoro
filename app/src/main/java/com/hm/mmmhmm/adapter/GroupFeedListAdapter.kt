@@ -8,14 +8,11 @@ import android.view.LayoutInflater
 import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
-import android.view.animation.AnimationUtils
 import android.widget.*
 import androidx.fragment.app.FragmentActivity
 import androidx.recyclerview.widget.RecyclerView
 import com.hm.mmmhmm.R
-import com.hm.mmmhmm.fragments.CommentsFragment
-import com.hm.mmmhmm.fragments.HomeFragment
-import com.hm.mmmhmm.fragments.ProfileFragment
+import com.hm.mmmhmm.fragments.*
 import com.hm.mmmhmm.helper.SessionManager
 import com.hm.mmmhmm.helper.load
 import com.hm.mmmhmm.models.*
@@ -27,8 +24,8 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
 
-class FeedListAdapter(var ctx: FragmentActivity, private var feedList: List<ItemComment>? = null,private var sessionId:Long?=null) :
-    RecyclerView.Adapter<FeedListAdapter.MyViewHolder>() {
+class GroupFeedListAdapter(var ctx: FragmentActivity, private var feedList: List<Item>? = null) :
+    RecyclerView.Adapter<GroupFeedListAdapter.MyViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MyViewHolder {
         val view: View =
@@ -40,7 +37,7 @@ class FeedListAdapter(var ctx: FragmentActivity, private var feedList: List<Item
         holder.tv_username.text = feedList?.get(position)?.username
         // holder.tv_apply_count.text= feedList?.get(position)?.like.size()
         //holder.tv_apply_count.text= feedList?.get(position)?.shortDescription
-        // holder.tv_time_left.text= "â‚¹"+feedList?.get(position)?.timeLeft.toString()+" left"
+        // holder.tv_time_left.text= "₹"+feedList?.get(position)?.timeLeft.toString()+" left"
 //           holder.tv_apply_count.text= feedList?.get(position)?.comment?.size()
         var text = feedList?.get(position)?.description
         holder.tv_feed_description.text = text
@@ -51,7 +48,7 @@ class FeedListAdapter(var ctx: FragmentActivity, private var feedList: List<Item
 
 
             holder.tv_feed_description.setOnClickListener{
-                val commentsFragment = CommentsFragment()
+                val commentsFragment = GroupCommentsFragment()
                 val args = Bundle()
                 args.putString("postId", feedList?.get(position)?._id)
                 commentsFragment.arguments = args
@@ -84,10 +81,11 @@ class FeedListAdapter(var ctx: FragmentActivity, private var feedList: List<Item
             val intent= Intent()
             intent.action= Intent.ACTION_SEND
             intent.putExtra(Intent.EXTRA_TEXT,
-                BASE_URL+"post/"+feedList?.get(position)?._id+"?"+"&postId="+ feedList?.get(position)?._id)
+                BASE_URL+"?"+"&postId="+ feedList?.get(position)?.id)
             intent.type="text/plain"
             ctx.startActivity(Intent.createChooser(intent,"Share To:"))
         }
+        holder.iv_menu_feed.visibility=View.GONE
         holder.iv_menu_feed.setOnClickListener {
             val popupMenu = PopupMenu(ctx, holder.iv_menu_feed)
             popupMenu.inflate(R.menu.menu)
@@ -164,25 +162,23 @@ class FeedListAdapter(var ctx: FragmentActivity, private var feedList: List<Item
         holder.tv_comment_count.text = (feedList?.get(position)?.comment as List<Comment>).size.toString()
 
         for (Like in feedList?.get(position)?.like as List<Like>) {
-            if(Like.id==SessionManager.getUserId()){
-                holder.iv_liked.visibility=View.VISIBLE
-                holder.iv_like.visibility=View.GONE
+           if(Like.id==SessionManager.getUserId()){
+               holder.iv_liked.visibility=View.VISIBLE
+               holder.iv_like.visibility=View.GONE
 
-            }else{
-                holder.iv_liked.visibility=View.GONE
-                holder.iv_like.visibility=View.VISIBLE
-            }
+           }else{
+               holder.iv_liked.visibility=View.GONE
+               holder.iv_like.visibility=View.VISIBLE
+           }
         }
         holder.iv_like.setOnClickListener {
-            val animation1 = AnimationUtils.loadAnimation(ctx.applicationContext, R.anim.scale)
-            holder.iv_like.startAnimation(animation1)
-            var likeData: PostLikeData = PostLikeData(
-
+            var likeData: LikeData = LikeData(
                 SessionManager.getUserId(),
+                SessionManager.getUserPic(),
                 SessionManager.getUserPic(),
                 SessionManager.getUserName()
             );
-            var postLikeRequest: PostLikeRequest = PostLikeRequest(
+            var postLikeRequest: GroupDiscussionPostUpdateLikeRequest = GroupDiscussionPostUpdateLikeRequest(
                 feedList?.get(position)?._id, likeData
             );
             postUpdateLike(
@@ -194,11 +190,11 @@ class FeedListAdapter(var ctx: FragmentActivity, private var feedList: List<Item
             )
         }
         holder.ll_comments.setOnClickListener{
-            val commentsFragment = CommentsFragment()
+            val commentsFragment = GroupCommentsFragment()
             val args = Bundle()
             args.putString("postId", feedList?.get(position)?._id)
             commentsFragment.arguments = args
-            ctx.supportFragmentManager.beginTransaction().add(R.id.frame_layout_main, commentsFragment).addToBackStack("comment")
+            ctx.supportFragmentManager.beginTransaction().replace(R.id.frame_layout_main, commentsFragment).addToBackStack(null)
                 .commit()
             SessionManager.setFeedLastPosition(position)
             (HomeFragment).lastFirstVisiblePosition = position
@@ -207,7 +203,7 @@ class FeedListAdapter(var ctx: FragmentActivity, private var feedList: List<Item
         holder.tv_like_status.text= "and "+(feedList?.get(position)?.like as List<Like>).size.toString()+" others "+ ctx.getResources().getString(R.string.also_liked_the_post)
         holder.tv_like_status.visibility= if ((feedList?.get(position)?.like as List<Like>).size>1) View.VISIBLE else  View.GONE
 
-        holder.recycler_mutual_like_user.adapter= MutualLikerAdapter(ctx,feedList?.get(position)?.like as List<Like>)
+       holder.recycler_mutual_like_user.adapter= MutualLikerAdapter(ctx,feedList?.get(position)?.like as List<Like>)
     }
 
 
@@ -223,7 +219,7 @@ class FeedListAdapter(var ctx: FragmentActivity, private var feedList: List<Item
         val iv_user_feed: ImageView
         val iv_share: ImageView
         val iv_feed: ImageView
-        val iv_like: CheckBox
+        val iv_like: ImageView
         val iv_liked: ImageView
         val tv_username: TextView
         val tv_like_count: TextView
@@ -257,8 +253,8 @@ class FeedListAdapter(var ctx: FragmentActivity, private var feedList: List<Item
     }
 
     private fun postUpdateLike(
-        postLikeRequest: PostLikeRequest,
-        iv_like: CheckBox,
+        postLikeRequest: GroupDiscussionPostUpdateLikeRequest,
+        iv_like: ImageView,
         iv_liked: ImageView,
         tv_like_count: TextView,
         likeCount: Int
@@ -267,7 +263,7 @@ class FeedListAdapter(var ctx: FragmentActivity, private var feedList: List<Item
         val apiInterface = ApiClient.getRetrofitService(ctx)
         CoroutineScope(Dispatchers.IO).launch {
             try {
-                val response = apiInterface.updateLike(postLikeRequest)
+                val response = apiInterface.groupMemePostUpdateLike(postLikeRequest)
                 withContext(Dispatchers.Main) {
                     // pb_group_detail.visibility = View.GONE
 
@@ -275,8 +271,8 @@ class FeedListAdapter(var ctx: FragmentActivity, private var feedList: List<Item
                         //  toast("" + response.body()?.message)
                         if (response != null) {
                             tv_like_count.text = (likeCount + 1).toString()
-                            iv_liked.visibility=View.GONE
-                            iv_like.visibility=View.VISIBLE
+                            iv_liked.visibility=View.VISIBLE
+                            iv_like.visibility=View.GONE
                         } else {
                             Log.d("resp", "complet else: ")
                         }

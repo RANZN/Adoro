@@ -3,6 +3,14 @@
   <component name="DesignSurface">
     <option name="filePathToZoomLevelMap">
       <map>
+        <entry key="..\:/Projects/adoro_social/app/src/main/res/layout/custom_navigation_view_sidebar.xml" value="0.1" />
+        <entry key="..\:/Projects/adoro_social/app/src/main/res/layout/custom_toolbar.xml" value="0.1" />
+        <entry key="..\:/Projects/adoro_social/app/src/main/res/layout/fragment_add.xml" value="0.1" />
+        <entry key="..\:/Projects/adoro_social/app/src/main/res/layout/fragment_edit_post.xml" value="0.1" />
+        <entry key="..\:/Projects/adoro_social/app/src/main/res/layout/fragment_group_discussion_comments.xml" value="0.1" />
+        <entry key="..\:/Projects/adoro_social/app/src/main/res/layout/fragment_upload_meme.xml" value="0.20416666666666666" />
+        <entry key="..\:/Projects/adoro_social/app/src/main/res/layout/item_feed.xml" value="0.20416666666666666" />
+        <entry key="..\:/Projects/adoro_social/app/src/main/res/layout/item_gallery.xml" value="0.1" />
         <entry key="..\:/Users/lenovo/Downloads/Mmm Hmm/kapilkaushikyl-adoro-4b00a4ebbc17/app/src/main/res/layout/fragment_view_templete_image.xml" value="0.18518518518518517" />
       </map>
     </option>

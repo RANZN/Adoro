@@ -157,18 +157,19 @@ class AddFragment : Fragment() {
                     try {
                         pb_publish_post.visibility = View.GONE
 
-                        startActivity(Intent(activity, MainActivity::class.java))
-                        activity?.finish()
-//                        if (response.body()?.OK != null) {
-//                            val r = response.body()
-////
-//                        } else {
-//                            Toast.makeText(
-//                                activity,
-//                                R.string.Something_went_wrong,
-//                                Toast.LENGTH_SHORT
-//                            ).show()
-//                        }
+
+                        if (response.body()?.OK != null&&response.body()?.OK?.status=="success") {
+                            val r = response.body()
+                            requireActivity().supportFragmentManager.beginTransaction()
+                                .replace(R.id.frame_layout_main, HomeFragment())
+                                .commit()
+                        } else {
+                            Toast.makeText(
+                                activity,
+                                R.string.Something_went_wrong,
+                                Toast.LENGTH_SHORT
+                            ).show()
+                        }
                     } catch (e: Exception) {
                         Toast.makeText(requireActivity(), "" + e.toString(), Toast.LENGTH_SHORT)
                             .show()
@@ -199,14 +200,6 @@ class AddFragment : Fragment() {
         return true
     }
 
-    override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View? {
-        // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_add, container, false)
-    }
-
     private fun setupToolBar() {
         iv_toolbar_icon.setBackgroundResource(R.drawable.hamburger_icon)
         iv_toolbar_action_inbox.setBackgroundResource(R.drawable.chat)
@@ -232,4 +225,13 @@ class AddFragment : Fragment() {
 
 
     }
+    override fun onCreateView(
+        inflater: LayoutInflater, container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View? {
+        // Inflate the layout for this fragment
+        return inflater.inflate(R.layout.fragment_add, container, false)
+    }
+
+
 }

@@ -13,6 +13,9 @@ import android.widget.Button
 import android.widget.TextView
 import android.widget.Toast
 import androidx.fragment.app.Fragment
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.auth.FirebaseAuthUserCollisionException
+import com.google.firebase.database.FirebaseDatabase
 import com.hm.mmmhmm.R
 import com.hm.mmmhmm.activity.MainActivity
 import com.hm.mmmhmm.helper.CommanFunction
@@ -23,22 +26,19 @@ import com.hm.mmmhmm.models.RequestAuthenticateUsername
 import com.hm.mmmhmm.models.RequestRegister
 import com.hm.mmmhmm.web_service.ApiClient
 import kotlinx.android.synthetic.main.custom_toolbar.*
+import kotlinx.android.synthetic.main.fragment_login.*
 import kotlinx.android.synthetic.main.fragment_signup.*
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
-import org.json.JSONObject
 import java.lang.Exception
+import java.util.HashMap
 
 
 class SignupFragment : Fragment() {
-     var a:String=""
-//     var b:String=""
-//     var c:String=""
-//     var d:String=""
 
-    var isUsernameAvailable = false
+    var isUsernameAvailable=false
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
@@ -67,7 +67,6 @@ class SignupFragment : Fragment() {
         btn_signup.setOnClickListener(View.OnClickListener {
             validateInput()
         })
-        getIp()
         et_username.addTextChangedListener(object : TextWatcher {
             override fun afterTextChanged(s: Editable?) {
             }
@@ -79,6 +78,8 @@ class SignupFragment : Fragment() {
                 validateUsername(s.toString())
             }
         })
+
+
     }
 
 //    private fun stopFragment() {
@@ -101,37 +102,26 @@ class SignupFragment : Fragment() {
         } else if (!isUsernameAvailable) {
             toast(R.string.username_already_taken, 1)
         } else if (ConnectivityObserver.isOnline(activity as Context)) {
-            var requestRegister: RequestRegister = RequestRegister(
-                name,
-                number?.toLong(),
-                email,
-                username,
-                SessionManager.getFCMToken() ?: ""
-            );
+            var requestRegister: RequestRegister = RequestRegister(name,number?.toLong(),email,username,SessionManager.getFCMToken()?:"");
             hitRegisteruserAPI(requestRegister)
 
         }
     }
-
     private fun validateUsername(username: String) {
-        if (username.isNullOrEmpty()) {
+    if (username.isNullOrEmpty()) {
             toast(R.string.username, 1)
-            et_username.setCompoundDrawablesWithIntrinsicBounds(0, 0, 0, 0);
-        } else if (ConnectivityObserver.isOnline(activity as Context)) {
-            var requestAuthenticateUsername: RequestAuthenticateUsername =
-                RequestAuthenticateUsername(username);
-            hitAuthenticateUsernameAPI(requestAuthenticateUsername)
+        et_username.setCompoundDrawablesWithIntrinsicBounds(0, 0, 0, 0);
+    } else if (ConnectivityObserver.isOnline(activity as Context)) {
+            var requestAuthenticateUsername: RequestAuthenticateUsername = RequestAuthenticateUsername(username);
+        hitAuthenticateUsernameAPI(requestAuthenticateUsername)
         }
     }
 
     private fun showDialog() {
         val dialog = Dialog(activity as Context)
         dialog.setContentView(R.layout.custom_dialog)
-        dialog.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
-        dialog.window?.setLayout(
-            WindowManager.LayoutParams.MATCH_PARENT,
-            WindowManager.LayoutParams.MATCH_PARENT
-        );
+        dialog.window?.setBackgroundDrawable( ColorDrawable(Color.TRANSPARENT))
+        dialog.window?.setLayout(WindowManager.LayoutParams.MATCH_PARENT, WindowManager.LayoutParams.MATCH_PARENT);
 //        dialog.window?.clearFlags(WindowManager.LayoutParams.FLAG_DIM_BEHIND)
         dialog.setCancelable(false)
         val body = dialog.findViewById(R.id.tvBody) as TextView
@@ -145,6 +135,7 @@ class SignupFragment : Fragment() {
             dialog.dismiss()
         }
         dialog.show()
+
     }
 
     private fun openNext() {
@@ -152,42 +143,12 @@ class SignupFragment : Fragment() {
         activity?.finishAffinity()
     }
 
-    var IP: String = ""
-    fun getIp() {
-        CoroutineScope(Dispatchers.IO).launch {
-            val apiInterface = ApiClient.getRetrofitService(requireContext())
-            try {
-                val response = apiInterface.getIp()
-                IP = response.ip!!
-                val json= JSONObject(IP)
-                val responsePresence= apiInterface.checkIp(json)
-                if (responsePresence.OK?.status.equals("referral")){
-                    a= responsePresence.OK?.data?.Id.toString()
-//                    b= responsePresence.OK?.data?.referedBy.toString()
-//                    c= responsePresence.OK?.data?.CreatedDate.toString()
-//                    d= responsePresence.OK?.data?.UpdatedDate.toString()
-
-                }else{
-                    a= ""
-                }
-            } catch (e: Exception) {
-                Toast.makeText(requireActivity(), "" + e.toString(), Toast.LENGTH_SHORT)
-                    .show()
-            }
-        }
-
-    }
-
-    private fun hitRegisteruserAPI(requestRegister: RequestRegister) {
+    private fun hitRegisteruserAPI( requestRegister: RequestRegister) {
         pb_signup.visibility = View.VISIBLE
         val apiInterface = ApiClient.getRetrofitService(requireContext())
         CoroutineScope(Dispatchers.IO).launch {
             try {
-                var response = apiInterface.registerUser(requestRegister)
-                if (a!="") {
-                     response = apiInterface.registerReferalUser(requestRegister)
-                }
-
+                val response = apiInterface.registerUser(requestRegister)
                 withContext(Dispatchers.Main) {
 
                     try {
@@ -205,6 +166,8 @@ class SignupFragment : Fragment() {
 
                             showDialog()
 
+                            loginUserForFirebase()
+
                         } else {
                             CommanFunction.handleApiError(
                                 response.errorBody()?.charStream(),
@@ -212,8 +175,7 @@ class SignupFragment : Fragment() {
                             )
                         }
                     } catch (e: Exception) {
-                        Toast.makeText(requireActivity(), "" + e.toString(), Toast.LENGTH_SHORT)
-                            .show()
+                        Toast.makeText(requireActivity(), "" + e.toString(), Toast.LENGTH_SHORT).show()
                     }
                 }
             } catch (e: Exception) {
@@ -222,7 +184,52 @@ class SignupFragment : Fragment() {
         }
     }
 
-    private fun hitAuthenticateUsernameAPI(requestAuthenticateUsername: RequestAuthenticateUsername) {
+    private fun pushUserToFirebase() {
+        val reference = FirebaseDatabase.getInstance().getReference("users")
+        reference.get().addOnSuccessListener {
+            try {
+                val value = it.value as HashMap<String?, Any>
+                value.apply {
+                    put(SessionManager.getFirebaseID(), HashMap<String, Any?>().apply {
+                        put("userId", SessionManager.getFirebaseID())
+                        put("userName", SessionManager.getUserName())
+                        put("email", SessionManager.getUserEmail())
+                        put("isOnline", true)
+                        put("id", SessionManager.getUserId())
+                        put("profile", SessionManager.getUserPic())
+                    })
+                }
+                reference.updateChildren(value)
+            } catch (e: java.lang.Exception) {
+                e.printStackTrace()
+            }
+        }
+    }
+
+    private fun loginUserForFirebase() {
+        FirebaseAuth.getInstance().createUserWithEmailAndPassword(
+            SessionManager.getUserEmail(),
+            "test@123"
+        ).addOnSuccessListener {
+            SessionManager.setFirebaseID(it.user?.uid)
+            FirebaseAuth.getInstance().signOut()
+            pushUserToFirebase()
+        }.addOnFailureListener {
+            FirebaseAuth.getInstance().signOut()
+            if (it is FirebaseAuthUserCollisionException) {
+                FirebaseAuth.getInstance().signInWithEmailAndPassword(
+                    SessionManager.getUserEmail(),
+                    "test@123"
+                ).addOnSuccessListener { result ->
+                    SessionManager.setFirebaseID(result.user?.uid)
+                    FirebaseAuth.getInstance().signOut()
+                    pushUserToFirebase()
+                }
+            }
+        }
+    }
+
+    private fun hitAuthenticateUsernameAPI( requestAuthenticateUsername: RequestAuthenticateUsername) {
         pb_signup.visibility = View.VISIBLE
         val apiInterface = ApiClient.getRetrofitService(requireContext())
         CoroutineScope(Dispatchers.IO).launch {
@@ -235,18 +242,12 @@ class SignupFragment : Fragment() {
                         if (response.body()?.OK != null) {
 //                        Toast.makeText(activity," "+response.body()?.message, Toast.LENGTH_SHORT).show()
                             val r = response.body()
-                            if (r?.OK?.length != 0) {
-                                et_username.error =
-                                    resources.getString(R.string.username_already_taken)
-                                isUsernameAvailable = false
-                            } else {
-                                et_username.setCompoundDrawablesWithIntrinsicBounds(
-                                    0,
-                                    0,
-                                    R.drawable.tick,
-                                    0
-                                );
-                                isUsernameAvailable = true
+                            if(r?.OK?.length!=0){
+                                et_username.error =  resources.getString(R.string.username_already_taken)
+                                isUsernameAvailable= false
+                            }else{
+                                et_username.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.tick, 0);
+                                isUsernameAvailable= true
                             }
                         } else {
                             CommanFunction.handleApiError(
@@ -255,8 +256,7 @@ class SignupFragment : Fragment() {
                             )
                         }
                     } catch (e: Exception) {
-                        Toast.makeText(requireActivity(), "" + e.toString(), Toast.LENGTH_SHORT)
-                            .show()
+                        Toast.makeText(requireActivity(), "" + e.toString(), Toast.LENGTH_SHORT).show()
                     }
                 }
             } catch (e: Exception) {
