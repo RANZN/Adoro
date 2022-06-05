@@ -1,5 +1,6 @@
 package com.hm.mmmhmm.Chat_Module
 
+import android.content.Intent
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
@@ -11,11 +12,15 @@ import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.database.ValueEventListener
 import com.hm.mmmhmm.R
+import com.hm.mmmhmm.activity.MainActivity
+import com.hm.mmmhmm.fragments.SearchFragment
 import com.hm.mmmhmm.helper.SessionManager
 import com.hm.mmmhmm.models.SearchRequest
+import kotlinx.android.synthetic.main.activity__chat.*
 import kotlinx.android.synthetic.main.activity_inbox.*
 import kotlinx.android.synthetic.main.activity_inbox.et_search
 import kotlinx.android.synthetic.main.activity_inbox.iv_search
+import kotlinx.android.synthetic.main.custom_toolbar.*
 import kotlinx.android.synthetic.main.fragment_search.*
 
 class InboxActivity : AppCompatActivity() {
@@ -27,11 +32,34 @@ class InboxActivity : AppCompatActivity() {
         init()
     }
 
-    private fun init() {
-        mAdapter = Inbox.UserAdapter(users)
-        iv_back.setOnClickListener {
+    private fun setupToolBar() {
+        iv_toolbar_icon.setBackgroundResource(R.drawable.ic_back_arrow)
+        iv_toolbar_action_inbox.setBackgroundResource(R.drawable.iv_search)
+        iv_toolbar_icon.setColorFilter(resources.getColor(R.color.black))
+        iv_toolbar_action_inbox.setColorFilter(resources.getColor(R.color.black))
+
+        tv_toolbar_title.visibility=View.VISIBLE
+        tv_toolbar_title.setTextColor(resources.getColor(R.color.black))
+        tv_toolbar_title.text = resources.getString(R.string.inbox
+        )
+        iv_toolbar_icon.setOnClickListener(View.OnClickListener {
             onBackPressed()
+        })
+
+        iv_toolbar_action_inbox.setOnClickListener {
+
+            startActivity(Intent(this, MainActivity::class.java).apply {
+                flags = Intent.FLAG_ACTIVITY_CLEAR_TOP
+                putExtra("tag", "inbox")
+            }
+            )
         }
+
+    }
+    private fun init() {
+        setupToolBar()
+        mAdapter = Inbox.UserAdapter(users)
+
         pb_inbox.visibility = View.VISIBLE
         chat_list.adapter = mAdapter
 

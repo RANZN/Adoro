@@ -2,15 +2,14 @@ package com.hm.mmmhmm.adapter
 
 import android.content.Intent
 import android.os.Bundle
+import android.os.Handler
 import android.text.Html
 import android.util.Log
-import android.view.LayoutInflater
-import android.view.MenuItem
-import android.view.View
-import android.view.ViewGroup
+import android.view.*
 import android.view.animation.AnimationUtils
 import android.widget.*
 import androidx.fragment.app.FragmentActivity
+import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.RecyclerView
 import com.hm.mmmhmm.R
 import com.hm.mmmhmm.fragments.CommentsFragment
@@ -21,10 +20,7 @@ import com.hm.mmmhmm.helper.load
 import com.hm.mmmhmm.models.*
 import com.hm.mmmhmm.web_service.ApiClient
 import com.hm.mmmhmm.web_service.ApiClient.BASE_URL
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
+import kotlinx.coroutines.*
 
 
 class FeedListAdapter(var ctx: FragmentActivity, private var feedList: List<ItemComment>? = null,private var sessionId:Long?=null) :
@@ -40,7 +36,7 @@ class FeedListAdapter(var ctx: FragmentActivity, private var feedList: List<Item
         holder.tv_username.text = feedList?.get(position)?.username
         // holder.tv_apply_count.text= feedList?.get(position)?.like.size()
         //holder.tv_apply_count.text= feedList?.get(position)?.shortDescription
-        // holder.tv_time_left.text= "â‚¹"+feedList?.get(position)?.timeLeft.toString()+" left"
+        // holder.tv_time_left.text= "₹"+feedList?.get(position)?.timeLeft.toString()+" left"
 //           holder.tv_apply_count.text= feedList?.get(position)?.comment?.size()
         var text = feedList?.get(position)?.description
         holder.tv_feed_description.text = text
@@ -84,7 +80,7 @@ class FeedListAdapter(var ctx: FragmentActivity, private var feedList: List<Item
             val intent= Intent()
             intent.action= Intent.ACTION_SEND
             intent.putExtra(Intent.EXTRA_TEXT,
-                BASE_URL+"post/"+feedList?.get(position)?._id+"?"+"&postId="+ feedList?.get(position)?._id)
+                BASE_URL+"?"+"&postId="+ feedList?.get(position)?.id)
             intent.type="text/plain"
             ctx.startActivity(Intent.createChooser(intent,"Share To:"))
         }
@@ -173,18 +169,19 @@ class FeedListAdapter(var ctx: FragmentActivity, private var feedList: List<Item
                 holder.iv_like.visibility=View.VISIBLE
             }
         }
+        val animation1 = AnimationUtils.loadAnimation(ctx.applicationContext, R.anim.scale)
         holder.iv_like.setOnClickListener {
-            val animation1 = AnimationUtils.loadAnimation(ctx.applicationContext, R.anim.scale)
+
             holder.iv_like.startAnimation(animation1)
             var likeData: PostLikeData = PostLikeData(
                 SessionManager.getUserId(),
                 SessionManager.getUserPic(),
                 SessionManager.getUserPic(),
                 SessionManager.getUserName()
-            )
+            );
             var postLikeRequest: PostLikeRequest = PostLikeRequest(
                 feedList?.get(position)?._id, likeData
-            )
+            );
             postUpdateLike(
                 postLikeRequest,
                 holder.iv_like,
@@ -193,12 +190,30 @@ class FeedListAdapter(var ctx: FragmentActivity, private var feedList: List<Item
                 (feedList?.get(position)?.like as List<PostLikeData>).size
             )
         }
+
+        var doubleClick: Boolean? = false
+
+        holder.iv_feed.setOnClickListener{
+            if (doubleClick == true) {
+                //binding.imag.isSelected= true
+                holder.iv_like.isChecked = true
+                holder.bigImage.visibility = View.VISIBLE
+                ctx.lifecycleScope.launch {
+                    holder.iv_like.startAnimation(animation1)
+                    holder.bigImage.startAnimation(animation1)
+                    delay(300)
+                    holder.bigImage.visibility = View.GONE
+                }
+            }
+            doubleClick = true
+            Handler().postDelayed({ doubleClick = false }, 2000)
+        }
         holder.ll_comments.setOnClickListener{
             val commentsFragment = CommentsFragment()
             val args = Bundle()
             args.putString("postId", feedList?.get(position)?._id)
             commentsFragment.arguments = args
-            ctx.supportFragmentManager.beginTransaction().add(R.id.frame_layout_main, commentsFragment).addToBackStack("CommentFragment")
+            ctx.supportFragmentManager.beginTransaction().add(R.id.frame_layout_main, commentsFragment).addToBackStack("comment")
                 .commit()
             SessionManager.setFeedLastPosition(position)
             (HomeFragment).lastFirstVisiblePosition = position
@@ -224,6 +239,7 @@ class FeedListAdapter(var ctx: FragmentActivity, private var feedList: List<Item
         val iv_share: ImageView
         val iv_feed: ImageView
         val iv_like: CheckBox
+        val bigImage: ImageView
         val iv_liked: ImageView
         val tv_username: TextView
         val tv_like_count: TextView
@@ -238,6 +254,7 @@ class FeedListAdapter(var ctx: FragmentActivity, private var feedList: List<Item
 
         //
         init {
+            bigImage= v.findViewById(R.id.bigImage)
             iv_user_feed = v.findViewById(R.id.iv_user_feed)
             ll_feed_user_detail = v.findViewById(R.id.ll_feed_user_detail)
             iv_share = v.findViewById(R.id.iv_share)

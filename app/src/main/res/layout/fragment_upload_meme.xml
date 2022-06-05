@@ -143,7 +143,7 @@
                     android:background="@drawable/bg_buttun_gradient2"
                     android:fontFamily="@font/poppins_regular"
                     android:paddingVertical="4dp"
-                    android:text="@string/add"
+                    android:text="@string/change"
                     android:textAllCaps="false"
                     android:textColor="@color/black" />
 

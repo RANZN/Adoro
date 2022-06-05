@@ -15,43 +15,7 @@
         android:orientation="vertical"
         android:background="@color/white">
 
-        <androidx.cardview.widget.CardView
-            android:layout_width="match_parent"
-            android:layout_height="?android:attr/actionBarSize"
-            app:cardElevation="4dp">
-            <RelativeLayout
-                android:id="@+id/rl_header"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent">
-
-                <ImageView
-                    android:id="@+id/iv_back"
-                    android:layout_width="wrap_content"
-                    android:layout_height="match_parent"
-                    android:layout_alignParentStart="true"
-                    android:layout_centerVertical="true"
-                    android:paddingHorizontal="20dp"
-                    android:paddingVertical="15dp"
-                    android:src="@drawable/ic_back_arrow"
-                    app:tint="@color/black" />
-
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_centerInParent="true"
-                    android:layout_gravity="center_horizontal"
-                    android:fontFamily="@font/roboto_regular"
-                    android:gravity="center_vertical"
-                    android:maxLength="20"
-                    android:singleLine="true"
-                    android:text="@string/inbox"
-                    android:textColor="@color/black"
-                    android:textSize="20sp" />
-
-            </RelativeLayout>
-
-        </androidx.cardview.widget.CardView>
+        <include layout="@layout/custom_toolbar"/>
 
         <RelativeLayout
             android:id="@+id/rl_search"

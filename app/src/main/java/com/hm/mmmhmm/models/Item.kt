@@ -14,6 +14,7 @@ data class Item (
     val campignImage: String?,
     val comment: List<Comment>?,
     val cost: String?,
+    val notificationStatus: String?,
     val description: String?,
     val like: List<Like>?,
     val shortDescription: String?,

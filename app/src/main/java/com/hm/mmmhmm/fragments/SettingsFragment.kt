@@ -5,19 +5,32 @@ import android.content.Intent
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
+import android.util.Log
 import android.view.*
 import android.widget.Button
 import android.widget.TextView
+import android.widget.Toast
 import androidx.fragment.app.Fragment
 import com.hm.mmmhmm.R
 import com.hm.mmmhmm.activity.MainActivity
 import com.hm.mmmhmm.activity.SplashLauncher
+import com.hm.mmmhmm.adapter.NotificationsAdapter
 import com.hm.mmmhmm.helper.GlobleData
 import com.hm.mmmhmm.helper.SessionManager
+import com.hm.mmmhmm.helper.load
+import com.hm.mmmhmm.models.GeneralRequest
+import com.hm.mmmhmm.models.ProfileRequest
+import com.hm.mmmhmm.models.UpdateUserNotificationStatusRequest
+import com.hm.mmmhmm.web_service.ApiClient
 import kotlinx.android.synthetic.main.custom_navigation_view_sidebar.*
 import kotlinx.android.synthetic.main.custom_toolbar.*
 import kotlinx.android.synthetic.main.fragment_notification.*
+import kotlinx.android.synthetic.main.fragment_profile.*
 import kotlinx.android.synthetic.main.fragment_settings.*
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
 
 class SettingsFragment : Fragment() {
@@ -48,6 +61,9 @@ class SettingsFragment : Fragment() {
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
+
+        var generalRequest: ProfileRequest =ProfileRequest(SessionManager.getUserId() ?: "",SessionManager.getUserId() ?: "")
+        getUserData(generalRequest)
         setupToolBar()
         // pb_cms_page.visibility= View.VISIBLE
         switch_notification.setOnClickListener {
@@ -55,11 +71,19 @@ class SettingsFragment : Fragment() {
                 //todo
                 //switch_notification.setTextColor(Color.WHITE)
                 tv_notification_status.text=  resources.getString(R.string.notification)+"(On)"
+                var generalRequest: UpdateUserNotificationStatusRequest = UpdateUserNotificationStatusRequest(
+                    SessionManager.getUserId() ?: "",
+                    "ON");
+                updateNotificationSetting(generalRequest)
             }
             else{
                // todo
                 //switch_notification.setTextColor(Color.BLACK)
                 tv_notification_status.text=  resources.getString(R.string.notification)+"(Off)"
+                var generalRequest: UpdateUserNotificationStatusRequest = UpdateUserNotificationStatusRequest(
+                    SessionManager.getUserId() ?: "",
+                    "OFF");
+                updateNotificationSetting(generalRequest)
             }
         }
 
@@ -97,6 +121,71 @@ class SettingsFragment : Fragment() {
         startActivity(Intent(activity, SplashLauncher::class.java))
         activity?.finish()
     }
+
+
+    private fun updateNotificationSetting(generalRequest: UpdateUserNotificationStatusRequest) {
+        pb_settings.visibility = View.VISIBLE
+        val apiInterface = ApiClient.getRetrofitService(requireContext())
+        CoroutineScope(Dispatchers.IO).launch {
+            try {
+                val response = apiInterface.updateUserNotificationStatus(generalRequest)
+                withContext(Dispatchers.Main) {
+                    pb_settings.visibility = View.GONE
+
+                    try {
+                        //  toast("" + response.body()?.message)
+                        if (response!=null) {
+//todo
+                        } else {
+                            Log.d("resp", "complet else: ")
+                        }
+
+                    } catch (e: Exception) {
+                        Log.d("resp", "cathch: " + e.toString())
+                    }
+                }
+
+            } catch (e: Exception) {
+                pb_notifications.visibility = View.GONE
+                Log.d("weweewefw", e.toString())
+            }
+        }
+
+    }
+
+    private fun getUserData(generalRequest: ProfileRequest) {
+        pb_settings.visibility = View.VISIBLE
+        val apiInterface = ApiClient.getRetrofitService(requireContext())
+        CoroutineScope(Dispatchers.IO).launch {
+            try {
+                val response = apiInterface.getUserData(generalRequest)
+                withContext(Dispatchers.Main) {
+                    try {
+                        pb_settings.visibility = View.GONE
+                        if (response.body()?.OK != null) {
+                            val r = response.body()
+
+                            switch_notification.isChecked = r?.OK?.items?.get(0)?.notificationStatus=="ON"
+
+
+                        } else {
+                            Toast.makeText(
+                                activity,
+                                R.string.Something_went_wrong,
+                                Toast.LENGTH_SHORT
+                            ).show()
+                        }
+                    } catch (e: java.lang.Exception) {
+//                        Toast.makeText(requireActivity(), "" + e.toString(), Toast.LENGTH_SHORT)
+//                            .show()
+                    }
+                }
+            } catch (e: java.lang.Exception) {
+                e.printStackTrace()
+            }
+        }
+    }
+
 
 
 }

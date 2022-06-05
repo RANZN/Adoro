@@ -245,6 +245,7 @@ public class Inbox extends AppCompatActivity {
             holder.onItemClick(users.get(position));
             holder.setTime(users.get(position).getTime());
             holder.setMessage(users.get(position).getLastMessage(), false);
+            holder.setUserImage(users.get(position).getProfile());
 
         }
         public void updateUsers(List<User> list) {

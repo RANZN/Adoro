@@ -122,6 +122,9 @@ dependencies {
 
     implementation 'com.intuit.ssp:ssp-android:1.0.5'
     implementation 'com.intuit.sdp:sdp-android:1.0.5'
+    implementation 'com.github.chrisbanes:PhotoView:2.3.0'
+    implementation 'androidx.lifecycle:lifecycle-runtime-ktx:2.4.0'
+
 
 }
 

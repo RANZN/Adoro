@@ -139,7 +139,7 @@
                     android:paddingVertical="4dp"
                     android:layout_weight="1"
                     android:textAllCaps="false"
-                    android:text="@string/add"
+                    android:text="@string/change"
                     android:fontFamily="@font/poppins_regular"
                     android:textColor="@color/black" />
 

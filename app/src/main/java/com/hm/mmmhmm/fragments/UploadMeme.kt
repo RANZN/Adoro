@@ -153,8 +153,7 @@ class UploadMeme : Fragment() {
                     try {
                         pb_publish_post.visibility = View.GONE
 
-                        startActivity(Intent(activity, MainActivity::class.java))
-                        activity?.finish()
+                        (activity as MainActivity).onBackPressed()
 //                        if (response.body()?.OK != null) {
 //                            val r = response.body()
 ////

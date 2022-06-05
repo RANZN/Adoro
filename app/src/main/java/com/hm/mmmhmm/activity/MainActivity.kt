@@ -170,6 +170,14 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
                 supportFragmentManager.beginTransaction()
                     .replace(R.id.frame_layout_main, profileFragment)
                     .addToBackStack(profileFragment::class.java.simpleName).commit()
+            }else if (intent.getStringExtra("tag") == "inbox") {
+                val searchFragment = SearchFragment()
+                val args = Bundle()
+                //args.putString("path", "search")
+                searchFragment.arguments = args
+                supportFragmentManager.beginTransaction()
+                    .replace(R.id.frame_layout_main, searchFragment)
+                    .addToBackStack(searchFragment::class.java.simpleName).commit()
             }
         }
     }

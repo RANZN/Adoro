@@ -65,36 +65,6 @@ class GroupJoiningRequests : Fragment() {
 
         }
 
-        private fun getNotificationListAPI(generalRequest: GeneralRequest) {
-            pb_notifications.visibility = View.VISIBLE
-            val apiInterface = ApiClient.getRetrofitService(requireContext())
-            CoroutineScope(Dispatchers.IO).launch {
-                try {
-                    val response = apiInterface.showNotification(generalRequest)
-                    withContext(Dispatchers.Main) {
-                        pb_notifications.visibility = View.GONE
-
-                        try {
-                            //  toast("" + response.body()?.message)
-                            if (response!=null) {
-                                recycler_notifications.adapter= NotificationsAdapter(requireActivity(), response.body()?.OK?.items)
-
-                            } else {
-                                Log.d("resp", "complet else: ")
-                            }
-
-                        } catch (e: Exception) {
-                            Log.d("resp", "cathch: " + e.toString())
-                        }
-                    }
-
-                } catch (e: Exception) {
-                    pb_notifications.visibility = View.GONE
-                    Log.d("weweewefw", e.toString())
-                }
-            }
-
-        }
 
 
 

@@ -5,6 +5,7 @@ import okhttp3.MultipartBody
 import okhttp3.RequestBody
 import okhttp3.Response
 import okhttp3.ResponseBody
+import org.json.JSONObject
 import retrofit2.http.*
 import retrofit2.http.Query
 
@@ -115,6 +116,19 @@ interface ApiInterface {
         @Body() req: GeneralRequest
     ): retrofit2.Response<BaseResponse>
 
+    @GET()
+    suspend fun getIp(@Url url:String="https://api.ipify.org/?format=json"):GetIpAddressClass
+
+    @POST("_functions/checkIPAddress")
+    suspend fun checkIp(
+        @Body() req: JSONObject
+    ): IpStatusModel
+
+    @POST("_functions/updateUserNotificationStatus")
+    suspend fun updateUserNotificationStatus(
+        @Body() req: UpdateUserNotificationStatusRequest
+    ): retrofit2.Response<BaseResponse>
+
     @GET("_functions/getWalkThroughList")
     suspend fun getWalkThroughList(): retrofit2.Response<BaseResponse>
 
@@ -168,6 +182,12 @@ interface ApiInterface {
     suspend fun loginUser(
         @Body() req: RequestLogin
     ): retrofit2.Response<LoginResponse>
+
+
+    @POST("_functions/referalSignup")
+    suspend fun registerReferalUser(
+        @Body() req: RequestRegister
+    ): retrofit2.Response<RegisterModel>
 
     @POST("_functions/authenticateUsername")
     suspend fun authenticateUsername(
