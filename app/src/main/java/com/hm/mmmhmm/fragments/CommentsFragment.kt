@@ -11,6 +11,7 @@ import android.view.LayoutInflater
 import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
+import android.view.animation.AnimationUtils
 import android.view.inputmethod.InputMethodManager
 import android.widget.*
 import androidx.core.content.ContextCompat
@@ -43,6 +44,7 @@ import java.util.*
 class CommentsFragment : Fragment() {
     private var feedList: List<ItemComment>? = null
     private var likes: List<PostLikeData> ? = null
+    var data: ItemComment?=null
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
@@ -79,49 +81,50 @@ class CommentsFragment : Fragment() {
             intent.type="text/plain"
             startActivity(Intent.createChooser(intent,"Share To:"))
         }
-
+        val animation1 = AnimationUtils.loadAnimation(requireActivity().applicationContext, R.anim.scale)
         iv_like.setOnClickListener {
-            var likeData: PostLikeData = PostLikeData(
-                SessionManager.getUserId(),
-                SessionManager.getUserPic(),
-                SessionManager.getUserPic(),
-                SessionManager.getUserName()
-            )
-            var postLikeRequest: PostLikeRequest = PostLikeRequest(
-                requireArguments().getString("postId") ?: "", likeData
-            );
-            postUpdateLike(
-                postLikeRequest,
-                iv_like,
-                tv_like_count,
-                likes?.size?:0
-            )
+            var postItem: ItemComment?=data
+            iv_like.startAnimation(animation1)
+            if (iv_like.isChecked){
+                var likeData: Like = Like(
+                    SessionManager.getUserId(),
+                    SessionManager.getUserPic(),
+                    SessionManager.getUserName()
+                )
+                postItem?.like?.add(likeData)
+                postUpdateLike(postItem!!)
+            }else{
+                try {
+                    var likeList: ArrayList<Like>? = data?.like
+                    for(Like in (likeList as ArrayList<Like>)){
+                        if(Like.id==SessionManager.getUserId()){
+                            likeList.remove(Like)
+                        }
+                    }
+                    postItem?.like=likeList
+                    postUpdateLike(postItem!!)
+                }catch (e:Exception){
+                    e.printStackTrace()
+                }
+
+            }
+
         }
     }
     private fun postUpdateLike(
-        postLikeRequest: PostLikeRequest,
-        iv_like: ImageView,
-        tv_like_count: TextView,
-        likeCount: Int
+        itemComment: ItemComment
     ) {
-        // pb_group_detail.visibility = View.VISIBLE
+         pb_comments.visibility = View.VISIBLE
         val apiInterface = ApiClient.getRetrofitService(requireActivity())
         CoroutineScope(Dispatchers.IO).launch {
             try {
-                val response = apiInterface.updateLike(postLikeRequest)
+                val response = apiInterface.updateLike(itemComment)
                 withContext(Dispatchers.Main) {
-                    // pb_group_detail.visibility = View.GONE
+                     pb_comments.visibility = View.GONE
 
                     try {
                         //  toast("" + response.body()?.message)
                         if (response != null) {
-                            tv_like_count.text = (likeCount + 1).toString()
-                            iv_like.setColorFilter(
-                                ContextCompat.getColor(requireActivity(), R.color.red),
-                                android.graphics.PorterDuff.Mode.MULTIPLY
-                            )
-                            iv_liked.visibility=View.VISIBLE
-                            iv_like.visibility=View.GONE
 
 
                             var generalRequest: GeneralRequest = GeneralRequest(requireArguments().getString("postId") ?: "");
@@ -187,8 +190,8 @@ class CommentsFragment : Fragment() {
                     try {
                         //  toast("" + response.body()?.message)
                         if (response!=null) {
-                            var data= response.body()?.OK?.items?.get(0)
-
+                            data= response.body()?.OK?.items?.get(0)
+                            tv_like_count.text = (data?.like?.size?:0).toString()
 
                             if(data?.id==SessionManager.getUserId()){
                                 iv_toolbar_action_inbox.getLayoutParams().height = 50
@@ -234,28 +237,27 @@ class CommentsFragment : Fragment() {
                                 })
                             }
 
-                            for (Like in (data?.like as List<Like>)) {
+
+                            for (Like in (data?.like as ArrayList<Like>)) {
                                 if(Like.id==SessionManager.getUserId()){
-                                    iv_liked.visibility=View.VISIBLE
-                                    iv_like.visibility=View.GONE
+                                    iv_like.isChecked=true
 
                                 }else{
-                                    iv_liked.visibility=View.GONE
-                                    iv_like.visibility=View.VISIBLE
+                                    iv_like.isChecked=false
                                 }
                             }
-                            tv_like_status.text= "and "+(data?.like as List<Like>).size.toString()+" others "+ getResources().getString(R.string.also_liked_the_post)
-                            tv_like_status.visibility= if ((data.like as List<Like>).size>1) View.VISIBLE else  View.GONE
+                            tv_like_status.text= "and "+ data?.like?.size+" others "+ getResources().getString(R.string.also_liked_the_post)
+                            tv_like_status.visibility= if ((data?.like as List<Like>).size>1) View.VISIBLE else  View.GONE
 
-                            recycler_mutual_like_user.adapter= MutualLikerAdapter(requireActivity(),data.like as List<Like>)
+                            recycler_mutual_like_user.adapter= MutualLikerAdapter(requireActivity(),data?.like as List<Like>)
                             var adapter = CommentsAdapter(
                                 requireActivity(),
-                                data.comment)
+                                data?.comment)
                             recycler_comments.adapter= adapter
                             adapter.notifyDataSetChanged()
-                            likes = (data.like as List<PostLikeData>)
+                            likes = (data?.like as List<PostLikeData>)
                             //  tv_username.text = data?.username
-                            tv_feed_description.text = data.description
+                            tv_feed_description.text = data?.description
 //                            iv_user_feed.load(
 //                                data?.profile,
 //                                R.color.text_gray,
@@ -263,7 +265,7 @@ class CommentsFragment : Fragment() {
 //                                true
 //                            )
                             iv_feed.load(
-                                data.image,
+                                data?.image,
                                 R.color.text_gray,
                                 R.color.text_gray,
                                 false

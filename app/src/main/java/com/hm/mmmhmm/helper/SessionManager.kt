@@ -407,7 +407,7 @@ object SessionManager {
     }
 
     fun getAdoroCoins(): Int {
-        return prefs.getInt(adoroCoins, 0)?:0
+        return prefs.getInt(adoroCoins, 0)
     }
 
     fun setUserPhone(value: String) {

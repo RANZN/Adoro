@@ -12,28 +12,36 @@ data class OKGetContest(
     var appliedNumber: Int?,
     var brandLogo: String?,
     var brandName: String?,
+    var campaignName: String?,
     var comment: List<Any>?,
     var contest: String?,
     var description: String?,
-    var duration: String?,
+    var designType: String?,
+    var downloadBalance: Int?,
     var endDate: String?,
     var featured: String?,
     var featuredImage: String?,
     var grandTotal: String?,
     var gst: Int?,
-    var like: List<Like>?,
-    var memeData: List<MemeData>?,
+    var guidlines: String?,
+    var like: List<ContestLike>?,
+    var logoOnPost: String?,
+    var memeData: List<Any>?,
+    var officialEmail: String?,
+    var paymentStatus: String?,
     var quantity: Int?,
-    var reportCounting: Int?,
     var serviceSubCategory: String?,
     var serviceType: String?,
     var shortDescription: String?,
-    var total: Int?
+    var targetIndustry: String?,
+    var timeLeft: String?,
+    var total: Int?,
+    var useOfStockImage: String?
+)
+data class ContestLike(
+    var id: String?,
+    var profileLink: String?,
+    var profilePhoto: String?,
+    var userName: String?
 )
 
-data class MemeData(
-    var _id: String?,
-    var image: String?,
-    var profile: String?,
-    var username: String?
-)

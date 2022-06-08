@@ -16,7 +16,7 @@ data class Item (
     val cost: String?,
     val notificationStatus: String?,
     val description: String?,
-    val like: List<Like>?,
+    var like: ArrayList<Like>?,
     val shortDescription: String?,
     val timeLeft: String?,
     val email: String?,

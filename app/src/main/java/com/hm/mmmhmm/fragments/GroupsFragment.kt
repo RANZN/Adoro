@@ -196,8 +196,7 @@ class GroupsFragment : Fragment() {
                     SessionManager.getUsername(),
                 )
                 var joinGroupRequest: JoinGroupRequest = JoinGroupRequest(groupDetail,memberDetail)
-                joinGroup(joinGroupRequest)
-
+                joinGroup(joinGroupRequest, groupsList?.get(position)?._id?:"",groupsList?.get(position)?.groupName?:"", groupsList?.get(position)?.memberData?: ArrayList())
             }
         }
 
@@ -265,7 +264,7 @@ class GroupsFragment : Fragment() {
         }
     }
 
-    private fun joinGroup(joinGroupRequest: JoinGroupRequest) {
+    private fun joinGroup(joinGroupRequest: JoinGroupRequest,groupId:String,groupName:String,members: ArrayList<MemberData> ) {
         pb_groups.visibility = View.VISIBLE
         val apiInterface = ApiClient.getRetrofitService(requireContext())
         CoroutineScope(Dispatchers.IO).launch {
@@ -276,6 +275,15 @@ class GroupsFragment : Fragment() {
                           pb_groups.visibility = View.GONE
                         Toast.makeText(requireActivity(), "Group Joined" , Toast.LENGTH_SHORT)
                             .show()
+                        val groupDetailFragment = GroupDetail()
+                        val args = android.os.Bundle()
+                        args.putString("groupId", groupId)
+                        args.putString("groupName", groupName)
+                        args.putSerializable("members", members)
+                        groupDetailFragment.arguments = args
+                        activity?.supportFragmentManager?.beginTransaction()
+                            ?.replace(R.id.frame_layout_main, groupDetailFragment)
+                            ?.addToBackStack(null)?.commit()
                         // ADD ?.OK
                         if (response.body() != null) {
                             val r = response.body()

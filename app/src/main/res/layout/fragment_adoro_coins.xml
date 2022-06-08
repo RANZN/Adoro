@@ -50,7 +50,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginHorizontal="16dp"
                 android:layout_gravity="center_horizontal"
-                android:text="Cheon Yeo Woon"
+                android:text=""
                 android:layout_marginTop="30dp"
                 android:fontFamily="@font/poppins_regular"
                 android:textStyle="bold"

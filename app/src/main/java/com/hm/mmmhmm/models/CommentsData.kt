@@ -22,7 +22,7 @@ data class ItemComment(
     var description: String?,
     var id: String?,
     var image: String?,
-    var like: List<Like>?,
+    var like: ArrayList<Like>?,
     var profile: String?,
     var serialNumber: Int?,
     var username: String?

@@ -155,40 +155,41 @@ class FeedListAdapter(var ctx: FragmentActivity, private var feedList: List<Item
 
 
         holder.tv_like_count.text =
-            (feedList?.get(position)?.like as List<Like>).size.toString()
+            (feedList?.get(position)?.like as ArrayList<Like>).size.toString()
 
         holder.tv_comment_count.text = (feedList?.get(position)?.comment as List<Comment>).size.toString()
 
-        for (Like in feedList?.get(position)?.like as List<Like>) {
+        for (Like in feedList?.get(position)?.like as ArrayList<Like>) {
             if(Like.id==SessionManager.getUserId()){
-                holder.iv_liked.visibility=View.VISIBLE
-                holder.iv_like.visibility=View.GONE
+                holder.iv_like.isChecked=true
 
             }else{
-                holder.iv_liked.visibility=View.GONE
-                holder.iv_like.visibility=View.VISIBLE
+                holder.iv_like.isChecked=false
             }
         }
         val animation1 = AnimationUtils.loadAnimation(ctx.applicationContext, R.anim.scale)
         holder.iv_like.setOnClickListener {
-
+            var postItem: ItemComment?=feedList?.get(position)
             holder.iv_like.startAnimation(animation1)
-            var likeData: PostLikeData = PostLikeData(
-                SessionManager.getUserId(),
-                SessionManager.getUserPic(),
-                SessionManager.getUserPic(),
-                SessionManager.getUserName()
-            );
-            var postLikeRequest: PostLikeRequest = PostLikeRequest(
-                feedList?.get(position)?._id, likeData
-            );
-            postUpdateLike(
-                postLikeRequest,
-                holder.iv_like,
-                holder.iv_liked,
-                holder.tv_like_count,
-                (feedList?.get(position)?.like as List<PostLikeData>).size
-            )
+            if (holder.iv_like.isChecked){
+                var likeData: Like = Like(
+                    SessionManager.getUserId(),
+                    SessionManager.getUserPic(),
+                    SessionManager.getUserName()
+                )
+                postItem?.like?.add(likeData)
+                postUpdateLike(postItem!!)
+            }else{
+                var likeList: ArrayList<Like>? = feedList?.get(position)?.like
+                for(Like in (likeList as List<Like>)){
+                    if(Like.id==SessionManager.getUserId()){
+                        likeList.remove(Like)
+                    }
+                }
+                postItem?.like=likeList
+                postUpdateLike(postItem!!)
+            }
+
         }
 
         var doubleClick: Boolean? = false
@@ -240,7 +241,6 @@ class FeedListAdapter(var ctx: FragmentActivity, private var feedList: List<Item
         val iv_feed: ImageView
         val iv_like: CheckBox
         val bigImage: ImageView
-        val iv_liked: ImageView
         val tv_username: TextView
         val tv_like_count: TextView
         val tv_share_count: TextView
@@ -261,7 +261,6 @@ class FeedListAdapter(var ctx: FragmentActivity, private var feedList: List<Item
             recycler_mutual_like_user = v.findViewById(R.id.recycler_mutual_like_user)
             iv_feed = v.findViewById(R.id.iv_feed)
             iv_like = v.findViewById(R.id.iv_like)
-            iv_liked = v.findViewById(R.id.iv_liked)
             tv_like_status = v.findViewById(R.id.tv_like_status)
             tv_username = v.findViewById(R.id.tv_username)
             tv_like_count = v.findViewById(R.id.tv_like_count)
@@ -274,26 +273,20 @@ class FeedListAdapter(var ctx: FragmentActivity, private var feedList: List<Item
     }
 
     private fun postUpdateLike(
-        postLikeRequest: PostLikeRequest,
-        iv_like: CheckBox,
-        iv_liked: ImageView,
-        tv_like_count: TextView,
-        likeCount: Int
+        itemComment: ItemComment
     ) {
         // pb_group_detail.visibility = View.VISIBLE
         val apiInterface = ApiClient.getRetrofitService(ctx)
         CoroutineScope(Dispatchers.IO).launch {
             try {
-                val response = apiInterface.updateLike(postLikeRequest)
+                val response = apiInterface.updateLike(itemComment)
                 withContext(Dispatchers.Main) {
                     // pb_group_detail.visibility = View.GONE
 
                     try {
                         //  toast("" + response.body()?.message)
                         if (response != null) {
-                            tv_like_count.text = (likeCount + 1).toString()
-                            iv_liked.visibility=View.GONE
-                            iv_like.visibility=View.VISIBLE
+                          //todo
                         } else {
                             Log.d("resp", "complet else: ")
                         }

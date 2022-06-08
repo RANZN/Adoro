@@ -104,12 +104,12 @@ interface ApiInterface {
     @POST("_functions/getSpecificPostDetailGroup")
     suspend fun getSpecificPostDetailGroup(
         @Body() req: GeneralRequest
-    ): retrofit2.Response<CommentsData>
+    ): retrofit2.Response<BaseResponse>
 
     @POST("_functions/getSpecificDiscussionDetailGroup")
     suspend fun getSpecificDiscussionDetailGroup(
         @Body() req: GeneralRequest
-    ): retrofit2.Response<CommentsData>
+    ): retrofit2.Response<BaseResponse>
 
     @POST("_functions/showNotification")
     suspend fun showNotification(
@@ -244,7 +244,7 @@ interface ApiInterface {
 
     @POST("_functions/groupDiscussionPostUpdateLike")
     suspend fun groupDiscussionPostUpdateLike(
-        @Body() req: GroupDiscussionPostUpdateLikeRequest
+        @Body() req: Item
     ): retrofit2.Response<BaseResponse>
 
     @POST("_functions/campaignUpdateLike")
@@ -254,7 +254,7 @@ interface ApiInterface {
 
     @POST("_functions/groupMemePostUpdateLike")
     suspend fun groupMemePostUpdateLike(
-        @Body() req: GroupDiscussionPostUpdateLikeRequest
+        @Body() req: Item
     ): retrofit2.Response<BaseResponse>
 
     @POST("_functions/reportCampaign")
@@ -265,7 +265,7 @@ interface ApiInterface {
 
     @POST("_functions/updateLike")
     suspend fun updateLike(
-        @Body() req: PostLikeRequest
+        @Body() req: ItemComment
     ): retrofit2.Response<BaseResponse>
 
     @POST("_functions/searchAccount")

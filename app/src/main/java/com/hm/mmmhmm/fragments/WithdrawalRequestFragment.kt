@@ -21,12 +21,14 @@ import com.hm.mmmhmm.models.RequestAuthenticateNumber
 import com.hm.mmmhmm.models.RequestWithdrawalMoney
 import com.hm.mmmhmm.web_service.ApiClient
 import kotlinx.android.synthetic.main.custom_toolbar.*
+import kotlinx.android.synthetic.main.fragment_adoro_coins.*
 import kotlinx.android.synthetic.main.fragment_groups.*
 import kotlinx.android.synthetic.main.fragment_home.*
 import kotlinx.android.synthetic.main.fragment_login.*
 import kotlinx.android.synthetic.main.fragment_o_t_p_verify.*
 import kotlinx.android.synthetic.main.fragment_o_t_p_verify.btn_verify
 import kotlinx.android.synthetic.main.fragment_withdrawal_request.*
+import kotlinx.android.synthetic.main.fragment_withdrawal_request.tv_user
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -102,6 +104,7 @@ class WithdrawalRequestFragment : Fragment() {
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
+        tv_user.text=SessionManager.getUserName()
         setupToolBar()
         btn_verify.setOnClickListener{
             val oTPVerifyFragment = OTPVerifyFragment()
@@ -113,7 +116,6 @@ class WithdrawalRequestFragment : Fragment() {
                     ?.replace(R.id.frame_layout_main,oTPVerifyFragment)?.commit()
             }
         }
-        tv_total_coins.text= SessionManager.getAdoroCoins().toString()+" A"
 
         btn_verify.setOnClickListener {
             validateInput()

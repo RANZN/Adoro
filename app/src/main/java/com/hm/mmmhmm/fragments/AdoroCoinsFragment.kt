@@ -87,6 +87,8 @@ class AdoroCoinsFragment : Fragment() {
             R.color.text_gray,
             true
         )
+        tv_user.text=SessionManager.getUserName()
+        tv_coins.text= SessionManager.getAdoroCoins().toString() +" C"
         btn_withdrawal_coins.setOnClickListener{
             (activity as MainActivity).supportFragmentManager.beginTransaction().replace(R.id.frame_layout_main, WithdrawalRequestFragment())
                 .addToBackStack(null).commit()
@@ -108,7 +110,7 @@ class AdoroCoinsFragment : Fragment() {
                         pb_adoro_coins.visibility = View.GONE
                         if (response.body()?.OK !=null) {
                             val r = response.body()
-                           // tv_coins.text = r?.OK?.amount+" C"
+                           tv_coins.text = r?.OK?.amount+" C"
                             SessionManager.setAdoroCoins((r?.OK?.amount ?: "0").toInt())
                             hitShowTrancationsAPI(generalRequest)
                         } else {

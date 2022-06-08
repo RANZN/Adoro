@@ -108,14 +108,7 @@
                     android:layout_marginStart="20dp"
                     android:background="@drawable/like_icon"
                     android:duplicateParentState="true" />
-                <ImageView
-                    android:id="@+id/iv_liked"
-                    android:layout_width="50dp"
-                    android:layout_height="50dp"
-                    android:padding="13dp"
-                    android:visibility="gone"
-                    android:src="@drawable/iv_liked"
-                    app:tint="@color/red" />
+
 
                 <TextView
                     android:id="@+id/tv_like_count"

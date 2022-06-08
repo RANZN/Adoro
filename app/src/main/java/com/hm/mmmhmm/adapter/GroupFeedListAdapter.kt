@@ -2,6 +2,7 @@ package com.hm.mmmhmm.adapter
 
 import android.content.Intent
 import android.os.Bundle
+import android.os.Handler
 import android.text.Html
 import android.util.Log
 import android.view.LayoutInflater
@@ -11,6 +12,7 @@ import android.view.ViewGroup
 import android.view.animation.AnimationUtils
 import android.widget.*
 import androidx.fragment.app.FragmentActivity
+import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.RecyclerView
 import com.hm.mmmhmm.R
 import com.hm.mmmhmm.fragments.*
@@ -19,10 +21,7 @@ import com.hm.mmmhmm.helper.load
 import com.hm.mmmhmm.models.*
 import com.hm.mmmhmm.web_service.ApiClient
 import com.hm.mmmhmm.web_service.ApiClient.BASE_URL
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
+import kotlinx.coroutines.*
 
 
 class GroupFeedListAdapter(var ctx: FragmentActivity, private var feedList: List<Item>? = null) :
@@ -163,35 +162,59 @@ class GroupFeedListAdapter(var ctx: FragmentActivity, private var feedList: List
         holder.tv_comment_count.text = (feedList?.get(position)?.comment as List<Comment>).size.toString()
 
         for (Like in feedList?.get(position)?.like as List<Like>) {
-           if(Like.id==SessionManager.getUserId()){
-               holder.iv_liked.visibility=View.VISIBLE
-               holder.iv_like.visibility=View.GONE
+            if(Like.id==SessionManager.getUserId()){
+                holder.iv_like.isChecked=true
 
-           }else{
-               holder.iv_liked.visibility=View.GONE
-               holder.iv_like.visibility=View.VISIBLE
-           }
+            }else{
+                holder.iv_like.isChecked=false
+            }
         }
+        val animation1 = AnimationUtils.loadAnimation(ctx.applicationContext, R.anim.scale)
         holder.iv_like.setOnClickListener {
-
-            val animation1 = AnimationUtils.loadAnimation(ctx.applicationContext, R.anim.scale)
+            var postItem: Item?=feedList?.get(position)
             holder.iv_like.startAnimation(animation1)
-            var likeData: LikeData = LikeData(
-                SessionManager.getUserId(),
-                SessionManager.getUserPic(),
-                SessionManager.getUserPic(),
-                SessionManager.getUserName()
-            );
-            var postLikeRequest: GroupDiscussionPostUpdateLikeRequest = GroupDiscussionPostUpdateLikeRequest(
-                feedList?.get(position)?._id, likeData
-            );
-            postUpdateLike(
-                postLikeRequest,
-                holder.iv_like,
-                holder.iv_liked,
-                holder.tv_like_count,
-                (feedList?.get(position)?.like as List<PostLikeData>).size
-            )
+            if (holder.iv_like.isChecked){
+                var likeData: Like = Like(
+                    SessionManager.getUserId(),
+                    SessionManager.getUserPic(),
+                    SessionManager.getUserName()
+                )
+                postItem?.like?.add(likeData)
+                postUpdateLike(postItem!!)
+            }else{
+                try {
+                    var likeList: ArrayList<Like>? = feedList?.get(position)?.like
+                    for(Like in (likeList as ArrayList<Like>)){
+                        if(Like.id==SessionManager.getUserId()){
+                            likeList.remove(Like)
+                        }
+                    }
+                    postItem?.like=likeList
+                    postUpdateLike(postItem!!)
+                }catch (e:Exception){
+                    e.printStackTrace()
+                }
+
+            }
+
+        }
+
+        var doubleClick: Boolean? = false
+
+        holder.iv_feed.setOnClickListener{
+            if (doubleClick == true) {
+                //binding.imag.isSelected= true
+                holder.iv_like.isChecked = true
+                holder.bigImage.visibility = View.VISIBLE
+                ctx.lifecycleScope.launch {
+                    holder.iv_like.startAnimation(animation1)
+                    holder.bigImage.startAnimation(animation1)
+                    delay(300)
+                    holder.bigImage.visibility = View.GONE
+                }
+            }
+            doubleClick = true
+            Handler().postDelayed({ doubleClick = false }, 2000)
         }
         holder.ll_comments.setOnClickListener{
             val commentsFragment = GroupCommentsFragment()
@@ -224,7 +247,7 @@ class GroupFeedListAdapter(var ctx: FragmentActivity, private var feedList: List
         val iv_share: ImageView
         val iv_feed: ImageView
         val iv_like: CheckBox
-        val iv_liked: ImageView
+        val bigImage: ImageView
         val tv_username: TextView
         val tv_like_count: TextView
         val tv_share_count: TextView
@@ -238,13 +261,13 @@ class GroupFeedListAdapter(var ctx: FragmentActivity, private var feedList: List
 
         //
         init {
+            bigImage= v.findViewById(R.id.bigImage)
             iv_user_feed = v.findViewById(R.id.iv_user_feed)
             ll_feed_user_detail = v.findViewById(R.id.ll_feed_user_detail)
             iv_share = v.findViewById(R.id.iv_share)
             recycler_mutual_like_user = v.findViewById(R.id.recycler_mutual_like_user)
             iv_feed = v.findViewById(R.id.iv_feed)
             iv_like = v.findViewById(R.id.iv_like)
-            iv_liked = v.findViewById(R.id.iv_liked)
             tv_like_status = v.findViewById(R.id.tv_like_status)
             tv_username = v.findViewById(R.id.tv_username)
             tv_like_count = v.findViewById(R.id.tv_like_count)
@@ -257,26 +280,20 @@ class GroupFeedListAdapter(var ctx: FragmentActivity, private var feedList: List
     }
 
     private fun postUpdateLike(
-        postLikeRequest: GroupDiscussionPostUpdateLikeRequest,
-        iv_like: CheckBox,
-        iv_liked: ImageView,
-        tv_like_count: TextView,
-        likeCount: Int
+        item: Item
     ) {
         // pb_group_detail.visibility = View.VISIBLE
         val apiInterface = ApiClient.getRetrofitService(ctx)
         CoroutineScope(Dispatchers.IO).launch {
             try {
-                val response = apiInterface.groupMemePostUpdateLike(postLikeRequest)
+                val response = apiInterface.groupMemePostUpdateLike(item)
                 withContext(Dispatchers.Main) {
                     // pb_group_detail.visibility = View.GONE
 
                     try {
                         //  toast("" + response.body()?.message)
                         if (response != null) {
-                            tv_like_count.text = (likeCount + 1).toString()
-                            iv_liked.visibility=View.VISIBLE
-                            iv_like.visibility=View.GONE
+                           //todo
                         } else {
                             Log.d("resp", "complet else: ")
                         }
