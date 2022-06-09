@@ -19,7 +19,6 @@ import com.hm.mmmhmm.adapter.GroupFeedListAdapter
 import com.hm.mmmhmm.helper.SessionManager
 import com.hm.mmmhmm.models.GeneralRequest
 import com.hm.mmmhmm.models.GetSpecificGroupDataRequest
-import com.hm.mmmhmm.models.MemberData
 import com.hm.mmmhmm.models.ShowAnnouncementRequest
 import com.hm.mmmhmm.web_service.ApiClient
 import kotlinx.android.synthetic.main.custom_toolbar.*

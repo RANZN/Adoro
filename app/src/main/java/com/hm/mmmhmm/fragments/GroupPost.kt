@@ -1,8 +1,7 @@
 package com.hm.mmmhmm.fragments
 
 import android.Manifest
-import android.content.Intent
-import android.content.pm.PackageManager
+updated import android.content.pm.PackageManager
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.os.Bundle
@@ -18,24 +17,12 @@ import androidx.core.content.ContextCompat
 import com.canhub.cropper.CropImageContract
 import com.canhub.cropper.CropImageView
 import com.canhub.cropper.options
-import com.hm.mmmhmm.Chat_Module.InboxActivity
 import com.hm.mmmhmm.R
 import com.hm.mmmhmm.activity.MainActivity
 import com.hm.mmmhmm.helper.SessionManager
 import com.hm.mmmhmm.models.PostGroupRequest
-import com.hm.mmmhmm.models.PublishPostRequest
 import com.hm.mmmhmm.web_service.ApiClient
 import kotlinx.android.synthetic.main.custom_toolbar.*
-import kotlinx.android.synthetic.main.fragment_add.*
-import kotlinx.android.synthetic.main.fragment_add.btn_change_selected_image
-import kotlinx.android.synthetic.main.fragment_add.btn_choose_design
-import kotlinx.android.synthetic.main.fragment_add.btn_upload_design
-import kotlinx.android.synthetic.main.fragment_add.iv_selected_image
-import kotlinx.android.synthetic.main.fragment_add.ll_after_image_selection
-import kotlinx.android.synthetic.main.fragment_add.ll_choose_image
-import kotlinx.android.synthetic.main.fragment_add.pb_publish_post
-import kotlinx.android.synthetic.main.fragment_add.rl_selected_image
-import kotlinx.android.synthetic.main.fragment_add.tv_file_name
 import kotlinx.android.synthetic.main.fragment_group_post.*
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -48,7 +35,7 @@ class GroupPost : Fragment() {
 
     private var pickedBanner: Bitmap? = null
 
-    private val TAG = "Add Fragment"
+    private val TAG = "group post Fragment"
     var file: String? = null
     var postType:Int=0
     private val cropImage = registerForActivityResult(CropImageContract()) { result ->
