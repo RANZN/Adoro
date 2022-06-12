@@ -9,5 +9,6 @@ data class NotificationPublish(
 
 data class NotificationData(
     val type: String,
-    val count: String
+    val count: String,
+    val person: String? = null
 )

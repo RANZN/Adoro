@@ -10,16 +10,19 @@ import com.google.firebase.database.*
 import com.hm.mmmhmm.R
 import com.hm.mmmhmm.activity.MainActivity
 import com.hm.mmmhmm.adapter.MessageAdapter
-import com.hm.mmmhmm.fragments.HomeFragment
-import com.hm.mmmhmm.fragments.ProfileFragment
 import com.hm.mmmhmm.helper.SessionManager
 import com.hm.mmmhmm.helper.load
-import com.squareup.picasso.Picasso
+import com.hm.mmmhmm.models.NotificationData
+import com.hm.mmmhmm.models.NotificationPublish
+import com.hm.mmmhmm.web_service.ApiClient
 import kotlinx.android.synthetic.main.activity__chat.*
-import kotlinx.android.synthetic.main.fragment_profile.*
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 
 class ChatActivity : AppCompatActivity() {
     private var mList: ArrayList<Message?> = ArrayList()
+    private var username: String? = null
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity__chat)
@@ -30,7 +33,8 @@ class ChatActivity : AppCompatActivity() {
     }
 
     private fun init() {
-        tv_header.text = intent.getStringExtra("user_name")
+        username = intent.getStringExtra("user_name")
+        tv_header.text = username
         val message = et_message.text
         ll_user.setOnClickListener {
 
@@ -134,6 +138,22 @@ class ChatActivity : AppCompatActivity() {
                 put("time", time)
             })
         et_message.setText("")
+        notifyMessage(receiver, message)
+    }
+
+    private fun notifyMessage(receiver: String?, message: String) {
+        val apiInterface = ApiClient.getRetrofitService(this)
+        CoroutineScope(Dispatchers.IO).launch {
+            apiInterface.subscribeNotifications(
+                notification = NotificationPublish(
+                    to = "/topics/$username)}",
+                    data = NotificationData(
+                        "like", message, person = receiver
+                    )
+                )
+            )
+        }
+
     }
 
     private fun setupChatList(first: String?, second: String?) {

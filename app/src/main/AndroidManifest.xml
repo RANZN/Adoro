@@ -23,10 +23,6 @@
         android:theme="@style/AppTheme"
         android:usesCleartextTraffic="true">
 
-        <!--        <meta-data-->
-        <!--            android:name="com.hm.mmmhmm.helper.MyGlideModule"-->
-        <!--            android:value="GlideModule" />-->
-
         <activity
             android:name=".Chat_Module.InboxActivity"
             android:launchMode="singleTop"
