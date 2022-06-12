@@ -9,12 +9,8 @@ import android.widget.TextView
 import androidx.fragment.app.FragmentActivity
 import androidx.recyclerview.widget.RecyclerView
 import com.hm.mmmhmm.R
-import com.hm.mmmhmm.fragments.HomeFragment
 import com.hm.mmmhmm.fragments.ProfileFragment
-import com.hm.mmmhmm.fragments.ResultDetailFragment
-import com.hm.mmmhmm.helper.SessionManager
 import com.hm.mmmhmm.helper.load
-import com.hm.mmmhmm.models.Item
 import com.hm.mmmhmm.models.WinnerDetail
 
 
@@ -84,8 +80,8 @@ class WinnersAdapter(var ctx: FragmentActivity, private var winnersList: List<Wi
 //            val ll_item_list: LinearLayout
 //
             init {
-    iv_winner_pic = v.findViewById(R.id.iv_winner_pic)
-    tv_winner_name = v.findViewById(R.id.tv_winner_name)
+                iv_winner_pic = v.findViewById(R.id.iv_winner_pic)
+                    tv_winner_name = v.findViewById(R.id.tv_winner_name)
 //                tv_detail = v.findViewById(R.id.tv_detail)
 //                tv_time_left = v.findViewById(R.id.tv_time_left)
 //                tv_price = v.findViewById(R.id.tv_price)

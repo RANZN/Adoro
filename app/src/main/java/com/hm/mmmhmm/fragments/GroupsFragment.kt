@@ -1,11 +1,12 @@
 package com.hm.mmmhmm.fragments
 
-import android.R.menu
 import android.content.Intent
 import android.os.Bundle
-import android.view.*
+import android.view.LayoutInflater
+import android.view.MenuItem
+import android.view.View
+import android.view.ViewGroup
 import android.widget.*
-import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.RecyclerView
 import com.hm.mmmhmm.Chat_Module.InboxActivity
@@ -16,12 +17,7 @@ import com.hm.mmmhmm.helper.load
 import com.hm.mmmhmm.models.*
 import com.hm.mmmhmm.web_service.ApiClient
 import kotlinx.android.synthetic.main.custom_toolbar.*
-import kotlinx.android.synthetic.main.fragment_comments.*
-import kotlinx.android.synthetic.main.fragment_group_creation.*
 import kotlinx.android.synthetic.main.fragment_groups.*
-import kotlinx.android.synthetic.main.fragment_profile.*
-import kotlinx.android.synthetic.main.fragment_services.*
-import kotlinx.android.synthetic.main.item_group_list.*
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -180,6 +176,7 @@ class GroupsFragment : Fragment() {
                 }
 
             holder.btn_enter.setOnClickListener {
+
                 var groupDetail: com.hm.mmmhmm.models.GroupDetail = com.hm.mmmhmm.models.GroupDetail(
                     groupsList?.get(position)?._id,
                     groupsList?.get(position)?.category,
@@ -195,6 +192,8 @@ class GroupsFragment : Fragment() {
                     SessionManager.getUserId(),
                     SessionManager.getUsername(),
                 )
+
+
                 var joinGroupRequest: JoinGroupRequest = JoinGroupRequest(groupDetail,memberDetail)
                 joinGroup(joinGroupRequest, groupsList?.get(position)?._id?:"",groupsList?.get(position)?.groupName?:"", groupsList?.get(position)?.memberData?: ArrayList())
             }
@@ -270,10 +269,19 @@ class GroupsFragment : Fragment() {
         CoroutineScope(Dispatchers.IO).launch {
             try {
                 val response = apiInterface.addMemberToGroup(joinGroupRequest)
+                if (members.size == 100 || members.size == 200 || members.size == 500 || members.size == 1000)
+                    apiInterface.subscribeNotifications(
+                        notification = NotificationPublish(
+                            to = "/topics/${members[0].username?.lowercase()}",
+                            data = NotificationData(
+                                "group", members.size.toString()
+                            )
+                        )
+                    )
                 withContext(Dispatchers.Main) {
                     try {
-                          pb_groups.visibility = View.GONE
-                        Toast.makeText(requireActivity(), "Group Joined" , Toast.LENGTH_SHORT)
+                        pb_groups.visibility = View.GONE
+                        Toast.makeText(requireActivity(), "Group Joined", Toast.LENGTH_SHORT)
                             .show()
                         val groupDetailFragment = GroupDetail()
                         val args = android.os.Bundle()

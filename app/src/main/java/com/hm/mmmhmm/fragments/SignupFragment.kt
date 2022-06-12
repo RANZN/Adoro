@@ -8,7 +8,10 @@ import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
-import android.view.*
+import android.view.LayoutInflater
+import android.view.View
+import android.view.ViewGroup
+import android.view.WindowManager
 import android.widget.Button
 import android.widget.TextView
 import android.widget.Toast
@@ -19,6 +22,8 @@ import com.hm.mmmhmm.helper.CommanFunction
 import com.hm.mmmhmm.helper.ConnectivityObserver
 import com.hm.mmmhmm.helper.SessionManager
 import com.hm.mmmhmm.helper.toast
+import com.hm.mmmhmm.models.IPAddressCheck
+import com.hm.mmmhmm.models.ReferRequestRegister
 import com.hm.mmmhmm.models.RequestAuthenticateUsername
 import com.hm.mmmhmm.models.RequestRegister
 import com.hm.mmmhmm.web_service.ApiClient
@@ -28,17 +33,11 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
-import org.json.JSONObject
-import java.lang.Exception
 
 
 class SignupFragment : Fragment() {
-    var a:String=""
-//     var b:String=""
-//     var c:String=""
-//     var d:String=""
-
-    var isUsernameAvailable = false
+    private var referralType: String = ""
+    private var isUsernameAvailable = false
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
@@ -108,7 +107,7 @@ class SignupFragment : Fragment() {
                 username,
                 SessionManager.getFCMToken() ?: ""
             );
-            hitRegisteruserAPI(requestRegister)
+            hitRegisterUserAPI(requestRegister)
 
         }
     }
@@ -152,44 +151,54 @@ class SignupFragment : Fragment() {
         activity?.finishAffinity()
     }
 
-    var IP: String = ""
-    fun getIp() {
+    private var referredBy: String = ""
+    private fun getIp() {
         CoroutineScope(Dispatchers.IO).launch {
             val apiInterface = ApiClient.getRetrofitService(requireContext())
             try {
+                var IP = ""
                 val response = apiInterface.getIp()
                 IP = response.ip!!
-                val json= JSONObject(IP)
-                val responsePresence= apiInterface.checkIp(json)
-                if (responsePresence.OK?.status.equals("referral")){
-                    a= responsePresence.OK?.data?.Id.toString()
-//                    b= responsePresence.OK?.data?.referedBy.toString()
-//                    c= responsePresence.OK?.data?.CreatedDate.toString()
-//                    d= responsePresence.OK?.data?.UpdatedDate.toString()
 
-                }else{
-                    a= ""
+                val responsePresence = apiInterface.checkIp(IPAddressCheck(IP))
+                if (responsePresence.OK?.status.equals("referral")) {
+                    referralType = responsePresence.OK?.data?.Id.toString()
+                    referredBy = responsePresence.OK?.data?.referedBy!!
+                } else {
+                    referralType = ""
                 }
+
             } catch (e: Exception) {
-                Toast.makeText(requireActivity(), "" + e.toString(), Toast.LENGTH_SHORT)
-                    .show()
+                withContext(Dispatchers.Main) {
+                    Toast.makeText(requireActivity(), e.localizedMessage.toString(), Toast.LENGTH_SHORT)
+                        .show()
+                }
             }
         }
 
     }
 
-    private fun hitRegisteruserAPI(requestRegister: RequestRegister) {
+    private fun hitRegisterUserAPI(requestRegister: RequestRegister) {
         pb_signup.visibility = View.VISIBLE
         val apiInterface = ApiClient.getRetrofitService(requireContext())
         CoroutineScope(Dispatchers.IO).launch {
             try {
-                var response = apiInterface.registerUser(requestRegister)
-                if (a!="") {
-                    response = apiInterface.registerReferalUser(requestRegister)
-                }
+                var response = if (referralType == "")
+                    apiInterface.registerUser(requestRegister)
+                else
+                    apiInterface.registerReferalUser(
+                        ReferRequestRegister(
+                            requestRegister.name,
+                            requestRegister.number,
+                            requestRegister.email,
+                            requestRegister.username,
+                            requestRegister.token,
+                            referedBy = referredBy
+                        )
+                    )
+
 
                 withContext(Dispatchers.Main) {
-
                     try {
                         pb_signup.visibility = View.GONE
                         if (response.body()?.OK != null) {
@@ -197,10 +206,10 @@ class SignupFragment : Fragment() {
                             val r = response.body()
                             SessionManager.init(activity as Context)
                             SessionManager.setLoginStatus("true")
-                            SessionManager.setUserId(response.body()?.OK!!._id)
+                            SessionManager.setUserId(r?.OK!!._id)
 
                             SessionManager.setRefrerCode(
-                                response.body()?.OK?.referCode ?: ""
+                                r.OK.referCode ?: ""
                             )
 
                             showDialog()

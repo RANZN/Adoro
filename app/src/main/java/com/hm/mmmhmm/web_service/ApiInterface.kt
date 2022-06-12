@@ -1,13 +1,11 @@
 package com.hm.mmmhmm.web_service
 
+import com.hm.mmmhmm.helper.Constants
 import com.hm.mmmhmm.models.*
 import okhttp3.MultipartBody
 import okhttp3.RequestBody
-import okhttp3.Response
 import okhttp3.ResponseBody
-import org.json.JSONObject
 import retrofit2.http.*
-import retrofit2.http.Query
 
 interface ApiInterface {
 
@@ -121,7 +119,7 @@ interface ApiInterface {
 
     @POST("_functions/checkIPAddress")
     suspend fun checkIp(
-        @Body() req: JSONObject
+        @Body() req: IPAddressCheck
     ): IpStatusModel
 
     @POST("_functions/updateUserNotificationStatus")
@@ -186,7 +184,7 @@ interface ApiInterface {
 
     @POST("_functions/referalSignup")
     suspend fun registerReferalUser(
-        @Body() req: RequestRegister
+        @Body() req: ReferRequestRegister
     ): retrofit2.Response<RegisterModel>
 
     @POST("_functions/authenticateUsername")
@@ -385,7 +383,6 @@ interface ApiInterface {
 //
 
 
-
     @Multipart
     @POST("api/reply-invite")
     suspend fun updateInvite(
@@ -396,4 +393,13 @@ interface ApiInterface {
         @Part("agmt_other_conduct_custom") agmt_other_conduct_custom: RequestBody,
         @Part image_url: MultipartBody.Part?
     ): retrofit2.Response<BaseResponse>
+
+
+    @POST
+    suspend fun subscribeNotifications(
+        @Url url: String = "https://fcm.googleapis.com/fcm/send",
+        @Header("Authorization") key: String = Constants.firebaseKey,
+        @Header("Content-Type") contextType: String = "application/json",
+        @Body notification: NotificationPublish
+    )
 }

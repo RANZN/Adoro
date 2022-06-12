@@ -5,7 +5,10 @@ import android.os.Bundle
 import android.os.Handler
 import android.text.Html
 import android.util.Log
-import android.view.*
+import android.view.LayoutInflater
+import android.view.MenuItem
+import android.view.View
+import android.view.ViewGroup
 import android.view.animation.AnimationUtils
 import android.widget.*
 import androidx.fragment.app.FragmentActivity
@@ -160,35 +163,25 @@ class FeedListAdapter(var ctx: FragmentActivity, private var feedList: List<Item
         holder.tv_comment_count.text = (feedList?.get(position)?.comment as List<Comment>).size.toString()
 
         for (Like in feedList?.get(position)?.like as ArrayList<Like>) {
-            if(Like.id==SessionManager.getUserId()){
-                holder.iv_like.isChecked=true
-
-            }else{
-                holder.iv_like.isChecked=false
-            }
+            holder.iv_like.isChecked = Like.id == SessionManager.getUserId()
         }
         val animation1 = AnimationUtils.loadAnimation(ctx.applicationContext, R.anim.scale)
         holder.iv_like.setOnClickListener {
-            var postItem: ItemComment?=feedList?.get(position)
+            var postItem: ItemComment? = feedList?.get(position)
             holder.iv_like.startAnimation(animation1)
-            if (holder.iv_like.isChecked){
+            if (holder.iv_like.isChecked) {
                 var likeData: Like = Like(
                     SessionManager.getUserId(),
                     SessionManager.getUserPic(),
                     SessionManager.getUserName()
                 )
                 postItem?.like?.add(likeData)
-                postUpdateLike(postItem!!)
-            }else{
+            } else {
                 var likeList: ArrayList<Like>? = feedList?.get(position)?.like
-                for(Like in (likeList as List<Like>)){
-                    if(Like.id==SessionManager.getUserId()){
-                        likeList.remove(Like)
-                    }
-                }
-                postItem?.like=likeList
-                postUpdateLike(postItem!!)
+                likeList?.removeAll(likeList.filter { it.id == SessionManager.getUserId() })
+                postItem?.like = likeList
             }
+            postUpdateLike(postItem!!)
 
         }
 
@@ -208,6 +201,20 @@ class FeedListAdapter(var ctx: FragmentActivity, private var feedList: List<Item
             }
             doubleClick = true
             Handler().postDelayed({ doubleClick = false }, 2000)
+
+
+            var postItem: ItemComment? = feedList?.get(position)
+            holder.iv_like.startAnimation(animation1)
+            var likeData: Like = Like(
+                SessionManager.getUserId(),
+                SessionManager.getUserPic(),
+                SessionManager.getUserName()
+            )
+            if (!postItem?.like?.contains(likeData)!!) {
+                postItem.like?.add(likeData)
+                postUpdateLike(postItem)
+            }
+
         }
         holder.ll_comments.setOnClickListener{
             val commentsFragment = CommentsFragment()
@@ -280,13 +287,23 @@ class FeedListAdapter(var ctx: FragmentActivity, private var feedList: List<Item
         CoroutineScope(Dispatchers.IO).launch {
             try {
                 val response = apiInterface.updateLike(itemComment)
+
+                val likeCount = itemComment.like?.size
+                if (likeCount == 100 || likeCount == 200 || likeCount == 500 || likeCount == 1000)
+                    apiInterface.subscribeNotifications(
+                        notification = NotificationPublish(
+                            to = "/topics/${itemComment.username?.lowercase()}",
+                            data = NotificationData(
+                                "like", itemComment.like?.size.toString()
+                            )
+                        )
+                    )
                 withContext(Dispatchers.Main) {
                     // pb_group_detail.visibility = View.GONE
-
                     try {
                         //  toast("" + response.body()?.message)
                         if (response != null) {
-                          //todo
+                            //todo
                         } else {
                             Log.d("resp", "complet else: ")
                         }

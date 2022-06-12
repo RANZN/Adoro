@@ -1,6 +1,5 @@
 package com.hm.mmmhmm.activity
 
-//import com.theartofdev.edmodo.cropper.CropImage
 import android.app.Dialog
 import android.content.Intent
 import android.content.pm.PackageManager
@@ -20,6 +19,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.GravityCompat
 import androidx.fragment.app.FragmentManager
 import com.google.firebase.database.FirebaseDatabase
+import com.google.firebase.messaging.FirebaseMessaging
 import com.hm.mmmhmm.R
 import com.hm.mmmhmm.fragments.*
 import com.hm.mmmhmm.helper.GlobleData
@@ -45,6 +45,7 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
         setContentView(R.layout.activity_main)
         // SessionManager.init(this)
         // GlobleData.ACCESS_TOKEN = SessionManager.getAccessToken().toString()
+        FirebaseMessaging.getInstance().subscribeToTopic(SessionManager.getUsername()!!.lowercase())
         iv_user.load(
             SessionManager.getUserPic(),
             R.color.text_gray,
@@ -559,4 +560,5 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
             super.onBackPressed()
         }
     }
+
 }
