@@ -77,7 +77,8 @@ class CommentsFragment : Fragment() {
         iv_share.setOnClickListener {
             val intent= Intent()
             intent.action= Intent.ACTION_SEND
-            intent.putExtra(Intent.EXTRA_TEXT,"Hey Check out this Great app:"+"test")
+            intent.putExtra(Intent.EXTRA_TEXT,
+                ApiClient.BASE_URL +"post/"+requireArguments().getString("postId")+"?"+"&postId="+ requireArguments().getString("postId"))
             intent.type="text/plain"
             startActivity(Intent.createChooser(intent,"Share To:"))
         }

@@ -76,11 +76,12 @@ class FeedListAdapter(var ctx: FragmentActivity, private var feedList: List<Item
 
         }
 
+
         holder.iv_share.setOnClickListener {
             val intent= Intent()
             intent.action= Intent.ACTION_SEND
             intent.putExtra(Intent.EXTRA_TEXT,
-                BASE_URL+"?"+"&postId="+ feedList?.get(position)?.id)
+                BASE_URL+"post/"+feedList?.get(position)?._id+"?"+"&postId="+ feedList?.get(position)?._id)
             intent.type="text/plain"
             ctx.startActivity(Intent.createChooser(intent,"Share To:"))
         }
