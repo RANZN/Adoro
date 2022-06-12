@@ -25,6 +25,7 @@ data class ItemLoginResponse(
      val number: Long,
     val username: String,
     val adoroCoins: Int,
+    val adoroShield: Int,
     val profile: String,
     val referCode: String,
     val followerData: List<Any>?,

@@ -25,9 +25,11 @@ import com.hm.mmmhmm.helper.SessionManager
 import com.hm.mmmhmm.helper.toast
 import com.hm.mmmhmm.models.OTPRequest
 import com.hm.mmmhmm.models.RequestLogin
+import com.hm.mmmhmm.models.RequestWithdrawalMoney
 import com.hm.mmmhmm.web_service.ApiClient
 import kotlinx.android.synthetic.main.custom_toolbar.*
 import kotlinx.android.synthetic.main.fragment_o_t_p_verify.*
+import kotlinx.android.synthetic.main.fragment_withdrawal_request.*
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -111,7 +113,29 @@ class OTPVerifyFragment : Fragment() {
                 }
 
             } else if (requireArguments().getString("path") == "withdraw") {
-                showDialog()
+                if (otp == SessionManager.getOTP()) {
+                    var requestRegisterNumber: RequestWithdrawalMoney = RequestWithdrawalMoney(
+                        SessionManager.getAccountNumber()?:"" ,
+                        requireArguments().getInt("withdrawMoney") ,
+                        SessionManager.getBank()?:"" ,
+                        SessionManager.getIFSC()?:"",
+                        SessionManager.getUserName()?:"" ,
+                        SessionManager.getPanNumber()?:"" ,
+                        "Pending" ,
+                        SessionManager.getUserId()?:"",
+                        SessionManager.getUsername()?:"" ,
+                    )
+                    sendWithdrawalRequest(requestRegisterNumber)
+                }else{
+                    Toast.makeText(
+                        activity,
+                        "Invalid OTP",
+                        Toast.LENGTH_SHORT
+                    ).show()
+                }
+
+
+
 
             } else {
                 //check otp if match call below api
@@ -213,6 +237,9 @@ class OTPVerifyFragment : Fragment() {
                             SessionManager.setAdoroCoins(
                                 response.body()?.OK?.items?.get(0)?.adoroCoins?: 0
                             )
+                            SessionManager.setAdoroShield(
+                                response.body()?.OK?.items?.get(0)?.adoroShield?: 0
+                            )
                             startActivity(Intent(activity, MainActivity::class.java))
 
                             loginUserForFirebase()
@@ -292,18 +319,8 @@ class OTPVerifyFragment : Fragment() {
                         pb_login.visibility = View.GONE
                         if (response.body()?.OK?.status == "Sucess") {
                             SessionManager.setOTP(response.body()?.OK?.otp ?: "")
-                            val r = response.body()
-                            val oTPVerifyFragment = OTPVerifyFragment()
-                            val args = Bundle()
-                            args.putString("path", "login")
-                            args.putString("number", requireArguments().getString("number"))
-                            oTPVerifyFragment.arguments = args
-                            if (activity != null) {
-                                activity?.supportFragmentManager?.beginTransaction()
-                                    ?.replace(R.id.frame_layout_splash_launcher, oTPVerifyFragment)
-                                    ?.commit()
-                            }
-
+                            Toast.makeText(activity, R.string.otp_sent_please_verify, Toast.LENGTH_SHORT)
+                                .show()
                         } else {
                             Toast.makeText(activity, "Somethings went wrong!", Toast.LENGTH_SHORT)
                                 .show()
@@ -319,5 +336,30 @@ class OTPVerifyFragment : Fragment() {
         }
     }
 
+    private fun sendWithdrawalRequest( generalRequest: RequestWithdrawalMoney) {
+        pb_login.visibility = View.VISIBLE
+        val apiInterface = ApiClient.getRetrofitService(requireContext())
+        CoroutineScope(Dispatchers.IO).launch {
+            try {
+                val response = apiInterface.sendWithdrawalRequest(generalRequest)
+                withContext(Dispatchers.Main) {
+                    try {
+                        pb_login.visibility = View.GONE
+                        if (response.body()?.OK !=null) {
+                            val r = response.body()
+                            showDialog()
+
+                        } else {
+                            Toast.makeText(activity,R.string.Something_went_wrong, Toast.LENGTH_SHORT).show()
+                        }
+                    } catch (e: java.lang.Exception) {
+                        Toast.makeText(requireActivity(), "" + e.toString(), Toast.LENGTH_SHORT).show()
+                    }
+                }
+            } catch (e: java.lang.Exception) {
+                e.printStackTrace()
+            }
+        }
+    }
 
 }

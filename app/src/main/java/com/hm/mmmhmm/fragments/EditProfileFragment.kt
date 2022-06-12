@@ -126,7 +126,7 @@ class EditProfileFragment : Fragment() {
                 SessionManager.getUserId() ?: "",
                 et_account_number.text.toString(),
                 SessionManager.getAdoroCoins(),
-                0,
+                SessionManager.getAdoroShield(),
                 et_bank_name.text.toString(),
                 completeAddress,
                 "",
@@ -140,7 +140,7 @@ class EditProfileFragment : Fragment() {
                 getEncoded64ImageStringFromBitmap(pickedProfile),
                 getEncoded64ImageStringFromBitmap(pickedBanner),
                 et_bio.text.toString(),
-                SessionManager.getAccountHolder(),
+                et_beneficiary_name.text.toString(),
             )
             updateProfileAPI(updateProfileRequest)
         })
@@ -316,21 +316,21 @@ class EditProfileFragment : Fragment() {
                                 R.color.text_gray,
                                 false
                             )
-                            et_full_name.setText(r?.OK?.items?.get(0)?.name)
-                            et_username.setText(r?.OK?.items?.get(0)?.username)
-                            et_bio.setText(r?.OK?.items?.get(0)?.bio)
-                            et_email.setText(r?.OK?.items?.get(0)?.email)
-                            et_phone.setText(r?.OK?.items?.get(0)?.number.toString())
-                            et_street_address.setText(r?.OK?.items?.get(0)?.completeAddress?.streetAddress)
-                            et_landmark.setText(r?.OK?.items?.get(0)?.completeAddress?.landmark)
-                            et_area_name.setText(r?.OK?.items?.get(0)?.completeAddress?.areaName)
-                            et_city.setText(r?.OK?.items?.get(0)?.completeAddress?.city)
+                            et_full_name.setText(r?.OK?.items?.get(0)?.name?:"")
+                            et_username.setText(r?.OK?.items?.get(0)?.username?:"")
+                            et_bio.setText(r?.OK?.items?.get(0)?.bio?:"")
+                            et_email.setText(r?.OK?.items?.get(0)?.email?:"")
+                            et_phone.setText((r?.OK?.items?.get(0)?.number?:0).toString())
+                            et_street_address.setText(r?.OK?.items?.get(0)?.completeAddress?.streetAddress?:"")
+                            et_landmark.setText(r?.OK?.items?.get(0)?.completeAddress?.landmark?:"")
+                            et_area_name.setText(r?.OK?.items?.get(0)?.completeAddress?.areaName?:"")
+                            et_city.setText(r?.OK?.items?.get(0)?.completeAddress?.city?:"")
                             et_state_name.setText(r?.OK?.items?.get(0)?.completeAddress?.state)
-                            et_zip_code.setText(r?.OK?.items?.get(0)?.completeAddress?.zipCode?:0)
-                            et_bank_name.setText(r?.OK?.items?.get(0)?.bankName)
-                            et_beneficiary_name.setText(r?.OK?.items?.get(0)?.bankName)
-                            et_account_number.setText(r?.OK?.items?.get(0)?.accountNumber)
-                            et_ifsc_code.setText(r?.OK?.items?.get(0)?.ifseCode)
+                            et_zip_code.setText((r?.OK?.items?.get(0)?.completeAddress?.zipCode?:0).toString())
+                            et_bank_name.setText(r?.OK?.items?.get(0)?.bankName?:"")
+                            et_beneficiary_name.setText(r?.OK?.items?.get(0)?.accountHolder?:"")
+                            et_account_number.setText(r?.OK?.items?.get(0)?.accountNumber?:"")
+                            et_ifsc_code.setText(r?.OK?.items?.get(0)?.ifseCode?:"")
 
 
 

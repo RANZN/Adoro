@@ -165,7 +165,6 @@ class GroupDetail : Fragment() {
                         //  toast("" + response.body()?.message)
                         if (response != null) {
                             if (response.body()?.OK?.items?.get(0)?.ownerId == SessionManager.getUserId()) {
-
                                 tv_group_name.text = response.body()?.OK?.items?.get(0)?.groupName
                                 iv_toolbar_action_members.setColorFilter(resources.getColor(R.color.black));
                                 iv_toolbar_action_members.visibility = View.VISIBLE
