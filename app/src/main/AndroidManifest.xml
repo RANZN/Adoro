@@ -63,7 +63,6 @@
                 <data android:host="www.marqueberry.com"
                     android:pathPrefix="/post"/>
                 <data android:path="/" />
-
                 <action android:name="android.intent.action.VIEW" />
 
                 <category android:name="android.intent.category.DEFAULT" />
