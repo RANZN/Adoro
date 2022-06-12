@@ -81,6 +81,11 @@ class HomeFragment : Fragment() {
 //        var generalRequest: GeneralRequest = GeneralRequest(SessionManager.getUserId()?:"");
 //        getSessionForPosts(generalRequest)
         getFeedListAPI()
+
+        pullToRefresh.setOnRefreshListener {
+            getFeedListAPI()
+            pullToRefresh.isRefreshing = false
+        }
     }
     private fun getSessionForPosts(generalRequest: GeneralRequest) {
         pb_feeds.visibility = View.VISIBLE

@@ -20,13 +20,23 @@ import com.hm.mmmhmm.fragments.HomeFragment
 import com.hm.mmmhmm.fragments.ProfileFragment
 import com.hm.mmmhmm.helper.SessionManager
 import com.hm.mmmhmm.helper.load
-import com.hm.mmmhmm.models.*
+import com.hm.mmmhmm.models.Comment
+import com.hm.mmmhmm.models.ItemComment
+import com.hm.mmmhmm.models.Like
 import com.hm.mmmhmm.web_service.ApiClient
 import com.hm.mmmhmm.web_service.ApiClient.BASE_URL
 import kotlinx.coroutines.*
+import android.view.LayoutInflater
+import android.view.MenuItem
+import android.view.View
+import android.view.ViewGroup
 
 
-class FeedListAdapter(var ctx: FragmentActivity, private var feedList: List<ItemComment>? = null,private var sessionId:Long?=null) :
+class FeedListAdapter(
+    var ctx: FragmentActivity,
+    private var feedList: List<ItemComment>? = null,
+    private var sessionId: Long? = null
+) :
     RecyclerView.Adapter<FeedListAdapter.MyViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MyViewHolder {
@@ -44,17 +54,18 @@ class FeedListAdapter(var ctx: FragmentActivity, private var feedList: List<Item
         var text = feedList?.get(position)?.description
         holder.tv_feed_description.text = text
 
-        if (feedList?.get(position)?.description?.length?:0>80) {
-            var text=text?.substring(0,80)+"...";
-            holder.tv_feed_description.setText(Html.fromHtml(text+"<font color='red'> <u>View More</u></font>"));
+        if (feedList?.get(position)?.description?.length ?: 0 > 80) {
+            var text = text?.substring(0, 80) + "...";
+            holder.tv_feed_description.setText(Html.fromHtml(text + "<font color='red'> <u>View More</u></font>"));
 
 
-            holder.tv_feed_description.setOnClickListener{
+            holder.tv_feed_description.setOnClickListener {
                 val commentsFragment = CommentsFragment()
                 val args = Bundle()
                 args.putString("postId", feedList?.get(position)?._id)
                 commentsFragment.arguments = args
-                ctx.supportFragmentManager.beginTransaction().replace(R.id.frame_layout_main, commentsFragment).addToBackStack(null)
+                ctx.supportFragmentManager.beginTransaction()
+                    .replace(R.id.frame_layout_main, commentsFragment).addToBackStack(null)
                     .commit()
 
                 (HomeFragment).lastFirstVisiblePosition = position
@@ -79,13 +90,18 @@ class FeedListAdapter(var ctx: FragmentActivity, private var feedList: List<Item
 
         }
 
+
         holder.iv_share.setOnClickListener {
-            val intent= Intent()
-            intent.action= Intent.ACTION_SEND
-            intent.putExtra(Intent.EXTRA_TEXT,
-                BASE_URL+"?"+"&postId="+ feedList?.get(position)?.id)
-            intent.type="text/plain"
-            ctx.startActivity(Intent.createChooser(intent,"Share To:"))
+            val intent = Intent()
+            intent.action = Intent.ACTION_SEND
+            intent.putExtra(
+                Intent.EXTRA_TEXT,
+                BASE_URL + "post/" + feedList?.get(position)?._id + "?" + "&postId=" + feedList?.get(
+                    position
+                )?._id
+            )
+            intent.type = "text/plain"
+            ctx.startActivity(Intent.createChooser(intent, "Share To:"))
         }
         holder.iv_menu_feed.setOnClickListener {
             val popupMenu = PopupMenu(ctx, holder.iv_menu_feed)
@@ -114,7 +130,7 @@ class FeedListAdapter(var ctx: FragmentActivity, private var feedList: List<Item
             popupMenu.show()
 
         }
-        holder.tv_username.setOnClickListener(object : View.OnClickListener{
+        holder.tv_username.setOnClickListener(object : View.OnClickListener {
             override fun onClick(v: View?) {
                 val profileFragment = ProfileFragment()
                 val args = Bundle()
@@ -126,8 +142,9 @@ class FeedListAdapter(var ctx: FragmentActivity, private var feedList: List<Item
                     .addToBackStack(null).commit()
                 (HomeFragment).lastFirstVisiblePosition = position
                 SessionManager.setFeedLastPosition(position)
-            }})
-        holder.iv_user_feed.setOnClickListener(object : View.OnClickListener{
+            }
+        })
+        holder.iv_user_feed.setOnClickListener(object : View.OnClickListener {
             override fun onClick(v: View?) {
                 val profileFragment = ProfileFragment()
                 val args = Bundle()
@@ -139,8 +156,9 @@ class FeedListAdapter(var ctx: FragmentActivity, private var feedList: List<Item
                     .addToBackStack(null).commit()
                 (HomeFragment).lastFirstVisiblePosition = position
                 SessionManager.setFeedLastPosition(position)
-            }})
-        holder.ll_feed_user_detail.setOnClickListener(object : View.OnClickListener{
+            }
+        })
+        holder.ll_feed_user_detail.setOnClickListener(object : View.OnClickListener {
             override fun onClick(v: View?) {
                 val profileFragment = ProfileFragment()
                 val args = Bundle()
@@ -152,17 +170,17 @@ class FeedListAdapter(var ctx: FragmentActivity, private var feedList: List<Item
                     .addToBackStack(null).commit()
                 (HomeFragment).lastFirstVisiblePosition = position
                 SessionManager.setFeedLastPosition(position)
-            }})
+            }
+        })
 
 
 
 
-        holder.tv_like_count.text =
-            (feedList?.get(position)?.like as ArrayList<Like>).size.toString()
+        holder.tv_like_count.text = feedList?.get(position)?.like?.size.toString()
 
-        holder.tv_comment_count.text = (feedList?.get(position)?.comment as List<Comment>).size.toString()
+        holder.tv_comment_count.text = feedList?.get(position)?.comment?.size.toString()
 
-        for (Like in feedList?.get(position)?.like as ArrayList<Like>) {
+        for (Like in feedList?.get(position)?.like ?: emptyList()) {
             holder.iv_like.isChecked = Like.id == SessionManager.getUserId()
         }
         val animation1 = AnimationUtils.loadAnimation(ctx.applicationContext, R.anim.scale)
@@ -176,18 +194,20 @@ class FeedListAdapter(var ctx: FragmentActivity, private var feedList: List<Item
                     SessionManager.getUserName()
                 )
                 postItem?.like?.add(likeData)
+                postUpdateLike(postItem!!)
             } else {
                 var likeList: ArrayList<Like>? = feedList?.get(position)?.like
                 likeList?.removeAll(likeList.filter { it.id == SessionManager.getUserId() })
+
                 postItem?.like = likeList
+                postUpdateLike(postItem!!)
             }
-            postUpdateLike(postItem!!)
 
         }
 
         var doubleClick: Boolean? = false
 
-        holder.iv_feed.setOnClickListener{
+        holder.iv_feed.setOnClickListener {
             if (doubleClick == true) {
                 //binding.imag.isSelected= true
                 holder.iv_like.isChecked = true
@@ -216,21 +236,30 @@ class FeedListAdapter(var ctx: FragmentActivity, private var feedList: List<Item
             }
 
         }
-        holder.ll_comments.setOnClickListener{
+        holder.ll_comments.setOnClickListener {
             val commentsFragment = CommentsFragment()
             val args = Bundle()
             args.putString("postId", feedList?.get(position)?._id)
             commentsFragment.arguments = args
-            ctx.supportFragmentManager.beginTransaction().add(R.id.frame_layout_main, commentsFragment).addToBackStack("comment")
+            ctx.supportFragmentManager.beginTransaction()
+                .add(R.id.frame_layout_main, commentsFragment).addToBackStack("comment")
                 .commit()
             SessionManager.setFeedLastPosition(position)
             (HomeFragment).lastFirstVisiblePosition = position
+        }
+        if (feedList?.get(position)?.like?.isNullOrEmpty()!=true){
+            holder.tv_like_status.text =
+                "and " + feedList?.get(position)?.like?.size.toString() + " others " + ctx.getResources()
+                    .getString(R.string.also_liked_the_post)
+            holder.tv_like_status.visibility =
+                if ((feedList?.get(position)?.like?.size?:0) > 1) View.VISIBLE else View.GONE
         }
 
         holder.tv_like_status.text= "and "+(feedList?.get(position)?.like as List<Like>).size.toString()+" others "+ ctx.getResources().getString(R.string.also_liked_the_post)
         holder.tv_like_status.visibility= if ((feedList?.get(position)?.like as List<Like>).size>1) View.VISIBLE else  View.GONE
 
-        holder.recycler_mutual_like_user.adapter= MutualLikerAdapter(ctx,feedList?.get(position)?.like as List<Like>)
+        holder.recycler_mutual_like_user.adapter =
+            MutualLikerAdapter(ctx, feedList?.get(position)?.like)
     }
 
 
@@ -261,7 +290,7 @@ class FeedListAdapter(var ctx: FragmentActivity, private var feedList: List<Item
 
         //
         init {
-            bigImage= v.findViewById(R.id.bigImage)
+            bigImage = v.findViewById(R.id.bigImage)
             iv_user_feed = v.findViewById(R.id.iv_user_feed)
             ll_feed_user_detail = v.findViewById(R.id.ll_feed_user_detail)
             iv_share = v.findViewById(R.id.iv_share)

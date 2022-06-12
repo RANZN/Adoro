@@ -224,6 +224,9 @@ class LoginFragment : androidx.fragment.app.Fragment() {
                             SessionManager.setAdoroCoins(
                                 response.body()?.OK?.items?.get(0)?.adoroCoins?: 0
                             )
+                            SessionManager.setAdoroShield(
+                                response.body()?.OK?.items?.get(0)?.adoroShield?: 0
+                            )
                             startActivity(Intent(activity, MainActivity::class.java))
 
                             loginUserForFirebase()

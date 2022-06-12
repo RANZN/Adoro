@@ -16,6 +16,7 @@ import com.hm.mmmhmm.adapter.FeedListAdapter
 import com.hm.mmmhmm.helper.ConnectivityObserver
 import com.hm.mmmhmm.helper.SessionManager
 import com.hm.mmmhmm.helper.toast
+import com.hm.mmmhmm.models.OTPRequest
 import com.hm.mmmhmm.models.ProfileRequest
 import com.hm.mmmhmm.models.RequestAuthenticateNumber
 import com.hm.mmmhmm.models.RequestWithdrawalMoney
@@ -85,18 +86,40 @@ class WithdrawalRequestFragment : Fragment() {
             Toast.makeText(requireActivity(), "You've insufficient coins!", Toast.LENGTH_SHORT).show()
         } else if (ConnectivityObserver.isOnline(activity as Context)) {
 
-            var requestRegisterNumber: RequestWithdrawalMoney = RequestWithdrawalMoney(
-                SessionManager.getAccountNumber()?:"" ,
-                withdrawMoney.toInt() ,
-                SessionManager.getBank()?:"" ,
-                SessionManager.getIFSC()?:"",
-                SessionManager.getUserName()?:"" ,
-                SessionManager.getPanNumber()?:"" ,
-               "Pending" ,
-                SessionManager.getUserId()?:"",
-               SessionManager.getUsername()?:"" ,
-            )
-            sendWithdrawalRequest(requestRegisterNumber)
+            var otpReq: OTPRequest = OTPRequest(SessionManager.getUserPhone());
+            pb_withdrawal.visibility = View.VISIBLE
+            val apiInterface = ApiClient.getRetrofitService(requireContext())
+            CoroutineScope(Dispatchers.IO).launch {
+                try {
+                    val response = apiInterface.sendOTP(otpReq)
+                    withContext(Dispatchers.Main) {
+
+                        try {
+                            pb_withdrawal.visibility = View.GONE
+                            if (response.body()?.OK?.status =="Sucess") {
+                                SessionManager.setOTP(response.body()?.OK?.otp?:"")
+                                val oTPVerifyFragment = OTPVerifyFragment()
+                                val args = Bundle()
+                                args.putString("path", "withdraw")
+                                args.putInt("withdrawMoney", et_withdraw_money.text.toString().toInt())
+                                args.putString("number",SessionManager.getUserPhone())
+                                oTPVerifyFragment.arguments = args
+                                if (activity != null) {
+                                    activity?.supportFragmentManager?.beginTransaction()
+                                        ?.replace(R.id.frame_layout_main,oTPVerifyFragment)?.commit()
+                                }
+
+                            } else {
+                                Toast.makeText(activity,"Somethings wents wrongs!", Toast.LENGTH_SHORT).show()
+                            }
+                        } catch (e: java.lang.Exception) {
+                            Toast.makeText(requireActivity(), "" + e.toString(), Toast.LENGTH_SHORT).show()
+                        }
+                    }
+                } catch (e: java.lang.Exception) {
+
+                }
+            }
 
         }
 
@@ -106,50 +129,10 @@ class WithdrawalRequestFragment : Fragment() {
         super.onActivityCreated(savedInstanceState)
         tv_user.text=SessionManager.getUserName()
         setupToolBar()
-        btn_verify.setOnClickListener{
-            val oTPVerifyFragment = OTPVerifyFragment()
-            val args = Bundle()
-            args.putString("path", "withdraw")
-            oTPVerifyFragment.arguments = args
-            if (activity != null) {
-                activity?.supportFragmentManager?.beginTransaction()
-                    ?.replace(R.id.frame_layout_main,oTPVerifyFragment)?.commit()
-            }
-        }
 
-        btn_verify.setOnClickListener {
+        btn_next.setOnClickListener {
             validateInput()
         }
     }
-    private fun sendWithdrawalRequest( generalRequest: RequestWithdrawalMoney) {
-        pb_withdrawal.visibility = View.VISIBLE
-        val apiInterface = ApiClient.getRetrofitService(requireContext())
-        CoroutineScope(Dispatchers.IO).launch {
-            try {
-                val response = apiInterface.sendWithdrawalRequest(generalRequest)
-                withContext(Dispatchers.Main) {
-                    try {
-                        pb_withdrawal.visibility = View.GONE
-                        if (response.body()?.OK !=null) {
-                            val r = response.body()
-                            (activity as MainActivity).supportFragmentManager.beginTransaction().replace(R.id.frame_layout_main, VerifyWithdrawal())
-                                .addToBackStack(null).commit()
 
-                        } else {
-                            Toast.makeText(activity,R.string.Something_went_wrong, Toast.LENGTH_SHORT).show()
-                        }
-                    } catch (e: Exception) {
-                        Toast.makeText(requireActivity(), "" + e.toString(), Toast.LENGTH_SHORT).show()
-                    }
-                }
-            } catch (e: java.lang.Exception) {
-                e.printStackTrace()
-            }
-        }
-    }
-
-    private fun stopFragment() {
-        startActivity(Intent(activity, MainActivity::class.java))
-        activity?.finish()
-    }
 }

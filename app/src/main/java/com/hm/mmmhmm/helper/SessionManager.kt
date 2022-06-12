@@ -25,6 +25,7 @@ object SessionManager {
     private const val USER_EMAIL = "user_email"
     private const val referCode = "refer_code"
     private const val adoroCoins = "adoro_coins"
+    private const val adoroShield = "adoro_shield"
     private const val totalFollowers = "total_followers"
     private const val USER_PHONE = "user_phone"
     private const val USER_IMAGE = "user_image"
@@ -402,12 +403,22 @@ object SessionManager {
     fun getTotalFollowers(): Int {
         return prefs.getInt(totalFollowers, 0)?:0
     }
+
+
     fun setAdoroCoins(value: Int) {
         prefs.edit().putInt(adoroCoins, value).commit()
     }
 
     fun getAdoroCoins(): Int {
         return prefs.getInt(adoroCoins, 0)
+    }
+
+    fun setAdoroShield(value: Int) {
+        prefs.edit().putInt(adoroShield, value).commit()
+    }
+
+    fun getAdoroShield(): Int {
+        return prefs.getInt(adoroShield, 0)
     }
 
     fun setUserPhone(value: String) {
