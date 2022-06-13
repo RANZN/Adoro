@@ -20,16 +20,13 @@ import com.hm.mmmhmm.fragments.HomeFragment
 import com.hm.mmmhmm.fragments.ProfileFragment
 import com.hm.mmmhmm.helper.SessionManager
 import com.hm.mmmhmm.helper.load
-import com.hm.mmmhmm.models.Comment
 import com.hm.mmmhmm.models.ItemComment
 import com.hm.mmmhmm.models.Like
+import com.hm.mmmhmm.models.NotificationData
+import com.hm.mmmhmm.models.NotificationPublish
 import com.hm.mmmhmm.web_service.ApiClient
 import com.hm.mmmhmm.web_service.ApiClient.BASE_URL
 import kotlinx.coroutines.*
-import android.view.LayoutInflater
-import android.view.MenuItem
-import android.view.View
-import android.view.ViewGroup
 
 
 class FeedListAdapter(
@@ -254,9 +251,6 @@ class FeedListAdapter(
             holder.tv_like_status.visibility =
                 if ((feedList?.get(position)?.like?.size?:0) > 1) View.VISIBLE else View.GONE
         }
-
-        holder.tv_like_status.text= "and "+(feedList?.get(position)?.like as List<Like>).size.toString()+" others "+ ctx.getResources().getString(R.string.also_liked_the_post)
-        holder.tv_like_status.visibility= if ((feedList?.get(position)?.like as List<Like>).size>1) View.VISIBLE else  View.GONE
 
         holder.recycler_mutual_like_user.adapter =
             MutualLikerAdapter(ctx, feedList?.get(position)?.like)
