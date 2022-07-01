@@ -1,27 +1,20 @@
 package com.hm.mmmhmm.fragments
 
-import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.os.Handler
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
-
+import androidx.fragment.app.Fragment
 import com.hm.mmmhmm.R
 import com.hm.mmmhmm.activity.MainActivity
-import com.hm.mmmhmm.adapter.GalleryAdapter
-import com.hm.mmmhmm.helper.GlobleData
 import com.hm.mmmhmm.helper.SessionManager
 import com.hm.mmmhmm.models.AddAdoroCoinsRequest
-import com.hm.mmmhmm.models.RequestShowMyTemplate
 import com.hm.mmmhmm.web_service.ApiClient
 import com.romainpiel.shimmer.Shimmer
-import kotlinx.android.synthetic.main.fragment_profile.*
 import kotlinx.android.synthetic.main.fragment_splash.*
-import kotlinx.android.synthetic.main.fragment_templates.*
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -59,8 +52,7 @@ class SplashFragment : Fragment() {
                 startActivity(Intent(activity, MainActivity::class.java))
                 activity?.finishAffinity()
             } else {
-                activity?.supportFragmentManager?.beginTransaction()
-                    ?.replace(R.id.frame_layout_splash_launcher,WalkThroughFragment())?.commit()
+                requireActivity().supportFragmentManager.beginTransaction().replace(R.id.frame_layout_splash_launcher, WalkThroughFragment()).commit()
         }
     }}
 

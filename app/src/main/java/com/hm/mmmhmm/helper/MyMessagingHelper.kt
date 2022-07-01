@@ -83,45 +83,8 @@ class MyMessagingHelper : FirebaseMessagingService() {
 
 
         notificationManager.notify((0..10000).random(), notification.build())
-    }
 
 
-    private fun showChatNotification2(chat: String?, person: String?, image: Bitmap) {
-        val intent = Intent(this, InboxActivity::class.java)
-        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
-        val pendingIntent = PendingIntent.getActivity(this, 0, intent, PendingIntent.FLAG_IMMUTABLE)
-
-        val notificationManager = getSystemService(NOTIFICATION_SERVICE) as NotificationManager
-
-        val remoteViews = RemoteViews(this.packageName, R.layout.notification_layout1)
-        remoteViews.setTextViewText(R.id.title, person)
-        remoteViews.setTextViewText(R.id.text, chat)
-        remoteViews.setBitmap(R.id.image, image.toString(), image)
-
-
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-
-            val importance = NotificationManager.IMPORTANCE_HIGH
-            val channel = NotificationChannel(channelName, channelId, importance)
-            channel.description = "${application.packageName} Notifications"
-            channel.setShowBadge(true)
-            channel.lockscreenVisibility = Notification.VISIBILITY_PUBLIC
-            notificationManager.createNotificationChannel(channel)
-        }
-        val defaultSoundUri = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION)
-
-        val notification = NotificationCompat.Builder(this, channelId)
-            .setSmallIcon(R.drawable.app_icon_transparent)
-            .setContent(remoteViews)
-//            .setColor(ContextCompat.getColor(this, R.color.colorPrimary))
-            .setSound(defaultSoundUri)
-            .setDefaults(NotificationCompat.DEFAULT_SOUND or NotificationCompat.DEFAULT_VIBRATE)
-            .setPriority(NotificationCompat.PRIORITY_HIGH)
-            .setContentIntent(pendingIntent)
-            .setAutoCancel(true)
-
-
-        notificationManager.notify((0..10000).random(), notification.build())
     }
 
 
@@ -150,7 +113,7 @@ class MyMessagingHelper : FirebaseMessagingService() {
             .setContentTitle(title)
             .setSound(defaultSoundUri)
             .setDefaults(NotificationCompat.DEFAULT_SOUND or NotificationCompat.DEFAULT_VIBRATE)
-            .setPriority(NotificationCompat.PRIORITY_HIGH)
+            .setPriority(NotificationCompat.PRIORITY_MAX)
             .setContentIntent(pendingIntent)
             .setAutoCancel(true)
 

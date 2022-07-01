@@ -1,11 +1,13 @@
 package com.hm.mmmhmm.activity
 
 import android.app.Dialog
+import android.content.ComponentName
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
 import android.net.Uri
+import android.os.Build
 import android.os.Bundle
 import android.os.Handler
 import android.util.Log
@@ -46,6 +48,7 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
         // SessionManager.init(this)
         // GlobleData.ACCESS_TOKEN = SessionManager.getAccessToken().toString()
         FirebaseMessaging.getInstance().subscribeToTopic(SessionManager.getUsername()!!.lowercase())
+
         iv_user.load(
             SessionManager.getUserPic(),
             R.color.text_gray,

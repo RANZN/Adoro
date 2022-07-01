@@ -1,20 +1,16 @@
 package com.hm.mmmhmm.adapter
 
 import android.content.Context
-import android.os.Bundle
 import android.util.Base64
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import androidx.recyclerview.widget.RecyclerView
 import com.hm.mmmhmm.R
-import com.hm.mmmhmm.fragments.ViewTempleteImage
 import com.hm.mmmhmm.helper.ItemClickListener
 import com.hm.mmmhmm.helper.loadBitMap
 import com.hm.mmmhmm.models.Item
-import java.lang.String
 
 class TemplateAdapter(
     private var postsList: List<Item>? = null,

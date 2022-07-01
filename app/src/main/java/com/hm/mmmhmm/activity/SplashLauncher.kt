@@ -16,6 +16,8 @@ class SplashLauncher : AppCompatActivity() {
         setContentView(R.layout.activity_splash_launcher)
         SessionManager.init(this)
         updateToken()
+        FirebaseMessaging.getInstance().subscribeToTopic("all")
+
         supportFragmentManager.beginTransaction()
             .replace(R.id.frame_layout_splash_launcher, SplashFragment())
             .commit()
